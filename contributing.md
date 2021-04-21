@@ -2,13 +2,18 @@
 
 I am going to assume that the only people who will be contributing will be members of the UK SDG data team. However, if anyone else should happen upon this repo and wish to comment or contribute please do get in touch with us at SustainableDevelopment@ons.gov.uk - your thoughts will be very welcome!
 
-If you are new to this and have not worked on the repo before, please see
+[Useful resources](#useful-resources)  
+[General guidelines](#general-guidelines)  
+[Coding conventions](#coding-conventions)  
+[Setting up your computer to work on indicator automations](#setting-up-your-computer-to-work-on-indicator-automations)  
+[Setting up a new indicator automation](#setting-up-a-new-indicator-automation)  
+[Working on an existing code](#working-on-an-existing-code)  
 
 ## Useful resources ##
 
-packrat
-updating packages (SDGupdater)
-[Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)
+[packrat](https://rstudio.github.io/packrat)  
+[making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  
+[Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)  
 
 ## General guidelines ##
 

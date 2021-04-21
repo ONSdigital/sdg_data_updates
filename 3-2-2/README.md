@@ -5,6 +5,8 @@ Create csv data for 3-2-2 with the following disaggregations:
 - country of occurrence by sex of baby
 - area of residence (region)
 
+Runtime is approximately 6 seconds
+
 Input data are stored in a folder named 'Input' (See 'Example Input'). Outputs are saved to a folder named 'Output'. 
         
 ### USER INSTRUCTIONS (SDG Data team): 

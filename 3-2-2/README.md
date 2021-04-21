@@ -1,24 +1,24 @@
-Author: Emma Wood
+Author(s): Emma Wood
 
-Create csv data for 3-2-2 with the following disaggregations:
+Create csv data for 3-2-2 (Neonatal mortality rate) with the following disaggregations:
 - birthweight by mother age
 - country of occurrence by sex of baby
 - area of residence (region)
 
 Runtime is approximately 6 seconds
 
-Input data are stored in a folder named 'Input' (See 'Example Input'). Outputs are saved to a folder named 'Output'. 
+Input data are stored in a folder named 'Input' (See 'Example Data'). Outputs are saved to a folder named 'Output'. 
         
 ### USER INSTRUCTIONS (SDG Data team): 
 
-1) Save 'Child mortality (death cohort) tables in England and Wales' as an xlsx file in Jemalex/code for updates/3.2.2/Input. 
-2) Open update_indicator_main.R from RStudio
-3) Run all disaggregation scripts by clicking the source button in the top right of the script window 
-Note: If this is the first time you have run the script you may need to install some packages. 
-	The error you get should make it clear what package you dont have.
-	unhash the relevant install.packages() rows at the top of the script and repeat step 5.
-	Please put the hash(es) back in once packages are installed.
-4) csv files will be exported to Output folder.
+1) Save 'Child mortality (death cohort) tables in England and Wales' as an xlsx file in Jemalex/code for updates/3.2.2/Input. You may need to create the Input folder if one does not already exist.
+2) Open config.yml in the 3-2-2 folder and check that all configurations are correct.
+> The `first_header_row` settings refer to the row number of the top level of column names. All rows above this just contain information like the country and year the data refer to.
+3) Open RStudio.
+4) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. sdg_data_updates.Rproj is a packrat project. This means that R looks in the packrat folder for packages. You therefore do not need to install any packages.
+5) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.
+6) Change the indicator number to '3-2-2' (Dashes NOT dots).
+7) csv files will be exported to Output folder.
 
 Please check the data source to see if the best data are being reported, or if there are other series we sohould include
 
@@ -31,21 +31,15 @@ Error in setwd(paste0("H:/Coding_repos/sdg_data_updates/", indicator)) :
   cannot change working directory
 -The folder name you have given for indicator does not exist. Check you are using '-' not '.' between the numbers.
 
-If you get an error similar to 
-Error in file(file, ifelse(append, "a", "w")) : 
-  cannot open the connection
--This is probably becaue you already have a version of that output file open. Close the file and try again.
 
 ### NOTES:
-compile_tables.R: called by update_indicator_main.R.
-	Asks the user to choose a file from the Input folder, 
-	runs the scriots for each table, and compiles them into a single csv, 
-	which it saves in the Output folder.
 	
-config.R: contains configuration data that are likely to change between years e.g tab names.
-	These configurations are used by country_of_occurence_by_sex.R, birthweight_by_mum_age.R, and region.R,
-	which ask the user to double check the configs. The user is given the option to override the configs.
-	If the change is permanent for all years going forward, the config file should be updated.
+config.yml: contains configuration data that will/are likely to change between years e.g filename and tab names.
+	These configurations are used by country_of_occurence_by_sex.R, birthweight_by_mum_age.R, and region.R.  
+	
+compile_tables.R: called by update_indicator_main.R.
+	Reads in the data from the input folder, and runs the scripts for each table, and compiles them into a single csv, 
+	which it saves in the Output folder.  If the Output folder does not already exist, it creates one.  
 	
 country_of_occurence_by_sex.R, birthweight_by_mum_age.R, and region.R: where the bulk of the work is done.
 	These scripts take the data from the input file, mung it into the format we want, and do calculations.

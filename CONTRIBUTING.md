@@ -63,12 +63,12 @@ Every new indicator automation requires it's own branch. **Do not work on code i
 3) Start writing your indicator update automation
 4) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. In Git GUI:
   > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout
-  > Click Rescan to pickup any changes
-  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details. 
-  > To move them down into the Staged changes panel click on the file icon to the left of the filename inthe Unstaged changes panel
-  > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?
-  > Commit
-  > Push (make sure you are pushing to the right branch)
+  > Click Rescan to pickup any changes  
+  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details.   
+  > To move them down into the Staged changes panel click on the file icon to the left of the filename inthe Unstaged changes panel  
+  > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?  
+  > Commit  
+  > Push (make sure you are pushing to the right branch)  
 
 
 ## Working on an existing code ##

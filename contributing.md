@@ -2,6 +2,33 @@
 
 I am going to assume that the only people who will be contributing will be members of the UK SDG data team. However, if anyone else should happen upon this repo and wish to comment or contribute please do get in touch with us at SustainableDevelopment@ons.gov.uk - your thoughts will be very welcome!
 
+If you are new to this and have not worked on the repo before, please see
+
+## Useful resources ##
+
+packrat
+updating packages (SDGupdater)
+[Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)
+
+## General guidelines ##
+
+- Only edit code for one indicator on any branch
+- Commit at least once a day when you are writing code
+- Make commit messages, and pull request comments informative
+- Get code reviewed when merging into a branch that has other collaborators
+- Review is required to merge to main
+- When you complete a pull request to main, update sdg_data_updates on the shared drive
+- Functions should do only *one* thing. If you think there is a chance it would be useful for other indicators updates, include it in SDGupdater.
+
+## Coding conventions ##
+
+ - Please follow the [Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)
+ - Some key points:
+    - Use informative names. Make it easy on future users (including yourself), by using names that tell you what is going on. This is not easy, but worth mastering. Well named objects and functions can negate the need for comments that tell you what the code does.
+    - Use spaces the way they would be used in a sentence (e.g. the space comes *after* the comma `[, 1]`)
+    - In R, assign using `<-` not `=`
+    - Comment on *why* you are doing something not *what* the code is doing. If you need to state what the code does, consider improving names and using well-named functions.
+
 ## Setting up your computer to work on indicator automations ##
 
 1) You should have 2-factor authentication on you Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
@@ -34,4 +61,7 @@ If you want to make changes to an existing automation, unless it is a cosmetic c
 1) Follow the steps for setting up a new indicator automation, but change the Starting Revision to the relevant branch. This may either be 'main' or a branch that has not yet been merged with 'main'. If you are not sure, check with whoever is currently working on that branch. Name your new branch something informative (e.g. 3-2-2-add_sex_data).  
 **Remember to fetch from origin and create from the Tracking Branch**
 2) Once you have made your changes, merge your branch with the branch it was created from using a pull request. 
-3) If the branch was created by someone else on the team If this is the main branch 
+    > Pull requests > New pull request
+    > Set base and compare branches  
+    > Create pull request  
+    > Request review using panel on the right. If you are merging into main this is required before the merge can be completed. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.

@@ -3,18 +3,17 @@
 # Purpose: To create csv data for country of occurrence: baby sex disaggregations for indicator 3.2.2
 # Requirements:This script is called by compile_tables.R, which is called by update_indicator_main.R
 
-country_of_occurrence_by_sex_tab_name <- country_of_occurrence_by_sex_tab_name
-first_header_row <- first_header_row_country_by_sex
 
-source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename), sheets = country_of_occurrence_by_sex_tab_name)
+country_of_occurrence_by_sex <- dplyr::filter(source_data, sheet == config$country_of_occurrence_by_sex_tab_name)
 
-info_cells <- SDGupdater::get_info_cells(source_data, first_header_row)
+
+info_cells <- SDGupdater::get_info_cells(country_of_occurrence_by_sex, config$first_header_row_country_by_sex)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
-main_data <- source_data %>%
-  SDGupdater::remove_blanks_and_info_cells(first_header_row) %>%
-  dplyr::mutate(character = remove_superscripts(character))
+main_data <- country_of_occurrence_by_sex %>%
+  SDGupdater::remove_blanks_and_info_cells(config$first_header_row_country_by_sex) %>%
+  dplyr::mutate(character = SDGupdater::remove_superscripts(character))
 
 tidy_data <- main_data %>%
   unpivotr::behead("left-up", area_code) %>%
@@ -70,7 +69,7 @@ data_in_csv_format <- relevant_columns %>%
     values_to = "Value")
 
 clean_csv_data_country_by_sex <- data_in_csv_format %>%
-  dplyr::mutate(Neonatal_period = case_when(
+  dplyr::mutate(Neonatal_period = dplyr::case_when(
     Neonatal_period == "Rates_Per 1,000  live births_Childhood deaths_Early" ~ "Early neonatal",
     Neonatal_period == "Rates_Late_neonatal" ~ "Late neonatal",
     Neonatal_period == "Rates_Per 1,000  live births_Childhood deaths_Neonatal" ~ ""),
@@ -85,7 +84,12 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
          Region = "",
          `Health board` = "",
          Country = ifelse(Country == "United Kingdom", "", Country),
-         Sex = ifelse(Sex == "P", "", Sex),
+         GeoCode = ifelse(Country == "England and Wales", "K04000001", GeoCode),
+         Sex = dplyr::case_when(
+           Sex == "P" ~ "",
+           Sex == "M" ~ "Male",
+           Sex == "F" ~ "Female",
+           TRUE ~ Sex),
          `Unit measure` = "Rate per 1,000 live births",
          `Unit multiplier` = "Units",
          `Observation status` = "Undefined",
@@ -93,8 +97,8 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
   dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
 
 
-SDGupdater::multiple_year_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
-SDGupdater::multiple_country_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
+SDGupdater::multiple_year_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
+SDGupdater::multiple_country_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
 
 if(number_of_rate_calculation_mismatches != 0){
   warning(paste("check of rate caclulations has failed.",
@@ -106,9 +110,9 @@ if(number_of_rate_calculation_mismatches != 0){
 rm(clean_data, main_data,
    data_for_calculations, data_in_csv_format,
    headings_standardised,
-   info_cells, late_neonatal, source_data,
+   info_cells, late_neonatal,
    tidy_data, relevant_columns,
-   country, year, first_header_row,
+   country, year,
    max_decimal_places_used_by_source, number_of_rate_calculation_mismatches)
 
 

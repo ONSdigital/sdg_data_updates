@@ -3,18 +3,16 @@
 # Purpose: To create csv data for birthweight by mother age disaggregation for indicator 3.2.2
 # Requirements: This script is called by compile_tables.R, which is called by update_indicator_main.R
 
-birthweight_by_mum_age_tab_name <-  birthweight_by_mum_age_tab_name
-first_header_row <-  first_header_row_birthweight_by_mum_age
 
-source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename), sheets = birthweight_by_mum_age_tab_name)
+birthweight_by_mum_age <- dplyr::filter(source_data, sheet == config$birthweight_by_mum_age_tab_name)
 
-info_cells <- SDGupdater::get_info_cells(source_data, first_header_row)
+info_cells <- SDGupdater::get_info_cells(birthweight_by_mum_age, config$first_header_row_birthweight_by_mum_age)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
-main_data <- source_data %>%
-  SDGupdater::remove_blanks_and_info_cells(first_header_row) %>%
-  dplyr::mutate(character = remove_superscripts(character))
+main_data <- birthweight_by_mum_age %>%
+  SDGupdater::remove_blanks_and_info_cells(config$first_header_row_birthweight_by_mum_age) %>%
+  dplyr::mutate(character = SDGupdater::remove_superscripts(character))
 
 tidy_data <- main_data %>%
   unpivotr::behead("left-up", birthweight) %>%
@@ -27,7 +25,8 @@ tidy_data <- main_data %>%
 
 clean_data <- tidy_data %>%
   dplyr::filter(!is.na(numeric)) %>% # to remove cells that are just ends of a header that have run on to the next row
-  dplyr::mutate(birthweight = trimws(birthweight,  which = "both")) %>%
+  dplyr::mutate(birthweight = trimws(birthweight,  which = "both"),
+                mother_age = trimws(mother_age, which = "both")) %>%
   dplyr::mutate(birthweight = ifelse(birthweight == "4000 and" | birthweight == "over",
                               "4000 and over", birthweight))
 
@@ -35,7 +34,7 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, baby_age, event),
               values_from = numeric)
 
-max_decimal_places_used_by_source <- count_decimal_places(data_for_calculations$Rates_Neonatal_Deaths)
+max_decimal_places_used_by_source <- SDGupdater::count_decimal_places(data_for_calculations$Rates_Neonatal_Deaths)
 
 late_neonatal <- data_for_calculations %>%
   dplyr::mutate(Numbers_Late_neonatal_Deaths = Numbers_Neonatal_Deaths - Numbers_Early_Deaths) %>%
@@ -91,8 +90,8 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          Value = ifelse(is.na(Value), "", Value)) %>% # this turns the value into a character string
   dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
 
-SDGupdater::multiple_year_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
-SDGupdater::multiple_country_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
+SDGupdater::multiple_year_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
+SDGupdater::multiple_country_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
 
 if(number_of_rate_calculation_mismatches != 0){
   warning(paste("check of rate caclulations has failed.",
@@ -103,7 +102,7 @@ if(number_of_rate_calculation_mismatches != 0){
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data, main_data,
    data_for_calculations, data_in_csv_format,
-   info_cells, late_neonatal, source_data,
+   info_cells, late_neonatal,
    tidy_data,
-   country, year, first_header_row,
+   country, year,
    max_decimal_places_used_by_source, number_of_rate_calculation_mismatches)

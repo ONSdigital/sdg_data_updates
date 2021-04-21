@@ -49,7 +49,7 @@ Package: cli
 Source: CRAN
 Version: 2.4.0
 Hash: 35f31bea1ff99d14035e9f60719a4ef3
-Requires: glue, assertthat
+Requires: glue
 
 Package: config
 Source: CRAN
@@ -71,7 +71,7 @@ Package: desc
 Source: CRAN
 Version: 1.2.0
 Hash: a0a3ca939997679a52816bae4ed6aaae
-Requires: R6, assertthat, crayon, rprojroot
+Requires: R6, crayon, assertthat, rprojroot
 
 Package: diffobj
 Source: CRAN
@@ -148,7 +148,7 @@ Package: pillar
 Source: CRAN
 Version: 1.6.0
 Hash: 9e328e6484cba72897cac9b12a619db6
-Requires: cli, crayon, fansi, rlang, vctrs, utf8
+Requires: ellipsis, fansi, lifecycle, rlang, vctrs, crayon, utf8, cli
 
 Package: piton
 Source: CRAN
@@ -250,8 +250,8 @@ Package: tibble
 Source: CRAN
 Version: 3.1.0
 Hash: dc23e5489c99bc632dbbda88792300e9
-Requires: ellipsis, lifecycle, magrittr, rlang, vctrs, crayon, fansi,
-    pkgconfig, cli, pillar
+Requires: ellipsis, lifecycle, magrittr, rlang, vctrs, fansi,
+    pkgconfig, pillar
 
 Package: tidyr
 Source: CRAN

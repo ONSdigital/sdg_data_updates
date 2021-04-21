@@ -4,15 +4,15 @@
 # TO DO: look into also giving local authority numbers (We shouldn't display rates as they are unreliable)
 # Requirements:This script is called by compile_tables.R, which is called by update_indicator_main.R
 
-source_data <- tidyxl::xlsx_cells(paste0(config$input_folder, "/", filename),
-                                  sheets = config$area_of_residence_tab_name)
+
+area_of_residence <- dplyr::filter(source_data, sheet == config$area_of_residence_tab_name)
 
 # info cells are the cells above the column headings
-info_cells <- SDGupdater::get_info_cells(source_data, config$first_header_row_area_of_residence)
+info_cells <- SDGupdater::get_info_cells(area_of_residence, config$first_header_row_area_of_residence)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
-main_data <- source_data %>%
+main_data <- area_of_residence %>%
   SDGupdater::remove_blanks_and_info_cells(config$first_header_row_country_by_sex) %>%
   dplyr::mutate(character = SDGupdater::remove_superscripts(character))
 
@@ -51,7 +51,7 @@ if ("Region" %in% main_data$character){ # because headings are different for 201
     dplyr::mutate(area_name = trimws(area_name,  which = "both"))
 
   only_regions_kept <- clean_data %>% # because Wales health boards and LAs contain lowercase letters
-    dplyr::filter(grepl("[a-z]|ENGLAND", area_name) == FALSE)
+    dplyr::filter(grepl("[a-z]|ENGLAND|WALES|SCOTLAND", area_name) == FALSE)
 }
 
 # no early-neonatal deaths are given, so can't calculate late_neonatoal as in other tables
@@ -77,13 +77,13 @@ clean_csv_data_area_of_residence <- only_regions_kept %>%
                 Value = ifelse(is.na(Value), "", as.character(Value))) %>% # this turns the value into a character string only if there are NAs so need to explicitly turn it into a character so all data can be combined (in compile_tables.R).
   dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
 
-SDGupdater::multiple_year_warning(filename, config$area_of_residence_tab_name,"area of residence (region)")
-SDGupdater::multiple_country_warning(filename, config$area_of_residence_tab_name,"area of residence (region)")
+SDGupdater::multiple_year_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
+SDGupdater::multiple_country_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
 
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data, main_data,
    only_regions_kept,
-   info_cells, source_data,
+   info_cells,
    tidy_data,
    country, year)
 

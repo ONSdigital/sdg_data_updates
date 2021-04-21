@@ -4,15 +4,11 @@
 # Requirements: This script runs the code in the folder stated by indicator <- "indicator_folder_name" below.
 # Runtime: last run approx. 22 seconds
 
-# install.packages("tidyr", dependencies = TRUE)
-# install.packages("dplyr", dependencies = TRUE)
-# install.packages("tidyxl", dependencies = TRUE)
-# install.packages("unpivotr", dependencies = TRUE)
-
-# setwd("H:/Coding_repos/sdg_data_updates")
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 rm(list = ls())
+
+start.time <- Sys.time()
 
 # library(tidyr)
 library(magrittr) # need to use library rather than namespace operator (::) for the pipe ( %>% )
@@ -30,6 +26,5 @@ setwd(paste0("./", indicator))
 
 source("compile_tables.R")
 
-
-
-
+end.time <- Sys.time()
+end.time-start.time

@@ -51,7 +51,7 @@ I am going to assume that the only people who will be contributing will be membe
 ![image](https://user-images.githubusercontent.com/52452377/115564316-46297d00-a2b0-11eb-958b-c578235d14a5.png)
 
 ## Setting up a new indicator automation ##
-Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.
+Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**
 1) In Git GUI fetch the most recent version of the repo from Github
   > Remote > Fetch from > origin
 2) Create a new branch for the indicator you want to work on

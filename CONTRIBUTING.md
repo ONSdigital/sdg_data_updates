@@ -59,11 +59,21 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > Name the branch with the indicator number  
   > Starting Revision should be set to Tracking Branch > main  
   > Create
-3) You are now ready to start writing your indicator update automation
+3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
+3) Start writing your indicator update automation
+4) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. In Git GUI:
+  > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout
+  > Click Rescan to pickup any changes
+  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details. 
+  > To move them down into the Staged changes panel click on the file icon to the left of the filename inthe Unstaged changes panel
+  > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?
+  > Commit
+  > Push (make sure you are pushing to the right branch)
+
 
 ## Working on an existing code ##
 If you want to make changes to an existing automation, unless it is a cosmetic change e.g. to the readme, please create a new branch for your changes. 
-1) Follow the steps for setting up a new indicator automation, but change the Starting Revision to the relevant branch. This may either be 'main' or a branch that has not yet been merged with 'main'. If you are not sure, check with whoever is currently working on that branch. Name your new branch something informative (e.g. 3-2-2-add_sex_data).  
+1) Follow steps 1 and 2 for setting up a new indicator automation, but change the Starting Revision to the relevant branch. This may either be 'main' or a branch that has not yet been merged with 'main'. If you are not sure, check with whoever is currently working on that branch. Name your new branch something informative (e.g. 3-2-2-add_sex_data).  
 **Remember to fetch from origin and create from the Tracking Branch**
 2) Once you have made your changes, merge your branch with the branch it was created from using a pull request. 
     > Pull requests > New pull request

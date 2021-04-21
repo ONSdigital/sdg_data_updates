@@ -56,8 +56,11 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > Remote > Fetch from > origin
 2) Create a new branch for the indicator you want to work on
   > Branch > Create  
+  >   
   > Name the branch with the indicator number  
+  >   
   > Starting Revision should be set to Tracking Branch > main  
+  >   
   > Create
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
 3) Start writing your indicator update automation
@@ -68,6 +71,7 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > To move them down into the Staged changes panel click on the file icon to the left of the filename inthe Unstaged changes panel  
   > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?  
   > Commit  
+  >   
   > Push (make sure you are pushing to the right branch)  
 
 
@@ -77,6 +81,9 @@ If you want to make changes to an existing automation, unless it is a cosmetic c
 **Remember to fetch from origin and create from the Tracking Branch**
 2) Once you have made your changes, merge your branch with the branch it was created from using a pull request. 
     > Pull requests > New pull request
+    >   
     > Set base and compare branches  
+    >   
     > Create pull request  
+    >   
     > Request review using panel on the right. If you are merging into main this is required before the merge can be completed. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.

@@ -5,8 +5,8 @@
 # USER INPUT:
 #
 file_year <- 201819 # CHANGE to the years this data refers to
-input_filepath <- "D:/SDG general/DAO stuff/NCMP/ncmp_1819_final_non_disclosive_published.csv"
-output_filepath <- "D:/SDG general/DAO stuff/NCMP"
+input_filepath <- "D:/SDG general/SDG_updates/ncmp_1819_final_non_disclosive_published.csv"
+output_filepath <- "D:/SDG general/SDG_updates"
 ###############################################################################################
 
 # install the package and load it in your R session:
@@ -50,23 +50,33 @@ if (any(unique(clean_NCMP$school_imd_quintile) %in% c(1:5)) == FALSE){
 }
 
 
-#main function, takes around 26 mins to run:
+# creating a smaller sample with various (low) counts of sub-regional data
+clean_NCMP_sample <- NULL
+for(i in unique(clean_NCMP$schoolgovernmentofficeregion)){
+clean_NCMP_sample <- rbind(clean_NCMP_sample,
+                          clean_NCMP[(clean_NCMP$schoolgovernmentofficeregion == i) & 
+                                       (clean_NCMP$GenderCode == sample(1:2,1)),][1:sample(5:20, 1),])
+}
+
+#main function, takes around 26 mins to run on full test dataset, < 1 min on sample test dataset:
 
 #the wealthq argument is fed the regrouped IMD variable and assumes 1 = most deprived, 5 = least deprived
 #typeres argument expects urban/rural breakdown variable, 
 # which is not available in the test data but is reported to be available in the raw data as "PupilUrbanRuralIndicator"
-# schoolgovernmentofficeregion variable is used here as a test for othergr argument (which may take ethnicity from the raw data)
+# schoolgovernmentofficeregion variable is used here as a test for othergr argument (which will take ethnicity from the raw data)
+# schoolgovernmentofficeregion is also used for geographical region breakdowns
 # reformatting this variable into character, in case it's a factor (to avoid function errors)
-clean_NCMP$schoolgovernmentofficeregion <- as.character(clean_NCMP$schoolgovernmentofficeregion)
+clean_NCMP_sample$schoolgovernmentofficeregion <- as.character(clean_NCMP_sample$schoolgovernmentofficeregion)
 
-test_NCMP <- anthro_prevalence(sex = clean_NCMP$GenderCode,
-                             age = clean_NCMP$AgeInMonths, 
+test_NCMP <- anthro_prevalence(sex = clean_NCMP_sample$GenderCode,
+                             age = clean_NCMP_sample$AgeInMonths, 
                              is_age_in_month = TRUE, 
-                             weight = clean_NCMP$Weight, 
-                             lenhei = clean_NCMP$Height, 
+                             weight = clean_NCMP_sample$Weight, 
+                             lenhei = clean_NCMP_sample$Height, 
                              measure = "H",
-                             wealthq = clean_NCMP$school_imd_quintile,
-                             othergr = clean_NCMP$schoolgovernmentofficeregion)
+                             wealthq = clean_NCMP_sample$school_imd_quintile,
+                             gregion = clean_NCMP_sample$schoolgovernmentofficeregion,
+                             othergr = clean_NCMP_sample$schoolgovernmentofficeregion)
 
 #get relevant info only
 rownames(test_NCMP) <- test_NCMP$Group #assigning the first column as rownames (makes is cleaner)
@@ -96,6 +106,11 @@ colnames(final_result) <- c("Unweighted sample size",
 
 # IMD is not available as an interaction with other variables
 # sample sizes are very small, but this should not be the case for the unsuppressed data
+# 
+# NOTE: gregion argument for geographical disaggregation will be dropped from the main code for PHE.
+# They require the decominators for sub-regional statistics to go through rounding due to suppression policies.
+# This reounding cannot be done external to the anthro_prevalence function - the source code will need to be edited.
+# Therefore, will be dropped until more time resource is available to edit the function code
 
 write.csv(final_result, paste(output_filepath,"/Target_2.2_", file_year, ".csv", sep=""))
 

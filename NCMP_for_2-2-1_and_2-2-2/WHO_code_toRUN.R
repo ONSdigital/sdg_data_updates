@@ -14,7 +14,6 @@
 # [Weight]	                          Weight in kg 
 # [PupilIndexOfMultipleDeprivationD]	IMD decile of child LSOA (NB: 1 = most deprived)
 # [PupilUrbanRuralIndicator]	        ONS urban/rural classification based on child LSOA - code
-# [PupilRegionCode_ONS]               ONS region code based of child postcode
 # 
 # 
 # The output would be the the levels of the variables above as rows, disaggregated on: 
@@ -70,7 +69,6 @@ SDG_2.2 <- anthro_prevalence(sex = NCMP_data$GenderCode,
                              lenhei = NCMP_data$Height, 
                              measure = "H",
                              wealthq = NCMP_data$pupil_imd_quintile,
-                             gregion = NCMP_data$PupilRegionCode_ONS,
                              typeres = NCMP_data$PupilUrbanRuralIndicator,
                              othergr = NCMP_data$Ethnicity_desc)
 
@@ -84,10 +82,10 @@ test_NCMP <- SDG_2.2[rowSums(is.na(SDG_2.2)) != ncol(SDG_2.2), ]
 
 # renaming the function's default deprivation variable to match dataset:
 first_Q <- which(rownames(SDG_2.2)=="Wealth quintile: Q1: Poorest")
-rownames(SDG_2.2)[first_Q:(first_Q + 4)] <- c("School IMD Q1: most deprived", 
-                                                "School IMD Q2",
-                                                "School IMD Q3","School IMD Q4",
-                                                "School IMD Q5: least deprived")
+rownames(SDG_2.2)[first_Q:(first_Q + 4)] <- c("Child IMD Q1: most deprived", 
+                                                "Child IMD Q2",
+                                                "Child IMD Q3","Child IMD Q4",
+                                                "Child IMD Q5: least deprived")
 
 
 #these are the columns of interest from the function output (based on the function documentation)

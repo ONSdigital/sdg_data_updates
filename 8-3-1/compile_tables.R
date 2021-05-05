@@ -39,16 +39,16 @@ for (i in 1:length(year_filepaths)) {
   available_dataset_folders <- list.files(paste0(filepath, year_folder))
   
   available_files <- list.files(paste0(filepath, year_folder, "/", dataset_folder))
-  
-  if (year_folder %not_in% available_year_folders) {
+
+  if(year_folder %not_in% available_year_folders) {
     
     stop(paste(input, "does not exist. Please correct year_filepaths and re-run"))
     
-  } else if (dataset_folder %not_in% available_dataset_folders & input_file %not_in% available_dataset_folders) {
+  } else if(dataset_folder %not_in% available_dataset_folders & input_file %not_in% available_dataset_folders) {
     
     stop(paste(dataset_folder, "does not exist in", paste0(filepath, year_folder), ". Please correct year_filepaths in config.R and re-run"))
     
-  } else if (input_file %not_in% available_files & input_file %not_in% available_dataset_folders) {
+  } else if(input_file %not_in% available_files & input_file %not_in% available_dataset_folders) {
     
     stop(paste(input_file, "does not exist in", paste0(filepath, "/", dataset_folder) , ". Please correct year_filepaths in config.R and re-run"))
     
@@ -66,7 +66,7 @@ country_by_sex_compiled <- data.frame()
 
 repeat_checks_compiled <- data.frame()
 disaggregations_with_low_counts_compiled <- data.frame()
-suppressed_data_compiled <- data.frame()
+# suppressed_data_compiled <- data.frame()
 
 all_years <- c()
 
@@ -80,6 +80,7 @@ for (i in 1:length(year_filepaths)) {
   
   source("LFS_unpaid_family_workers_by_sector.R")
   
+  
   csv_data_compiled <- bind_rows(csv_data_compiled, csv)
   
   sector_by_country_compiled <- bind_rows(sector_by_country_compiled, sector_by_country)
@@ -87,13 +88,13 @@ for (i in 1:length(year_filepaths)) {
   sector_by_sex_compiled <- bind_rows(sector_by_sex_compiled, sector_by_sex)
   country_by_sex_compiled <- bind_rows(country_by_sex_compiled, country_by_sex)
   
-  suppressed <- suppressed_data
+  # suppressed <- suppressed_data
   
   repeat_checks <- data.frame(year = substr(year_filepath, 1, 4),
                               dataset = c("all employed    ", "unpaid family workers"),
                               repeated_respondents = c(nrow(repeat_check_employed), nrow(repeat_check_unpaid))) 
   
-  suppressed_data_compiled <- bind_rows(suppressed_data_compiled, suppressed)
+  # suppressed_data_compiled <- bind_rows(suppressed_data_compiled, suppressed)
   disaggregations_with_low_counts_compiled <- bind_rows(disaggregations_with_low_counts_compiled, disaggregations_with_low_counts)
   repeat_checks_compiled <- bind_rows(repeat_checks_compiled, repeat_checks)
   
@@ -109,16 +110,16 @@ if (nrow(disaggregations_with_low_counts_compiled) > 0) {
   warning("There were fewer than 25 respondents in one or more groups. These can be found using the 'Number of respondents' column in the output csv")
 }
 
-if (nrow(suppressed_data_compiled) > 0) {
-  warning("There were fewer than 3 respondents for some disaggregations. These values have been suppressed in the output csv")
-}
+# if (nrow(suppressed_data_compiled) > 0) {
+#   warning("There were fewer than 3 respondents for some disaggregations. These values have been suppressed in the output csv")
+# }
 
 # save data
 
 source("Publication.R")
 print(paste0("The Excel file for the ad-hoc publication has been saved as ", output_directory, "/ad_hoc_", run_date, ".xlsx"))
 
-source("run_info.R") # output_directory is set in run_info.R
+# source("run_info.R") # output_directory is set in run_info.R
 
 write.csv(csv_data_compiled, csv_data_filename, row.names = FALSE)
 print(paste("data for 8-3-1 have been compiled and saved as", csv_data_filename))

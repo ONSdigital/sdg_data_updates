@@ -227,7 +227,7 @@ for_publication_and_csv <- quality_control %>%
 
 # final table for current year for indicator csv ----
 csv <- for_publication_and_csv %>%
-  filter(value != "") %>% 
+  filter(Value != "") %>% 
   mutate(`Unit measure` = "Percentage (%)",
          `Unit multiplier`= "Units",
          `Observation status`= "Undefined") %>%
@@ -314,11 +314,11 @@ disaggregations_with_low_counts <- low_counts %>%
   select(disaggregation) %>% 
   mutate(year = substr(year_filepath, 1, 4))
 
-suppressed_data <- quality_control %>% 
-  filter(`Number of respondents` == "suppressed") %>%
-  mutate(Year = substr(year_filepath, 1, 4)) %>% 
-  select_if(not_all_na) %>% 
-  select(-`Number of respondents`)
+# suppressed_data <- quality_control %>% 
+#   filter(`Number of respondents informal employment`, `Number of respondents for people in employment` == "suppressed") %>%
+#   mutate(Year = substr(year_filepath, 1, 4)) %>% 
+#   select_if(not_all_na) %>% 
+#   select(-`Number of respondents`)
 
 
 

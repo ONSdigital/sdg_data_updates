@@ -11,7 +11,8 @@
 #'
 #' @examples
 #' test_dat <- c("England is a country of the UK", "this does not contain a
-#' country name") get_all_country_names(test_dat)
+#' country name")
+#' get_all_country_names(test_dat)
 #'
 #' @export
 get_all_country_names <- function (variable) {
@@ -22,7 +23,7 @@ get_all_country_names <- function (variable) {
   list_of_countries <- ifelse(str_detect(variable, possible_countries),
                               str_extract_all(variable, possible_countries), NA)
 
-  list_into_vector_of_strings(list_of_countries)
+  collapse_list_to_strings(list_of_countries)
 
 }
 

@@ -23,6 +23,12 @@
 #' remove_blanks_and_info_cells(test_dat, 4)
 remove_blanks_and_info_cells <- function(dat, first_header_row) {
 
+  expected_columns <- c("character", "is_blank", "row")
+
+  if(sum(expected_columns %not_in% names(dat)) != 0) {
+    stop("requires columns 'row', 'character', and 'is_blank', which are created when importing using xlsx_cells")
+  }
+
   dat %>%
     mutate(is_blank = ifelse(character == "" & data_type == "character", TRUE, is_blank)) %>%
     filter(is_blank == FALSE & row %not_in% 1:(first_header_row - 1))

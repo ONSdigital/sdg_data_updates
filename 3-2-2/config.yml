@@ -1,8 +1,8 @@
 default:
-  input_folder: "Example data"
+  input_folder: "Input"
   output_folder: "Output"
 
-  filename: "example_data_3-2-2.xlsx"
+  filename: "cms2018workbookf.xlsx"
 
   country_of_occurrence_by_sex_tab_name: "Table 2"
   first_header_row_country_by_sex: 4
@@ -12,3 +12,5 @@ default:
 
   birthweight_by_mum_age_tab_name: "Table 10"
   first_header_row_birthweight_by_mum_age: 4
+
+  decimal_places: 1

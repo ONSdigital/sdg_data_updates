@@ -44,15 +44,15 @@ if ("NA_NA_Births_Live births" %in% colnames(data_for_calculations)) {
   headings_standardised <- data_for_calculations
 }
 
-max_decimal_places_used_by_source <- SDGupdater::count_decimal_places(data_for_calculations$`Rates_Per 1,000  live births_Childhood deaths_Neonatal`)
+decimal_places <- config$decimal_places
 
 late_neonatal <- headings_standardised %>%
   dplyr::mutate(Numbers_Deaths_Late_neonatal = `Numbers_NA_Deaths under 1_Neonatal` - `Numbers_NA_Deaths under 1_Early`) %>%
   dplyr::mutate(Rates_Late_neonatal = SDGupdater::calculate_valid_rates_per_1000(Numbers_Deaths_Late_neonatal,
-                                                        `Numbers_NA_Births_Live births`, max_decimal_places_used_by_source),
+                                                        `Numbers_NA_Births_Live births`, decimal_places),
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
          Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(`Numbers_NA_Deaths under 1_Neonatal`,
-                                                         `Numbers_NA_Births_Live births`, max_decimal_places_used_by_source))
+                                                         `Numbers_NA_Births_Live births`, decimal_places))
 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$`Rates_Per 1,000  live births_Childhood deaths_Neonatal`)
 
@@ -89,13 +89,7 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
            Sex == "P" ~ "",
            Sex == "M" ~ "Male",
            Sex == "F" ~ "Female",
-           TRUE ~ Sex),
-         `Unit measure` = "Rate per 1,000 live births",
-         `Unit multiplier` = "Units",
-         `Observation status` = "Undefined",
-         Value = ifelse(is.na(Value), "", as.character(Value))) %>% # this turns the value into a character string
-  dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
-
+           TRUE ~ Sex))
 
 SDGupdater::multiple_year_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
 SDGupdater::multiple_country_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
@@ -113,6 +107,6 @@ rm(clean_data, main_data,
    info_cells, late_neonatal,
    tidy_data, relevant_columns,
    country, year,
-   max_decimal_places_used_by_source, number_of_rate_calculation_mismatches)
+   decimal_places, number_of_rate_calculation_mismatches)
 
 

@@ -4,7 +4,6 @@
 # TO DO: look into also giving local authority numbers (We shouldn't display rates as they are unreliable)
 # Requirements:This script is called by compile_tables.R, which is called by update_indicator_main.R
 
-
 area_of_residence <- dplyr::filter(source_data, sheet == config$area_of_residence_tab_name)
 
 # info cells are the cells above the column headings
@@ -70,12 +69,7 @@ clean_csv_data_area_of_residence <- only_regions_kept %>%
                 Age = "",
                 `Health board` = "",
                 Country = "England",
-                Region = SDGupdater::format_region_names(Region),
-                `Unit measure` = "Rate per 1,000 live births",
-                `Unit multiplier` = "Units",
-                `Observation status` = "Undefined",
-                Value = ifelse(is.na(Value), "", as.character(Value))) %>% # this turns the value into a character string only if there are NAs so need to explicitly turn it into a character so all data can be combined (in compile_tables.R).
-  dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
+                Region = SDGupdater::format_region_names(Region))
 
 SDGupdater::multiple_year_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
 SDGupdater::multiple_country_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")

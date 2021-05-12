@@ -40,7 +40,13 @@ test_that("calculate_valid_rates_per_1000 produces the correct value", {
 
   expect_equal(calculate_valid_rates_per_1000(3.01, 1000, 2), 3.01)
   expect_equal(calculate_valid_rates_per_1000(10.1, 1000, 2), 10.10)
-  })
+
+})
+
+test_that("calculate_valid_rates_per_1000 handles NAs correctly", {
+  expect_equal(calculate_valid_rates_per_1000(c(NA, 10), c(10, 10), 0), c(NA, 1000))
+  expect_equal(calculate_valid_rates_per_1000(c(10, 10), c(10, NA), 0), c(1000, NA))
+})
 
 test_that("calculate_valid_rates_per_1000 returns NA when numerator is <= 3 but >= 0", {
   expect_equal(calculate_valid_rates_per_1000(0, 10, 0), NA)

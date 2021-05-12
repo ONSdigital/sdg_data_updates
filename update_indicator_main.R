@@ -10,13 +10,7 @@ rm(list = ls())
 
 start.time <- Sys.time()
 
-# library(tidyr)
 library(magrittr) # need to use library rather than namespace operator (::) for the pipe ( %>% )
-# library(tidyxl)
-# library(unpivotr)
-# library(stringr)
-#
-# library(SDGupdater)
 
 #----------------------------------------------------------------------------------------------
 
@@ -28,3 +22,5 @@ source("compile_tables.R")
 
 end.time <- Sys.time()
 end.time-start.time
+
+getwd()

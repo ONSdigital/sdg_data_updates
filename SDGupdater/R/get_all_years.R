@@ -29,7 +29,7 @@ get_all_years <- function (variable) {
   list_of_years <- ifelse(str_detect(variable, year_pattern),
                           str_extract_all(variable, year_pattern), NA)
 
-  list_into_vector_of_strings(list_of_years)
+  collapse_list_to_strings(list_of_years)
 
 }
 

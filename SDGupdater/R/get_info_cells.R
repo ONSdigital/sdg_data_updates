@@ -15,19 +15,33 @@
 #' @return Tibble containing all year and country info.
 #'
 #' @examples
-#' first_header_row <- 4 test_dat <- data.frame(row = c(1:5), character =
-#' c("data for 2017 ", "England and", "this is Wales", "impala", "elephant"))
+#' first_header_row <- 4
+#' test_dat <- data.frame(row = c(1:5), character = c("data for 2017 ", "England and", "Wales", "impala", "elephant"))
 #' get_info_cells(test_dat, first_header_row)
 #'
 #' @export
 get_info_cells <- function(dat, first_header_row) {
 
-  dat %>%
+  output <- dat %>%
     filter(row %in% 1:(first_header_row - 1)) %>%
     distinct(character) %>%
     filter(!is.na(character)) %>%
     mutate(character = trimws(character,  which = "both")) %>%
     mutate(Year = get_all_years(character)) %>%
     mutate(Country = get_all_country_names(character))
+
+  number_of_country_NAs <- sum(is.na(output$Country))
+  number_of_year_NAs <- sum(is.na(output$Year))
+
+  if(number_of_country_NAs == nrow(output)){
+    warning(paste("No countries were identified in the header section of", substitute(dat)))
+  }
+
+  if(number_of_year_NAs == nrow(output)){
+    warning(paste("No years were identified in the header section of", substitute(dat)))
+  }
+
+  return(output)
+
 
 }

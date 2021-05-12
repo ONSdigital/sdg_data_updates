@@ -34,19 +34,22 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, baby_age, event),
               values_from = numeric)
 
-max_decimal_places_used_by_source <- SDGupdater::count_decimal_places(data_for_calculations$Rates_Neonatal_Deaths)
+decimal_places <- config$decimal_places
+
+neonatal_rates_location <- stringr::str_which(names(data_for_calculations), "Rates_Neonatal")
+names(data_for_calculations)[neonatal_rates_location] <- "Rates_Neonatal_Deaths" # need this because in 2019 data headings are slightly different and colname becomes Rates_Neonatal_Rates
 
 late_neonatal <- data_for_calculations %>%
   dplyr::mutate(Numbers_Late_neonatal_Deaths = Numbers_Neonatal_Deaths - Numbers_Early_Deaths) %>%
   dplyr::mutate(Rates_Late_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Late_neonatal_Deaths,
-                                                                     `Numbers_Live births_Births`, max_decimal_places_used_by_source),
+                                                                     `Numbers_Live births_Births`, decimal_places),
 
          Rates_Early_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Early_Deaths,
-                                                                      `Numbers_Live births_Births`, max_decimal_places_used_by_source),
+                                                                      `Numbers_Live births_Births`, decimal_places),
 
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
          Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(Numbers_Neonatal_Deaths,
-                                                               `Numbers_Live births_Births`, max_decimal_places_used_by_source))
+                                                               `Numbers_Live births_Births`, decimal_places))
 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$Rates_Neonatal_Deaths)
 
@@ -74,7 +77,8 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          birthweight = gsub("<", "Less than ", birthweight),
          birthweight = ifelse(birthweight == "<", "Less than", birthweight),
          birthweight = ifelse(birthweight == "Notstated", "Not stated", birthweight),
-         birthweight = ifelse(birthweight == "All", "", birthweight)) %>%
+         birthweight = ifelse(birthweight == "All", "", birthweight),
+         GeoCode = ifelse(country == "England and Wales", "K04000001", "")) %>%
   dplyr::rename(`Neonatal period` = Neonatal_period,
          Age = mother_age,
          Birthweight = birthweight) %>%
@@ -82,13 +86,7 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          Sex = "",
          Country = country,
          Region = "",
-         `Health board` = "",
-         `Unit measure` = "Rate per 1,000 live births",
-         `Unit multiplier` = "Units",
-         `Observation status` = "Undefined",
-         GeoCode = "K04000001",
-         Value = ifelse(is.na(Value), "", Value)) %>% # this turns the value into a character string
-  dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, `Unit measure`, `Unit multiplier`, `Observation status`, GeoCode, Value)
+         `Health board` = "")
 
 SDGupdater::multiple_year_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
 SDGupdater::multiple_country_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
@@ -105,4 +103,4 @@ rm(clean_data, main_data,
    info_cells, late_neonatal,
    tidy_data,
    country, year,
-   max_decimal_places_used_by_source, number_of_rate_calculation_mismatches)
+   decimal_places, number_of_rate_calculation_mismatches)

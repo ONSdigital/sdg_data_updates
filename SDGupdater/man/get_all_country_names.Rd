@@ -29,6 +29,10 @@ Identifies whether a string contains the name of one or more of the UK
 countries and if it does, it gives the names of that country as a string,
 otherwise it returns NA.
 }
+\details{
+Future improvements - return countries with correct capitalisation (possibly
+as option in arguments)
+}
 \section{Functions}{
 \itemize{
 \item \code{multiple_country_warning}: Extract country from string containing country name
@@ -36,7 +40,8 @@ otherwise it returns NA.
 
 \examples{
 test_dat <- c("England is a country of the UK", "this does not contain a
-country name") get_all_country_names(test_dat)
+country name")
+get_all_country_names(test_dat)
 
 multiple_country_warning("foo.xlsx", "Tab 1", "sex_by_age disaggregation")
 

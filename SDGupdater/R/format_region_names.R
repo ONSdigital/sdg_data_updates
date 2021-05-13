@@ -16,9 +16,9 @@
 #' test_var <- c("YORKSHIRE AND THE HUMBER", "EAST OF ENGLAND", "The shire")
 #' Region <- format_region_names(test_var)
 format_region_names <- function(variable) {
-  dplyr::case_when(variable == "YORKSHIRE AND THE HUMBER" ~ "Yorkshire and the Humber",
+  dplyr::case_when(variable == "YORKSHIRE AND THE HUMBER" ~ "Yorkshire and The Humber",
                    variable == "EAST OF ENGLAND" ~ "East",
-                   variable == "Yorkshire and The Humber" ~ "Yorkshire and the Humber",
+                   variable == "Yorkshire and the Humber" ~ "Yorkshire and The Humber",
                    variable == "East of England" ~ "East",
                    TRUE ~ stringr::str_to_title(variable))
 }

@@ -4,6 +4,9 @@
 #' countries and if it does, it gives the names of that country as a string,
 #' otherwise it returns NA.
 #'
+#' Future improvements - return countries with correct capitalisation (possibly
+#' as option in arguments)
+#'
 #' @param variable Character vector you want to check to see if it contains the
 #'   name of a UK country.
 #'
@@ -17,13 +20,22 @@
 #' @export
 get_all_country_names <- function (variable) {
 
-  possible_countries_vector <- c("England\ and\ Wales", "England",  "Wales", "Scotland", "Northern\ Ireland", "UK", "United\ Kingdom")
+  possible_countries_vector <- c("England\ and\ Wales", "England",  "Wales", "Scotland", "Northern\ Ireland",
+                                 "UK", "United\ Kingdom", "Great\ Britain", "Britain", "GB",
+                                 "England\ And\ Wales", "england\ and\ wales",
+                                 "northern\ Ireland", "Northern\ ireland",
+                                 "United\ kingdom", "united\ Kingdom",
+                                 "great\ Britain", "Great\ britain",
+                                 "england",  "wales", "scotland", "northern\ ireland",
+                                 "uk", "united\ kingdom", "great\ britain", "britain",
+                                 "ENGLAND\ AND\ WALES", "ENGLAND",  "WALES", "SCOTLAND", "NORTHERN\ IRELAND",
+                                 "UNITED\ KINGDOM", "GREAT\ BRITAIN", "BRITAIN")
   possible_countries <- paste(possible_countries_vector, collapse = "|")
 
-  list_of_countries <- ifelse(str_detect(variable, possible_countries),
-                              str_extract_all(variable, possible_countries), NA)
+  list_of_countries <- ifelse(stringr::str_detect(variable, possible_countries),
+                              stringr::str_extract_all(variable, possible_countries), NA)
 
-  collapse_list_to_strings(list_of_countries)
+  suppressWarnings(collapse_list_to_strings(list_of_countries))
 
 }
 

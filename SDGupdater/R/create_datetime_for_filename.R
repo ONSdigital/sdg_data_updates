@@ -15,5 +15,9 @@
 
 create_datetime_for_filename <- function(date_time) {
   datetime <- substr(date_time, 1, 16)
-  reformatted <- gsub("[:|' '']", '-', datetime)
+
+  reformatted_colon <- gsub("[:]", '-', datetime)
+  reformatted_all <- gsub("[' ']", '_at_', reformatted_colon)
+
+  return(reformatted_all)
 }

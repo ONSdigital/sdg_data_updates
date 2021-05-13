@@ -12,7 +12,13 @@
 #'
 #' @export
 get_characters_after_dot <- function(string) {
-  
+
+  input_type <- typeof(string)
+
+  if(input_type != "character"){
+    warning("input should be of type string. If input type is double, a character string will be returned")
+  }
+
   ifelse(grepl("\\.", string) == TRUE,
          sub(".*[.]", "", string),
          "")

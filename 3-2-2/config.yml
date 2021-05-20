@@ -1,8 +1,8 @@
 default:
-  input_folder: "Input"
+  input_folder: "Example data"
   output_folder: "Output"
 
-  filename: "cms2018workbookf.xlsx"
+  filename: "example_data_3-2-2.xlsx"
 
   country_of_occurrence_by_sex_tab_name: "Table 2"
   first_header_row_country_by_sex: 4

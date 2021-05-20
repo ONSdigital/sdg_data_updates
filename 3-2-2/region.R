@@ -13,7 +13,7 @@ country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- area_of_residence %>%
   SDGupdater::remove_blanks_and_info_cells(config$first_header_row_country_by_sex) %>%
-  dplyr::mutate(character = SDGupdater::remove_superscripts(character))
+  dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
 if ("Region" %in% main_data$character){ # because headings are different for 2017 and 2018 files
   tidy_data <- main_data %>%
@@ -75,7 +75,7 @@ SDGupdater::multiple_year_warning(config$filename, config$area_of_residence_tab_
 SDGupdater::multiple_country_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
 
 # clean up environment as the same names are used for multiple scripts called in the same session
-rm(clean_data, main_data,
+rm(clean_data,
    only_regions_kept,
    info_cells,
    tidy_data,

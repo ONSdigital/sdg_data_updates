@@ -12,7 +12,7 @@ country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- birthweight_by_mum_age %>%
   SDGupdater::remove_blanks_and_info_cells(config$first_header_row_birthweight_by_mum_age) %>%
-  dplyr::mutate(character = SDGupdater::remove_superscripts(character))
+  dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
 tidy_data <- main_data %>%
   unpivotr::behead("left-up", birthweight) %>%
@@ -34,22 +34,20 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, baby_age, event),
               values_from = numeric)
 
-decimal_places <- config$decimal_places
-
 neonatal_rates_location <- stringr::str_which(names(data_for_calculations), "Rates_Neonatal")
 names(data_for_calculations)[neonatal_rates_location] <- "Rates_Neonatal_Deaths" # need this because in 2019 data headings are slightly different and colname becomes Rates_Neonatal_Rates
 
 late_neonatal <- data_for_calculations %>%
   dplyr::mutate(Numbers_Late_neonatal_Deaths = Numbers_Neonatal_Deaths - Numbers_Early_Deaths) %>%
   dplyr::mutate(Rates_Late_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Late_neonatal_Deaths,
-                                                                     `Numbers_Live births_Births`, decimal_places),
+                                                                     `Numbers_Live births_Births`, config$decimal_places),
 
          Rates_Early_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Early_Deaths,
-                                                                      `Numbers_Live births_Births`, decimal_places),
+                                                                      `Numbers_Live births_Births`, config$decimal_places),
 
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
          Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(Numbers_Neonatal_Deaths,
-                                                               `Numbers_Live births_Births`, decimal_places))
+                                                               `Numbers_Live births_Births`, config$decimal_places))
 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$Rates_Neonatal_Deaths)
 
@@ -98,9 +96,9 @@ if(number_of_rate_calculation_mismatches != 0){
 }
 
 # clean up environment as the same names are used for multiple scripts called in the same session
-rm(clean_data, main_data,
+rm(clean_data,
    data_for_calculations, data_in_csv_format,
    info_cells, late_neonatal,
    tidy_data,
    country, year,
-   decimal_places, number_of_rate_calculation_mismatches)
+   number_of_rate_calculation_mismatches)

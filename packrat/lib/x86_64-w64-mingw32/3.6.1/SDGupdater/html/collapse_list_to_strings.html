@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Turn a list of character vectors/matrices into a vector of...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for collapse_list_to_strings {SDGupdater}"><tr><td>collapse_list_to_strings {SDGupdater}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Turn a list of character vectors/matrices into a vector of character strings</h2>
+
+<h3>Description</h3>
+
+<p>Turns a list of vectors/matrices that hold only character strings into a
+single vector of character strings, separated by &quot;, &quot;. The elements that make
+up each component of the input list are pasted into a single string. Each
+element of the new vector is formed from one component of the input list.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+collapse_list_to_strings(input_list)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>input_list</code></td>
+<td>
+<p>List of vectors or matrices, or a vector.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>(Initially called this function list_into_vector_of_strings)
+</p>
+
+
+<h3>Value</h3>
+
+<p>Each element of a list is collapsed to a string. Each element of the
+list becomes an element of a vector. If the input_list is a matrix, the
+order is first down rows then across columns.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+matrix_1 &lt;- as.matrix(c("England", "UK"))
+matrix_2 &lt;- as.matrix(c("Wales"))
+matrix_3 &lt;- as.matrix(c("NA"))
+matrix_list &lt;- list(matrix_1, matrix_2, matrix_3)
+list_into_vector_of_strings(matrix_list)
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>SDGupdater</em> version 0.0.0.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

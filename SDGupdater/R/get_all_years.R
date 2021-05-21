@@ -1,0 +1,47 @@
+#' Extract years from strings
+#'
+#' Identifies whether a string contains a number that looks like a year from the
+#' 20th or 21st century. If it does, it returns the year as a string, otherwise
+#' it returns NA. If it contains more than one year, all years are returned as a
+#' comma separated string
+#'
+#' @importFrom stringr str_detect str_extract_all
+#'
+#' @param variable Character vector.
+#'
+#' @return Character vector giving year or NA.
+#'
+#' @examples
+#' test_dat <- c("a date: 2005", "1995 6", "1993 end", "a1995", "1995a", "a
+#' date:1995, another date: 2012", "not a date: 475", "also not a date: 1234",
+#' "abc 12345",  "34200943", "190932")#' get_all_country_names(test_dat)
+#' get_all_years(test_dat)
+#'
+#' @export
+get_all_years <- function (variable) {
+
+  not_preceded_by_number <- "(?<![0-9])"
+  four_digits_starting_19_or_20 <- "(19|20)\\d{2}"
+  not_followed_by_number <- "(?![0-9])"
+  year_pattern <- paste(c(not_preceded_by_number, four_digits_starting_19_or_20, not_followed_by_number), collapse = "")
+
+
+  list_of_years <- ifelse(str_detect(variable, year_pattern),
+                          str_extract_all(variable, year_pattern), NA)
+
+  collapse_list_to_strings(list_of_years)
+
+}
+
+#' @rdname get_all_years
+#'
+#' @export
+multiple_year_warning <- function (filename, tab, description) {
+
+  if (nchar(year) > 4) {
+    warning(paste("More than one year identified from info above the column headings in",
+                  filename, tab, "where only one year was expected.
+  \nTO DO: Please check that Year is correct in the output for", description))
+  }
+
+}

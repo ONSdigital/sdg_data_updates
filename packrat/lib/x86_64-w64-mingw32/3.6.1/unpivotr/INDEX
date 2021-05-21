@@ -1,0 +1,22 @@
+as_cells                Tokenize data frames into a tidy 'melted'
+                        structure
+behead                  Strip a level of headers from a pivot table
+direction               Directions from data cells to headers
+enhead                  Join data cells to headers
+isolate_sentinels       Move sentinel values into a separate column
+                        leaving NA behind
+justify                 Align one set of cells with another set
+merge_cells             Merge cell values into a single cell by rows or
+                        columns
+pack                    Pack cell values from separate columns per data
+                        type into one list-column
+partition               Divide a grid of cells into partitions
+                        containing individual tables
+purpose                 Sense-of-purpose in the 2014 New Zealand
+                        General Social Survey
+rectify                 Display cells as though in a spreadsheet
+spatter                 Spread key-value pairs of mixed types across
+                        multiple columns
+tidy_table              Tokenize data frames into a tidy 'melted'
+                        structure
+unpivotr-package        Un-pivot complex and irregular data layouts.

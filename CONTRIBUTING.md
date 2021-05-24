@@ -18,8 +18,9 @@ I am going to assume that the only people who will be contributing will be membe
 ## General guidelines ##
 
 - Only edit code for one indicator on any branch
+- If making edits to SDGupdater do this on a separate branch (any advice on how to make edits to the package robust will be very welcome!)
 - Commit at least once a day when you are writing code
-- Make commit messages, and pull request comments informative
+- Make *informative* commit messages and pull request comments
 - Get code reviewed when merging into a branch that has other collaborators
 - Review is required to merge to main
 - When you complete a pull request to main, update sdg_data_updates on the shared drive
@@ -32,11 +33,11 @@ I am going to assume that the only people who will be contributing will be membe
     - Use informative names. Make it easy on future users (including yourself), by using names that tell you what is going on. This is not easy, but worth mastering. Well named objects and functions can negate the need for comments that tell you what the code does.
     - Use spaces the way they would be used in a sentence (e.g. the space comes *after* the comma `[, 1]`)
     - In R, assign using `<-` not `=`
-    - Comment on *why* you are doing something not *what* the code is doing. If you need to state what the code does, consider improving names and using well-named functions.
+    - Comment on *why* you are doing something not *what* the code is doing. If you need to state what the code does, consider improving names, breaking code down into well-named functions, or splitting up complex lines.
 
 ## Setting up your computer to work on indicator automations ##
 
-1) You should have 2-factor authentication on you Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
+1) You should have 2-factor authentication on your Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
 2) Copy the repo to your local drive (do not use a networked drive, as this will only cause you issues!). You can do this using the command line (e.g. Anaconda prompt), however here I just give instructions for Git GUI (though the logic will be the same):
  >   
  > If you don't already have one, create a folder on your local drive in which to store this and any other coding repos (I suggest using the  D: drive). 

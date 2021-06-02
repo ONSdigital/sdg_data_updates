@@ -23,7 +23,7 @@ note <- data.frame("Note" = c(
 info <- data.frame("Info" = c(
   "Office for National Statistics",
   "", 
-  "Proportion of informal employment in total employment, by sector (agriculture/ non-agriculture) and sex",
+  "Proportion of informal employment in total employment, by sector (agriculture/ non-agriculture), country, region, and sex",
   "For the purposes of reporting SDG indicator 8.3.1, we have defined informal employment as people who identify as unpaid family workers, this includes individuals who are either doing unpaid work for their own business or a relative's business",
   "These data are used to report indicator 8.3.1 of the Sustainable Development Goals",
   "",

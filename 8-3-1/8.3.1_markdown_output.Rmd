@@ -1,0 +1,141 @@
+---
+title: "8.3.1_test"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+
+
+eightthreeone_csv<- csv
+
+sector_by_country_na <- eightthreeone_csv %>%
+  filter(is.na(Sector) & is.na(Region)& is.na(Sex)) %>% 
+  mutate(Country = ifelse(is.na(Country), "United Kingdom", Country),
+         Sector = ifelse(is.na(Sector), "Total", Sector))
+
+sector_by_country_na2 <- eightthreeone_csv %>%
+  filter(!is.na(Sector) & is.na(Country) & is.na(Region) & is.na(Sex)) %>% 
+  mutate(Country = "United Kingdom")
+  
+  
+sector_by_country <- eightthreeone_csv %>%
+  select(Year, Country, Sector, Value) %>% 
+  filter(!is.na(Sector)& !is.na(Country)) %>% 
+  bind_rows(sector_by_country_na, sector_by_country_na2)
+
+
+sector_by_region <- eightthreeone_csv %>%
+  filter(is.na(Country) & is.na(Sex) & !is.na(Region)) %>% 
+  mutate(Sector = ifelse(is.na(Sector), "Total", Sector))
+
+sector_by_sex <- eightthreeone_csv %>% 
+  filter(is.na(Country) & is.na(Region)) %>% 
+  mutate(Sex = ifelse(is.na(Sex), "Total", Sex),
+         Sector = ifelse(is.na(Sector), "Total", Sector))
+
+
+country_by_sex <- eightthreeone_csv %>% 
+  filter(is.na(Region) & is.na(Sector)) %>% 
+  mutate(Sex = ifelse(is.na(Sex), "Total", Sex),
+         Country = ifelse(is.na(Country), "Total", Country))
+
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+
+## Sector by Country plot
+
+The below plot displays the percentage of employed people in informal employment by Country and Sector
+
+```{r sector_by_country, echo=FALSE}
+
+
+
+ggplot(sector_by_country, aes(Year, Value))+
+  geom_line(color = "steelblue")+
+  geom_point(color = "steelblue")+
+  labs(title = "Sector by Country",
+       y = "Percentage of employed people in informal employment", x = "")+
+  facet_grid(Sector ~ Country)+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))
+  #theme(panel.grid.major = element_line(colour = "black"))
+```
+
+## Sector by Region plot
+
+The below plot displays the percentage of employed people in informal employment by Sector and Region
+
+
+
+
+```{r sector_by_region, echo=FALSE}
+
+ggplot(sector_by_region, aes(Year, Value))+
+  geom_line(color = "steelblue")+
+  geom_point(color = "steelblue")+
+  labs(title = "Sector by region",
+       y = "Percentage of employed people in informal employment", x = "")+
+  facet_grid(Sector ~ Region)+
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))+
+  theme(panel.grid.major = element_line(colour = "black"))
+
+
+```
+
+
+
+## Sector by Sex plot
+
+The below plot displays the percentage of employed people in informal employment by Sector and Sex
+
+
+
+
+```{r sector_by_sex, echo=FALSE}
+
+ggplot(sector_by_sex, aes(Year, Value))+
+  geom_line(color = "steelblue")+
+  geom_point(color = "steelblue")+
+  labs(title = "Sector by sex",
+       y = "Percentage of employed people in informal employment", x = "")+
+  facet_grid(Sector ~ Sex)+
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))+
+  theme(panel.grid.major = element_line(colour = "black"))
+
+
+
+```
+
+## Country by Sex plot
+
+The below plot displays the percentage of employed people in informal employment by Country and Sex
+
+
+
+```{r country_by_sex, echo=FALSE}
+
+ggplot(country_by_sex, aes(Year, Value))+
+  geom_line(color = "steelblue")+
+  geom_point(color = "steelblue")+
+  labs(title = "Sector by sex",
+       y = "Percentage of employed people in informal employment", x = "")+
+  facet_grid(Sex ~ Country)+
+  theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))+
+  theme(panel.grid.major = element_line(colour = "black"))
+
+
+```
+
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

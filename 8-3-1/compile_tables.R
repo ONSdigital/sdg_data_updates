@@ -63,6 +63,7 @@ sector_by_country_compiled <- data.frame()
 sector_by_region_compiled <- data.frame()
 sector_by_sex_compiled <- data.frame()
 country_by_sex_compiled <- data.frame()
+suppressed_values <- data.frame()
 
 repeat_checks_compiled <- data.frame()
 disaggregations_with_low_counts_compiled <- data.frame()
@@ -87,6 +88,10 @@ for (i in 1:length(year_filepaths)) {
   sector_by_region_compiled <- bind_rows(sector_by_region_compiled, sector_by_region)
   sector_by_sex_compiled <- bind_rows(sector_by_sex_compiled, sector_by_sex)
   country_by_sex_compiled <- bind_rows(country_by_sex_compiled, country_by_sex)
+  
+  
+  suppressed_values <- bind_rows(suppressed_values, all_suppressed_values)
+  
   
   # suppressed <- suppressed_data
   

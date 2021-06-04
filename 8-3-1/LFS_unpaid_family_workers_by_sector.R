@@ -195,6 +195,38 @@ quality_control <- all_data %>%
                                           "suppressed", as.character(`Number of respondents for people in employment`)),
          Total_employment = ifelse(`Number of respondents for people in employment` == "suppressed", NA, Total_employment))
 
+
+
+all_suppressed_values <- all_data %>% 
+  left_join(informal_counts_one_geography, by = c("SEX", "Sector", "GeoCode")) %>% 
+  rename(`Number of respondents informal employment` = count) %>% 
+  left_join(employment_counts_one_geography, by = c("SEX", "Sector", "GeoCode")) %>% 
+  filter(`Number of respondents informal employment` < 3 | `Number of respondents for people in employment` < 3
+         | is.na(`Number of respondents informal employment`) | is.na(`Number of respondents for people in employment`)) %>% 
+  mutate(Year = year, 
+         Sex = case_when(
+           SEX == 1 ~ "Male",
+           SEX == 2 ~ "Female",
+           is.na(SEX) ~ ""),
+         Region = case_when(
+           GeoCode == "E12000001" ~ "North East",
+           GeoCode == "E12000002" ~ "North West",
+           GeoCode == "E12000003" ~ "Yorkshire and The Humber",
+           GeoCode == "E12000004" ~ "East Midlands",
+           GeoCode == "E12000005" ~ "West Midlands",
+           GeoCode == "E12000006" ~ "East",
+           GeoCode == "E12000007" ~ "London",
+           GeoCode == "E12000008" ~ "South East",
+           GeoCode == "E12000009" ~ "South West",
+           TRUE ~ ""), # In a case_when this final "TRUE" translates as "all other cases"
+         Country = case_when(
+           GeoCode == "W92000004" ~ "Wales",
+           GeoCode == "S92000003" ~ "Scotland",
+           GeoCode == "N92000002" ~ "Northern Ireland",
+           GeoCode == "E92000001" ~ "England",
+           TRUE ~ "")) %>% 
+  select(-SEX)
+
 # create final tables ----
 
 for_publication_and_csv <- quality_control %>%

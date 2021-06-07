@@ -17,19 +17,7 @@ eightthreeone_csv <- read_csv("D:\\Coding_repos\\sdg_data_updates\\8-3-1\\output
 
 
 # only want to create this df only when there are suppressed Country values otherwise I would be creating an empty df
-if (!is_empty(suppressed_values$Country)) {
-  suppressed_sector_by_country2 <- suppressed_values %>% 
-    filter(Country != "")
-}
 
-suppressed_sector_by_region <- suppressed_values %>% 
-  filter(Region != "")
-
-suppressed_sector_by_sex <- suppressed_values %>% 
-  filter(Sex != "")
-
-suppressed_Country_by_sex <- suppressed_values %>% 
-  filter(Country != "" & Sex != "")
 ################
 
 sector_by_country_na <- eightthreeone_csv %>%
@@ -78,8 +66,6 @@ The below plot displays the percentage of employed people in informal employment
 
 ```{r sector_by_country, echo=FALSE}
 
-
-
 ggplot(sector_by_country, aes(Year, Value))+
   geom_line(color = "steelblue")+
   geom_point(color = "steelblue")+
@@ -89,12 +75,30 @@ ggplot(sector_by_country, aes(Year, Value))+
   theme_bw()+
   theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))
   #theme(panel.grid.major = element_line(colour = "black"))
+
+# # only want to create this df only when there are suppressed Country values otherwise I would be creating an empty df
+# suppressed_sector_by_country <- suppressed_values %>% 
+#   filter(Country != "")
+# if (nrow(country_suppressed) > 0) {
+#   print(suppressed_sector_by_country)
+# } else {print("No suppressed values for this plot")}
+
+```
+
+```{r sector_by_country table, echo=FALSE}
+suppressed_sector_by_country <- suppressed_values %>% 
+  filter(Country != "")
+if (nrow(suppressed_sector_by_country) > 0) {
+  print(suppressed_sector_by_country)
+} else {
+  print("This dissaggregation had no suppressed values")
+}
+
 ```
 
 ## Sector by Region plot
 
 The below plot displays the percentage of employed people in informal employment by Sector and Region
-
 
 
 
@@ -112,7 +116,18 @@ ggplot(sector_by_region, aes(Year, Value))+
 
 ```
 
+```{r sector_by_region table, echo=FALSE}
+knitr::opts_chunk$set(error = TRUE)
+suppressed_sector_by_region <- suppressed_values %>% 
+  filter(Region != "")
+if (nrow(suppressed_sector_by_region) > 0) {
+  print(suppressed_sector_by_region)
+} else {
+  print("This dissaggregation had no suppressed values")
+}
 
+
+```
 
 ## Sector by Sex plot
 
@@ -135,6 +150,16 @@ ggplot(sector_by_sex, aes(Year, Value))+
 
 
 ```
+```{r sector_by_sex table, echo=FALSE}
+suppressed_sector_by_sex <- suppressed_values %>% 
+  filter(Sex != "")
+if (nrow(suppressed_sector_by_sex) > 0) {
+  print(suppressed_sector_by_sex)
+} else{
+  print("This dissaggregation had no suppressed values")
+}
+```
+
 
 ## Country by Sex plot
 
@@ -147,7 +172,7 @@ The below plot displays the percentage of employed people in informal employment
 ggplot(country_by_sex, aes(Year, Value))+
   geom_line(color = "steelblue")+
   geom_point(color = "steelblue")+
-  labs(title = "Sector by sex",
+  labs(title = "Country by sex",
        y = "Percentage of employed people in informal employment", x = "")+
   facet_grid(Sex ~ Country)+
   theme(axis.text.x = element_text(angle = -45, vjust = 1, hjust = 0))+
@@ -155,7 +180,15 @@ ggplot(country_by_sex, aes(Year, Value))+
 
 
 ```
-
+```{r country_by_sex table, echo=FALSE}
+suppressed_Country_by_sex <- suppressed_values %>% 
+  filter(Country != "" & Sex != "")
+if (nrow(suppressed_Country_by_sex) > 0) {
+  print(suppressed_Country_by_sex)
+} else{
+  print("This dissaggregation had no suppressed values")
+}
+```
 
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

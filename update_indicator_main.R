@@ -9,7 +9,7 @@
 # install.packages("tidyxl", dependencies = TRUE)
 # install.packages("unpivotr", dependencies = TRUE)
 
-# setwd("H:/Coding_repos/sdg_data_updates")
+# setwd("D:/Coding_repos")
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 rm(list = ls())
@@ -24,9 +24,9 @@ library(SDGupdater)
 
 #----------------------------------------------------------------------------------------------
 
-indicator <- "8-3-1" # name of folder for indicator
+indicator <- "16-3-2" # name of folder for indicator
 
-setwd(paste0("H:/Coding_repos/sdg_data_updates/", indicator))
+setwd(paste0("D:/Coding_repos/sdg_data_updates/", indicator))
 
 source("compile_tables.R")
 

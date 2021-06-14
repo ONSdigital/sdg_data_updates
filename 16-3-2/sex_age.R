@@ -5,10 +5,6 @@
 
 age_sex_data <- dplyr::filter(source_data, sheet == age_sex_tabname)
 
-# info cells are the cells above the column headings
-info_cells <- SDGupdater::get_info_cells(age_sex_data, first_date_row_age_sex)
-start_and_end_years <- SDGupdater::unique_to_string(info_cells$Year)
-
 data_without_superscripts <- age_sex_data %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character))) %>% 
   dplyr::mutate(character = remove_bracketted_superscripts(character)) %>% 
@@ -29,7 +25,7 @@ all_data <- bind_rows(first_set_correct_columns,
                       third_set_correct_columns) %>% 
   mutate(Status = ifelse(is.na(Status), "all_prisoners", Status)) %>%
   # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
-  filter(substr(Date, 7, 7) == 6 | substr(Date, 4, 6) == "Jun") %>% 
+  filter(substr(Date, 7, 7) == month_numeric | substr(Date, 4, 6) == month_character) %>% 
   filter(!is.na(numeric)) %>% 
   select(-c(row, sex_age_status, Date))
 
@@ -39,7 +35,7 @@ data_for_calculations <- all_data %>%
 
 proportions_calculated <- data_for_calculations %>% 
   mutate(Value = (Remand / all_prisoners) * 100) %>% 
-  mutate(Value = iflese(is.na(Value) & Remand == 0, 0, Value))
+  mutate(Value = ifelse(is.na(Value) & Remand == 0, 0, Value))
 
 csv_sex_age <- proportions_calculated %>% 
   mutate(Sex = case_when(
@@ -55,5 +51,5 @@ csv_sex_age <- proportions_calculated %>%
          `Observation status` = "Undefined") %>% 
   select(Year, Sex, Age, Nationality, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
 
-rm(info_cells, data_without_superscripts)
+rm(data_without_superscripts)
 

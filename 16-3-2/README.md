@@ -8,3 +8,4 @@
 If there are issues such as this, change them to be correct in the excel file. While this is not ideal, I don't know how to make the code cover every eventuality like this.
 6) Open update_indicator_main.R (from sdg_data_updates.Rproj) and click 'Source' button to run the script (top right corner of the script panel).  
 7) Outputs will be saved in the Outputs folder in 16-3-2 (which the script will create if it doesn't already exist).  
+8) An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv**

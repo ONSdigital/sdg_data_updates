@@ -43,7 +43,7 @@ data_with_year <- add_year_column(completed_nationality_column)
 all_data <- data_with_year %>%
   mutate(Status = ifelse(is.na(Status), "all_prisoners", Status)) %>%
   # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
-  filter(substr(Date, 7, 7) == 6 | substr(Date, 4, 6) == "Jun") %>%
+  filter(substr(Date, 7, 7) == month_numeric | substr(Date, 4, 6) == month_character) %>% 
   filter(!is.na(numeric)) %>%
   select(-c(row, nationality_status, Date))
  
@@ -53,7 +53,7 @@ data_for_calculations <- all_data %>%
 
 proportions_calculated <- data_for_calculations %>%
   mutate(Value = (Remand / all_prisoners) * 100) %>% 
-  mutate(Value = iflese(is.na(Value) & Remand == 0, 0, Value))
+  mutate(Value = ifelse(is.na(Value) & Remand == 0, 0, Value))
 
 csv_nationality <- proportions_calculated %>%
   mutate(Nationality = ifelse(Nationality == "Total",

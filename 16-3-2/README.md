@@ -1,5 +1,12 @@
 ### 16.3.2 update instructions
 
+Run this update from `update_indicator_main.R` (in the parent folder to this one). Unless you are editing the code, this, and `config.R` are the only files you need to open.  
+  
+- `update_indicator_main.R` calls `compile_tables.R`, which compiles data created by `sex_age.R` and `nationality.R` into a single csv.  
+- `compile_tables.R` saves the csv, and renders and saves the output of R markdown file `16-3-2_checks.Rmd` as an html document.  
+- `sex_age.R` and `nationality.R` both use functions in the `functions.R` file (which are specific to this indicator), as well as from the SDGupdater package.  
+
+
 1) Save the Annual Prison Population tables as an xlsx file in the 'Input' folder in 16-3-2 (if this doesn't exist, make it inside the 16.3.2 folder).  
 2) Open the sdg_data_updates.Rproj from inside RStudio.  
 3) Open the config.R file in 16-3-2 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel).  

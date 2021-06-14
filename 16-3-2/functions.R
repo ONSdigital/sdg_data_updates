@@ -18,8 +18,8 @@ create_disaggregation_columns <- function(dat) {
   unpivoted <- unpivot_data(dat)
   separated_columns <- separate_columns(unpivoted)
   first_status_row <- get_first_row_for_each_status(separated_columns)
-  status_for_each_row <- get_status_for_each_row(first_status_row)
-  completed_status_column <- complete_status_column(separated_columns)
+  status_for_each_row <- get_status_for_each_row(first_status_row, all_rows = separated_columns)
+  completed_status_column <- complete_status_column(separated_columns, entry_for_each_row = status_for_each_row)
   completed_sex_column <- complete_sex_column(completed_status_column)
   year_column_added <- add_year_column(completed_sex_column)
   
@@ -45,16 +45,16 @@ get_first_row_for_each_status <- function (dat) {
     filter(row_number() == 1) %>% 
     distinct(Status, row) 
 }
-get_status_for_each_row <- function(dat){
-  data.frame(row = c(min(separated_columns$row):max(separated_columns$row))) %>% 
-    left_join(dat, by = "row") %>% 
+get_status_for_each_row <- function(first_status_row, all_rows){
+  data.frame(row = c(min(all_rows$row):max(all_rows$row))) %>% 
+    left_join(first_status_row, by = "row") %>% 
     tidyr::fill(Status)
   
 }
-complete_status_column <- function(dat){
+complete_status_column <- function(dat, entry_for_each_row){
   dat %>% 
     select(-Status) %>% 
-    left_join(status_for_each_row, by = "row") 
+    left_join(entry_for_each_row, by = "row") 
 }
 complete_sex_column <- function(dat) {
   sex <- get_sex(dat)

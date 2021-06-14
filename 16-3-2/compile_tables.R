@@ -11,4 +11,4 @@ source_data <- tidyxl::xlsx_cells(input_filepath,
                                   sheets = c(age_sex_tabname,
                                              nationality_tabname))
 
-source(sex_age)
+source("sex_age.R")

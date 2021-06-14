@@ -16,47 +16,53 @@ data_without_superscripts <- nationality_data %>%
 main_data <- filter(data_without_superscripts, row >= date_row_nationality)
 
 unpivoted_data <- main_data %>% 
-  unpivotr::behead("left", nationality_status_detail) %>%
+  unpivotr::behead("left", nationality_status) %>%
   unpivotr::behead("up", Date) %>%  
-  dplyr::select(nationality_status_detail, Date, numeric, row) 
+  dplyr::select(nationality_status, Date, numeric, row) 
 
 potential_nationalities <- c("Total", "British nationals", "Foreign nationals", "Nationality not recorded")
 
 tidied_data <- unpivoted_data %>% 
   filter(!is.na(numeric)) %>% 
-  mutate(Nationality = ifelse(nationality_status_detail %in% potential_nationalities|
-                                grepl("ation", nationality_status_detail) == TRUE, # this line added in case capitalization is different or another nationality containing the word nation is added
-                              nationality_status_detail, NA),
-         Status = ) %>% 
-  # there is a typo in the data - it says British national where it should say Remand - figure out how to fix this (something to do with order?) or change it in the file? The latter may be a better use of my time
+  mutate(Nationality = ifelse(nationality_status %in% potential_nationalities|
+                                grepl("ation", nationality_status) == TRUE, # this line added in case capitalization is different or another nationality containing the word nation is added
+                              nationality_status, NA),
+         Status = ifelse(nationality_status %not_in% potential_nationalities &
+                           grepl("ation", nationality_status) == FALSE,
+                         nationality_status, NA)) 
 
-# 
-# all_data <- bind_rows(first_set_correct_columns,
-#                       second_set_correct_columns,
-#                       third_set_correct_columns) %>% 
-#   mutate(Status = ifelse(is.na(Status), "all_prisoners", Status)) %>%
-#   # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
-#   filter(substr(Date, 7, 7) == 6 | substr(Date, 4, 6) == "Jun") %>% 
-#   filter(!is.na(numeric)) %>% 
-#   select(-c(row, sex_age_status, Date))
-# 
-# data_for_calculations <- all_data %>% 
-#   tidyr::pivot_wider(names_from = Status,
-#                      values_from = numeric)
-# 
-# proportions_calculated <- data_for_calculations %>% 
-#   mutate(Value = (Remand / all_prisoners) * 100)
-# 
-# csv_sex_age <- proportions_calculated %>% 
-#   mutate(Sex = ifelse(Sex == "Males and females" | Sex == "Males and Females" | Sex == "males and females",
-#                       "", Sex),
-#          Age = gsub("-", " to ", Age),
-#          Age = ifelse(is.na(Age), "", Age),
-#          Nationality = "",
-#          `Unit measure` = "Percentage (%)",
-#          `Unit multiplier` =  "Units",
-#          `Observation status` = "Undefined") %>% 
-#   select(Year, Sex, Age, Nationality, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
-# 
-# 
-# 
+nationality_for_each_row <- fill_column_with_type(dat = tidied_data,
+                                                  type = Nationality)
+
+completed_nationality_column <- tidied_data %>% 
+  select(-Nationality) %>% 
+  left_join(nationality_for_each_row, by = "row")
+
+data_with_year <- add_year_column(completed_nationality_column)
+ 
+all_data <- data_with_year %>%
+  mutate(Status = ifelse(is.na(Status), "all_prisoners", Status)) %>%
+  # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
+  filter(substr(Date, 7, 7) == 6 | substr(Date, 4, 6) == "Jun") %>%
+  filter(!is.na(numeric)) %>%
+  select(-c(row, nationality_status, Date))
+ 
+data_for_calculations <- all_data %>%
+  tidyr::pivot_wider(names_from = Status,
+                     values_from = numeric)
+
+proportions_calculated <- data_for_calculations %>%
+  mutate(Value = (Remand / all_prisoners) * 100)
+
+csv_nationality <- proportions_calculated %>%
+  mutate(Nationality = ifelse(Nationality == "Total",
+                      "", Nationality),
+         Sex = "",
+         Age = "",
+         `Unit measure` = "Percentage (%)",
+         `Unit multiplier` =  "Units",
+         `Observation status` = "Undefined") %>%
+  select(Year, Sex, Age, Nationality, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
+
+
+

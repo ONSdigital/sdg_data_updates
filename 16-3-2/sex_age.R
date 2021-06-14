@@ -1,6 +1,7 @@
 # Author: Emma Wood
 # Date (start): 10/06/2021
 # Purpose: To create csv data for age and sex 16.3.2.
+# Requirements: Functions specific to this indicator are called from functions.R
 
 age_sex_data <- dplyr::filter(source_data, sheet == age_sex_tabname)
 
@@ -19,7 +20,7 @@ first_set_correct_columns <- create_disaggregation_columns(first_set)
 second_set <- filter(data_without_superscripts, row %in% second_date_row_age_sex:(third_date_row_age_sex - 1))
 second_set_correct_columns <- create_disaggregation_columns(second_set)
 
-third_set <- filter(data_without_superscripts, row > third_date_row_age_sex)
+third_set <- filter(data_without_superscripts, row >= third_date_row_age_sex)
 third_set_correct_columns <- create_disaggregation_columns(third_set)
 
 
@@ -37,11 +38,15 @@ data_for_calculations <- all_data %>%
                      values_from = numeric)
 
 proportions_calculated <- data_for_calculations %>% 
-  mutate(Value = (Remand / all_prisoners) * 100)
+  mutate(Value = (Remand / all_prisoners) * 100) %>% 
+  mutate(Value = iflese(is.na(Value) & Remand == 0, 0, Value))
 
 csv_sex_age <- proportions_calculated %>% 
-  mutate(Sex = ifelse(Sex == "Males and females" | Sex == "Males and Females" | Sex == "males and females",
-                      "", Sex),
+  mutate(Sex = case_when(
+           Sex == "Males and females" | Sex == "Males and Females" | Sex == "males and females" ~ "",
+           Sex == "Females" | Sex == "females"  ~  "Female",
+           Sex == "Males" | Sex == "males" ~ "Male",
+           TRUE ~ as.character(Sex)),
          Age = gsub("-", " to ", Age),
          Age = ifelse(is.na(Age), "", Age),
          Nationality = "",

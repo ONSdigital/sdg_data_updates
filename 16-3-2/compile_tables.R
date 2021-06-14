@@ -16,7 +16,13 @@ source_data <- tidyxl::xlsx_cells(input_filepath,
 source("sex_age.R")
 source("nationality.R")
 
-csv <- bind_rows(csv_sex_age, csv_nationality)
+csv <- bind_rows(csv_sex_age, csv_nationality) %>% 
+  distinct()
+
+duplicated_disaggs <- csv %>% 
+  group_by(Year, Sex, Age, Nationality) %>% 
+  tally() %>% 
+  filter(n > 1)
 
 existing_files <- list.files()
 if("Output" %not_in% existing_files) {
@@ -26,3 +32,5 @@ if("Output" %not_in% existing_files) {
 setwd("Output")
 
 write.csv(csv, paste0("output_", run_date, ".csv"), row.names = FALSE)
+
+setwd('..')

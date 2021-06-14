@@ -52,7 +52,8 @@ data_for_calculations <- all_data %>%
                      values_from = numeric)
 
 proportions_calculated <- data_for_calculations %>%
-  mutate(Value = (Remand / all_prisoners) * 100)
+  mutate(Value = (Remand / all_prisoners) * 100) %>% 
+  mutate(Value = iflese(is.na(Value) & Remand == 0, 0, Value))
 
 csv_nationality <- proportions_calculated %>%
   mutate(Nationality = ifelse(Nationality == "Total",

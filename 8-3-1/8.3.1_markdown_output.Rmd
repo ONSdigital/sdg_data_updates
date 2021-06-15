@@ -8,7 +8,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
-
+library(knitr)
+library(kableExtra)
 
 eightthreeone_csv <- read_csv("D:\\Coding_repos\\sdg_data_updates\\8-3-1\\output\\8-3-1_csv_2021-05-10.csv") 
 
@@ -50,6 +51,10 @@ country_by_sex <- eightthreeone_csv %>%
   filter(is.na(Region) & is.na(Sector)) %>% 
   mutate(Sex = ifelse(is.na(Sex), "Total", Sex),
          Country = ifelse(is.na(Country), "Total", Country))
+
+
+suppressed_sector_by_region <- suppressed_values %>% 
+  filter(Region != "")
 
 ```
 
@@ -116,12 +121,13 @@ ggplot(sector_by_region, aes(Year, Value))+
 
 ```
 
-```{r sector_by_region table, echo=FALSE}
-knitr::opts_chunk$set(error = TRUE)
-suppressed_sector_by_region <- suppressed_values %>% 
-  filter(Region != "")
+```{r sector_by_region table, echo=FALSE, results = 'hold'}
+#knitr::opts_chunk$set(error = TRUE)
+
+
 if (nrow(suppressed_sector_by_region) > 0) {
-  print(suppressed_sector_by_region)
+  kable(suppressed_sector_by_region, format="html", booktabs=TRUE) %>% 
+    kable_styling(bootstrap_options="basic")
 } else {
   print("This dissaggregation had no suppressed values")
 }
@@ -184,7 +190,7 @@ ggplot(country_by_sex, aes(Year, Value))+
 suppressed_Country_by_sex <- suppressed_values %>% 
   filter(Country != "" & Sex != "")
 if (nrow(suppressed_Country_by_sex) > 0) {
-  print(suppressed_Country_by_sex)
+  kable(print(suppressed_Country_by_sex))
 } else{
   print("This dissaggregation had no suppressed values")
 }

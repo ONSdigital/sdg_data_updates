@@ -47,7 +47,7 @@ vignettes/*.pdf
 **/output
 
 # config files
-config.R
-configs.R
-Config.R
-Configs.R
+**/config.R
+**/configs.R
+**/Config.R
+**/Configs.R

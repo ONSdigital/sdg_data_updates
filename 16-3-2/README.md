@@ -7,7 +7,7 @@ Run this update from `update_indicator_main.R` (in the parent folder to this one
 - `sex_age.R` and `nationality.R` both use functions in the `functions.R` file (which are specific to this indicator), as well as from the SDGupdater package.  
 
 
-1) Save the Annual Prison Population tables as an xlsx file in the 'Input' folder in 16-3-2 (if this doesn't exist, make it inside the 16.3.2 folder).  
+1) Save the Annual Prison Population tables as an **xlsx** file in the 'Input' folder in 16-3-2 (if this doesn't exist, make it inside the 16.3.2 folder).  It MUST be xlsx not xls in order for the functin that reads in the data to work (`xlsx_cells`).  
 2) Open the sdg_data_updates.Rproj from inside RStudio.  
 3) Open the config.R file in 16-3-2 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel).  
 4) Check the configurations (e.g. filename and tab names) are correct, and if not correct them and save.  

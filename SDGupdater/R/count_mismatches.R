@@ -18,9 +18,11 @@
 #' @export
 count_mismatches <- function(number_var_1, number_var_2)  {
 
-  data_frame <- data.frame(var1 = number_var_1, var2 = number_var_2)
+    data_frame <- data.frame(var1 = number_var_1, var2 = number_var_2) %>% 
+      dplyr::mutate(across(where(is.factor), as.character))
+  
   no_NAs <- na.omit(data_frame)
-  comparison <- ifelse(no_NAs$number_var_1 == no_NAs$number_var_2, 0, 1)
+  comparison <- ifelse(no_NAs$var1 == no_NAs$var2, 0, 1)
   mismatch_count <- sum(comparison, na.rm = TRUE)
   return(mismatch_count)
 

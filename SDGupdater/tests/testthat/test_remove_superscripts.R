@@ -21,6 +21,10 @@ test_that("remove_superscripts returns expected value", {
   expect_equal(remove_superscripts(c(NA, "Ab")), c(NA, "Ab"))
 })
 
+test_that("remove_superscripts does not trucate a code", {
+  expect_equal(remove_superscripts("E12000002"), "E12000002")
+})
+
 
 test_that("remove_superscripts gives expected warnings",{
   expect_warning(remove_superscripts(""), 

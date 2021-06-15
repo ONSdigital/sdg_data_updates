@@ -18,7 +18,7 @@
 #' matrix_2 <- as.matrix(c("Wales"))
 #' matrix_3 <- as.matrix(c("NA"))
 #' matrix_list <- list(matrix_1, matrix_2, matrix_3)
-#' list_into_vector_of_strings(matrix_list)
+#' collapse_list_to_strings(matrix_list)
 #'
 #' @export
 

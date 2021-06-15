@@ -117,5 +117,6 @@ NA_values = csv_concat[csv_concat["Value"].isin(["nan"])] # This df contains all
 csv_concat = csv_concat.dropna(subset = ["Value"]) # Df with no NA values - to use in indicator file
 
 
+csv_concat.to_csv("Y:\\Data Collection and Reporting\\Jemalex\\In progress\\API updated\\3.9.1.csv", index = False)
 
 

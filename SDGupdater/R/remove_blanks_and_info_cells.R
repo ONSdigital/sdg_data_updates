@@ -7,7 +7,7 @@
 #' @importFrom dplyr mutate
 #' @importFrom dplyr filter
 #'
-#' @param dat Tibble originaly imported using xlsx_cells.
+#' @param dat Tibble originally imported using xlsx_cells.
 #' @param first_header_row Numeric. Row number of first row in the xlsx file
 #'   containing column names.
 #'
@@ -26,7 +26,7 @@ remove_blanks_and_info_cells <- function(dat, first_header_row) {
   expected_columns <- c("character", "is_blank", "row")
 
   if(sum(expected_columns %not_in% names(dat)) != 0) {
-    stop("requires columns 'row', 'character', and 'is_blank', which are created when importing using xlsx_cells")
+    stop("requires columns 'row', 'character', and 'is_blank', which are created when importing using xlsx_cells.")
   }
 
   dat %>%

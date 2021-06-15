@@ -19,6 +19,17 @@ test_that("remove_multiple_superscripts returns expected value", {
   expect_equal(remove_multiple_superscripts("Ab1,3-5,7"), "Ab")
   expect_equal(remove_multiple_superscripts("Ab1-3,5,7-9"), "Ab")
 
-  expect_equal(remove_multiple_superscripts(c("1", "Ab")), c("1", "Ab"))
+  expect_equal(suppressWarnings(remove_multiple_superscripts(c("1", "Ab"))), c("1", "Ab"))
   expect_equal(remove_multiple_superscripts(c(NA, "Ab")), c(NA, "Ab"))
+})
+
+test_that("remove_multiple_superscripts gives expected warnings",{
+  expect_warning(remove_multiple_superscripts(""), 
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+  expect_warning(remove_multiple_superscripts(1), 
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+  expect_warning(remove_multiple_superscripts("1"), 
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+  expect_warning(remove_multiple_superscripts(c("1", "Ab")), 
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
 })

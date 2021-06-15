@@ -5,11 +5,11 @@ test_that("get_all_years returns expected value", {
   expect_equal(get_all_years("1990A"), "1990")
   expect_equal(get_all_years("A1990"), "1990")
 
-  expect_equal(get_all_years("1899"), NA)
-  expect_equal(get_all_years("2100"), NA)
-  expect_equal(get_all_years("1234"), NA)
-  expect_equal(get_all_years("0000"), NA)
-  expect_equal(get_all_years("year: 200"), NA)
+  expect_equal(suppressWarnings(get_all_years("1899")), NA)
+  expect_equal(suppressWarnings(get_all_years("2100")), NA)
+  expect_equal(suppressWarnings(get_all_years("1234")), NA)
+  expect_equal(suppressWarnings(get_all_years("0000")), NA)
+  expect_equal(suppressWarnings(get_all_years("year: 200")), NA)
 
   expect_equal(get_all_years("1999 2020"), "1999, 2020")
   expect_equal(get_all_years("Year: 1950"), "1950")

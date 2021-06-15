@@ -23,7 +23,7 @@ test_that("remove_blanks_and_info_cells returns expected data class", {
 })
 
 test_that("remove_blanks_and_info_cells returns an error if input does not look like it comes from xlsx_cells input", {
-  expect_warning(remove_blanks_and_info_cells(dplyr::tibble(A = 1)),
-               "requires columns 'row', 'character', and 'is_blank', which are created when importing using xlsx_cells")
+  expect_error(remove_blanks_and_info_cells(dplyr::tibble(A = 1)),
+               "requires columns 'row', 'character', and 'is_blank', which are created when importing using xlsx_cells.")
 
 })

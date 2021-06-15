@@ -14,8 +14,8 @@ test_that("get_characters_after_dot returns expected value", {
 test_that("get_characters_after_dot returns expected data datatype", {
   expect_equal(typeof(get_characters_after_dot("abc.d")), "character")
   expect_equal(typeof(get_characters_after_dot("12.34")), "character")
-  expect_equal(typeof(get_characters_after_dot(12.34)), "character")
-  expect_equal(typeof(get_characters_after_dot(1234)), "character")
+  expect_equal(typeof(suppressWarnings(get_characters_after_dot(12.34))), "character")
+  expect_equal(typeof(suppressWarnings(get_characters_after_dot(1234))), "character")
 })
 
 test_that("get_characters_after_dot gives an appropriate warning if input is not of character type", {

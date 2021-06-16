@@ -7,7 +7,7 @@
 unique_to_string(variable)
 }
 \arguments{
-\item{variable}{Vector of character strings.}
+\item{variable}{Vector of character strings or numbers.}
 }
 \value{
 Single character string of unique entries, not including NAs.

@@ -14,12 +14,12 @@ Vector of same type as values.
 }
 \description{
 Finds which value occurs most frequently. If there is more than one mode, all
-will be returned
+will be returned (i.e. this works for multimodal data)
 }
 \examples{
-get_modal_values(1,2,3,1,3)
-get_modal_values(1,1,2,3)
-get_modal_values("a", "a", "b")
+get_modal_values(c(1,2,3,1,3))
+get_modal_values(c(1,1,2,3))
+get_modal_values(c("a", "a", "b"))
 
 }
 \seealso{

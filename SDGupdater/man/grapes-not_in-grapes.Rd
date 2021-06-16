@@ -9,8 +9,3 @@
 \description{
 Opposite of \%in\%
 }
-\examples{
-get_characters_after_dot("ab.cde")
-get_characters_after_dot("ab.cde.fgh")
-
-}

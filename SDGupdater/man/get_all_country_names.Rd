@@ -17,7 +17,8 @@ name of a UK country.}
 
 \item{tab}{string giving name of the tab (so warning is specific)}
 
-\item{description}{string describing the data that is affected (e.g. which disaggregation)}
+\item{description}{string describing the data that is affected (e.g. which
+disaggregation)}
 }
 \value{
 Character vector giving name of country or NA.
@@ -35,7 +36,8 @@ as option in arguments)
 }
 \section{Functions}{
 \itemize{
-\item \code{multiple_country_warning}: Extract country from string containing country name
+\item \code{multiple_country_warning}: Extract country from string containing
+country name
 }}
 
 \examples{
@@ -43,6 +45,7 @@ test_dat <- c("England is a country of the UK", "this does not contain a
 country name")
 get_all_country_names(test_dat)
 
+country <- "England, Scotland"
 multiple_country_warning("foo.xlsx", "Tab 1", "sex_by_age disaggregation")
 
 }

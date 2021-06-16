@@ -7,7 +7,7 @@
 remove_blanks_and_info_cells(dat, first_header_row)
 }
 \arguments{
-\item{dat}{Tibble originaly imported using xlsx_cells.}
+\item{dat}{Tibble originally imported using xlsx_cells.}
 
 \item{first_header_row}{Numeric. Row number of first row in the xlsx file
 containing column names.}

@@ -2,7 +2,7 @@
 #'
 #' Get the second to last character of a string
 #'
-#' @param variable Character string.
+#' @param variable Character string or numeric.
 #'
 #' @return Character.
 #'

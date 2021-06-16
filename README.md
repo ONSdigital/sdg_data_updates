@@ -17,4 +17,6 @@ Indicator specific files can be found in each indicator folder (name structure x
 
 SDGupdater is a package used by indicator update scripts. 
 
-Dependencies are managed using packrat (all required packages are stored locally). SDGupdater, devtools and roxygen2 are external packages.
+
+### To do ### 
+Manage dependencies using packrat (all required packages are stored locally). 

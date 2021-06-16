@@ -7,7 +7,7 @@
 get_penultimate_character(variable)
 }
 \arguments{
-\item{variable}{Character string.}
+\item{variable}{Character string or numeric.}
 }
 \value{
 Character.

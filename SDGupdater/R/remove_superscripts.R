@@ -2,16 +2,19 @@
 #'
 #' @description Remove superscripts, whether they are read as actual
 #'   superscripts or just as numbers (which are referred to as 'false
-#'   superscripts'). This function assumes that superscripts never follow:  
-#'   - a space  
-#'   - a number (so superscripts over 9 are not recognised)  
-#'   - a string consisting of just one other character  
-#'   - a 'word' consisting of both numbers and letters  
-#'   - a pound (£) or dollar ($) symbol.
-#'   - a string starting with a number or a single letter
-#'   If it becomes apparent that these scenarios need to be covered, the
-#'   function will need updating. 
+#'   superscripts'). 
 #'
+#' @details  This function assumes that superscripts never follow: 
+#' - a space 
+#' - a number (superscripts over 9 are not recognised)
+#' - a string consisting of just one other character
+#' - a 'word' consisting of both numbers and letters
+#' - a pound or dollar symbol
+#' - a string starting with a number or a single letter  
+#' 
+#'  If it becomes apparent that these scenarios need to be covered, the function
+#' will need updating.
+#'   
 #' @param variable Character vector you want superscripts removed from.
 #'
 #' @return Character vector for all but `could_contain_superscripts`, which
@@ -97,12 +100,15 @@ remove_false_superscripts <- function (variable) {
 #' @export
 could_contain_superscript <- function (variable) {
 
-  # We don't want to accidentally identify a number that is not a superscript as a superscript.
-  # e.g. we don't want to truncate a number, or a code that ends in a number (e.g. an area code) because that number was misidentified as a superscript
+  # We don't want to accidentally identify a number that is not a superscript as
+  # a superscript. e.g. we don't want to truncate a number, or a code that ends
+  # in a number (e.g. an area code) because that number was misidentified as a
+  # superscript
   #
-  # If first TWO characters are 'letters', this identifies the string as a string not a number
-  # (If we only required the FIRST character to be a letter, Area code numbers would be affected)
-  # In addition, superscripts are unlikely to be preceded by a number or a space
+  # If first TWO characters are 'letters', this identifies the string as a
+  # string not a number (If we only required the FIRST character to be a letter,
+  # Area code numbers would be affected) In addition, superscripts are unlikely
+  # to be preceded by a number or a space
 
   allowed_characters <- c(LETTERS, letters, " ", "-", "#")
 

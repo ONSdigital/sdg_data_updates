@@ -3,7 +3,7 @@
 #' Turns a vector that hold only character strings into a single character
 #' string, with values separated by separated by ", ". NAs are ignored.
 #'
-#' @param variable Vector of character strings.
+#' @param variable Vector of character strings or numbers.
 #'
 #' @return Single character string of unique entries, not including NAs.
 #'

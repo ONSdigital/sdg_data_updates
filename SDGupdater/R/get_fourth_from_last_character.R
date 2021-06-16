@@ -2,7 +2,7 @@
 #'
 #' Get the fourth from last character of a string
 #'
-#' @param variable Character string.
+#' @param variable Character string or numeric.
 #'
 #' @return Character.
 #'

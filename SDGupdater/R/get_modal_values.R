@@ -1,7 +1,7 @@
 #' Get modal values
 #'
 #' Finds which value occurs most frequently. If there is more than one mode, all
-#' will be returned
+#' will be returned (i.e. this works for multimodal data)
 #'
 #' @seealso From thread:
 #'   https://stackoverflow.com/questions/2547402/how-to-find-the-statistical-mode
@@ -11,9 +11,9 @@
 #' @return Vector of same type as values.
 #'
 #' @examples
-#' get_modal_values(1,2,3,1,3)
-#' get_modal_values(1,1,2,3)
-#' get_modal_values("a", "a", "b")
+#' get_modal_values(c(1,2,3,1,3))
+#' get_modal_values(c(1,1,2,3))
+#' get_modal_values(c("a", "a", "b"))
 #'
 #' @export
 get_modal_values <- function(values) {

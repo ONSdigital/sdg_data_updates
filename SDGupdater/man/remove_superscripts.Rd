@@ -22,19 +22,27 @@ could_contain_superscript(variable)
 \item{variable}{Character vector you want superscripts removed from.}
 }
 \value{
-Character vector.
+Character vector for all but \code{could_contain_superscripts}, which
+returns a logical vector.
 }
 \description{
 Remove superscripts, whether they are read as actual
-superscripts or just as numbers. This function assumes that superscripts
-never follow:
+superscripts or just as numbers (which are referred to as 'false
+superscripts').
+}
+\details{
+This function assumes that superscripts never follow:
 \itemize{
 \item a space
-\item a number (so superscripts over 9 are not recognised)
+\item a number (superscripts over 9 are not recognised)
 \item a string consisting of just one other character
 \item a 'word' consisting of both numbers and letters
-\item £ or $
+\item a pound or dollar symbol
+\item a string starting with a number or a single letter
 }
+
+If it becomes apparent that these scenarios need to be covered, the function
+will need updating.
 }
 \examples{
 character <- c("Wales1","Rates?", "Numbers1,2")

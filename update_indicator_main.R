@@ -9,7 +9,7 @@
 # install.packages("tidyxl", dependencies = TRUE)
 # install.packages("unpivotr", dependencies = TRUE)
 
-# setwd("H:/Coding_repos/sdg_data_updates")
+# setwd("D:/Coding_repos/sdg_data_updates")
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 rm(list = ls())

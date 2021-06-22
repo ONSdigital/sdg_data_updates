@@ -16,8 +16,6 @@ import datetime as dt # to get date
 import config
 
 
-
-
 def check_download_filepath():
     
     # search for csv files in the same format as the time series, which will
@@ -25,9 +23,9 @@ def check_download_filepath():
     for name in glob.glob(config.download_path+'series-??????.csv'):
         if path.exists(name):
             response = ctypes.windll.user32.MessageBoxW(0, 
-                                                        "The file " + name + " already exists in " + config.download_path + ". Delete file?",
+                                                        "The file " + name + " already exists in " + config.download_path + ". Delete file? If you do not want to delete files, please click cancel. Closing the dialogue box will prompt file deletion.",
                                                         "File download warning",
-                                                        0x40000)
+                                                        1)
             if response == 1:
                 remove(name)
                 print(name+" has been deleted")
@@ -54,9 +52,9 @@ def check_output_filepath():
     if file_flag == 1:
         response = ctypes.windll.user32.MessageBoxW(0, "Files already exist in "+ 
                                                     config.download_path + 
-                                                    ". Delete files?", 
+                                                    ". Delete files? If you do not want to delete files, please click cancel. Closing the dialogue box will prompt file deletion.", 
                                                     "File download warning",
-                                                     0x40000)
+                                                     1)
         if response == 1:
             for name in names:
                 try:
@@ -101,8 +99,7 @@ def get_relevant_data(dataframe):
     monthly_dataframe = monthly_dataframe.reset_index()
     
     return(monthly_dataframe)
-
-
+    
 # define function to produce the latest vintage of the indicator
 def months_to_numbers(index_df):
     # convert months to numbers - for each year, read in using strptime and print out using strftime
@@ -118,94 +115,95 @@ def get_start_year(index_df):
     start_year = int(index_df['year'][0][0:4])
     return(start_year)
 
-def get_growth_rates(index_df): # pretty sure this is not needed here
+#def get_growth_rates(index_df): # pretty sure this is not needed here
     
     # reduce down to year & value
-    index_df = index_df[['year', 'value']] # do we ever use the index value? If not get rid of it in n earlier function
+ #   index_df = index_df[['year', 'value']] # do we ever use the index value? If not get rid of it in n earlier function
 
 
+def calculate_indicator(df, start_year):
     
-def calculate_growth_rates(index_df, period):
-    # add growth rate columns up to len(index_df['value']), which is the CGR of the previous 3 months
+    annual_lookup = {
+        "weight": "annual_weight",
+        "growth_rate": "annual_growth_rate",
+        "weighted_mean": "average_annual",
+        "w*(x-mu)^two": "annual_w*(x-mu)^two",
+        "st_dev": "st_dev_annual",
+        "months": 12,
+        "z-score": "z-score_annual"}
+    quarterly_lookup = {
+        "weight*value": "quart_weight*value",
+        "growth_rate": "quarterly_growth_rate",
+        "weighted_mean": "average_quarterly",
+        "w*(x-mu)^two": "quart_w*(x-mu)^two",
+        "st_dev": "st_dev_quarterly",
+        "months": 3,
+        "z-score": "z-score_quarterly"}
     
-    if period == "annual":
-        months = 12 
-        column = "annual_growth_rate"
-    if period == "quarterly":
-        months = 3
-        column = ["quarterly_growth_rate"]
+    annual_growth_rates = calculate_growth_rates(df, annual_lookup)
+    quarterly_growth_rates = calculate_growth_rates(annual_growth_rates, quarterly_lookup)
     
-    index_df[column] = np.nan
+    weights_by_year = add_weights_by_year(quarterly_growth_rates, start_year)
+    annual_weighted_growth_rates = calculate_weighted_growth_rates(weights_by_year, annual_lookup)
+    quarterly_weighted_growth_rates = calculate_weighted_growth_rates(annual_weighted_growth_rates, quarterly_lookup)
+    
+    annual_weighted_means = calculate_weighted_means(quarterly_weighted_growth_rates, annual_lookup)
+    quarterly_weighted_means = calculate_weighted_means(annual_weighted_means, quarterly_lookup)
+    
+    annual_weighted_standard_deviations = calculate_weighted_standard_deviations(quarterly_weighted_means, annual_lookup)
+    quarterly_weighted_standard_deviations = calculate_weighted_standard_deviations(annual_weighted_standard_deviations, quarterly_lookup)
+    
+    annual_z_scores = calculate_z_scores(quarterly_weighted_standard_deviations, annual_lookup)
+    quarterly_z_scores = calculate_z_scores(annual_z_scores, quarterly_lookup)
+    
+    indicator = calculate_indicator_z_scores(quarterly_z_scores)
+    
+    return(indicator)
+
+
+def calculate_growth_rates(index_df, lookup):
+
+    index_df[lookup["growth_rate"]] = np.nan
     
     for i in range(0, len(index_df)):
-        if i >= months:
-            index_df.loc[i, column] =+ (pd.to_numeric(index_df.loc[i, 'value']) / pd.to_numeric(index_df.loc[i - months, 'value']))**(1/months) - 1
+        if i >= lookup["months"]:
+            index_df.loc[i, lookup["growth_rate"]] =+ (pd.to_numeric(index_df.loc[i, 'value']) / 
+                        pd.to_numeric(index_df.loc[i - lookup["months"], 'value']))**(1/lookup["months"]) - 1
             
     return(index_df)
 
-
 def add_weights_by_year(index_df, start_year):
-    # add weight according to year - first year has weight 1, second has 2, etc. calc with numeric(year) - (start year - 1)
+    # add weight according to year - first year has weight 1, second has 2, etc. 
     index_df['weight'] = pd.to_numeric(index_df['year'].str[0:4]) - (start_year - 1)
-              
     return(index_df)
 
-def calculate_rolling_values():
+def calculate_weighted_growth_rates(index_df, lookup):
+    index_df[lookup["weight*value"]] = index_df['weight']*index_df[lookup["growth_rate"]]
+    return(index_df)
+
+def calculate_weighted_means(index_df, lookup):
+    index_df[lookup["weighted_mean"]] = np.nan
+    index_df[lookup["weighted_mean"]] = (sum(index_df.loc[3:len(index_df['value']), lookup["weight*value"]]) /
+            sum(index_df.loc[3:len(index_df['value']),'weight']))    
+    return(index_df)
+
+def calculate_weighted_standard_deviations(index_df, lookup):
+    index_df[lookup["w*(x-mu)^two"]] = np.nan
+    index_df[lookup["st_dev"]] = np.nan
     
-  
-def two_c_one_indicator(index_df, start_year):
+    index_df[lookup["w*(x-mu)^two"]] = index_df['weight']*(index_df[lookup["growth_rate"]] - index_df[lookup["weighted_mean"]])**2
+    numerator = sum(index_df[lookup["w*(x-mu)^two"]][3:])
+    denominator = (sum(index_df['weight'][lookup["months"]:])*(len(index_df['weight'][lookup["months"]:])-1)/
+                   len(index_df['weight'][lookup["months"]:]))
+    index_df[lookup["st_dev"]] = (numerator / denominator)**0.5
+    return(index_df)
 
+def calculate_z_scores(index_df, lookup):
+    index_df[lookup["z-score"]] = (index_df[lookup["growth_rate"]] - index_df[lookup["weighted_mean"]]) / index_df[lookup["st_dev"]]
+    return(index_df)
 
-
-    
-    # create rolling weighted average and weighted standard deviation of quarterly and annual growth rates
-    
-    # quarterly
-    # create column to be filled
-    index_df['average_quarterly'] = np.nan
-    index_df['quart_w*(x-mu)^two_quart'] = np.nan
-    index_df['st_dev_quarterly'] = np.nan
-
-    # create weight*value column
-    index_df['quart_weight*value'] = index_df['weight']*index_df['quarterly_growth_rate']
-
-    # weighted mean
-    index_df['average_quarterly'] = sum(index_df.loc[3:len(index_df['value']),'quart_weight*value']) / sum(index_df.loc[3:len(index_df['value']),'weight'])
-    
-    # weighted standard deviation
-    index_df['quart_w*(x-mu)^two'] = index_df['weight']*(index_df['quarterly_growth_rate'] - index_df['average_quarterly'])**2
-    quart_var_numerator = sum(index_df['quart_w*(x-mu)^two'][3:])
-    quart_var_denom = sum(index_df['weight'][3:])*(len(index_df['weight'][3:])-1)/len(index_df['weight'][3:])
-    index_df['st_dev_quarterly'] = (quart_var_numerator / quart_var_denom)**0.5
-    
-    # annual
-    index_df['average_annual'] = np.nan
-    index_df['annual_w*(x-mu)^two'] = np.nan
-    index_df['st_dev_annual'] = np.nan    
-
-    # create weight*value column
-    index_df['annual_weight*value'] = index_df['weight']*index_df['annual_growth_rate']
-
-    # weighted mean
-    index_df['average_annual'] = sum(index_df.loc[12:len(index_df['value']),'annual_weight*value']) / sum(index_df.loc[12:len(index_df['value']),'weight'])
-    
-    # weighted standard deviation
-    index_df['annual_w*(x-mu)^two'] = index_df['weight']*(index_df['annual_growth_rate'] - index_df['average_annual'])**2
-    annual_var_numerator = sum(index_df['annual_w*(x-mu)^two'][12:])
-    annual_var_denom = sum(index_df['weight'][12:])*(len(index_df['weight'][12:])-1)/len(index_df['weight'][12:])
-    index_df['st_dev_annual'] = (annual_var_numerator / annual_var_denom)**0.5
-    
-    # create z-scores, calculated (x - mu) / st.dev.
-    
-    # quarterly
-    index_df['z-score_quarterly'] = (index_df['quarterly_growth_rate'] - index_df['average_quarterly']) / index_df['st_dev_quarterly']
-
-    # annual
-    index_df['z-score_annual'] = (index_df['annual_growth_rate'] - index_df['average_annual']) / index_df['st_dev_annual']
-
-    # indicator
+def calculate_indicator_z_scores(index_df):
     index_df['indicator'] = 0.4*index_df['z-score_quarterly'] + 0.6*index_df['z-score_annual']
-    
     return(index_df[['year','indicator']])
 
 
@@ -228,6 +226,7 @@ def two_c_one_main():
 
 
     # download data
+    print("During the download process a message window may appear behind other windows. If downloads stop early or do not seem to be happening please check for this message window")
     check_download_filepath()
     check_output_filepath()
     download_data(time_series)
@@ -250,20 +249,11 @@ def two_c_one_main():
         index_df = get_relevant_data(dataframe)
         
         index_df_with_months = months_to_numbers(index_df)
+        
         df_sorted_by_year = sort_by_year(index_df_with_months)
-        
         start_year = get_start_year(df_sorted_by_year)
-
-
-        # perform calculations
-        annual_growth_rates = calculate_growth_rates(df_sorted_by_year, "annual")
-        quarterly_growth_rates = calculate_growth_rates(annual_growth_rates, "quarterly")
         
-        
-        
-        
-        
-        indicator = two_c_one_indicator(index_df)
+        indicator = calculate_indicator(df_sorted_by_year, start_year)
         
         # add to dictionary
         data_dict[name[1]] = indicator

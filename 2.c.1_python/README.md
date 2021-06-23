@@ -8,6 +8,9 @@ It performs calculations for the food price anomalies index as described in the 
 [Identifying food price anomalies to support the Sustainable Development Goals](https://www.ons.gov.uk/economy/inflationandpriceindices/methodologies/identifyingfoodpriceanomaliestosupportthesustainabledevelopmentgoals).  
   
 Finally, the data are formatted to fit the csv requirements of the [UK SDG data website](https://sdgdata.gov.uk/).
+  
+This script will currently only work on UK data, but can be adapted for use by other countries. 
+
 
 ### Instructions for updating 2-c-1 data
 

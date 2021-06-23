@@ -16,6 +16,34 @@ import datetime as dt # to get date
 import config
 
 def create_2_c_1_csv():
+    """
+    Creates the csv required for upating SDG indicator 2-c-1 (Food price 
+    anomalies).
+    This is a high level function - see documentation for lower level functions 
+    further dow the script for details.
+    
+    Requires
+    -------
+    Requires a config.py file containing:
+        - download_path: where files from ONS will be downloaded
+        - output_filepath: where csv file will be saved
+        - sleep_time: allows time between downloads (3 should be 
+        sufficient for most computers)
+        - earliest_available_data: the earliest date available as written in 
+        the source data (string)
+    
+    Returns
+    -------
+    saves a csv file to the output_filepath defined in config.py
+    may return a message box if certain files already exist in the
+    download location
+    returns a message in the console when complete
+
+    Examples
+    --------
+    >>> create_2_c_1_csv()
+
+    """
     get_data()
     data_dict = compile_data_for_all_food_types()
     csv_data = get_final_values_for_csv(data_dict)
@@ -27,7 +55,15 @@ def create_2_c_1_csv():
 ###---------------------------------------------------------------------------
 
 def get_data():
-    
+    """
+    Checks that data can be downloaded and downloads it to config.download_path
+
+    Raises
+    ------
+    Message box
+        if files to be downloaded, or files with the names we use already exist
+
+    """
     print("""During the download process a message window may appear behind other windows. 
           If downloads stop early or do not seem to be happening please check for a message window""")
     check_download_filepath()
@@ -35,11 +71,26 @@ def get_data():
     download_data()
 
 def check_download_filepath():
-    # if files with the same naming convention as the files we want to use
-    # already exist in the download filepath location, 
-    # the new downloads may be given an unexpected name (eg ending in '(1)')
-    # and the indicator data will be created from the old downloads. 
-    # We therefore need to delete the old files, but we check with the user first that this is ok.
+    """
+    Checks whether there are any files in the download location that look like 
+    the file that we want to download. If they do, they are deleted following
+    user interaction.
+    
+    Details
+    -------
+    If files with the same naming convention as the files we want to use
+    already exist in the download filepath location, 
+    the new downloads may be given an unexpected name (eg ending in '(1)')
+    and the indicator data will be created from the old downloads. 
+    We therefore need to delete the old files, but we check with the user first
+    that this is ok.
+
+    Raises
+    ------
+    Message box
+        if files to be downloaded already exist
+ 
+    """
     for name in glob.glob(config.download_path+'series-??????.csv'):
         if path.exists(name):
             response = ctypes.windll.user32.MessageBoxW(0, 
@@ -54,10 +105,25 @@ def check_download_filepath():
             return()
 
 def check_output_filepath():
+    """
+    Checks whether there are any files in the download location with the names
+    of the files we will be using.
+
+    Details
+    ----------
     # if these files already exist in the download filepath location, 
     # the new downloads will be given an unexpected name (eg ending in '(1)')
     # and the indicator data will be created from the old downloads. 
-    # We therefore need to delete the old files, but we check with the user first that this is ok.
+    # We therefore need to delete the old files, but we check with the user 
+    first that this is ok.
+
+    Raises
+    ------
+    Message box
+        if files with the names we want our downloaded files to have already
+        exist
+
+    """
     names = ["all_food.csv","bread.csv","meat.csv","fish.csv",
              "dairy.csv","oil_fat.csv","fruit.csv","vegetables.csv","sugars.csv",
              "nec.csv"]
@@ -88,6 +154,10 @@ def check_output_filepath():
             
 
 def download_data():
+    """
+    Downloads data from the ONS for each of the series listed in time_series.
+
+    """
     time_series = {
             "all_food": "d7c8",
             "bread": "l52i",
@@ -113,6 +183,16 @@ def download_data():
 ###----------------------------------------------------------------------------
 
 def compile_data_for_all_food_types():
+    """
+    Takes the CPIH Index data for each food group and calculates the indicator
+    data required.
+
+    Returns
+    -------
+    dictionary 
+        each key is a food type
+
+    """
     input_names = [("all_food.csv","all_food"),("bread.csv","bread"),
                ("meat.csv","meat"),("fish.csv","fish"),
                ("dairy.csv","dairy"),("oil_fat.csv","oil_fat"),
@@ -122,14 +202,14 @@ def compile_data_for_all_food_types():
     data_dict = {}
     
     for name in input_names:
-        dataframe = read_data(name[0])
+        dataframe = pd.read_csv(config.download_path + name[0], header=None)  
         index_df = get_relevant_data(dataframe)
         
         index_df_with_months = convert_months_to_numbers(index_df)
         
-        df_sorted_by_year = sort_by_year(index_df_with_months)
+        df_sorted_by_year = index_df_with_months.sort_values(by = ['year'])
         
-        start_year = get_start_year(df_sorted_by_year)
+        start_year = int(df_sorted_by_year['year'][0][0:4])
         
         indicator = calculate_indicator(df_sorted_by_year, start_year)
         
@@ -137,12 +217,27 @@ def compile_data_for_all_food_types():
         
     return(data_dict)
 
-
-def read_data(file):
-    dataframe = pd.read_csv(config.download_path + file, header=None)            
-    return(dataframe)
-
 def get_relevant_data(dataframe):
+    """
+    Selects the required data from the dataframe. Removes information such as
+    important notes, CDID, release date etc.
+
+    Parameters
+    ----------
+    dataframe : dataframe
+        contains the CPIH data for one food group.
+    
+    Requires
+    --------
+    config.earliest_available_data: the earliest date available as written in 
+        the source data (string)
+
+    Returns
+    -------
+    dataframe
+        CPIH data for one food group.
+
+    """
     start_index = dataframe.loc[dataframe[0] == config.earliest_available_data].index[0]
 
     # this relies on the dataframe being ordered and the order being preserved
@@ -154,25 +249,52 @@ def get_relevant_data(dataframe):
     return(monthly_dataframe)
     
 # define function to produce the latest vintage of the indicator
-def convert_months_to_numbers(index_df):
-    for i in range(0, len(index_df)):
-        index_df.loc[i, 'year'] = dt.datetime.strftime(dt.datetime.strptime(index_df.loc[i, 'year'], '%Y %b' ), '%Y %m')
-    return(index_df)
+def convert_months_to_numbers(dataframe):
+    """
+    Converts months to numbers (e.g. 'JAN' to 01)
 
-def sort_by_year(index_df):
-    sorted_by_year = index_df.sort_values(by = ['year'])
-    return(sorted_by_year)
+    Parameters
+    ----------
+    dataframe : dataframe
+        The CPIH data for one food group.
 
-def get_start_year(index_df):
-    start_year = int(index_df['year'][0][0:4])
-    return(start_year)
+    Returns
+    -------
+    dataframe : dataframe
+        The CPIH data for one food group with months as numbers.
+
+    """
+    for i in range(0, len(dataframe)):
+        dataframe.loc[i, 'year'] = dt.datetime.strftime(dt.datetime.strptime(dataframe.loc[i, 'year'], '%Y %b' ), '%Y %m')
+    return(dataframe)
 
 #-----------------------
 def calculate_indicator(df, start_year):
-    # z-scores are based on a single weighted mean and a single weighted standard deviation
-    # so that it is easier to compare between years (rather than calculating each up to each timepoint).
-    # Therefore, each time the indicator is updated, values for past years will change slighlty.
+    """
+    Calculates the indicator value for each quater and year.
+    
+    Details
+    -------
+    Z-scores are based on a single weighted mean and a single weighted standard
+    deviation so that it is easier to compare between years (rather than 
+    calculating each up to each timepoint). Therefore, each time the indicator 
+    is updated, values for past years will change slighlty.
 
+    Parameters
+    ----------
+    df : dataframe
+        CPIH data for one indicator, sorted by date
+        
+    start_year : int or float
+        The first year found in the source data
+
+    Returns
+    -------
+    dataframe
+        CPIH data for one indicator, sorted by date, with indicator value as a 
+        new column
+
+    """
     annual_lookup = {
         "growth_rate": "annual_growth_rate",
         "weighted_growth_rate": "annual_weighted_growth_rate",
@@ -208,6 +330,26 @@ def calculate_indicator(df, start_year):
 
 
 def calculate_growth_rates(index_df, lookup):
+    """
+    Calculates growth rates
+
+    Parameters
+    ----------
+    index_df : dataframe
+        CPIH data for one indicator, sorted by date
+    lookup : dictionary
+        Column names and numbers specific to the index_data and data being
+        caluclated for:
+            growth_rate: column for growth rates 
+            months: 3 for quarterly, 12 for annual
+
+    Returns
+    -------
+   dataframe
+        CPIH data for one indicator, sorted by date, including growth rate 
+        column
+
+    """
     index_df[lookup["growth_rate"]] = np.nan
     
     for i in range(0, len(index_df)):
@@ -217,20 +359,99 @@ def calculate_growth_rates(index_df, lookup):
     return(index_df)
 
 def add_weights_by_year(index_df, start_year):
-    # weight increases with year, as more recent years are more important - first year has weight 1, second has 2, etc. 
+    """
+    Adds a column giving the weight for each year
+    
+    Details
+    -------
+    Weight increases with year, as more recent years are more important - 
+    first year has weight 1, second has 2, etc. 
+
+    Parameters
+    ----------
+    index_df : dataframe
+        CPIH data for one indicator, containing growth rates.
+    start_year : int
+        first year of available data.
+
+    Returns
+    -------
+   dataframe
+        CPIH data for one indicator including weight column
+
+    """
     index_df['weight'] = pd.to_numeric(index_df['year'].str[0:4]) - (start_year - 1)
     return(index_df)
 
 def calculate_weighted_growth_rates(index_df, lookup):
+    """
+    Calculates weighted growth rates
+
+    Parameters
+    ----------
+    index_df : dataframe
+        CPIH data for one indicator containing growth rates and year weights
+    lookup : dictionary
+        Column names specific to the index_data and data being caluclated:
+            growth_rate: column for growth rates 
+            weighted_growth_rate: column for weighted growth rates 
+     
+    Returns
+    -------
+   dataframe
+        CPIH data for one indicator, sorted by date, including weighted growth 
+        rate column.
+
+    """
     index_df[lookup["weighted_growth_rate"]] = np.nan
     index_df[lookup["weighted_growth_rate"]] = index_df['weight']*index_df[lookup["growth_rate"]]
     return(index_df)
 
 def calculate_weighted_mean(index_df, lookup):
+    """
+    Calculates weighted mean
+
+    Parameters
+    ----------
+   dataframe
+        CPIH data for one indicator, sorted by date, including weighted growth 
+        rate column.
+    lookup : dictionary
+        Column names and numbers specific to the index_data and data being
+        caluclated for:
+            weighted_growth_rate: column for weighted growth rates 
+            months: 3 for quarterly, 12 for annual
+
+    Returns
+    -------
+    float 
+
+    """
     weighted_mean = sum(index_df.loc[lookup["months"]:len(index_df['value']), lookup["weighted_growth_rate"]]) / sum(index_df.loc[lookup["months"]:len(index_df['value']), 'weight'])   
     return(weighted_mean)
 
 def calculate_weighted_standard_deviation(index_df, lookup, weighted_mean):
+    """
+    Calculates weighted standard deviation
+
+    Parameters
+    ----------
+   dataframe
+        CPIH data for one indicator, sorted by date, including growth 
+        rate column.
+    lookup : dictionary
+        Column names and numbers specific to the index_data and data being
+        caluclated for:
+            growth_rate: column for growth rates 
+            deviation_numerator_by_row: column to hold the calculation 
+                w*(x-mu)^two
+            months: 3 for quarterly, 12 for annual
+
+    Returns
+    -------
+    float 
+
+    """
     index_df[lookup["deviation_numerator_by_row"]] = index_df['weight'] * (index_df[lookup["growth_rate"]] - weighted_mean)**2 
     numerator = sum(index_df[lookup["deviation_numerator_by_row"]][lookup["months"]:])
     denominator = (sum(index_df['weight'][lookup["months"]:])*(len(index_df['weight'][lookup["months"]:]) - 1)/
@@ -239,16 +460,68 @@ def calculate_weighted_standard_deviation(index_df, lookup, weighted_mean):
     return(standard_deviation)
 
 def calculate_z_scores(index_df, lookup, weighted_mean, weighted_standard_deviation):
+    """
+    Calculates z-scores for each quarter or year
+
+    Parameters
+    ----------
+    index_df : dataframe
+        CPIH data for one indicator, sorted by date
+    lookup : dictionary
+        Column names and numbers specific to the index_data and data being
+        caluclated for:
+            growth_rate: column for growth rates 
+            z-score: column to hold z-scores 
+    weighted_mean : float
+    weighted_standard_deviation : float    
+
+    Returns
+    -------
+    dataframe
+        CPIH data for one indicator, with column for z-scores
+
+    """
     index_df[lookup["z-score"]] = (index_df[lookup["growth_rate"]] - weighted_mean) / weighted_standard_deviation
     return(index_df)
 
 def calculate_indicator_z_scores(index_df):
+    """
+    Calculates indicator specific z-scores, which take into account both 
+    quarterly and yearly changes.
+
+    Parameters
+    ----------
+    index_df : dataframe
+        CPIH data for one indicator containing columns 'z-score_quarterly' and 
+        'z-score_annual', both of which contain floats
+
+    Returns
+    -------
+    dataframe
+        CPIH data for one indicator, with column for indicator z-scores
+    """
+
     index_df['indicator'] = 0.4*index_df['z-score_quarterly'] + 0.6*index_df['z-score_annual']
     return(index_df[['year','indicator']])
 
 ###----------------------------------------------------------------------------
 
 def get_final_values_for_csv(data_dict):
+    """
+    Add rolling averages and unaveraged monthly valuse to dataframe.
+
+    Parameters
+    ----------
+    data_dict : dictionary of dataframes
+        Each key is a different food group
+
+    Returns
+    -------
+    dataframe
+        Dataframe containing all required information for the indicator for all
+        food groups.
+
+    """
     indicator_groups = {
         "all_food": "",
         "bread": "Bread and cereal",
@@ -262,13 +535,31 @@ def get_final_values_for_csv(data_dict):
         "nec": "Food not elsewhere classified"}
     
     rolling_averages = calculate_rolling_averages(data_dict, indicator_groups)
-    unaveraged_monthly_values = calculate_unaveraged_monthly_values(data_dict, indicator_groups)
+    unaveraged_monthly_values = label_unaveraged_monthly_values(data_dict, indicator_groups)
     
     csv_data = unaveraged_monthly_values.append(rolling_averages)
     
     return(csv_data)
 
-def calculate_rolling_averages(data_dict, indicator_groups):    
+def calculate_rolling_averages(data_dict, indicator_groups):   
+    """
+    Calculates annual rolling averages.
+
+    Parameters
+    ----------
+     data_dict : dictionary of dataframes
+        Each key is a different food group
+    indicator_groups : dictionary
+        Dictionary containing the names of each food group as they will appear
+        in the csv, where the key is the name of that food group as it 
+        currently stands in data_dict        
+
+    Returns
+    -------
+    dataframe
+        Dataframe containing annual rolling averages.
+        
+    """
     csv_rolling_averages_dict = {}
     
     for key in data_dict:
@@ -281,7 +572,25 @@ def calculate_rolling_averages(data_dict, indicator_groups):
     csv_rolling_averages = pd.concat(csv_rolling_averages_dict.values(), ignore_index=True)
     return(csv_rolling_averages)
 
-def calculate_unaveraged_monthly_values(data_dict, indicator_groups):
+def label_unaveraged_monthly_values(data_dict, indicator_groups):
+    """
+    Labels monthly values as monthly values (to distinguish them from rolling
+    averages).
+
+    Parameters
+    ----------
+     data_dict : dictionary of dataframes
+        Each key is a different food group
+    indicator_groups : dictionary
+        Dictionary containing the names of each food group as they will appear
+        in the csv, where the key is the name of that food group as it 
+        currently stands in data_dict        
+
+    Returns
+    -------
+    dataframe
+        
+    """
     csv_monthly_values_dict = {}
     
     for key in data_dict:
@@ -294,6 +603,20 @@ def calculate_unaveraged_monthly_values(data_dict, indicator_groups):
     return(csv_monthly_values)
 
 def finalise_csv_columns(csv_data):
+    """
+    Arranges dataframe as it is required to be for indictaor csv file.
+
+    Parameters
+    ----------
+    csv_data : Dataframe containing all required information for the indicator 
+        for all food groups.
+
+    Returns
+    -------
+    dataframe
+        Dataframe as it needs to be for csv.
+        
+    """
     csv_data = csv_data.rename(index = str, columns = {'year' : 'Year', 'indicator' : 'Value'})
         
     csv_data["Unit measure"] = "Index"

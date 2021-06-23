@@ -27,24 +27,12 @@ def create_2_c_1_csv():
 ###---------------------------------------------------------------------------
 
 def get_data():
-    time_series = {
-        "all_food": "d7c8",
-        "bread": "l52i",
-        "meat": "l52j",
-        "fish": "l52k",
-        "dairy": "l52l",
-        "oil_fat": "l52m",
-        "fruit": "l52n",
-        "vegetables": "l52o",
-        "sugars": "l52p",
-        "nec": "l52q"
-        }
     
     print("""During the download process a message window may appear behind other windows. 
           If downloads stop early or do not seem to be happening please check for a message window""")
     check_download_filepath()
     check_output_filepath()
-    download_data(time_series)
+    download_data()
 
 def check_download_filepath():
     # if files with the same naming convention as the files we want to use
@@ -99,7 +87,20 @@ def check_output_filepath():
             raise ValueError("No files have been deleted, code aborted")
             
 
-def download_data(time_series):
+def download_data():
+    time_series = {
+            "all_food": "d7c8",
+            "bread": "l52i",
+            "meat": "l52j",
+            "fish": "l52k",
+            "dairy": "l52l",
+            "oil_fat": "l52m",
+            "fruit": "l52n",
+            "vegetables": "l52o",
+            "sugars": "l52p",
+            "nec": "l52q"
+        }
+        
     for key in time_series:
         webbrowser.open("https://www.ons.gov.uk/generator?format=csv&uri=/economy/inflationandpriceindices/timeseries/" + time_series[key] + "/mm23", new=0)
         sleep(config.sleep_time)  # leaves time to allow the file to download 

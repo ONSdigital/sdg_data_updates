@@ -9,3 +9,7 @@ import getpass
 download_path = "filepath where files are automatically downloaded to"
 
 output_filepath = "filepath where you want output to be stored"
+
+sleep_time = 3
+
+earliest_available_data = "1988 JAN"

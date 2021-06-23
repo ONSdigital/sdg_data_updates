@@ -4,10 +4,6 @@
 
 nationality_data <- dplyr::filter(source_data, sheet == nationality_tabname)
 
-# # info cells are the cells above the column headings
-# info_cells <- SDGupdater::get_info_cells(nationality_data, date_row_nationality)
-# start_and_end_years <- SDGupdater::unique_to_string(info_cells$Year)
-
 data_without_superscripts <- nationality_data %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character))) %>% 
   dplyr::mutate(character = remove_bracketted_superscripts(character)) %>% 

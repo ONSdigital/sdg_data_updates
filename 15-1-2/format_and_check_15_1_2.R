@@ -7,15 +7,13 @@
 
 '%not_in%' <- Negate('%in%')
 
-library(tidyr)
-library(dplyr)
 library(ggplot2)
-library(stringr) # for str_to_title
 
-Date <- "Dec_2020"
+Date <- Sys.Date()
 
-setwd('Y:\\Data Collection and Reporting\\Jemalex\\Code for updates\\15.1.2_initial_data_check_and_format')
-original_data <- read.csv('Input\\SDG1512_FINAL_OUTPUT.csv')
+original_data <- read.csv(input_filepath) %>% 
+  mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   ", "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  # change 0 to NA depending on response from Rob (if NA need to account for this in sum())
+  mutate(KBA_IN_PA_AREA_ha = as.numeric(KBA_IN_PA_AREA_ha))
 
 # add rows for England and UK
 England_data <- original_data %>% 
@@ -23,7 +21,8 @@ England_data <- original_data %>%
            CTRY19NM == "ENGLAND") %>% 
   group_by(LCM_AGGREGATE_NAME, YEAR) %>% 
   summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha)) %>% 
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
+            PA_ha = sum(PA_ha)) %>% 
   mutate(CTRY19NM = "ENGLAND",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
@@ -32,19 +31,21 @@ UK_data <- original_data %>%
   filter(RGN19NM != "England" & RGN19NM != "ENGLAND") %>%  # these are not currently in the data, but just in case they are added in in future years this is a failsafe 
   group_by(LCM_AGGREGATE_NAME, YEAR) %>% 
   summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha)) %>% 
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
+            PA_ha = sum(PA_ha)) %>% 
   mutate(CTRY19NM = "",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
 
 # join England and UK data to the regional data  
-all_countries <- bind_rows(England_data, UK_data, original_data)
+all_countries <- bind_rows(England_data, UK_data, original_data) 
 
 # add headline data for ecosystems
 all_ecosystems <- all_countries %>% 
-  group_by(CTRY19NM, RGN19NM, YEAR) %>% 
+  group_by(CTRY19NM, RGN19NM, RGN19CD, YEAR) %>% 
   summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha)) %>%
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
+            PA_ha = sum(PA_ha)) %>%
   mutate(LCM_AGGREGATE_NAME = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
 
@@ -59,33 +60,46 @@ long_format_for_csv <- all_data %>%
          Country = CTRY19NM,
          Region = RGN19NM,
          `Ecosystem type` = LCM_AGGREGATE_NAME,
-         `Area of Key Biodiversity Areas (ha)` = KBA._AREA_ha,
-         `Area of Key Biodiversity Areas within protected areas (ha)` = KBA_IN_PA_AREA_ha,
-         `Area of Key Biodiversity Areas within protected areas (%)` = PROPORTION_OF_KBA_IN_PA_pct,
+         `Key Biodiversity Areas` = KBA._AREA_ha,
+         `Key Biodiversity Areas within protected areas (ha)` = KBA_IN_PA_AREA_ha,
+         `Key Biodiversity Areas within protected areas (%)` = PROPORTION_OF_KBA_IN_PA_pct,
+         `Protected Areas` =  PA_ha,
          GeoCode = RGN19CD) %>% 
   mutate(GeoCode = ifelse(Country == "ENGLAND" & Region == "", England_geocode, as.character(GeoCode)),
          GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   mutate(Country = str_to_title(Country)) %>% 
   mutate(Region = ifelse(Country != "England", "", Region)) %>% 
-  select(-c(ï..CTRY19CD, LCM_AGGREGATE_CLASS_NUMBER)) %>% 
+  select(-c(CTRY19CD, LCM_AGGREGATE_CLASS_NUMBER, rgn19cd_AGG_NAME)) %>% 
   pivot_longer(-c(Year, Country, Region, `Ecosystem type`, GeoCode), 
                names_to = "Units",
                values_to = "Value") %>% 
-  mutate(`Unit measure` = ifelse(Units == "Area of Key Biodiversity Areas within protected areas (%)", "Percentage (%)", "Hectares (ha)"),
-         `Unit multiplier` = Units) %>% 
+  mutate(
+    Series = case_when(
+      Units == "Key Biodiversity Areas within Protected Areas (ha)" |
+        Units == "Key Biodiversity Areas within protected areas (%)" ~ 
+        "Key Biodiversity Areas within Protected Areas",
+      TRUE ~ as.character(Units)),
+    Units = case_when(
+      Units == "Key Biodiversity Areas within protected areas (%)" ~ "Percentage (%)",
+      TRUE ~ as.character("Hectares (ha)"))
+    ) %>% 
+  mutate(`Unit measure` = Units,
+         `Unit multiplier` = "Units") %>% 
   # region should be "East" in tables and charts rather than "East of England" (which should be used in text)
   mutate(Region = ifelse(Region == "East of England", "East", Region)) %>% 
-  # # change valus to thousands - decided against this as the region by ecosystem type values are often <1000
+  # # change values to thousands - decided against this as the region by ecosystem type values are often <1000
   # mutate(Value = ifelse(`Unit measure` == "Hectares (ha)", Value / 1000, Value),
   #        `Unit multiplier` = "Thousands") %>% 
-  # order columns
-  select(Year, Country, Region, `Ecosystem type`, 
+  select(Year, Country, Region, `Ecosystem type`, Series,
          Units, `Unit measure`, `Unit multiplier`,  
          GeoCode, Value) 
 
 # save file
-setwd("./Output")
-write.csv(long_format_for_csv, paste0('csv_', Date, '.csv'), row.names = FALSE)
+available_folders <- list.files()
+if('Output' %not_in% available_folders) {
+  dir.create('Output')
+}
+write.csv(long_format_for_csv, paste0('Output/csv_', Date, '.csv'), row.names = FALSE)
 
 ##########################################################################################  
 # create pdf of plots to check for anything weird/interesting - put this in outputs folder
@@ -105,8 +119,8 @@ total_ecosystems_country_data <- long_format_for_csv %>%
   filter(`Ecosystem type` == "" & Region == "") %>% 
   mutate(Region = Country)
 
-Units_list <- unique(data_regions$Units)
-Ecosystem_list <- unique(data_regions$`Ecosystem type`)
+Units_list <- unique(region_data$Units)
+Ecosystem_list <- unique(region_data$`Ecosystem type`)
 
 plot_data <- function(data_for_plot){
   data_for_plot %>% 
@@ -136,7 +150,7 @@ plot_totals_data <- function(data_for_plot){
 }
 
 
-pdf(paste0('Plots_', Date, '.pdf'))
+pdf(paste0('Output/Plots_', Date, '.pdf'))
 
 for (i in 1:length(Units_list)){
   

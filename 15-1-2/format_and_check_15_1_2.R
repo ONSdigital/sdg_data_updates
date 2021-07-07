@@ -12,7 +12,7 @@ library(ggplot2)
 Date <- Sys.Date()
 
 original_data <- read.csv(input_filepath) %>% 
-  mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   ", "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  # change 0 to NA depending on response from Rob (if NA need to account for this in sum())
+  mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   ", "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  
   mutate(KBA_IN_PA_AREA_ha = as.numeric(KBA_IN_PA_AREA_ha))
 
 # add rows for England and UK
@@ -51,6 +51,9 @@ all_ecosystems <- all_countries %>%
 
 # add headline figures for all ecosystems to rest of data  
 all_data <- bind_rows(all_ecosystems, all_countries)
+
+terrestrial <- c("Arable", "Broadleaf woodland", "Built-up areas and gardens", 
+                 "Coniferous woodland", "Improved grassland", "Semi-natural grassland")
 
 # layout data to match our csv layout
 England_geocode <- "E92000001"
@@ -94,12 +97,48 @@ long_format_for_csv <- all_data %>%
          Units, `Unit measure`, `Unit multiplier`,  
          GeoCode, Value) 
 
-# save file
+#--------------------------------------------------------------------------------
+# calculate numbers for the broader categories (for comparison with IBAT)
+broad_ecosystems <- all_data %>% 
+  filter(RGN19NM %in% c("", "Scotland", "Wales", "Northern Ireland")) %>% 
+  mutate(Category = case_when(
+    LCM_AGGREGATE_NAME %in% terrestrial ~ "terrestrial",
+    LCM_AGGREGATE_NAME == "Coastal" | LCM_AGGREGATE_NAME == "Saltwater" ~ "marine",
+    LCM_AGGREGATE_NAME == "Mountain, heath, bog" ~ "mountain",
+    LCM_AGGREGATE_NAME == "Freshwater" ~ "freshwater",
+    TRUE ~ as.character(LCM_AGGREGATE_NAME))) 
+
+broad_ecosystems_UK <- broad_ecosystems %>% 
+  filter(CTRY19NM == "") %>% 
+  group_by(YEAR, Category) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
+            PA_ha = sum(PA_ha)) %>% 
+  mutate(PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100) %>% 
+  mutate(Geography = "UK")
+
+broad_ecosystems_GB <- broad_ecosystems %>% 
+  mutate(GB = ifelse(CTRY19NM %in% c("ENGLAND", "WALES", "SCOTLAND"), TRUE, FALSE)) %>% 
+  filter(GB == TRUE) %>% 
+  group_by(YEAR, Category) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
+            PA_ha = sum(PA_ha)) %>% 
+  mutate(PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100) %>% 
+  mutate(Geography = "GBR")
+
+broad_ecosystems_GB_UK <- bind_rows(broad_ecosystems_GB, broad_ecosystems_UK) %>% 
+  mutate(Category = ifelse(Category == "", "all", Category)) %>% 
+  mutate(Category = tolower(Category))
+
+#-------------------------------------------------------------------------------
+# save files
 available_folders <- list.files()
 if('Output' %not_in% available_folders) {
   dir.create('Output')
 }
 write.csv(long_format_for_csv, paste0('Output/csv_', Date, '.csv'), row.names = FALSE)
+write.csv(broad_ecosystems_GB_UK, paste0('Output/to_check_against_IBAT_', Date, '.csv'), row.names = FALSE)
 
 ##########################################################################################  
 # create pdf of plots to check for anything weird/interesting - put this in outputs folder
@@ -173,3 +212,37 @@ for (i in 1:length(Units_list)){
 
 dev.off()
 
+# ------------------------------------------------------------------------------
+# Check data against IBAT
+
+if(IBAT_data_available == TRUE) {
+  
+  IBAT <- read.csv(IBAT_data_filepath) %>% 
+    filter(year >= min(long_format_for_csv$Year)) %>% 
+    mutate(Subset = tolower(Subset),
+           dataset = "IBAT")
+  
+  UK_IBAT_comparison <- broad_ecosystems_GB_UK %>% 
+    rename(year = YEAR,
+           Subset = Category,
+           Mean.PA.coverage.of.KBAs = PROPORTION_OF_KBA_IN_PA_pct,
+           dataset = Geography) %>% 
+    bind_rows(IBAT) 
+  
+  pdf(paste0('Output/IBAT_comparison_plots_', Date, '.pdf'))
+  
+  comparison_plot <- ggplot(
+    UK_IBAT_comparison,
+    aes(x = year,
+        y = Mean.PA.coverage.of.KBAs,
+        colour = dataset)) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(vars(Subset), nrow = 2) +
+    theme_bw()
+  
+  print(comparison_plot)
+
+  dev.off()
+  
+}

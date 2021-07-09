@@ -66,7 +66,7 @@ long_format_for_csv <- all_data %>%
          `Key Biodiversity Areas` = KBA._AREA_ha,
          `Key Biodiversity Areas within protected areas (ha)` = KBA_IN_PA_AREA_ha,
          `Key Biodiversity Areas within protected areas (%)` = PROPORTION_OF_KBA_IN_PA_pct,
-         `Protected Areas` =  PA_ha,
+         `Protected areas` =  PA_ha,
          GeoCode = RGN19CD) %>% 
   mutate(GeoCode = ifelse(Country == "ENGLAND" & Region == "", England_geocode, as.character(GeoCode)),
          GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
@@ -78,9 +78,9 @@ long_format_for_csv <- all_data %>%
                values_to = "Value") %>% 
   mutate(
     Series = case_when(
-      Units == "Key Biodiversity Areas within Protected Areas (ha)" |
+      Units == "Key Biodiversity Areas within protected areas (ha)" |
         Units == "Key Biodiversity Areas within protected areas (%)" ~ 
-        "Key Biodiversity Areas within Protected Areas",
+        "Key Biodiversity Areas within protected areas",
       TRUE ~ as.character(Units)),
     Units = case_when(
       Units == "Key Biodiversity Areas within protected areas (%)" ~ "Percentage (%)",

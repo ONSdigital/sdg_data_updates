@@ -80,9 +80,9 @@ long_format_for_csv <- all_data %>%
   mutate(
     Series = case_when(
       Units == "Key Biodiversity Areas within protected areas (ha)" & 
-        UN_series == "Freshwater" ~ "Average area of Freshwater Key Biodiversity Areas (KBAs) covered by protected areas",
+        UN_series == "Freshwater" ~ "Area of Freshwater Key Biodiversity Areas (KBAs) covered by protected areas",
       Units == "Key Biodiversity Areas within protected areas (ha)" & 
-        UN_series == "Terrestrial" ~ "Average area of Terrestrial Key Biodiversity Areas (KBAs) covered by protected areas",
+        UN_series == "Terrestrial" ~ "Area of Terrestrial Key Biodiversity Areas (KBAs) covered by protected areas",
       
       Units == "Key Biodiversity Areas within protected areas (%)" & 
         UN_series == "Freshwater" ~ "Average proportion of Freshwater Key Biodiversity Areas (KBAs) covered by protected areas",
@@ -90,14 +90,14 @@ long_format_for_csv <- all_data %>%
         UN_series == "Terrestrial" ~ "Average proportion of Terrestrial Key Biodiversity Areas (KBAs) covered by protected areas",
       
       Units == "Protected areas" & 
-        UN_series == "Freshwater" ~ "Average area of Freshwater protected areas",
+        UN_series == "Freshwater" ~ "Area of Freshwater protected areas",
       Units == "Protected areas" & 
-        UN_series == "Terrestrial" ~ "Average area of Terrestrial protected areas",
+        UN_series == "Terrestrial" ~ "Area of Terrestrial protected areas",
       
       Units == "Key Biodiversity Areas" & 
-        UN_series == "Freshwater" ~ "Average area of Freshwater Key Biodiversity Areas (KBAs)",
+        UN_series == "Freshwater" ~ "Area of Freshwater Key Biodiversity Areas (KBAs)",
       Units == "Key Biodiversity Areas" & 
-        UN_series == "Terrestrial" ~ "Average area of Terrestrial Key Biodiversity Areas (KBAs)",
+        UN_series == "Terrestrial" ~ "Area of Terrestrial Key Biodiversity Areas (KBAs)",
       
       TRUE ~ as.character(Units)),
     
@@ -191,7 +191,7 @@ plot_data <- function(data_for_plot){
     geom_point() +
     geom_line() +
     theme_bw() +
-    ggtitle(paste(Units_list[i], "\n", Ecosystem_list[j]))
+    ggtitle(paste(Series_list[i], "\n", Ecosystem_list[j]))
 }
 
 plot_totals_data <- function(data_for_plot){
@@ -204,13 +204,13 @@ plot_totals_data <- function(data_for_plot){
     geom_point() +
     geom_line() +
     theme_bw() +
-    ggtitle(paste(Units_list[i], "\n"))
+    ggtitle(paste(Series_list[i], "\n"))
 }
 
 
 pdf(paste0('Output/Plots_', Date, '.pdf'))
 
-for (i in 1:length(Units_list)){
+for (i in 1:length(Series_list)){
   
   for (j in 1:length(Ecosystem_list)) {
     

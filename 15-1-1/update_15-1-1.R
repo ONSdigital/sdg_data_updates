@@ -4,10 +4,13 @@
 library('openxlsx')
 
 woodland_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
-                                     sheet = woodland_area_tabname, colNames = FALSE)
+                                     sheet = woodland_area_tabname, colNames = FALSE) %>% 
+  mutate(across(where(is.character), toupper))
 certified_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
-                                      sheet = certified_area_tabname, colNames = FALSE)
-area_source_data <- read.csv(paste0(input_folder, "/", area_filename)) 
+                                      sheet = certified_area_tabname, colNames = FALSE) %>% 
+  mutate(across(where(is.character), toupper))
+area_source_data <- read.csv(paste0(input_folder, "/", area_filename)) %>% 
+  mutate(across(where(is.character), toupper))
 
 # get relevant area data (of all land)
 country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
@@ -22,7 +25,7 @@ relevant_area_data <- select(area_data, Geocode, Country, AREALHECT) %>%
   add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) 
 
 # get woodland area data (of all woodland)
-header_row_woodland <- which(woodland_source_data$X1 == "Year")
+header_row_woodland <- which(woodland_source_data$X1 == "YEAR")
 
 woodland_data_with_header <- woodland_source_data
 
@@ -30,16 +33,16 @@ names(woodland_data_with_header) <- woodland_data_with_header[header_row_woodlan
 
 woodland_data <- woodland_data_with_header %>% 
   mutate(Year_entry = grepl('[0-9][0-9][0-9][0-9]',
-                            substr(Year, 1, 4)))%>% 
+                            substr(YEAR, 1, 4)))%>% 
   filter(Year_entry == TRUE) %>% 
   select(-Year_entry) %>% 
-  pivot_longer(- Year,
+  pivot_longer(-YEAR,
                names_to = "Country",
                values_to = "woodland_area")
 
 
 # get certified woodland area data 
-header_row_certified <- which(certified_source_data$X1 == "Year")
+header_row_certified <- which(certified_source_data$X1 == "YEAR")
 
 certified_data_with_header <- certified_source_data
 
@@ -47,20 +50,20 @@ names(certified_data_with_header) <- certified_data_with_header[header_row_certi
 
 certified_data <- certified_data_with_header %>% 
   mutate(Year_entry = grepl('[0-9][0-9][0-9][0-9]',
-                            substr(Year, 5, 9))) %>% 
-  mutate(Year = substr(Year, 5, 9)) %>% 
+                            substr(YEAR, 5, 9))) %>% 
+  mutate(YEAR = substr(YEAR, 5, 9)) %>% 
   filter(Year_entry == TRUE) %>% 
   select(-Year_entry) %>% 
-  pivot_longer(- Year,
+  pivot_longer(-YEAR,
                names_to = "Country",
                values_to = "certified_area") 
 
 
 # join data and do calculations
 all_data <- woodland_data %>% 
-  left_join(certified_data, by = c("Year", "Country")) %>% 
+  left_join(certified_data, by = c("YEAR", "Country")) %>% 
   left_join(relevant_area_data, by = "Country") %>% 
-  mutate(Year = as.numeric(Year),
+  mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),
          woodland_area = as.numeric(woodland_area),
          certified_area = as.numeric(certified_area))
@@ -73,7 +76,7 @@ indicator_data <- all_data %>%
 
 # add required columns, rename disaggregation levels, and filter out values we don't want to display
 csv_formatted <- indicator_data %>% 
-  pivot_longer(-c(Year, Country, Geocode),
+  pivot_longer(-c(YEAR, Country, Geocode),
                names_to = "Sustainably managed status",
                values_to = "Value") %>% 
   mutate(`Sustainably managed status` = case_when(
@@ -82,15 +85,16 @@ csv_formatted <- indicator_data %>%
     `Sustainably managed status` == "non_certified_proportion" ~ "Non-certified"),
     Country = ifelse(Country == "UK", "", Country)) %>% 
   mutate(different_method = ifelse((Country == "Northern Ireland" | Country == "") & 
-                                     Year < 2013 & 
+                                     YEAR < 2013 & 
                                      `Sustainably managed status` %in% c("", "Non-certified"),
                                    TRUE, FALSE)) %>% 
   filter(!is.na(Value) & 
            different_method == FALSE &
-           Year >= 2004) %>% 
+           YEAR >= 2004) %>% 
   mutate(`Observation status` = "Undefined",
          `Unit multiplier` = "Units",
          `Unit measure` = "percentage (%)") %>% 
+  rename(Year = YEAR) %>% 
   select(Year, Country, `Sustainably managed status`, 
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)

@@ -38,7 +38,8 @@ woodland_data <- woodland_data_with_header %>%
   select(-Year_entry) %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
-               values_to = "woodland_area")
+               values_to = "woodland_area") %>% 
+  mutate(Country = str_to_title(Country))
 
 
 # get certified woodland area data 
@@ -56,12 +57,14 @@ certified_data <- certified_data_with_header %>%
   select(-Year_entry) %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
-               values_to = "certified_area") 
+               values_to = "certified_area") %>% 
+  mutate(Country = str_to_title(Country))
 
 
 # join data and do calculations
 all_data <- woodland_data %>% 
   left_join(certified_data, by = c("YEAR", "Country")) %>% 
+  mutate(Country = ifelse(Country == "Uk", "UK", Country)) %>% 
   left_join(relevant_area_data, by = "Country") %>% 
   mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),

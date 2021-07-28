@@ -71,6 +71,8 @@ all_data <- woodland_data %>%
          woodland_area = as.numeric(woodland_area),
          certified_area = as.numeric(certified_area))
 
+# this block below is copied into the markdown, so if it changes please update
+# that script too
 indicator_data <- all_data %>% 
   mutate(woodland_proportion = (woodland_area * 1000000) / AREALHECT * 100,
          certified_proportion = (certified_area * 1000000) / AREALHECT * 100,

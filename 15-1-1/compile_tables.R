@@ -13,9 +13,11 @@ if (output_folder_exists == FALSE) {
 
 
 date <- Sys.Date()
-csv_filename <- paste0(date, "_15-1-1", ".csv")
+csv_filename <- paste0(date, "_15-1-1.csv")
+pre_calculations_filename <- paste0(date, "_before_calcs_15-1-1.csv")
 
 write.csv(csv_formatted, paste0("Output/", csv_filename), row.names = FALSE)
+write.csv(all_data, paste0("Output/", pre_calculations_filename), row.names = FALSE)
 
 rmarkdown::render('15-1-1_checks.Rmd', output_file = paste0('Output/', date ,'_15-1-1_checks.html'))
 

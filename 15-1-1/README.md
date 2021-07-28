@@ -3,10 +3,10 @@
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
   
 1) Download and save the Forest Research Woodland Statistics excel file in the 'Input' folder in the 15-1-1 folder (if the Input folder doesn't exist, make it).  
-2) Check that 'Year' is one of the headings in the Woodland Satatistics. 
+2) Check that 'Year' is one of the headings in the Woodland Satatistics (case is not important). 
 3) Download the latest Standard Area Measurements for Administrative Areas folder from the geoportal. This will be a zip folder - 
 you only need to save the country UK file in the 'Input' folder in the 15-1-1 folder. 
-5) Check that `AREALHECT` is one of the headings in the Standard Area Measurements file.
+5) Check that `AREALHECT` is one of the headings in the Standard Area Measurements file (case is not important).
 6) Open the `sdg_data_updates.Rproj` from inside RStudio. 
 7) If it exists, open the `config.R` file in 15-1-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 If not, save `example_config.R` as `config.R` in 15-1-1.  

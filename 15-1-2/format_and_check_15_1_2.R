@@ -11,19 +11,20 @@ library(ggplot2)
 
 Date <- Sys.Date()
 
-original_data <- read.csv(input_filepath) %>% 
+original_data <- read.csv(input_filepath, na.strings = c(" -   ", "-", "NA")) %>% 
   mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   ", "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  
   mutate(KBA_IN_PA_AREA_ha = as.numeric(KBA_IN_PA_AREA_ha)) %>% 
-  mutate(UN_series = ifelse(LCM_AGGREGATE_NAME == "Freshwater", "Freshwater", "Terrestrial"))
+  mutate(UN_series = ifelse(LCM_AGGREGATE_NAME == "Freshwater", "Freshwater", "Terrestrial")) %>% 
+  mutate(across(where(is.factor), as.character))
 
 # add rows for England and UK
 England_data <- original_data %>% 
   filter(RGN19NM != "England" & RGN19NM != "ENGLAND" & # these are not currently in the data, but just in case they are added in in future years this is a failsafe
            CTRY19NM == "ENGLAND") %>% 
   group_by(LCM_AGGREGATE_NAME, YEAR, UN_series) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(CTRY19NM = "ENGLAND",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
@@ -31,9 +32,9 @@ England_data <- original_data %>%
 UK_data <- original_data %>% 
   filter(RGN19NM != "England" & RGN19NM != "ENGLAND") %>%  # these are not currently in the data, but just in case they are added in in future years this is a failsafe 
   group_by(LCM_AGGREGATE_NAME, YEAR, UN_series) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(CTRY19NM = "",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
@@ -44,9 +45,9 @@ all_countries <- bind_rows(England_data, UK_data, original_data)
 # add headline data for ecosystems
 all_ecosystems <- all_countries %>% 
   group_by(CTRY19NM, RGN19NM, RGN19CD, YEAR, UN_series) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>%
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>%
   mutate(LCM_AGGREGATE_NAME = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
 

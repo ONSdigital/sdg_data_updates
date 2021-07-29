@@ -10,7 +10,7 @@ The script also creates a pdf of plots, which should be checked after any run fo
 Our numbers differ slightly with theirs because in our data Key Biodiversity Areas (KBAs) include by both Important Bird and Biodiversity Areas (IBAs) and Important Plant Areas (IPAs) combined. IBAT only include IBAs. The UK is one of the few countries with IPA geographic data.
   
 ### Instructions for updating
-1) Save the all_data table from geospatial as a csv file in the 'Input' folder in 15-1-2. Make sure the numbers are formatted as numbers and the **thousands separator is NOT used**.
+1) Save the all_data table from geospatial as a csv file in the 'Input' folder in 15-1-2. Make sure the numbers are formatted as numbers (use a large number of decimal places) and ensure the **thousands separator is NOT used**. Also check that there are no
 2) Open the `sdg_data_updates.Rproj` from inside RStudio (in Jemalex > sdg_data_updates).  
 3) Open the `config.R` file in 15-1-2 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 4) Check the configurations are correct, and if not correct them and save.  

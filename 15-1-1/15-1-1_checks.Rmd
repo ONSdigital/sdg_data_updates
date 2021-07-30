@@ -134,8 +134,8 @@ percent_increase_since_2015 <- new_data %>%
 
 - `r round(woodland_certified_in_UK, 1)`% of woodland area in the UK is certified as 
 sustainably managed
-- Since the adoption of the SDGs in 2015, woodland area as a percentage of total 
-land area has increased by `r round(percent_increase_since_2015, 1)`%
+- Since the adoption of the SDGs in 2015, the percentage increase of woodland area (as a percentage of total area) in the UK
+is `r round(percent_increase_since_2015, 1)`%
 - Area of woodland in the UK: taken from the woodland statistics bulletin    
 which represents the following percent of land area in each country:
 

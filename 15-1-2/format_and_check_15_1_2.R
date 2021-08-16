@@ -12,27 +12,30 @@ library(ggplot2)
 Date <- Sys.Date()
 
 original_data <- read.csv(input_filepath) %>% 
-  mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   ", "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  
-  mutate(KBA_IN_PA_AREA_ha = as.numeric(KBA_IN_PA_AREA_ha))
+  mutate(KBA_IN_PA_AREA_ha = ifelse(KBA_IN_PA_AREA_ha == " -   " | is.na(KBA_IN_PA_AREA_ha),
+                                    "0" , as.character(KBA_IN_PA_AREA_ha))) %>%  
+  mutate(KBA_IN_PA_AREA_ha = as.numeric(KBA_IN_PA_AREA_ha))  %>% 
+  mutate(HABITAT_SERIES = ifelse(LCM_AGGREGATE_NAME == "Freshwater", 
+                                 "Freshwater", "Terrestrial"))
 
-# add rows for England and UK
+# add rows for England and UK, and split by terrestrial vs freshwater
 England_data <- original_data %>% 
   filter(RGN19NM != "England" & RGN19NM != "ENGLAND" & # these are not currently in the data, but just in case they are added in in future years this is a failsafe
            CTRY19NM == "ENGLAND") %>% 
-  group_by(LCM_AGGREGATE_NAME, YEAR) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  group_by(LCM_AGGREGATE_NAME, YEAR, HABITAT_SERIES) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(CTRY19NM = "ENGLAND",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
 
 UK_data <- original_data %>% 
   filter(RGN19NM != "England" & RGN19NM != "ENGLAND") %>%  # these are not currently in the data, but just in case they are added in in future years this is a failsafe 
-  group_by(LCM_AGGREGATE_NAME, YEAR) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  group_by(LCM_AGGREGATE_NAME, YEAR, HABITAT_SERIES) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(CTRY19NM = "",
          RGN19NM = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
@@ -42,10 +45,10 @@ all_countries <- bind_rows(England_data, UK_data, original_data)
 
 # add headline data for ecosystems
 all_ecosystems <- all_countries %>% 
-  group_by(CTRY19NM, RGN19NM, RGN19CD, YEAR) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>%
+  group_by(CTRY19NM, RGN19NM, RGN19CD, YEAR, HABITAT_SERIES) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>%
   mutate(LCM_AGGREGATE_NAME = "",
          PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100)
 
@@ -53,12 +56,60 @@ all_ecosystems <- all_countries %>%
 all_data <- bind_rows(all_ecosystems, all_countries)
 
 terrestrial <- c("Arable", "Broadleaf woodland", "Built-up areas and gardens", 
-                 "Coniferous woodland", "Improved grassland", "Semi-natural grassland")
+                 "Coniferous woodland", "Improved grassland", "Semi-natural grassland",
+                 "Coastal")
 
 # layout data to match our csv layout
 England_geocode <- "E92000001"
   
 long_format_for_csv <- all_data %>% 
+  select(-c(KBA._AREA_ha, KBA_IN_PA_AREA_ha, PA_ha)) %>% 
+  rename(Year = YEAR,
+         Country = CTRY19NM,
+         Region = RGN19NM,
+         `Ecosystem type` = LCM_AGGREGATE_NAME,
+         Series = HABITAT_SERIES,
+         # `Key Biodiversity Areas` = KBA._AREA_ha,
+         # `Key Biodiversity Areas within protected areas (ha)` = KBA_IN_PA_AREA_ha,
+         Value = PROPORTION_OF_KBA_IN_PA_pct,
+         # `Protected areas` =  PA_ha,
+         GeoCode = RGN19CD) %>% 
+  mutate(Series = ifelse(Series == "Freshwater", "Average proportion of freshwater Key Biodiversity Areas (KBAs) covered by protected areas",
+                         "Average proportion of terrestrial Key Biodiversity Areas (KBAs) covered by protected areas"),
+         `Ecosystem type` = ifelse(`Ecosystem type` == "Freshwater", "", 
+                                   `Ecosystem type`),
+         GeoCode = ifelse(Country == "ENGLAND" & Region == "", England_geocode, as.character(GeoCode)),
+         GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode)),
+         Country = str_to_title(Country),
+         Region = ifelse(Country != "England", "", Region),
+         Units = "Percentage (%)") %>% 
+  select(-c(CTRY19CD, LCM_AGGREGATE_CLASS_NUMBER, rgn19cd_AGG_NAME)) %>% 
+  # pivot_longer(-c(Year, Country, Region, `Ecosystem type`, GeoCode), 
+  #              names_to = "Units",
+  #              values_to = "Value") %>% 
+  # mutate(
+  #   Series = case_when(
+  #     Units == "Key Biodiversity Areas within protected areas (ha)" |
+  #       Units == "Key Biodiversity Areas within protected areas (%)" ~ 
+  #       "Key Biodiversity Areas within protected areas",
+  #     TRUE ~ as.character(Units)),
+  #   Units = case_when(
+  #     Units == "Key Biodiversity Areas within protected areas (%)" ~ "Percentage (%)",
+  #     TRUE ~ as.character("Hectares (ha)"))
+  #   ) %>% 
+  mutate(`Unit multiplier` = "Units",
+         `Observation status` = "Normal value",
+         Region = ifelse(Region == "East of England", "East", Region)) %>% 
+  # # change values to thousands - decided against this as the region by ecosystem type values are often <1000
+  # mutate(Value = ifelse(`Unit measure` == "Hectares (ha)", Value / 1000, Value),
+  #        `Unit multiplier` = "Thousands") %>% 
+  select(Year, Country, Region, `Ecosystem type`, Series,
+         Units, `Unit multiplier`, `Observation status`, GeoCode, Value) 
+
+# this is how I originally planned to display the data (showing the denominator and the numerator 
+# elements, rather than just the final proportion). It is still useful to do so 
+# for the check plots, as it will show where any errors may have arisen.
+for_plot_check <- all_data %>% 
   rename(Year = YEAR,
          Country = CTRY19NM,
          Region = RGN19NM,
@@ -73,7 +124,7 @@ long_format_for_csv <- all_data %>%
   mutate(Country = str_to_title(Country)) %>% 
   mutate(Region = ifelse(Country != "England", "", Region)) %>% 
   select(-c(CTRY19CD, LCM_AGGREGATE_CLASS_NUMBER, rgn19cd_AGG_NAME)) %>% 
-  pivot_longer(-c(Year, Country, Region, `Ecosystem type`, GeoCode), 
+  pivot_longer(-c(Year, Country, Region, `Ecosystem type`, GeoCode, HABITAT_SERIES), 
                names_to = "Units",
                values_to = "Value") %>% 
   mutate(
@@ -85,7 +136,7 @@ long_format_for_csv <- all_data %>%
     Units = case_when(
       Units == "Key Biodiversity Areas within protected areas (%)" ~ "Percentage (%)",
       TRUE ~ as.character("Hectares (ha)"))
-    ) %>% 
+  ) %>% 
   mutate(`Unit measure` = Units,
          `Unit multiplier` = "Units") %>% 
   # region should be "East" in tables and charts rather than "East of England" (which should be used in text)
@@ -93,10 +144,9 @@ long_format_for_csv <- all_data %>%
   # # change values to thousands - decided against this as the region by ecosystem type values are often <1000
   # mutate(Value = ifelse(`Unit measure` == "Hectares (ha)", Value / 1000, Value),
   #        `Unit multiplier` = "Thousands") %>% 
-  select(Year, Country, Region, `Ecosystem type`, Series,
+  select(Year, Country, Region, `Ecosystem type`, Series, HABITAT_SERIES,
          Units, `Unit measure`, `Unit multiplier`,  
          GeoCode, Value) 
-
 #--------------------------------------------------------------------------------
 # calculate numbers for the broader categories (for comparison with IBAT)
 broad_ecosystems <- all_data %>% 
@@ -111,9 +161,9 @@ broad_ecosystems <- all_data %>%
 broad_ecosystems_UK <- broad_ecosystems %>% 
   filter(CTRY19NM == "") %>% 
   group_by(YEAR, Category) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100) %>% 
   mutate(Geography = "UK")
 
@@ -121,9 +171,9 @@ broad_ecosystems_GB <- broad_ecosystems %>%
   mutate(GB = ifelse(CTRY19NM %in% c("ENGLAND", "WALES", "SCOTLAND"), TRUE, FALSE)) %>% 
   filter(GB == TRUE) %>% 
   group_by(YEAR, Category) %>% 
-  summarise(KBA._AREA_ha = sum(KBA._AREA_ha),
-            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha),
-            PA_ha = sum(PA_ha)) %>% 
+  summarise(KBA._AREA_ha = sum(KBA._AREA_ha, na.rm = TRUE),
+            KBA_IN_PA_AREA_ha = sum(KBA_IN_PA_AREA_ha, na.rm = TRUE),
+            PA_ha = sum(PA_ha, na.rm = TRUE)) %>% 
   mutate(PROPORTION_OF_KBA_IN_PA_pct = (KBA_IN_PA_AREA_ha/KBA._AREA_ha)*100) %>% 
   mutate(Geography = "GBR")
 
@@ -145,21 +195,22 @@ write.csv(broad_ecosystems_GB_UK, paste0('Output/to_check_against_IBAT_', Date, 
 
 big_countries <- c("", "England")
 
-region_data <- long_format_for_csv %>% 
+region_data <- for_plot_check %>% 
   mutate(Region = ifelse(Region == "", Country, Region)) %>% 
   filter(`Ecosystem type` != "" & Region %not_in% big_countries)
-country_data <- long_format_for_csv %>% 
+country_data <- for_plot_check %>% 
   filter(`Ecosystem type` != "" & Region == "") %>% 
   mutate(Region = Country)
-total_ecosystems_region_data <- long_format_for_csv %>% 
+total_ecosystems_region_data <- for_plot_check %>% 
   mutate(Region = ifelse(Region == "", Country, Region)) %>% 
   filter(`Ecosystem type` == "" & Region %not_in% big_countries)
-total_ecosystems_country_data <- long_format_for_csv %>% 
+total_ecosystems_country_data <- for_plot_check %>% 
   filter(`Ecosystem type` == "" & Region == "") %>% 
   mutate(Region = Country)
 
 Units_list <- unique(region_data$Units)
 Ecosystem_list <- unique(region_data$`Ecosystem type`)
+Ecosystem_list <- setdiff(Ecosystem_list, "Freshwater")
 
 plot_data <- function(data_for_plot){
   data_for_plot %>% 
@@ -171,6 +222,7 @@ plot_data <- function(data_for_plot){
                colour = Region)) +
     geom_point() +
     geom_line() +
+    facet_wrap(vars(Series), nrow = 2) +
     theme_bw() +
     ggtitle(paste(Units_list[i], "\n", Ecosystem_list[j]))
 }
@@ -184,6 +236,7 @@ plot_totals_data <- function(data_for_plot){
                colour = Region)) +
     geom_point() +
     geom_line() +
+    facet_grid(Series ~ HABITAT_SERIES) +
     theme_bw() +
     ggtitle(paste(Units_list[i], "\n"))
 }
@@ -191,16 +244,19 @@ plot_totals_data <- function(data_for_plot){
 
 pdf(paste0('Output/Plots_', Date, '.pdf'))
 
-for (i in 1:length(Units_list)){
+country_data_terrestrial <- filter(country_data, HABITAT_SERIES == "Terrestrial")
+region_data_terrestrial <- filter(region_data, HABITAT_SERIES == "Terrestrial")
+
+for(i in 1:length(Units_list)) {
   
-  for (j in 1:length(Ecosystem_list)) {
+  for(j in 1:length(Ecosystem_list)) {
     
-    all_countries_plot <- plot_data(country_data)
-    all_regions_plot <- plot_data(region_data)
+    all_countries_plot <- plot_data(country_data_terrestrial)
+    all_regions_plot <- plot_data(region_data_terrestrial)
     
     print(all_countries_plot)
     print(all_regions_plot)
-
+    
   }
   
   all_ecosystems_country_plot <- plot_totals_data(total_ecosystems_country_data)
@@ -209,6 +265,46 @@ for (i in 1:length(Units_list)){
   print(all_ecosystems_country_plot)
   print(all_ecosystems_region_plot)
 }
+
+country_data_freshwater <- filter(country_data, HABITAT_SERIES == "Freshwater")
+region_data_freshwater <- filter(region_data, HABITAT_SERIES == "Freshwater")
+
+for(i in 1:length(Units_list)) {
+  
+  all_countries_fw_plot <- country_data_freshwater %>% 
+    filter(Units == Units_list[i]) %>% 
+    ggplot(data = .,
+           aes(x = Year,
+               y = Value,
+               colour = Region)) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(vars(Series), nrow = 2) +
+    theme_bw() +
+    ggtitle(paste(Units_list[i], "\n", "Freshwater"))
+  
+  all_regions_fw_plot <-  region_data_freshwater %>% 
+    filter(Units == Units_list[i]) %>% 
+    ggplot(data = .,
+           aes(x = Year,
+               y = Value,
+               colour = Region)) +
+    geom_point() +
+    geom_line() +
+    facet_wrap(vars(Series), nrow = 2) +
+    theme_bw() +
+    ggtitle(paste(Units_list[i], "\n", "Freshwater"))
+  
+  print(all_countries_fw_plot)
+  print(all_regions_fw_plot)
+  
+}
+
+all_ecosystems_country_plot <- plot_totals_data(total_ecosystems_country_data)
+all_ecosystems_region_plot <- plot_totals_data(total_ecosystems_region_data)
+
+print(all_ecosystems_country_plot)
+print(all_ecosystems_region_plot)
 
 dev.off()
 

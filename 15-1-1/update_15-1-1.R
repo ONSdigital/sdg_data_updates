@@ -5,11 +5,14 @@ library('openxlsx')
 
 woodland_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
                                      sheet = woodland_area_tabname, colNames = FALSE) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 certified_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
                                       sheet = certified_area_tabname, colNames = FALSE) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 area_source_data <- read.csv(paste0(input_folder, "/", area_filename)) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
 # get relevant area data (of all land)
@@ -22,7 +25,8 @@ names(area_data)[country_column] <- "Country"
 names(area_data)[country_code_column] <- "Geocode"
 
 relevant_area_data <- select(area_data, Geocode, Country, AREALHECT) %>% 
-  add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) 
+  add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) %>% 
+  mutate()
 
 # get woodland area data (of all woodland)
 header_row_woodland <- which(woodland_source_data$X1 == "YEAR")
@@ -38,8 +42,7 @@ woodland_data <- woodland_data_with_header %>%
   select(-Year_entry) %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
-               values_to = "woodland_area") %>% 
-  mutate(Country = str_to_title(Country))
+               values_to = "woodland_area") 
 
 
 # get certified woodland area data 
@@ -57,14 +60,11 @@ certified_data <- certified_data_with_header %>%
   select(-Year_entry) %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
-               values_to = "certified_area") %>% 
-  mutate(Country = str_to_title(Country))
-
+               values_to = "certified_area") 
 
 # join data and do calculations
 all_data <- woodland_data %>% 
   left_join(certified_data, by = c("YEAR", "Country")) %>% 
-  mutate(Country = ifelse(Country == "Uk", "UK", Country)) %>% 
   left_join(relevant_area_data, by = "Country") %>% 
   mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),
@@ -89,6 +89,7 @@ csv_formatted <- indicator_data %>%
     `Sustainably managed status` == "certified_proportion" ~ "Certified",
     `Sustainably managed status` == "non_certified_proportion" ~ "Non-certified"),
     Country = ifelse(Country == "UK", "", Country)) %>% 
+  mutate(Country = str_to_title(Country)) %>% 
   mutate(different_method = ifelse((Country == "Northern Ireland" | Country == "") & 
                                      YEAR < 2013 & 
                                      `Sustainably managed status` %in% c("", "Non-certified"),

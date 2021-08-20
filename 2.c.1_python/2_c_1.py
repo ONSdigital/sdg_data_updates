@@ -91,7 +91,7 @@ def check_download_filepath():
         if files to be downloaded already exist
  
     """
-    for name in glob.glob(config.download_path+'series-??????.csv'):
+    for name in glob.glob(config.download_path+'series-*.csv'):
         if path.exists(name):
             response = ctypes.windll.user32.MessageBoxW(0, 
                                                         "The file " + name + " already exists in " + config.download_path + ". Delete file? If you do not want to delete files, please click cancel. Closing the dialogue box will prompt file deletion.",

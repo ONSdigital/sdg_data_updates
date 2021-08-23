@@ -1,15 +1,15 @@
-config <- config::get()
+source("config.R")
 
-# filename <- SDGupdater::ask_user_for_filename(config$input_folder)
+# filename <- SDGupdater::ask_user_for_filename(input_folder)
 
-if (SDGupdater::get_characters_after_dot(config$filename) != "xlsx") {
-  stop(paste("File must be an xlsx file. Save", config$filename, "as an xlsx and re-run script"))
+if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
+  stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
 }
 
-source_data <- tidyxl::xlsx_cells(paste0(config$input_folder, "/", config$filename),
-                                  sheets = c(config$area_of_residence_tab_name,
-                                             config$birthweight_by_mum_age_tab_name,
-                                             config$country_of_occurrence_by_sex_tab_name))
+source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                  sheets = c(area_of_residence_tab_name,
+                                             birthweight_by_mum_age_tab_name,
+                                             country_of_occurrence_by_sex_tab_name))
 
 source("region.R")
 source("birthweight_by_mum_age.R")

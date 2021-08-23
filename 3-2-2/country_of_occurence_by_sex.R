@@ -4,15 +4,15 @@
 # Requirements:This script is called by compile_tables.R, which is called by update_indicator_main.R
 
 
-country_of_occurrence_by_sex <- dplyr::filter(source_data, sheet == config$country_of_occurrence_by_sex_tab_name)
+country_of_occurrence_by_sex <- dplyr::filter(source_data, sheet == country_of_occurrence_by_sex_tab_name)
 
 
-info_cells <- SDGupdater::get_info_cells(country_of_occurrence_by_sex, config$first_header_row_country_by_sex)
+info_cells <- SDGupdater::get_info_cells(country_of_occurrence_by_sex, first_header_row_country_by_sex)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- country_of_occurrence_by_sex %>%
-  SDGupdater::remove_blanks_and_info_cells(config$first_header_row_country_by_sex) %>%
+  SDGupdater::remove_blanks_and_info_cells(first_header_row_country_by_sex) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
 tidy_data <- main_data %>%
@@ -47,10 +47,10 @@ if ("NA_NA_Births_Live births" %in% colnames(data_for_calculations)) {
 late_neonatal <- headings_standardised %>%
   dplyr::mutate(Numbers_Deaths_Late_neonatal = `Numbers_NA_Deaths under 1_Neonatal` - `Numbers_NA_Deaths under 1_Early`) %>%
   dplyr::mutate(Rates_Late_neonatal = SDGupdater::calculate_valid_rates_per_1000(Numbers_Deaths_Late_neonatal,
-                                                        `Numbers_NA_Births_Live births`, config$decimal_places),
+                                                        `Numbers_NA_Births_Live births`, decimal_places),
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
          Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(`Numbers_NA_Deaths under 1_Neonatal`,
-                                                         `Numbers_NA_Births_Live births`, config$decimal_places))
+                                                         `Numbers_NA_Births_Live births`, decimal_places))
 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$`Rates_Per 1,000  live births_Childhood deaths_Neonatal`)
 
@@ -89,8 +89,8 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
            Sex == "F" ~ "Female",
            TRUE ~ Sex))
 
-SDGupdater::multiple_year_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
-SDGupdater::multiple_country_warning(config$filename, config$country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
+SDGupdater::multiple_year_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
+SDGupdater::multiple_country_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
 
 if(number_of_rate_calculation_mismatches != 0){
   warning(paste("check of rate caclulations has failed.",

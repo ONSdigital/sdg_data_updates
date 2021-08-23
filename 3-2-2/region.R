@@ -4,15 +4,15 @@
 # TO DO: look into also giving local authority numbers (We shouldn't display rates as they are unreliable)
 # Requirements:This script is called by compile_tables.R, which is called by update_indicator_main.R
 
-area_of_residence <- dplyr::filter(source_data, sheet == config$area_of_residence_tab_name)
+area_of_residence <- dplyr::filter(source_data, sheet == area_of_residence_tab_name)
 
 # info cells are the cells above the column headings
-info_cells <- SDGupdater::get_info_cells(area_of_residence, config$first_header_row_area_of_residence)
+info_cells <- SDGupdater::get_info_cells(area_of_residence, first_header_row_area_of_residence)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- area_of_residence %>%
-  SDGupdater::remove_blanks_and_info_cells(config$first_header_row_country_by_sex) %>%
+  SDGupdater::remove_blanks_and_info_cells(first_header_row_country_by_sex) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
 if ("Region" %in% main_data$character){ # because headings are different for 2017 and 2018 files
@@ -71,8 +71,8 @@ clean_csv_data_area_of_residence <- only_regions_kept %>%
                 Country = "England",
                 Region = SDGupdater::format_region_names(Region))
 
-SDGupdater::multiple_year_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
-SDGupdater::multiple_country_warning(config$filename, config$area_of_residence_tab_name,"area of residence (region)")
+SDGupdater::multiple_year_warning(filename, area_of_residence_tab_name,"area of residence (region)")
+SDGupdater::multiple_country_warning(filename, area_of_residence_tab_name,"area of residence (region)")
 
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data,

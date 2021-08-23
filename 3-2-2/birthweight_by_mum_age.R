@@ -4,14 +4,14 @@
 # Requirements: This script is called by compile_tables.R, which is called by update_indicator_main.R
 
 
-birthweight_by_mum_age <- dplyr::filter(source_data, sheet == config$birthweight_by_mum_age_tab_name)
+birthweight_by_mum_age <- dplyr::filter(source_data, sheet == birthweight_by_mum_age_tab_name)
 
-info_cells <- SDGupdater::get_info_cells(birthweight_by_mum_age, config$first_header_row_birthweight_by_mum_age)
+info_cells <- SDGupdater::get_info_cells(birthweight_by_mum_age, first_header_row_birthweight_by_mum_age)
 year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- birthweight_by_mum_age %>%
-  SDGupdater::remove_blanks_and_info_cells(config$first_header_row_birthweight_by_mum_age) %>%
+  SDGupdater::remove_blanks_and_info_cells(first_header_row_birthweight_by_mum_age) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
 tidy_data <- main_data %>%
@@ -40,14 +40,14 @@ names(data_for_calculations)[neonatal_rates_location] <- "Rates_Neonatal_Deaths"
 late_neonatal <- data_for_calculations %>%
   dplyr::mutate(Numbers_Late_neonatal_Deaths = Numbers_Neonatal_Deaths - Numbers_Early_Deaths) %>%
   dplyr::mutate(Rates_Late_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Late_neonatal_Deaths,
-                                                                     `Numbers_Live births_Births`, config$decimal_places),
+                                                                     `Numbers_Live births_Births`, decimal_places),
 
          Rates_Early_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Early_Deaths,
-                                                                      `Numbers_Live births_Births`, config$decimal_places),
+                                                                      `Numbers_Live births_Births`, decimal_places),
 
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
          Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(Numbers_Neonatal_Deaths,
-                                                               `Numbers_Live births_Births`, config$decimal_places))
+                                                               `Numbers_Live births_Births`, decimal_places))
 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$Rates_Neonatal_Deaths)
 
@@ -86,8 +86,8 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          Region = "",
          `Health board` = "")
 
-SDGupdater::multiple_year_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
-SDGupdater::multiple_country_warning(config$filename, config$birthweight_by_mum_age_tab_name,"birthweight by age")
+SDGupdater::multiple_year_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
+SDGupdater::multiple_country_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 
 if(number_of_rate_calculation_mismatches != 0){
   warning(paste("check of rate caclulations has failed.",

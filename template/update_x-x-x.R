@@ -2,8 +2,11 @@
 # date: 24/08/2021
 # THIS IS A TEMPLATE NOT A WORKING SCRIPT
 
+# DATA WITH COMPLEX HEADINGS
+# e.g. merged cells, multiple rows of headings, headings down the side as well as along the top
+
 # read in data------------------------------------------------------------------
-# for data with complex headings
+
 source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
                                             sheet = tabname, colNames = FALSE) %>% 
   # change factors to characters as each level of a factor is given a number and so doesn't behave like a string
@@ -13,9 +16,37 @@ source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
   # remove all trailing white space and change multiple spaces to single spaces within the string
   mutate(across(where(is.character), str_squish))
 
+# remove blanks and rows above the first header row ----------------------------
+# first_header_row is the first row on which there are column names in the excel file
+# define first_header_row in config.R (it is the row number)
+main_data <- source_data %>% 
+  mutate(is_blank = ifelse(character == "" & data_type == "character", TRUE, is_blank)) %>% 
+  filter(is_blank == FALSE & row %not_in% 1:(first_header_row - 1))
+  ## alternatively use:
+  # tidy_data <- source_data %>%
+  #   SDGupdater::remove_blanks_and_info_cells(first_header_row)
 
-# for data with simple headings (a single row of column names, with no headings 
-# on the side, and no merged cells)
+# put data in a tidy format-----------------------------------------------------
+# see unpivotr_behead_explanation.pptx for how this wprks
+
+# this is an example from 3-2-2
+tidy_data <- main_data %>% 
+  unpivotr::behead("left-up", birthweight) %>%
+  unpivotr::behead("left", mother_age) %>%
+  unpivotr::behead("up-left", measure) %>%
+  unpivotr::behead("up-left", event) %>%
+  unpivotr::behead("up", baby_age) %>%
+  dplyr::select(birthweight, mother_age, measure, event, baby_age,
+                numeric)
+  
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+# DATA WITH SIMPLE HEADINGS
+# i.e. a single row of column names, with no headings on the side, and no merged cells
+
+# read in data------------------------------------------------------------------
+
 # If you are not sure whether the top row will always contain the column names, 
 # use source_data <- read.csv(paste0(input_folder, "/", filename), header = FALSE)
 source_data <- read.csv(paste0(input_folder, "/", filename)) %>% 
@@ -25,6 +56,7 @@ source_data <- read.csv(paste0(input_folder, "/", filename)) %>%
   mutate(across(where(is.character), tolower)) %>% 
   # remove all trailing white space and change multiple spaces to single spaces within the string
   mutate(across(where(is.character), str_squish))
+
 
 #-------------------------------------------------------------------------------
 # make all column names of all datasets the same case---------------------------
@@ -46,6 +78,11 @@ names(source_data) <- str_replace_all(names(source_data), "\\.\\.+", ".")
 # replace start dots and end dots with nothing ("")
 # In regular expressions ^ means at the start while $ means at the end) 
 names(source_data) <- str_replace_all(names(source_data), "^\\.|\\.$", "")
+
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+# RELEVANT FOR ALL DATA
 
 #-------------------------------------------------------------------------------
 # Remove superscripts ----------------------------------------------------------

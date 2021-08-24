@@ -108,11 +108,15 @@ We want to replace multiple dots with a single dot.
 `.` in regular expressions means 'everything'
 so we have to escape this meaning using `\\`. A regular expression followed by a 
 plus sign (`+`) matches one or more occurrences of the one-character regular expression.
-```names(source_data) <- str_replace_all(names(source_data), "\\.\\.+", ".")```
+```
+names(source_data) <- str_replace_all(names(source_data), "\\.\\.+", ".")
+```
 
 We also want to replace start dots and end dots with nothing ("").   
 In regular expressions `^` means 'at the start' while `$` means 'at the end'.
-```names(source_data) <- str_replace_all(names(source_data), "^\\.|\\.$", "")```
+```
+names(source_data) <- str_replace_all(names(source_data), "^\\.|\\.$", "")
+```
 
 4. Get the location of the column names row 
 If the column names are not in the first row, you could ask the user to define
@@ -135,15 +139,21 @@ First, identify which row contains headers using a header you know will be there
 header_row <- which(source_data$v1 == "year")
 ```
 Then change the column names to be the same as the identified row
-```names(source_data) <- source_data[header_row, ]```
+```
+names(source_data) <- source_data[header_row, ]
+```
 
 And subset the data so that any rows above the header row are dropped.
-```source_data <- source_data[header_row + 1:nrow(source_data), ]```
+```
+source_data <- source_data[header_row + 1:nrow(source_data), ]
+```
 
 This results in a datframe the same length as the original, but with lots of 
 NAs at the bottom. One way to drop these new but pointless rows is to subset again 
 (you could tag this subset onto the end of the last line):
-```source_data <- source_data[1 : (nrow(source_data) - header_row), ]```
+```
+source_data <- source_data[1 : (nrow(source_data) - header_row), ]
+```
 
 ### Code for all data (whether it had complex or simple headings)
 
@@ -167,7 +177,9 @@ source_data <- data.frame("country code1" = c("e92000001", "n92000002"),
 You can use a function in SDGupdater to remove superscripts from column names.   
 **Note: this function may need more testing** so make sure to check it has only 
 removed superscripts (not numbers that you want to keep)
-```names(source_data) <- SDGupdater::remove_superscripts(names(source_data))```
+```
+names(source_data) <- SDGupdater::remove_superscripts(names(source_data))
+```
 
 You can also use this function to remove superscripts from all columns. (Same caution notes apply) 
 ```
@@ -207,8 +219,10 @@ country_column <- which(substr(names(source_data), 1, 4) == "ctry" &
                           substr(names(source_data), 7, 8) == "nm")
 ````
 
-ename the identified column
-```names(source_data)[country_column] <- "country"```
+Rename the identified column:
+```
+names(source_data)[country_column] <- "country"
+```
 
 Option 2) Identify the column based on the column contents. In this example, identify year
 based on the criteria that all cells are a number between 1950 and the current year
@@ -289,6 +303,7 @@ instead of the real one
 age_order <- data.frame(Age = c("Under 15", "16 to 40", "41 to 65", "Over 65"),
                         Age_order = c(1:4))
 ```
+age_order can then be joined to the main data and used by the `arrange()` function (see below):
 ```
 csv_formatted <- indicator_data %>% 
   # we changed everything to lowercase at the top of the script, 

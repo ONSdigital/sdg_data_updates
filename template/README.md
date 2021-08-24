@@ -22,7 +22,7 @@ This is just the code in `update_x-x-x.R`. It is displayed here in a way that is
 e.g. merged cells, multiple rows of headings, headings down the side as well as along the top:
 ![complex_header](https://user-images.githubusercontent.com/52452377/130663339-d953d7ee-13d1-4422-aa48-e8d6091285d0.jpg)
   
-1. read in data
+1. Read in data
 
 ``` 
 source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
@@ -35,7 +35,7 @@ source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
  mutate(across(where(is.character), str_squish))
 ```
 
-2. remove blanks and rows above the first header row  
+2. Remove blanks and rows above the first header row  
 first_header_row is the first row on which there are column names in the excel file  
 define first_header_row in config.R (it is the row number)  
 ```
@@ -52,7 +52,7 @@ tidy_data <- source_data %>%
 This is exactly the same as the previous chunk but with a warning if the data has not been imported correctly.
 It is also arguably easier to understand (more explicit) and shorter.
 
-3. put data in a tidy format
+3. Put data in a tidy format
 see [unpivotr_behead_explanation.pptx](https://github.com/ONSdigital/sdg_data_updates/blob/template/template/unpivotr_behead_explanation.pptx) for how this works
 
 An example from 3-2-2:
@@ -71,7 +71,7 @@ tidy_data <- main_data %>%
 ### Code just for data with simple headers
 i.e. a single row of column names, with no headings on the side, and no merged cells
 
-1. read in data
+1. Read in data
   
 If you are not sure whether the top row will always contain the column names, 
 use `source_data <- read.csv(paste0(input_folder, "/", filename), header = FALSE)`
@@ -86,12 +86,14 @@ source_data <- read.csv(paste0(input_folder, "/", filename)) %>%
   mutate(across(where(is.character), str_squish))
 ```
 
-2. make all column names of all datasets the same case
+2. Make all column names of all datasets the same case
 You can make it whatever case you like, this is just so that it is consistent across years, and across datasets used for the indicator.
 You probably don't need to do this to data with complex headings, as you make up the headings yourself when 'beheading' the data.
-```names(source_data) <- tolower(names(source_data))```
+```
+names(source_data) <- tolower(names(source_data))
+```
 
-3. remove trailing and extra dots in names 
+3. Remove trailing and extra dots in names 
 read.csv changes spaces in column names to periods. This code can be used to remove excess dots.
 So you can see how it works this is some toy data:
 ```
@@ -243,29 +245,51 @@ names(source_data)[year_column] <- "year"
 ```
 
 #-------------------------------------------------------------------------------
+
+At this point, most of the future-proofing is done.    
+You can now do the stuff that is particularly specific to the indicator, such as 
+joining dataframes, doing relevant calculations, etc.    
+     
+Some useful functions:
+```
+# join datasets, keeping all the rows in the first dataset:
+left_join(join_this_data, to_this_data, by = c("this variable", "and this variable"))  
+
+# join datasets, keeping all the rows in the second dataset
+right_join(join_this_data, to_this_data, by = c("this variable", "and this variable"))
+
+# join datasets, keeping all the rows in both datasets
+full_join(join_this_data, to_this_data, by = c("this variable", "and this variable")) 
+
+# not often used but you can use this to manually add a row to the data
+add_row() 
+
+# remove rows based on some argument, eg filter(sex == "M" | sex == "F") will remove all entries that aren't either "M" or "F"
+filter() 
+
+# remove (using `-` before the column name) or keep (just use the column name) columns. Can also be used to order columns
+select()
+
+group_by() %>% summarise()
+
+pivot_longer() and pivot_wider()
+```
 #-------------------------------------------------------------------------------
 
 
-# Join dataframes, do relevant calculations etc
-# some useful functions:
-# left_join(), right_join, add_row(), filter(), select(), group_by() %>% summarise()
-# pivot_longer(), pivot_wider()
+### Finalise the csv file
 
+Add extra columns for SDMX, rename levels of disaggregations, 
+put columns in correct order etc 
 
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# finalise csv -----------------------------------------------------------------
-
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
-
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
+The order of disaggregations depend on order they appear. In some cases this won't 
+be alphanumeric order, so specify the order here and arrange by this fake column 
+instead of the real one
+```
 age_order <- data.frame(Age = c("Under 15", "16 to 40", "41 to 65", "Over 65"),
                         Age_order = c(1:4))
-
+```
+```
 csv_formatted <- indicator_data %>% 
   # we changed everything to lowercase at the top of the script, 
   # so now we need to change them back to the correct case
@@ -297,5 +321,5 @@ csv_formatted <- indicator_data %>%
   select(Year, Country, Age, 
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)
-
+```
 

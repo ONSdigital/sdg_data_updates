@@ -17,6 +17,8 @@ Indicator specific files can be found in each indicator folder (name structure x
 
 SDGupdater is a package used by indicator update scripts. 
 
+Template files for R automations can be found in the template folder (currently in template branch)
+
 
 ### To do ### 
 Manage dependencies using packrat (all required packages are stored locally). 

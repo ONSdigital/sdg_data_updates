@@ -53,7 +53,7 @@ This is exactly the same as the previous chunk but with a warning if the data ha
 It is also arguably easier to understand (more explicit) and shorter.
 
 3. Put data in a tidy format
-see [unpivotr_behead_explanation.pptx](https://github.com/ONSdigital/sdg_data_updates/blob/template/template/unpivotr_behead_explanation.pptx) for how this works
+see [unpivotr_behead_explanation.pptx](https://github.com/ONSdigital/sdg_data_updates/blob/main/template/unpivotr_behead_explanation.pptx) for how this works
 
 An example from 3-2-2:
 ```

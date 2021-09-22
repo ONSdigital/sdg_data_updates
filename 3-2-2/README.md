@@ -15,10 +15,11 @@ Input data are stored in a folder named 'Input' (See 'Example Data'). Outputs ar
 2) Open config.yml in the 3-2-2 folder and check that all configurations are correct.
 > The `first_header_row` settings refer to the row number of the top level of column names. All rows above this just contain information like the country and year the data refer to.
 3) Open RStudio.
-4) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. You may need to install packages if they are not already installed.
+4) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. 
 5) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.
 6) Change the indicator number to '3-2-2' (Dashes NOT dots).
-7) csv files will be exported to Output folder.
+7) Click the 'source' button (in the top right of the top left window). This will run the code. You may need to install some packages if they are not already installed. ~Use `install.packages('name_of_package', dependencies = TRUE)` to install packages, then try running the code (using the source button) again.
+8) csv files will be exported to Output folder.
 
 Please check the data source to see if the best data are being reported, or if there are other series we sohould include
 

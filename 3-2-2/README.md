@@ -48,4 +48,5 @@ country_of_occurence_by_sex.R, birthweight_by_mum_age.R, and region.R: where the
 	in case the user wants to see what data came from where, but they are not individually saved to the Output folder.
 
 #### still to do
-Create a file containing information about the run e.g. the name of the input file and the tabs used (to be used for QA purposes)
+Index of Multiple Deprivation is in the 2021 download for all years - may want to add
+this as an automated table next year (no point this year as we don't know what it will look like)

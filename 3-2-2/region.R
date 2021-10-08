@@ -12,6 +12,7 @@ year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- area_of_residence %>%
+  dplyr::mutate(character = str_squish(character)) %>% 
   SDGupdater::remove_blanks_and_info_cells(first_header_row_country_by_sex) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
@@ -83,7 +84,7 @@ clean_csv_data_area_of_residence <- only_regions_kept %>%
                 `Neonatal period` = "",
                 Birthweight = "",
                 Age = "",
-                `Health board` = "",
+                `Country of birth` = "", 
                 Country = "England",
                 Region = SDGupdater::format_region_names(Region))
 

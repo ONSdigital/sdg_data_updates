@@ -12,6 +12,7 @@ year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- country_of_occurrence_by_sex %>%
+  dplyr::mutate(character = str_squish(character)) %>% 
   SDGupdater::remove_blanks_and_info_cells(first_header_row_country_by_sex) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
@@ -102,7 +103,7 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
          Birthweight = "",
          Age = "",
          Region = "",
-         `Health board` = "",
+         `Country of birth` =  "",
          Country = ifelse(Country == "United Kingdom", "", Country),
          Sex = dplyr::case_when(
            Sex == "P" ~ "",
@@ -125,7 +126,6 @@ SDGupdater::multiple_country_warning(filename, country_of_occurrence_by_sex_tab_
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data,
    data_for_calculations, data_in_csv_format,
-   headings_standardised,
    info_cells, late_neonatal,
    tidy_data, relevant_columns, 
    neonatal_rate_column, early_neonatal_rate_column,

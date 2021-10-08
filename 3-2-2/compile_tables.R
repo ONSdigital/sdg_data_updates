@@ -9,11 +9,13 @@ if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
 source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
                                   sheets = c(area_of_residence_tab_name,
                                              birthweight_by_mum_age_tab_name,
-                                             country_of_occurrence_by_sex_tab_name))
+                                             country_of_occurrence_by_sex_tab_name,
+                                             country_of_birth_tab_name))
 
 source("region.R")
 source("birthweight_by_mum_age.R")
 source("country_of_occurence_by_sex.R")
+source("country_of_birth.R")
 
 age_order <- data.frame(Age = c("19 and under",
                                 "20 to 24",
@@ -45,7 +47,8 @@ country_order <- data.frame(Country = c("England and Wales",
 
 all_csv_data <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_birtweight_by_mum_age,
-                                 clean_csv_data_country_by_sex) %>%
+                                 clean_csv_data_country_by_sex,
+                                 clean_csv_data_country_of_birth) %>%
   dplyr::left_join(age_order, by = "Age") %>% 
   dplyr::left_join(country_order, by = "Country") %>% 
   dplyr::left_join(weight_order, by = "Birthweight") %>% 
@@ -55,7 +58,7 @@ all_csv_data <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
                  Region, Sex) %>%
-  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, Sex, 
+  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
                 GeoCode, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
 
 

@@ -11,6 +11,7 @@ year <- SDGupdater::unique_to_string(info_cells$Year)
 country <- SDGupdater::unique_to_string(info_cells$Country)
 
 main_data <- birthweight_by_mum_age %>%
+  dplyr::mutate(character = str_squish(character)) %>% 
   SDGupdater::remove_blanks_and_info_cells(first_header_row_birthweight_by_mum_age) %>%
   dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
@@ -103,7 +104,8 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          Birthweight = birthweight) %>%
   dplyr::mutate(Year = year,
          Sex = "",
-         Region = "")  %>% 
+         Region = "",
+         `Country of birth` = "")  %>% 
   dplyr::mutate(Value = as.numeric(Value))
 
 

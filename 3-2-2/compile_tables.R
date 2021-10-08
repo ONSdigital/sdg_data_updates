@@ -91,7 +91,7 @@ rmarkdown::render('QA.Rmd', output_file = markdown_filename)
 
 message(paste0("csv for ", year, " has been created and saved in '", current_directory,
              "' as '", csv_data_filename, "\n\n",
-             " Rows that didn't have values (supressed) are saved as '", no_value_rows_filename, "'"))
+             " Please also read the QA document '", markdown_filename, "'"))
 
 # so we end on the same directory as we started:
 setwd("./..")

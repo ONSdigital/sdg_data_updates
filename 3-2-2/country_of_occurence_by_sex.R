@@ -126,7 +126,7 @@ SDGupdater::multiple_country_warning(filename, country_of_occurrence_by_sex_tab_
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data,
    data_for_calculations, data_in_csv_format,
-   info_cells, late_neonatal,
+   info_cells, 
    tidy_data, relevant_columns, 
    neonatal_rate_column, early_neonatal_rate_column,
    country, year)

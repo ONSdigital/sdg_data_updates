@@ -378,5 +378,3 @@ suppressMessages(suppressWarnings(print(country_of_birth_plot)))
 
 
 
-
-

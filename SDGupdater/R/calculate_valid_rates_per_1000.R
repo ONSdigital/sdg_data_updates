@@ -25,7 +25,7 @@ calculate_valid_rates_per_1000 <- function (numerator, denominator, decimal_plac
 
   if (any(numerator > denominator, na.rm = TRUE)) { stop("numerator must be smaller than or equal to denominator") }
 
-  ifelse(numerator > 3,
+  ifelse(numerator >= 3,
          round(numerator / (denominator / 1000), decimal_places),
          NA)
 

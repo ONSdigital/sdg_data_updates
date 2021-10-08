@@ -150,7 +150,8 @@ if(expected_number_of_rows_in_output != nrow(all_csv_data)) {
  
 
 ### Calculations
-For birthweight and mother age, number of late neonatal deaths are calculated as
+For birthweight and mother age, and for country of mother's birth, 
+number of late neonatal deaths are calculated as
 'number of neonatal deaths - number of earlt neonatal deaths.   
 
 The rates for early and late neonatal deaths per 1,000 live births are then
@@ -183,14 +184,14 @@ datatable(table1,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
 
-}
+} else {"there are no mismatches for birthweight and age of mother"}
 
-rate_mismatches_sex <- SDGupdater::count_mismatches(late_neonatal_country_sex$Rates_Neonatal_check, 
-                                                       late_neonatal_country_sex$`Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
+rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(calculations_country_of_birth$Rates_Neonatal_check, 
+                                                       calculations_country_of_birth$Neonatal_rate)
 
-if(rate_mismatches_sex > 0){
+if(rate_mismatches_country_of_birth > 0){
   
-table2 <- late_neonatal_country_sex %>% 
+table2 <- calculations_country_of_birth %>% 
   filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
     distinct(country, sex, Rates_Neonatal_check, 
              `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
@@ -203,7 +204,7 @@ datatable(table2,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
 
-}
+} else {print("there are no mismatches for mother's country of birth")}
 
 
 ```
@@ -211,7 +212,7 @@ datatable(table2,
 Further to this, the rates of early and late neonatal deaths should sum to the 
 rate of all neonatal death (which is in the publication). The table below shows 
 rows where the sum of the early and late neonatal rates is different to the 
-published neonatal rate by more than 0.15:
+published neonatal rate by 0.1 or more, ordered by largest difference:
 ...
 ```{r, echo = FALSE}
 wide_data <- all_csv_data %>% 
@@ -221,7 +222,8 @@ wide_data <- all_csv_data %>%
               values_from = Value) %>% 
   mutate(sum_early_late = `Early neonatal` + `Late neonatal`) %>% 
   mutate(difference = sum_early_late - Neonatal) %>% 
-  filter(difference > 0.15)
+  filter(difference >= 0.1) %>% 
+  arrange(desc(difference)) 
 
 datatable(wide_data, 
           rownames = FALSE, 
@@ -254,7 +256,8 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
   mutate(Region = case_when(
     Region == "East of England" ~ "East", 
     Region == "Yorkshire and the Humber" ~ "Yorkshire and The Humber",
-    TRUE ~ as.character(Region))) %>% 
+    TRUE ~ as.character(Region)),
+    Value = round(Value, decimal_places)) %>% 
   rename(Birthweight = Birth.weight,
          `Health board` = Health.Board,
          `Unit measure` = Unit.measure,
@@ -274,7 +277,8 @@ all_data <- old_data %>%
 country_sex_plot <- all_data %>% 
   filter(Birthweight == "" &
          Region == "" &
-           Age == "") %>% 
+           Age == "" &
+           (`Country of birth` == "" | is.na(`Country of birth`))) %>% 
   ggplot(data = .,
        aes(x = Year,
            y = Value)) +
@@ -282,7 +286,8 @@ country_sex_plot <- all_data %>%
   geom_line(aes(colour = `Neonatal period`)) +
   facet_grid(Sex ~ Country) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  ggtitle("country of occurrence by sex")
 
 
 age_plot <- all_data %>% 
@@ -290,7 +295,8 @@ age_plot <- all_data %>%
            Sex == "" &
            Birthweight == "" &
            Age != "Not stated" &
-           Country == "England and Wales") %>% 
+           Country == "England and Wales linked deaths" &
+           (`Country of birth` == "" | is.na(`Country of birth`))) %>% 
   ggplot(data = .,
        aes(x = Year,
            y = Value)) +
@@ -298,7 +304,8 @@ age_plot <- all_data %>%
   geom_line(aes(colour = `Neonatal period`)) +
   facet_grid(. ~ Age) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  ggtitle("Age of mother")
 
 birthweight_plot <- all_data %>% 
   filter(Region == "" &
@@ -311,13 +318,15 @@ birthweight_plot <- all_data %>%
   geom_line(aes(colour = `Neonatal period`)) +
   facet_grid(. ~ Birthweight) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  ggtitle("Birthweight")
 
 region_plot <- all_data %>% 
   filter(Birthweight == "" &
            Sex == "" &
            Age == "" &
-           Country == "England") %>% 
+           Country == "England" &
+           (`Country of birth` == "" | is.na(`Country of birth`))) %>% 
   ggplot(data = .,
        aes(x = Year,
            y = Value)) +
@@ -325,12 +334,27 @@ region_plot <- all_data %>%
   geom_line(aes(colour = `Neonatal period`)) +
   facet_grid(. ~ Region) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  ggtitle("Regions of England")
+
+country_of_birth_plot <- all_data %>% 
+  filter(`Country of birth` != "" &
+           !is.na(`Country of birth`)) %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_point(aes(colour = `Neonatal period`)) +
+  geom_line(aes(colour = `Neonatal period`)) +
+  facet_grid(. ~ `Country of birth`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+  ggtitle("Country of mother's birth")
 
 suppressMessages(suppressWarnings(print(country_sex_plot)))
 suppressMessages(suppressWarnings(print(region_plot)))
 suppressMessages(suppressWarnings(print(age_plot)))
 suppressMessages(suppressWarnings(print(birthweight_plot)))
+suppressMessages(suppressWarnings(print(country_of_birth_plot)))
 
 ```
 

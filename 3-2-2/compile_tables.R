@@ -80,27 +80,19 @@ if (output_folder_exists == FALSE) {
   dir.create("Output")
 }
 
-setwd('./Output')
-
 date_time <- Sys.time()
 filename_date_time <- SDGupdater::create_datetime_for_filename(date_time)
 
-csv_data_filename <- paste0(filename_date_time, "_3-2-2_data_for_", year, ".csv")
-no_value_rows_filename <- paste0(filename_date_time, "rows_without_values_in_", year, ".csv")
+csv_data_filename <- paste0('Output/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
+markdown_filename <- paste0('Output/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
 
 write.csv(csv_data, csv_data_filename, row.names = FALSE)
-write.csv(no_value_rows, no_value_rows_filename, row.names = FALSE)
+rmarkdown::render('QA.Rmd', output_file = markdown_filename)
 
 message(paste0("csv for ", year, " has been created and saved in '", current_directory,
              "' as '", csv_data_filename, "\n\n",
-             " Rows that didn't have values (supressed) are saved as '", no_value_rows_filename, "'",
-             "'\n\nFiles created for individual tabs can be viewed by clicking on them in the Global Environment."))
-
-# To Do: this fix could be automated/ put in a markdown run report
-message(paste0("\n Please check that year is entered correctly in the csv.\n",
-               "Year should be the same for all rows in the output csv.\n",
-               "If there is a superscript immediately after year in the top of one of the input excel tabs, year may not be enetered, so will need to be manually filled in"))
+             " Rows that didn't have values (supressed) are saved as '", no_value_rows_filename, "'"))
 
 # so we end on the same directory as we started:
-setwd("./../..")
+setwd("./..")
 

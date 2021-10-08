@@ -34,8 +34,24 @@ if ("Region" %in% main_data$character){ # because headings are different for 201
   only_regions_kept <- clean_data %>%
     dplyr::filter(geography == "Region")
 
-} else { # for data that don't have Region as a geography, England regions and Welsh health boards are in the same column
+} else if(year < 2015){ # for data that don't have Region as a geography, England regions and Welsh health boards are in the same column
 
+  tidy_data <- main_data %>%
+    unpivotr::behead("left-up", area_name) %>%
+    unpivotr::behead("up-left", measure) %>%
+    unpivotr::behead("up-left", life_event) %>%
+    unpivotr::behead("up", baby_age) %>%
+    dplyr::select(area_name, measure, life_event, baby_age,
+                  numeric) %>% 
+    dplyr::mutate(GeoCode = "")
+  
+  clean_data <- tidy_data %>%
+    dplyr::filter(!is.na(numeric)) %>% # to remove cells that are just ends of a header that have run on to the next row
+    dplyr::mutate(area_name = trimws(area_name,  which = "both"))
+
+  only_regions_kept <- clean_data %>% # because Wales health boards and LAs contain lowercase letters
+    dplyr::filter(grepl("[a-z]|ENGLAND|WALES|SCOTLAND", area_name) == FALSE)
+} else {
   tidy_data <- main_data %>%
     unpivotr::behead("left-up", GeoCode) %>%
     unpivotr::behead("left-up", area_name) %>%
@@ -44,16 +60,16 @@ if ("Region" %in% main_data$character){ # because headings are different for 201
     unpivotr::behead("up", baby_age) %>%
     dplyr::select(GeoCode, area_name, measure, life_event, baby_age,
                   numeric)
-
+  
   clean_data <- tidy_data %>%
     dplyr::filter(!is.na(numeric)) %>% # to remove cells that are just ends of a header that have run on to the next row
     dplyr::mutate(area_name = trimws(area_name,  which = "both"))
-
+  
   only_regions_kept <- clean_data %>% # because Wales health boards and LAs contain lowercase letters
     dplyr::filter(grepl("[a-z]|ENGLAND|WALES|SCOTLAND", area_name) == FALSE)
 }
 
-# no early-neonatal deaths are given, so can't calculate late_neonatoal as in other tables
+# no early-neonatal deaths are given, so can't calculate late_neonatal as in other tables
 
 clean_csv_data_area_of_residence <- only_regions_kept %>%
   dplyr::filter(measure == "Rates",

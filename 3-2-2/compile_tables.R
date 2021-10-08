@@ -15,14 +15,48 @@ source("region.R")
 source("birthweight_by_mum_age.R")
 source("country_of_occurence_by_sex.R")
 
+age_order <- data.frame(Age = c("19 and under",
+                                "20 to 24",
+                                "25 to 29",
+                                "30 to 34",
+                                "35 to 39",
+                                "40 and over"),
+                        age_order = c(1:6))
+weight_order <- data.frame(Birthweight = c("Under 2500",
+                                           "Under 1500",
+                                           "Under 1000",
+                                           "1000 to 1499",
+                                           "1500 to 1999",
+                                           "2000 to 2499",
+                                           "2500 to 2999",
+                                           "3000 to 3499",
+                                           "3500 to 3999",
+                                           "4000 and over",
+                                           "Implausible birthweight",
+                                           "Not stated"),
+                           weight_order = c(1:12))
+country_order <- data.frame(Country = c("England and Wales",
+                                        "England and Wales linked deaths",
+                                        "England",
+                                        "Northern Ireland",
+                                        "Scotland",
+                                        "Wales"),
+                            country_order = c(1:6))
+
 all_csv_data <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_birtweight_by_mum_age,
                                  clean_csv_data_country_by_sex) %>%
+  dplyr::left_join(age_order, by = "Age") %>% 
+  dplyr::left_join(country_order, by = "Country") %>% 
+  dplyr::left_join(weight_order, by = "Birthweight") %>% 
   dplyr::mutate(`Unit measure` = "Rate per 1,000 live births",
                 `Unit multiplier` = "Units",
-                `Observation status` = "Undefined") %>%
-  dplyr::select(Year, Sex, Country, Region, `Health board`, Birthweight, Age, `Neonatal period`, GeoCode,
-                `Unit measure`, `Unit multiplier`, `Observation status`, Value)
+                `Observation status` = "Undefined",
+                GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
+  dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
+                 Region, Sex) %>%
+  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, Sex, 
+                GeoCode, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
 
 
 no_value_rows <- all_csv_data %>%

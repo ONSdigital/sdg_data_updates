@@ -1,0 +1,343 @@
+---
+title: "3-2-2 QA"
+author: "Emma Wood"
+date: "27/09/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+```
+**Run date and time: `r Sys.time()`**  
+   
+## Introduction
+
+3-2-2 is a relatively straightforward indicator but there are a lot of potential
+disaggregations so it has been automated to speed up the process.    
+    
+This file runs some basic checks and gives information about the update.
+
+    
+## Configurations
+
+Configurations for this run are as follows:       
+    
+- Input filepath: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
+- Tab name for country of occurrence by sex data: **`r country_of_occurrence_by_sex_tab_name`**    
+- Tab name for area of residence data: **`r area_of_residence_tab_name`**    
+- Tab name for birthweight by mother age data: **`r birthweight_by_mum_age_tab_name`**    
+- The first row of headings for each of these data sets are set as rows 
+`r first_header_row_country_by_sex`, `r first_header_row_area_of_residence`, and
+`r first_header_row_birthweight_by_mum_age` respectively.    
+- Data have been rounded to **`r decimal_places` decimal places**.   
+
+## Potential errors
+
+### Year
+
+Year is taken from the information above the headings in the source spreadsheet.
+If the cell containing the year contains a superscript straight after the year, 
+year may not be picked up.    
+
+```{r, include = FALSE}
+country_sex_year <- unique(clean_csv_data_country_by_sex$Year) 
+area_of_residence_year <- unique(clean_csv_data_area_of_residence$Year) 
+birthweight_age_year <- unique(clean_csv_data_birtweight_by_mum_age$Year) 
+
+
+blank_years <- c("Years were not identified in the following tabs in the source spreadsheet:")
+years <- c()
+if(country_sex_year == "") {
+  blank_years <- c(blank_years, country_of_occurrence_by_sex_tab_name)
+} else {
+    years <- c(years, country_sex_year)
+}
+
+if(area_of_residence_year == "") {
+  blank_years <- c(blank_years, area_of_residence_tab_name)
+} else {
+    years <- c(years, area_of_residence_year)
+}
+
+if(birthweight_age_year == "") {
+  blank_years <- c(blank_years, birthweight_by_mum_age_tab_name)
+} else {
+    years <- c(years, birthweight_age_year)
+}
+
+
+if(length(blank_years) == 1){
+  blank_years <- "Year was identified in all tabs"
+} else {
+  blank_years <- paste(c(blank_years, "Please check this/these tabs to see why, **manually add the correct year to the blank cells**, and check if any notes need to be added to the metadata.  Please also check that the year given is as expected"), collapse = '<br />')
+
+}
+
+if(length(unique(years)) == 1 & length(years) > 1) {
+  potential_year_issue <- ""
+} else {
+  potential_year_issue <- "Different years were found in different tables, but 
+  they should all be the same. Please investigate."
+}
+```
+    
+`r blank_years`    
+    
+`r potential_year_issue`    
+    
+### Blank values
+Some rows in the original dataset have been suppressed, and have therefore been 
+removed from the csv. This is most often the case in cross-disaggregtaions for more extreme groups.
+For example very low birthweights, and the oldest and youngest age groups.  
+  
+This table shows rows for which we would definitely expect to have a value but don't 
+(where it is not a cross-disaggregation, birthweight is not "unlinked deaths" and 
+neither age nor birthweight are "not stated"). If this table is more than 0 rows, 
+check whether the value is present in the original data.
+  
+```{r, echo = FALSE}
+no_value_rows_filtered <- no_value_rows %>% 
+  filter(Birthweight != "Unlinked deaths" &
+           Birthweight != "Not stated" & 
+           Age != "Not stated") %>% 
+  mutate(unexpected = case_when(
+    Sex != "" & Birthweight == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
+    Birthweight != "" & Sex == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
+    Age != "" & Birthweight == "" & Sex == "" & `Neonatal period` == "" ~ TRUE,
+    `Neonatal period` != "" & Birthweight == "" & Age == "" & Sex == "" ~ TRUE,
+    TRUE ~ FALSE)) %>% 
+  filter(unexpected == TRUE) %>% 
+  select(-unexpected)
+
+datatable(no_value_rows_filtered, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+The table below shows **all** rows for which there is no value given (these rows do not appear in the csv). 
+```{r, echo = FALSE}
+datatable(no_value_rows, 
+          rownames = FALSE, 
+          filter = "top", 
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+
+```
+
+### Number of rows
+We expect there to be `r expected_number_of_rows_in_output` rows in the output 
+csv (expected number of rows is set in config.R).  
+```{r, echo = FALSE}
+if(expected_number_of_rows_in_output != nrow(all_csv_data)) {
+  message <- paste0("*There are ", nrow(all_csv_data), ". *This is different to the expected number of rows. *Please investigate*. The difference might be due to a blank value, which will be shown above. Another likely casue is that there is a different number of rows for 'not stated' and 'impalusible' birthweight rows.")
+} else {
+  message <- paste0("Check passed: there are ", nrow(all_csv_data), " rows in the csv.")
+}
+```
+`r message`
+ 
+
+### Calculations
+For birthweight and mother age, number of late neonatal deaths are calculated as
+'number of neonatal deaths - number of earlt neonatal deaths.   
+
+The rates for early and late neonatal deaths per 1,000 live births are then
+calculated as 'number of early [or late] neonatal deaths / (number of live births/1,000)',
+where the numerator is greater than 3.
+
+As a preliminary check, the same calculation is run for all neonatal deaths and
+this is compared to the published rate for all neonatal deaths. If these two match,
+we can be confident the functions used to calculate rate are working as they should.
+If all or most do not match, this indicates a problem that needs to be investigated.  
+  
+N.B. there may be occasional mismatches due to differences in rounding.   
+  
+See tables below for mismatches:
+```{r, echo = FALSE}
+rate_mismatches_weight <- SDGupdater::count_mismatches(calculations$Rates_Neonatal_check, 
+                                                       calculations$Neonatal_rate)
+
+if(rate_mismatches_weight > 0){
+  
+table1 <- late_neonatal_weight_age %>% 
+  filter(Rates_Neonatal_check != Rates_Neonatal_Deaths) %>% 
+    distinct(birthweight, mother_age, Rates_Neonatal_check, Rates_Neonatal_Deaths)
+
+datatable(table1, 
+          rownames = FALSE, 
+          filter = "top", 
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+
+}
+
+rate_mismatches_sex <- SDGupdater::count_mismatches(late_neonatal_country_sex$Rates_Neonatal_check, 
+                                                       late_neonatal_country_sex$`Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
+
+if(rate_mismatches_sex > 0){
+  
+table2 <- late_neonatal_country_sex %>% 
+  filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
+    distinct(country, sex, Rates_Neonatal_check, 
+             `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
+
+datatable(table2, 
+          rownames = FALSE, 
+          filter = "top", 
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+
+}
+
+
+```
+
+Further to this, the rates of early and late neonatal deaths should sum to the 
+rate of all neonatal death (which is in the publication). The table below shows 
+rows where the sum of the early and late neonatal rates is different to the 
+published neonatal rate by more than 0.15:
+...
+```{r, echo = FALSE}
+wide_data <- all_csv_data %>% 
+  mutate(`Neonatal period` = ifelse(`Neonatal period` == "", 
+                                    "Neonatal", `Neonatal period`)) %>% 
+  pivot_wider(names_from = `Neonatal period`,
+              values_from = Value) %>% 
+  mutate(sum_early_late = `Early neonatal` + `Late neonatal`) %>% 
+  mutate(difference = sum_early_late - Neonatal) %>% 
+  filter(difference > 0.15)
+
+datatable(wide_data, 
+          rownames = FALSE, 
+          filter = "top", 
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+For country and sex the rate for late neonatal deaths is calculated as 
+'neonatal death rate - early neonatal death rate' where the count of 
+late neonatal deaths is greater than 3. There are two reasons we don't use the 
+same calculation as is done for birthweight and age of mother:  
+1. Early neonatal death rate is not available for birthweight and age of mother    
+2. For Northern Ireland the number of live births *doesn't* include non-residents,
+but the number of deaths *does* include non-residents. The published rates use number of 
+live births including non-residents so that the numerator and denominator are comparable.
+
+
+
+## Plots
+  
+Plots of the data are shown below. If you see anything unexpected in the plots,
+please manually check the data are correct, and edit the code if necessary.
+
+```{r, include = FALSE, fig.width=10}
+old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2-2.csv") %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(Region = case_when(
+    Region == "East of England" ~ "East", 
+    Region == "Yorkshire and the Humber" ~ "Yorkshire and The Humber",
+    TRUE ~ as.character(Region))) %>% 
+  rename(Birthweight = Birth.weight,
+         `Health board` = Health.Board,
+         `Unit measure` = Unit.measure,
+         `Unit multiplier` = Unit.multiplier,
+         `Observation status` = Observation.status) %>% 
+  filter(`Health board` == "") %>% 
+  select(-`Health board`)
+
+csv_data <- csv_data %>% 
+  mutate(Year = year) %>% 
+  mutate(Year = as.integer(Year)) 
+
+all_data <- old_data %>% 
+  bind_rows(csv_data)
+
+# country by sex
+country_sex_plot <- all_data %>% 
+  filter(Birthweight == "" &
+         Region == "" &
+           Age == "") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_point(aes(colour = `Neonatal period`)) +
+  geom_line(aes(colour = `Neonatal period`)) +
+  facet_grid(Sex ~ Country) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+
+age_plot <- all_data %>% 
+  filter(Region == "" &
+           Sex == "" &
+           Birthweight == "" &
+           Age != "Not stated" &
+           Country == "England and Wales") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_point(aes(colour = `Neonatal period`)) +
+  geom_line(aes(colour = `Neonatal period`)) +
+  facet_grid(. ~ Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+birthweight_plot <- all_data %>% 
+  filter(Region == "" &
+           Sex == "" &
+            Age == "") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_point(aes(colour = `Neonatal period`)) +
+  geom_line(aes(colour = `Neonatal period`)) +
+  facet_grid(. ~ Birthweight) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+region_plot <- all_data %>% 
+  filter(Birthweight == "" &
+           Sex == "" &
+           Age == "" &
+           Country == "England") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_point(aes(colour = `Neonatal period`)) +
+  geom_line(aes(colour = `Neonatal period`)) +
+  facet_grid(. ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1))
+
+suppressMessages(suppressWarnings(print(country_sex_plot)))
+suppressMessages(suppressWarnings(print(region_plot)))
+suppressMessages(suppressWarnings(print(age_plot)))
+suppressMessages(suppressWarnings(print(birthweight_plot)))
+
+```
+
+
+
+
+
+
+
+

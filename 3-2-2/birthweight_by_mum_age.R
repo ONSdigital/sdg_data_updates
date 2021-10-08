@@ -34,35 +34,53 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, baby_age, event),
               values_from = numeric)
 
-neonatal_rates_location <- stringr::str_which(names(data_for_calculations), "Rates_Neonatal")
-names(data_for_calculations)[neonatal_rates_location] <- "Rates_Neonatal_Deaths" # need this because in 2019 data headings are slightly different and colname becomes Rates_Neonatal_Rates
+# rename columns so they are the same each year --------------------------------
+neonatal_rate_patterns <- c("Rates", "Neo")
+live_births_patterns <- c("Live")
+early_neonatal_numbers_patterns <- c("Numbers", "Early")
+neonatal_numbers_patterns <- c("Numbers", "Neo", "Deaths")
 
-late_neonatal <- data_for_calculations %>%
-  dplyr::mutate(Numbers_Late_neonatal_Deaths = Numbers_Neonatal_Deaths - Numbers_Early_Deaths) %>%
-  dplyr::mutate(Rates_Late_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Late_neonatal_Deaths,
-                                                                     `Numbers_Live births_Births`, decimal_places),
+neonatal_rate_column <- which(apply(sapply(neonatal_rate_patterns, grepl, 
+                                           names(data_for_calculations)), 1, all) == TRUE)
+live_births_column <- which(apply(sapply(live_births_patterns, grepl, 
+                                         names(data_for_calculations)), 1, all) == TRUE)
+early_neonatal_numbers_column <- which(apply(sapply(early_neonatal_numbers_patterns, grepl, 
+                                         names(data_for_calculations)), 1, all) == TRUE)
+neonatal_numbers_column <- which(apply(sapply(neonatal_numbers_patterns, grepl, 
+                                              names(data_for_calculations)), 1, all) == TRUE)
 
-         Rates_Early_neonatal_Deaths = SDGupdater::calculate_valid_rates_per_1000(Numbers_Early_Deaths,
-                                                                      `Numbers_Live births_Births`, decimal_places),
+names(data_for_calculations)[neonatal_rate_column] <- "Neonatal_rate"
+names(data_for_calculations)[live_births_column] <- "number_live_births"
+names(data_for_calculations)[early_neonatal_numbers_column] <- "number_early_neonatal_deaths"
+names(data_for_calculations)[neonatal_numbers_column] <- "number_neonatal_deaths"
+#-------------------------------------------------------------------------------
+
+calculations <- data_for_calculations %>%
+  dplyr::mutate(number_late_neonatal_deaths = number_neonatal_deaths - number_early_neonatal_deaths) %>%
+  dplyr::mutate(Late_neonatal_rate = SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
+                                                                                number_live_births, decimal_places),
+
+                Early_neonatal_rate = SDGupdater::calculate_valid_rates_per_1000(number_early_neonatal_deaths,
+                                                                                 number_live_births, decimal_places),
 
          # overall neonatal rates are calculated already in the download, so we can check our calcs against these
-         Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(Numbers_Neonatal_Deaths,
-                                                               `Numbers_Live births_Births`, decimal_places))
+         Rates_Neonatal_check = SDGupdater::calculate_valid_rates_per_1000(number_neonatal_deaths,
+                                                                           number_live_births, decimal_places))
 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(late_neonatal$Rates_Neonatal_check, late_neonatal$Rates_Neonatal_Deaths)
+number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
+  calculations$Rates_Neonatal_check, calculations$Neonatal_rate)
 
-data_in_csv_format <- late_neonatal %>%
+
+data_in_csv_format <- calculations %>%
   dplyr::select(birthweight, mother_age,
-         # Early_neonatal, Late_neonatal, Neonatal,
-         Rates_Early_neonatal_Deaths, Rates_Late_neonatal_Deaths, Rates_Neonatal_Deaths) %>%
+                Early_neonatal_rate, Late_neonatal_rate, Neonatal_rate) %>%
   tidyr::pivot_longer(
-    cols = starts_with("Rates"),
+    cols = ends_with("rate"),
     names_to = "Neonatal_period",
     values_to = "Value")
 
 clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
-  dplyr::mutate(Neonatal_period = gsub("Rates_", "", Neonatal_period),
-         Neonatal_period = gsub("_Deaths", "", Neonatal_period),
+  dplyr::mutate(Neonatal_period = gsub("_rate", "", Neonatal_period),
          Neonatal_period = gsub("_", " ", Neonatal_period),
          Neonatal_period = ifelse(Neonatal_period == "Neonatal", "", Neonatal_period),
          mother_age = gsub("-", " to ", mother_age),
@@ -72,33 +90,31 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          mother_age = ifelse(mother_age == "All", "", mother_age),
          mother_age = trimws(mother_age,  which = "both"),
          birthweight = gsub("-", " to ", birthweight),
-         birthweight = gsub("<", "Less than ", birthweight),
-         birthweight = ifelse(birthweight == "<", "Less than", birthweight),
+         birthweight = gsub("<", "Under ", birthweight),
+         # birthweight = ifelse(birthweight == "<", "Under", birthweight),
          birthweight = ifelse(birthweight == "Notstated", "Not stated", birthweight),
          birthweight = ifelse(birthweight == "All", "", birthweight),
-         GeoCode = ifelse(country == "England and Wales", "K04000001", "")) %>%
+         GeoCode = ifelse(country == "England and Wales", "K04000001", ""),
+         Country = ifelse(country == "England and Wales", "England and Wales linked deaths", country)) %>%
+  dplyr::mutate(mother_age = ifelse(mother_age == "Less than 20", "19 and under", mother_age),
+                mother_age = ifelse(mother_age == "40  and  over", "40 and over", mother_age)) %>% 
   dplyr::rename(`Neonatal period` = Neonatal_period,
          Age = mother_age,
          Birthweight = birthweight) %>%
   dplyr::mutate(Year = year,
          Sex = "",
-         Country = country,
-         Region = "",
-         `Health board` = "")
+         Region = "")  %>% 
+  dplyr::mutate(Value = as.numeric(Value))
+
 
 SDGupdater::multiple_year_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 SDGupdater::multiple_country_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 
-if(number_of_rate_calculation_mismatches != 0){
-  warning(paste("check of rate caclulations has failed.",
-                number_of_rate_calculation_mismatches, "of", nrow(late_neonatal), "neonatal death rates do not match.",
-                "Calculations are performed in the block of code where 'late_neonatal' is created."))
-}
-
 # clean up environment as the same names are used for multiple scripts called in the same session
 rm(clean_data,
    data_for_calculations, data_in_csv_format,
-   info_cells, late_neonatal,
+   info_cells, 
    tidy_data,
    country, year,
    number_of_rate_calculation_mismatches)
+

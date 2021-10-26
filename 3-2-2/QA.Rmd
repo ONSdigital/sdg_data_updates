@@ -32,10 +32,12 @@ Configurations for this run are as follows:
 - Input filepath: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
 - Tab name for country of occurrence by sex data: **`r country_of_occurrence_by_sex_tab_name`**    
 - Tab name for area of residence data: **`r area_of_residence_tab_name`**    
-- Tab name for birthweight by mother age data: **`r birthweight_by_mum_age_tab_name`**    
+- Tab name for birthweight by mother age data: **`r birthweight_by_mum_age_tab_name`**  
+- Tab name for mother's country of birth: **`r country_of_birth_tab_name`**
 - The first row of headings for each of these data sets are set as rows 
-`r first_header_row_country_by_sex`, `r first_header_row_area_of_residence`, and
-`r first_header_row_birthweight_by_mum_age` respectively.    
+`r first_header_row_country_by_sex`, `r first_header_row_area_of_residence`, 
+`r first_header_row_birthweight_by_mum_age`, and 
+`r first_header_row_country_of_birth` respectively.    
 - Data have been rounded to **`r decimal_places` decimal places**.   
 
 ## Potential errors
@@ -50,7 +52,9 @@ year may not be picked up.
 country_sex_year <- unique(clean_csv_data_country_by_sex$Year) 
 area_of_residence_year <- unique(clean_csv_data_area_of_residence$Year) 
 birthweight_age_year <- unique(clean_csv_data_birtweight_by_mum_age$Year) 
-country_of_birth_year <- unique(clean_csv_data_country_of_birth$Year) 
+if(include_country_of_birth == TRUE) {
+  country_of_birth_year <- unique(clean_csv_data_country_of_birth$Year)
+}
 
 
 blank_years <- c("Years were not identified in the following tabs in the source spreadsheet:")
@@ -72,11 +76,12 @@ if(birthweight_age_year == "") {
 } else {
     years <- c(years, birthweight_age_year)
 }
-
-if(country_of_birth_year == "") {
-  blank_years <- c(blank_years, country_of_birth_tab_name)
-} else {
+if(include_country_of_birth == TRUE){
+  if(country_of_birth_year == "") {
+    blank_years <- c(blank_years, country_of_birth_tab_name)
+  } else {
     years <- c(years, country_of_birth_year)
+  }
 }
 
 
@@ -100,13 +105,13 @@ if(length(unique(years)) == 1) {
 `r potential_year_issue`    
     
 ### Blank values
-Some rows in the original dataset have been suppressed, and have therefore been 
-removed from the csv. This is most often the case in cross-disaggregtaions for more extreme groups.
+Blank values due to suppression have been retained in the output csv as this seems to be in line with
+SDMX options. This is most often the case in cross-disaggregtaions for more extreme groups.
 For example very low birthweights, and the oldest and youngest age groups.  
   
 This table shows rows for which we would definitely expect to have a value but don't 
 (where it is not a cross-disaggregation, birthweight is not "unlinked deaths" and 
-neither age nor birthweight are "not stated"). If this table is more than 0 rows, 
+neither age nor birthweight are "not stated"). If this table contains unexpected disaggregations, 
 check whether the value is present in the original data.
   
 ```{r, echo = FALSE}
@@ -149,10 +154,10 @@ datatable(no_value_rows,
 We expect there to be `r expected_number_of_rows_in_output` rows in the output 
 csv (expected number of rows is set in config.R).  
 ```{r, echo = FALSE}
-if(expected_number_of_rows_in_output != nrow(all_csv_data)) {
-  message <- paste0("*There are ", nrow(all_csv_data), ". *This is different to the expected number of rows. *Please investigate*. The difference might be due to a blank value, which will be shown above. Another likely casue is that there is a different number of rows for 'not stated' and 'impalusible' birthweight rows.")
+if(expected_number_of_rows_in_output != nrow(csv_data)) {
+  message <- paste0("*There are ", nrow(csv_data), ". *This is different to the expected number of rows. *Please investigate*. The difference might be due to a blank value, which will be shown above. Another likely casue is that there is a different number of rows for 'not stated' and 'impalusible' birthweight rows.")
 } else {
-  message <- paste0("Check passed: there are ", nrow(all_csv_data), " rows in the csv.")
+  message <- paste0("Check passed: there are ", nrow(csv_data), " rows in the csv.")
 }
 ```
 `r message`
@@ -172,7 +177,8 @@ this is compared to the published rate for all neonatal deaths. If these two mat
 we can be confident the functions used to calculate rate are working as they should.
 If all or most do not match, this indicates a problem that needs to be investigated.  
   
-N.B. there may be occasional mismatches due to differences in rounding.   
+N.B. there may be occasional mismatches due to differences in rounding. The `round()` 
+function rounds .5 to the even number, as always rounding up (as Excel does) leads to accumulation of error when errors are averaged).   
   
 See tables below for mismatches:
 ```{r, echo = FALSE}
@@ -181,9 +187,9 @@ rate_mismatches_weight <- SDGupdater::count_mismatches(calculations$Rates_Neonat
 
 if(rate_mismatches_weight > 0){
   
-table1 <- late_neonatal_weight_age %>% 
-  filter(Rates_Neonatal_check != Rates_Neonatal_Deaths) %>% 
-    distinct(birthweight, mother_age, Rates_Neonatal_check, Rates_Neonatal_Deaths)
+table1 <- calculations %>% 
+  filter(Rates_Neonatal_check != Neonatal_rate) %>% 
+    distinct(birthweight, mother_age, Rates_Neonatal_check, Neonatal_rate)
 
 datatable(table1, 
           rownames = FALSE, 
@@ -195,26 +201,28 @@ datatable(table1,
 
 } else {"there are no mismatches for birthweight and age of mother"}
 
-rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(calculations_country_of_birth$Rates_Neonatal_check, 
-                                                       calculations_country_of_birth$Neonatal_rate)
-
-if(rate_mismatches_country_of_birth > 0){
+if(include_country_of_birth == TRUE){
+  rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(calculations_country_of_birth$Rates_Neonatal_check,
+                                                                   calculations_country_of_birth$Neonatal_rate)
   
-table2 <- calculations_country_of_birth %>% 
-  filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
-    distinct(country, sex, Rates_Neonatal_check, 
-             `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
-
-datatable(table2, 
-          rownames = FALSE, 
-          filter = "top", 
-          options = list(dom = 'tp', 
-                         pageLength = 5,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
-
-} else {print("there are no mismatches for mother's country of birth")}
-
+  if(rate_mismatches_country_of_birth > 0){
+    
+    table2 <- calculations_country_of_birth %>% 
+      filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
+      distinct(country, sex, Rates_Neonatal_check, 
+               `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
+    
+    datatable(table2, 
+              rownames = FALSE, 
+              filter = "top", 
+              options = list(dom = 'tp', 
+                             pageLength = 5,
+                             columnDefs = list(list(
+                               className = 'dt-center', targets = 0:3))))
+    
+  } else {print("there are no mismatches for mother's country of birth")}
+  
+}
 
 ```
 
@@ -224,7 +232,7 @@ rows where the sum of the early and late neonatal rates is different to the
 published neonatal rate by 0.1 or more, ordered by largest difference:
 
 ```{r, echo = FALSE}
-wide_data <- all_csv_data %>% 
+wide_data <- csv_data %>% 
   mutate(`Neonatal period` = ifelse(`Neonatal period` == "", 
                                     "Neonatal", `Neonatal period`)) %>% 
   pivot_wider(names_from = `Neonatal period`,
@@ -270,7 +278,7 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
     dataset = "current") %>% 
   rename(Birthweight = Birth.weight,
          `Health board` = Health.Board,
-         `Unit measure` = Unit.measure,
+         # `Unit measure` = Unit.measure,
          `Unit multiplier` = Unit.multiplier,
          `Observation status` = Observation.status) %>% 
   filter(`Health board` == "") %>% 
@@ -352,24 +360,28 @@ region_plot <- all_data %>%
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
   ggtitle("Regions of England")
 
-country_of_birth_plot <- all_data %>% 
-  filter(`Country of birth` != "" &
-           !is.na(`Country of birth`)) %>% 
-  ggplot(data = .,
-       aes(x = Year,
-           y = Value)) +
-  geom_point(aes(colour = `period and dataset`)) +
-  geom_line(aes(colour = `period and dataset`)) +
-  facet_grid(. ~ `Country of birth`) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-  ggtitle("Country of mother's birth")
+if(include_country_of_birth == TRUE) {
+  country_of_birth_plot <- all_data %>% 
+    filter(`Country of birth` != "" &
+             !is.na(`Country of birth`)) %>% 
+    ggplot(data = .,
+           aes(x = Year,
+               y = Value)) +
+    geom_point(aes(colour = `period and dataset`)) +
+    geom_line(aes(colour = `period and dataset`)) +
+    facet_grid(. ~ `Country of birth`) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
+    ggtitle("Country of mother's birth")
+}
 
 suppressMessages(suppressWarnings(print(country_sex_plot)))
 suppressMessages(suppressWarnings(print(region_plot)))
 suppressMessages(suppressWarnings(print(age_plot)))
 suppressMessages(suppressWarnings(print(birthweight_plot)))
-suppressMessages(suppressWarnings(print(country_of_birth_plot)))
+if(include_country_of_birth == TRUE){
+  suppressMessages(suppressWarnings(print(country_of_birth_plot)))
+  }
 
 ```
 

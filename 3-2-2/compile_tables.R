@@ -7,7 +7,8 @@ if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
 }
 
 source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                  sheets = c(area_of_residence_tab_name,
+                                  sheets = c(england_and_wales_timeseries_tab_name,
+                                             area_of_residence_tab_name,
                                              birthweight_by_mum_age_tab_name,
                                              country_of_occurrence_by_sex_tab_name,
                                              country_of_birth_tab_name))
@@ -15,7 +16,12 @@ source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
 source("region.R")
 source("birthweight_by_mum_age.R")
 source("country_of_occurence_by_sex.R")
-source("country_of_birth.R")
+
+if(include_country_of_birth == TRUE){ 
+  source("country_of_birth.R")
+}else {
+  clean_csv_data_country_of_birth <- NULL
+}
 
 age_order <- data.frame(Age = c("19 and under",
                                 "20 to 24",
@@ -45,32 +51,35 @@ country_order <- data.frame(Country = c("England and Wales",
                                         "Wales"),
                             country_order = c(1:6))
 
-all_csv_data <- dplyr::bind_rows(clean_csv_data_area_of_residence,
+bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_birtweight_by_mum_age,
                                  clean_csv_data_country_by_sex,
-                                 clean_csv_data_country_of_birth) %>%
+                                 clean_csv_data_country_of_birth)
+
+# in tables prior to 2018, the England and Wales figure that is comparable to 
+# other 'country of occurrence' countries is in table 2. 
+# In 2018 and 2019 table 2 does not include this figure, so need to get it from table 1.
+# This is where 'england_and_wales.R' will be sourced when we know what format the table will settle in
+# as it needs to take 'year' from bound_tables
+
+csv_data <- bound_tables %>%
   dplyr::left_join(age_order, by = "Age") %>% 
   dplyr::left_join(country_order, by = "Country") %>% 
   dplyr::left_join(weight_order, by = "Birthweight") %>% 
-  dplyr::mutate(`Unit measure` = "Rate per 1,000 live births",
+  dplyr::mutate(`Units` = "Rate per 1,000 live births",
                 `Unit multiplier` = "Units",
-                `Observation status` = "Undefined",
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
                  Region, Sex) %>%
   dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
-                GeoCode, `Unit measure`, `Unit multiplier`, `Observation status`, Value)
+                GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
 
-no_value_rows <- all_csv_data %>%
+no_value_rows <- csv_data %>%
   dplyr::filter(is.na(Value))
 
-csv_data <- all_csv_data %>%
-  dplyr::filter(!is.na(Value))
-
-
 current_directory <- getwd()
-year <- SDGupdater::unique_to_string(SDGupdater::get_all_years(all_csv_data$Year))
+year <- SDGupdater::unique_to_string(SDGupdater::get_all_years(csv_data$Year))
 
 # Don't want to overwrite an Output folder that already exists, or depend on the user having remembered to create an Output folder themselves
 existing_files <- list.files()

@@ -71,14 +71,43 @@ if ("Region" %in% main_data$character){ # because headings are different for 201
 }
 
 # no early-neonatal deaths are given, so can't calculate late_neonatal as in other tables
+# but do need to add observation status
+data_for_calculations <- only_regions_kept %>%
+  tidyr::pivot_wider(names_from = c(measure, baby_age, life_event),
+                     values_from = numeric)
 
-clean_csv_data_area_of_residence <- only_regions_kept %>%
-  dplyr::filter(measure == "Rates",
-                life_event == "Deaths",
-                baby_age == "Neonatal") %>%
-  dplyr::select(area_name, GeoCode, numeric) %>%
+# rename columns so they are the same each year --------------------------------
+neonatal_rate_patterns <- c("Rates", "Neo")
+live_births_patterns <- c("Live")
+neonatal_numbers_patterns <- c("Numbers", "Neo", "Deaths")
+
+neonatal_rate_column <- which(apply(sapply(neonatal_rate_patterns, grepl, 
+                                           names(data_for_calculations)), 1, all) == TRUE)
+live_births_column <- which(apply(sapply(live_births_patterns, grepl, 
+                                         names(data_for_calculations)), 1, all) == TRUE)
+neonatal_numbers_column <- which(apply(sapply(neonatal_numbers_patterns, grepl, 
+                                              names(data_for_calculations)), 1, all) == TRUE)
+
+names(data_for_calculations)[neonatal_rate_column] <- "Neonatal_rate"
+names(data_for_calculations)[live_births_column] <- "number_live_births"
+names(data_for_calculations)[neonatal_numbers_column] <- "number_neonatal_deaths"
+#-------------------------------------------------------------------------------
+
+calculations_region <- data_for_calculations %>%
+  dplyr::mutate(obs_status_neonatal = case_when(
+      number_neonatal_deaths < 3 | is.na(number_neonatal_deaths) ~ "Missing value; suppressed", 
+      number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
+      number_neonatal_deaths > 19  ~ "Normal value"))
+
+data_in_csv_format <- calculations_region %>%
+  dplyr::select(GeoCode, area_name, 
+                Neonatal_rate,
+                obs_status_neonatal) 
+
+clean_csv_data_area_of_residence <- data_in_csv_format %>%
   dplyr::rename(Region = area_name,
-                Value = numeric) %>%
+                Value = Neonatal_rate,
+                `Observation status` = obs_status_neonatal) %>%
   dplyr::mutate(Year = year,
                 Sex = "",
                 `Neonatal period` = "",

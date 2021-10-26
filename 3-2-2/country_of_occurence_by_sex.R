@@ -72,23 +72,42 @@ names(data_for_calculations)[neonatal_number_column] <- "neonatal_number"
 calculation <- data_for_calculations %>%
   dplyr::mutate(late_neonatal_number = neonatal_number - early_neonatal_number) %>% 
   dplyr::mutate(late_neonatal_rate = ifelse(late_neonatal_number > 3,
-                                            neonatal_rate - early_neonatal_rate, NA))
+                                            neonatal_rate - early_neonatal_rate, NA)) %>% 
+  dplyr::mutate(obs_status_early = case_when(
+    early_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+    early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
+    early_neonatal_number > 19  ~ "Normal value"),
+    obs_status_late = case_when(
+      late_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      late_neonatal_number >= 3 & late_neonatal_number <= 19 ~ "Low reliability",
+      late_neonatal_number > 19  ~ "Normal value"),
+    obs_status_neonatal = case_when(
+      neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
+      neonatal_number > 19  ~ "Normal value"))
 
 if(year < 2015) {
   relevant_columns <- calculation %>%
     dplyr::select(country, sex, 
-                  early_neonatal_rate, late_neonatal_rate, neonatal_rate)
+                  early_neonatal_rate, late_neonatal_rate, neonatal_rate,
+                  obs_status_early, obs_status_late, obs_status_neonatal)
 } else {
   relevant_columns <- calculation %>%
     dplyr::select(country, sex, area_code,
-                  early_neonatal_rate, late_neonatal_rate, neonatal_rate)
+                  early_neonatal_rate, late_neonatal_rate, neonatal_rate,
+                  obs_status_early, obs_status_late, obs_status_neonatal)
 }
 
 data_in_csv_format <- relevant_columns %>%
   tidyr::pivot_longer(
     cols = ends_with("rate"),
     names_to = "Neonatal_period",
-    values_to = "Value")
+    values_to = "Value") %>%
+  dplyr::mutate(`Observation status` = case_when(
+    Neonatal_period == "early_neonatal_rate" ~ obs_status_early,
+    Neonatal_period == "late_neonatal_rate" ~ obs_status_late,
+    Neonatal_period == "neonatal_rate" ~ obs_status_neonatal)) %>% 
+  select(-c(obs_status_early, obs_status_late, obs_status_neonatal))
 
 clean_csv_data_country_by_sex <- data_in_csv_format %>%
   dplyr::mutate(Neonatal_period = dplyr::case_when(

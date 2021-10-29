@@ -27,7 +27,7 @@ ODA_15.a.1 <- function(data_underlying_SID){
   # grouping up income group that doesn't follow official DAC into "Undefined" for consistency
   biodiversity[(biodiversity$IncomeGroup == "0" | biodiversity$IncomeGroup == "Part I unallocated by income"),
                "IncomeGroup"] <- "Unspecified"
-  # adding totals to cleare the headline and combine with the final table
+  # adding totals to the headline and combine with the final table
   headline <- aggregate(biodiversity$`ODA(£thousands)`, 
                         by=list(Year = biodiversity$Year),
                         FUN = sum)
@@ -35,6 +35,9 @@ ODA_15.a.1 <- function(data_underlying_SID){
   headline$IncomeGroup <- ""
   
   biodiversity <- rbind(biodiversity,headline)
+  
+  # divide by 1000 to get millions instead of thousands (will change the col name after)
+  biodiversity$`ODA(£thousands)` <- biodiversity$`ODA(£thousands)` / 1000
   
   return(biodiversity)
 }

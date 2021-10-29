@@ -7,4 +7,4 @@
 
 filename <- "dataunderSID-Final2020.csv"
 
-input_folder  <- "Input"
+input_folder  <- "Example_Input"

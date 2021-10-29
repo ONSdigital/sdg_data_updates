@@ -13,9 +13,9 @@ if (output_folder_exists == FALSE) {
   dir.create("Output")
 }
 
-csv_formatted <- ODA_15.a.1(data_underlying_SID = read.csv(paste0(getwd(),"/Input/",filename), 
+csv_formatted <- ODA_15.a.1(data_underlying_SID = read.csv(paste0(getwd(),"/",input_folder,"/",filename), 
                                                            header=T))
-csv_formatted$Units <- "GBP (£ Millions)"
+csv_formatted$Units <- "GBP (Â£ Millions)"
 csv_formatted$Series <- "Total official development assistance for biodiversity, by recipient countries"
 csv_formatted$UnitMeasure <- "GBP"
 csv_formatted$UnitMultiplier <- "Millions"

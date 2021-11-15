@@ -10,7 +10,8 @@ rename_column <- function(dat, patterns, new_name){
   return(dat)
 }
 
-dat_new_names <- rename_column(dat, c("extend", "amount"), "Value") 
+dat_new_names <- rename_column(dat, c("year"), "year") 
+dat_new_names <- rename_column(dat_new_names, c("extend", "amount"), "Value") 
 dat_new_names <- rename_column(dat_new_names, c("income", "group"), "Country_income_classification")
 dat_new_names <- rename_column(dat_new_names, c("type", "aid", "code"), "Aid_code") 
 dat_new_names <- rename_column(dat_new_names, c("type", "aid", "text"), "Aid_description") 

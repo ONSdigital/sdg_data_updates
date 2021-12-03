@@ -10,8 +10,9 @@ I am going to assume that the only people who will be contributing will be membe
 [Working on an existing code](#working-on-an-existing-code)  
 
 ## Useful resources ##
-
-[packrat](https://rstudio.github.io/packrat)  
+    
+[Quality Assurance of Code for Research Analysis](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) - this is where you will find a template for peer review    
+[packrat](https://rstudio.github.io/packrat)  - not yet used but we should move to using it to future proof ourselves against package changes    
 [making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  
 [Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)  
 

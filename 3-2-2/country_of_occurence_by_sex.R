@@ -49,38 +49,43 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, rate_type, life_event_age, baby_age),
               values_from = numeric)
 
-# TO DO: turn this into a function for finding columns whose names may change slightly
-neonatal_rate_patterns <- c("Rates", "1,000", "Neonatal")
-early_neonatal_rate_patterns <- c("Rates", "1,000", "Early")
-early_neonatal_number_patterns <- c("Numbers", "Deaths", "Early")
-neonatal_number_patterns <- c("Numbers", "Deaths", "Neo") # if the publication starts putting 'neonatal' in the same cell as 'early' and 'late', this might need editing
-
-neonatal_rate_column <- which(apply(sapply(neonatal_rate_patterns, grepl, 
-                                     names(data_for_calculations)), 1, all) == TRUE)
-early_neonatal_rate_column <- which(apply(sapply(early_neonatal_rate_patterns, grepl, 
-                                           names(data_for_calculations)), 1, all) == TRUE)
-early_neonatal_number_column <- which(apply(sapply(early_neonatal_number_patterns, grepl, 
-                                                 names(data_for_calculations)), 1, all) == TRUE)
-neonatal_number_column <- which(apply(sapply(neonatal_number_patterns, grepl, 
-                                                   names(data_for_calculations)), 1, all) == TRUE)
-
-names(data_for_calculations)[neonatal_rate_column] <- "neonatal_rate"
-names(data_for_calculations)[early_neonatal_rate_column] <- "early_neonatal_rate"
-names(data_for_calculations)[early_neonatal_number_column] <- "early_neonatal_number"
-names(data_for_calculations)[neonatal_number_column] <- "neonatal_number"
+data_for_calculations <- name_columns(data_for_calculations, 
+                                           c("Rates", "1,000", "Neonatal"),
+                                           "neonatal_rate")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Rates", "1,000", "Early"),
+                                      "early_neonatal_rate")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Numbers", "Deaths", "Early"),
+                                      "early_neonatal_number")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Numbers", "Deaths", "Neo"),
+                                      "neonatal_number") # if the publication starts putting 'neonatal' in the same cell as 'early' and 'late', this might need editing
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Number", "Live"),
+                                      "number_live_births")
+# because the name varies across datasets, this is an alternative
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Births", "Live"),
+                                      "number_live_births")
 
 calculation <- data_for_calculations %>%
-  dplyr::mutate(late_neonatal_number = neonatal_number - early_neonatal_number) %>% 
-  dplyr::mutate(late_neonatal_rate = ifelse(late_neonatal_number > 3,
-                                            neonatal_rate - early_neonatal_rate, NA)) %>% 
+  dplyr::mutate(number_late_neonatal_deaths = neonatal_number - early_neonatal_number) %>% 
+  # use a pattern to identify Northern Ireland in case of differences in spelling, capitalisation, spaces etc
+  dplyr::mutate(late_neonatal_rate = case_when(
+    grepl("orthern", country) == TRUE ~ ifelse(number_late_neonatal_deaths >= 3,
+                                           neonatal_rate - early_neonatal_rate, NA),
+    grepl("orthern", country) == FALSE ~  SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
+                                                                                     number_live_births, decimal_places))
+    ) %>% 
   dplyr::mutate(obs_status_early = case_when(
     early_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
     early_neonatal_number > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      late_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
-      late_neonatal_number >= 3 & late_neonatal_number <= 19 ~ "Low reliability",
-      late_neonatal_number > 19  ~ "Normal value"),
+      number_late_neonatal_deaths < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      number_late_neonatal_deaths >= 3 & number_late_neonatal_deaths <= 19 ~ "Low reliability",
+      number_late_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
       neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
@@ -147,7 +152,6 @@ rm(clean_data,
    data_for_calculations, data_in_csv_format,
    info_cells, 
    tidy_data, relevant_columns, 
-   neonatal_rate_column, early_neonatal_rate_column,
    country, year)
 
 

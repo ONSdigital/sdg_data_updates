@@ -4,7 +4,7 @@
 # England and Wales (this figure is available in country of occurrence by sex 
 # before 2018)
 #
-# THIS SCRIPT IS NOT YET USED AS THE TABLE FORMAT HAS RECENTLY CHANGED - WAITING FOR IT TO SETTLE DOWN
+# THIS SCRIPT MAY NEED EDITING AS THE TABLE FORMAT HAS RECENTLY CHANGED -
 
 england_and_wales <- dplyr::filter(source_data, sheet == england_and_wales_timeseries_tab_name)
 
@@ -29,41 +29,40 @@ clean_data <- tidy_data %>%
   dplyr::filter(!is.na(numeric)) # to remove cells that are just ends of a header that have run on to the next row
 
 data_for_calculations <- clean_data %>% 
-  dplyr::filter(year == unique(bound_tables$Year) &
-                  # measure == "Rates" &
-                  (rate_type == "Per 1,000 live births" | is.na(rate_type)) & 
-                  baby_age %in% c("Under 7 days", "Under 28 days")) %>% 
   tidyr::pivot_wider(names_from = c(measure, rate_type, life_event_age, baby_age),
                      values_from = numeric) 
 
 #-------------------------------------------------------------------------------
-# to be put into a function for finding columns whose names may change slightly:
-neonatal_rate_patterns <- c("Rates", "1,000", "Neonatal")
-early_neonatal_rate_patterns <- c("Rates", "1,000", "Early")
-neonatal_number_patterns <- c("NA", "Neonatal") 
-early_neonatal_number_patterns <- c("NA", "Early") 
 
-neonatal_rate_column <- which(apply(sapply(neonatal_rate_patterns, grepl, 
-                                           names(data_for_calculations)), 1, all) == TRUE)
-early_neonatal_rate_column <- which(apply(sapply(early_neonatal_rate_patterns, grepl, 
-                                                 names(data_for_calculations)), 1, all) == TRUE)
-
-neonatal_number_column <- which(apply(sapply(neonatal_number_patterns, grepl,
-                                             names(data_for_calculations)), 1, all) == TRUE)
-early_neonatal_number_column <- which(apply(sapply(early_neonatal_number_patterns, grepl,
-                                                   names(data_for_calculations)), 1, all) == TRUE)
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Rates", "1,000", "Neonatal", "28 days"),
+                                      "neonatal_rate")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Rates", "1,000", "Early", "7 days"),
+                                      "early_neonatal_rate")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Rates", "Late", "neonatal"),
+                                      "late_neonatal_rate")
 
 
-names(data_for_calculations)[neonatal_rate_column] <- "neonatal_rate"
-names(data_for_calculations)[early_neonatal_rate_column] <- "early_neonatal_rate"
-names(data_for_calculations)[neonatal_number_column] <- "neonatal_number"
-names(data_for_calculations)[early_neonatal_number_column] <- "early_neonatal_number"
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("NA", "Neonatal", "28 days"),
+                                      "neonatal_number")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("NA", "Early", "7 days"),
+                                      "early_neonatal_number")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("NA", "Late", "neonatal"),
+                                      "late_neonatal_number")
+
+# 
+# 
+# data_for_calculations <- name_columns(data_for_calculations, 
+#                                       c("Births", "Live"),
+#                                       "number_live_births")
 #-------------------------------------------------------------------------------
 
 calculation_england_and_wales <- data_for_calculations %>% 
-  dplyr::mutate(late_neonatal_number = neonatal_number - early_neonatal_number) %>% 
-  dplyr::mutate(late_neonatal_rate = ifelse(late_neonatal_number > 2,
-                                            neonatal_rate - early_neonatal_rate, NA)) %>% 
   dplyr::mutate(obs_status_early = case_when(
     early_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
@@ -75,7 +74,8 @@ calculation_england_and_wales <- data_for_calculations %>%
     obs_status_neonatal = case_when(
       neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
-      neonatal_number > 19  ~ "Normal value"))
+      neonatal_number > 19  ~ "Normal value")) %>% 
+  dplyr::filter(year == unique(bound_tables$Year)[1])
 
 data_in_csv_format <- calculation_england_and_wales %>% 
   dplyr::select(year, early_neonatal_rate, late_neonatal_rate, neonatal_rate,
@@ -97,8 +97,7 @@ clean_csv_data_england_and_wales <- data_in_csv_format %>%
     Neonatal_period == "neonatal_rate" ~ "")) %>%
   dplyr::rename(`Neonatal period` = Neonatal_period,
                 Year = year) %>%
-  dplyr::mutate(Year = year,
-                Birthweight = "",
+  dplyr::mutate(Birthweight = "",
                 Age = "",
                 Region = "",
                 Sex = "",

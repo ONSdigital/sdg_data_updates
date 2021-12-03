@@ -1,0 +1,95 @@
+---
+title: "16-3-2 QA"
+author: "Emma Wood"
+date: "14/06/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+# library(stringr)
+library(ggplot2)
+library(kableExtra)
+```
+
+```{r include= FALSE}
+run_date <- Sys.Date()
+csv <- read.csv(paste0("Output/output_", run_date, ".csv")) %>% 
+  mutate(Year_num = as.numeric(as.character(substr(Year, 1, 4))))
+source('config.R')
+
+```
+
+## 16-3-2 update summary
+
+### Introduction
+Rundate: `r Sys.Date()`
+
+Data for `r month.name[month_numeric]` of `r min(csv$Year_num)` to `r month.name[month_numeric]` of `r max(csv$Year_num)` have been created and saved as `r paste0("output_", run_date, ".csv")` in the 16-3-2 Output folder.
+  
+There are two sets of data for 2009 as there was a change in methodology in 2010.  
+- `2009 see note in original data` is the start of the series from 2009 to `r max(csv$Year_num)`.  
+- `2009` is the end of the series from `r min(csv$Year_num)`.
+  
+
+## Checks
+- There are **`r nrow(csv[is.na(csv$Value), ])`** rows with missing values - If greater than 0, check that these are NA in the source data then manually remove these rows from the csv if they are correctly NA.
+
+- If there are multiple numbers for the same selection of disaggregations on the same date, they will show below. Please check which is correct and delete the incorrect one from the csv (for example, in the 2019 amd 2020 datasets, in 2009(a) there are two totals. One is caused by a typo, where the number of people in remand is 13456.02 rather than 13456):
+```{r, echo=FALSE}
+duplicated_disaggs <- csv %>% 
+  group_by(Year, Sex, Age, Nationality) %>% 
+  tally() %>%
+  filter(n > 1) %>% 
+  rename(`number of rows with this disaggregation combination for given year` = n)
+
+if(nrow(duplicated_disaggs) > 0){
+  duplicated_disaggs %>% 
+    kbl() %>%
+    kable_styling()
+} else {
+  print('There are no duplicated rows')
+}
+
+```
+
+## Plots
+Please check the plots below for any unusual looking datapoints.  
+As there are two 2009s (due to change in methodology), these are shown here as separate series (methodology 1 and 2).
+
+```{r, echo=FALSE, fig.width=10,fig.height=18}
+data_for_plots <- csv %>% 
+  mutate(Year = ifelse(Year == "2009 see note in original data", 2009.1, Year_num)) %>% 
+  mutate(methodology = ifelse(Year <= 2009, "1","2")) 
+
+data_for_plots %>% 
+  filter(Nationality == "") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_line(aes(lty = methodology)) +
+  facet_grid(Age ~ Sex) +
+  ggtitle('By sex and age') +
+  theme(axis.text.x = element_text(angle = 45)) +
+  theme_bw()
+
+data_for_plots %>% 
+  filter(Age == "" &
+           Sex == "") %>% 
+  ggplot(data = .,
+       aes(x = Year,
+           y = Value)) +
+  geom_line(aes(lty = methodology)) +
+  facet_grid(Nationality ~ .) +
+  ggtitle('By nationality') +
+  theme(axis.text.x = element_text(angle = 45)) +
+  theme_bw()
+  
+
+```
+

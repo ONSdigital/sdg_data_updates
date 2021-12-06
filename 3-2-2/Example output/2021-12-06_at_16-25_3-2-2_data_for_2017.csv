@@ -1,0 +1,72 @@
+"Year","Neonatal period","Age","Birthweight","Country","Region","Country of birth","Sex","GeoCode","Units","Unit multiplier","Observation status","Value"
+"2017","","19 and under","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",4.2
+"2017","","20 to 24","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.9
+"2017","","25 to 29","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.5
+"2017","","30 to 34","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.6
+"2017","","35 to 39","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.8
+"2017","","40 and over","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",3.6
+"2017","","","Under 1000","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",388.1
+"2017","","","1000 to 1499","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",29.2
+"2017","","","Not stated","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",19.3
+"2017","","Not stated","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Missing value; suppressed",NA
+"2017","","","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.8
+"2017","","","","England and Wales","","Born in UK‚ Isle of Man and Channel Islands","","","Rate per 1,000 live births","Units","Normal value",2.6
+"2017","","","","England and Wales","","Not born in UK","","","Rate per 1,000 live births","Units","Normal value",3
+"2017","","","","England and Wales","","Born in EU","","","Rate per 1,000 live births","Units","Normal value",2
+"2017","","","","England and Wales","","Born in Rest of Europe (non EU)","","","Rate per 1,000 live births","Units","Low reliability",1.7
+"2017","","","","England and Wales","","Born in Africa","","","Rate per 1,000 live births","Units","Normal value",5.1
+"2017","","","","England and Wales","","","Female","K04000001","Rate per 1,000 live births","Units","Normal value",2.4
+"2017","","","","England and Wales","","","Male","K04000001","Rate per 1,000 live births","Units","Normal value",3.2
+"2017","","","","England","North East","","","E12000001","Rate per 1,000 live births","Units","Normal value",2.2
+"2017","","","","Northern Ireland","","","","N92000002","Rate per 1,000 live births","Units","Normal value",2.8
+"2017","","","","Northern Ireland","","","Female","N92000002","Rate per 1,000 live births","Units","Normal value",2.7
+"2017","","","","Northern Ireland","","","Male","N92000002","Rate per 1,000 live births","Units","Normal value",2.8
+"2017","","","","","","","","K02000001","Rate per 1,000 live births","Units","Normal value",2.8
+"2017","","","","","","","Female","K02000001","Rate per 1,000 live births","Units","Normal value",2.3
+"2017","","","","","","","Male","K02000001","Rate per 1,000 live births","Units","Normal value",3.2
+"2017","Early neonatal","19 and under","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",3.1
+"2017","Early neonatal","20 to 24","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.2
+"2017","Early neonatal","25 to 29","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",1.9
+"2017","Early neonatal","30 to 34","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.1
+"2017","Early neonatal","35 to 39","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.2
+"2017","Early neonatal","40 and over","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.6
+"2017","Early neonatal","","Under 1000","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",338.5
+"2017","Early neonatal","","1000 to 1499","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",22.7
+"2017","Early neonatal","","Not stated","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",13
+"2017","Early neonatal","Not stated","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Missing value; suppressed",NA
+"2017","Early neonatal","","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",2.2
+"2017","Early neonatal","","","England and Wales","","Born in UK‚ Isle of Man and Channel Islands","","","Rate per 1,000 live births","Units","Normal value",2
+"2017","Early neonatal","","","England and Wales","","Not born in UK","","","Rate per 1,000 live births","Units","Normal value",2.4
+"2017","Early neonatal","","","England and Wales","","Born in EU","","","Rate per 1,000 live births","Units","Normal value",1.6
+"2017","Early neonatal","","","England and Wales","","Born in Rest of Europe (non EU)","","","Rate per 1,000 live births","Units","Low reliability",1
+"2017","Early neonatal","","","England and Wales","","Born in Africa","","","Rate per 1,000 live births","Units","Normal value",4.2
+"2017","Early neonatal","","","England and Wales","","","Female","K04000001","Rate per 1,000 live births","Units","Normal value",1.9
+"2017","Early neonatal","","","England and Wales","","","Male","K04000001","Rate per 1,000 live births","Units","Normal value",2.5
+"2017","Early neonatal","","","Northern Ireland","","","","N92000002","Rate per 1,000 live births","Units","Normal value",2.4
+"2017","Early neonatal","","","Northern Ireland","","","Female","N92000002","Rate per 1,000 live births","Units","Normal value",2.2
+"2017","Early neonatal","","","Northern Ireland","","","Male","N92000002","Rate per 1,000 live births","Units","Normal value",2.5
+"2017","Early neonatal","","","","","","","K02000001","Rate per 1,000 live births","Units","Normal value",2.1
+"2017","Early neonatal","","","","","","Female","K02000001","Rate per 1,000 live births","Units","Normal value",1.8
+"2017","Early neonatal","","","","","","Male","K02000001","Rate per 1,000 live births","Units","Normal value",2.4
+"2017","Late neonatal","19 and under","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",1.1
+"2017","Late neonatal","20 to 24","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",0.7
+"2017","Late neonatal","25 to 29","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",0.6
+"2017","Late neonatal","30 to 34","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",0.5
+"2017","Late neonatal","35 to 39","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",0.6
+"2017","Late neonatal","40 and over","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",1
+"2017","Late neonatal","","Under 1000","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",49.6
+"2017","Late neonatal","","1000 to 1499","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",6.5
+"2017","Late neonatal","","Not stated","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",6.2
+"2017","Late neonatal","Not stated","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Missing value; suppressed",NA
+"2017","Late neonatal","","","England and Wales","","","","K04000001","Rate per 1,000 live births","Units","Normal value",0.6
+"2017","Late neonatal","","","England and Wales","","Born in UK‚ Isle of Man and Channel Islands","","","Rate per 1,000 live births","Units","Normal value",0.6
+"2017","Late neonatal","","","England and Wales","","Not born in UK","","","Rate per 1,000 live births","Units","Normal value",0.7
+"2017","Late neonatal","","","England and Wales","","Born in EU","","","Rate per 1,000 live births","Units","Normal value",0.4
+"2017","Late neonatal","","","England and Wales","","Born in Rest of Europe (non EU)","","","Rate per 1,000 live births","Units","Low reliability",0.8
+"2017","Late neonatal","","","England and Wales","","Born in Africa","","","Rate per 1,000 live births","Units","Normal value",0.9
+"2017","Late neonatal","","","England and Wales","","","Female","K04000001","Rate per 1,000 live births","Units","Normal value",0.5
+"2017","Late neonatal","","","England and Wales","","","Male","K04000001","Rate per 1,000 live births","Units","Normal value",0.7
+"2017","Late neonatal","","","Northern Ireland","","","","N92000002","Rate per 1,000 live births","Units","Low reliability",0.4
+"2017","Late neonatal","","","","","","","K02000001","Rate per 1,000 live births","Units","Normal value",0.6
+"2017","Late neonatal","","","","","","Female","K02000001","Rate per 1,000 live births","Units","Normal value",0.5
+"2017","Late neonatal","","","","","","Male","K02000001","Rate per 1,000 live births","Units","Normal value",0.7

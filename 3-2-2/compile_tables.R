@@ -136,10 +136,10 @@ year <- SDGupdater::unique_to_string(SDGupdater::get_all_years(csv_data$Year))
 
 # Don't want to overwrite an Output folder that already exists, or depend on the user having remembered to create an Output folder themselves
 existing_files <- list.files()
-output_folder_exists <- ifelse("Output" %in% existing_files, TRUE, FALSE)
+output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
 
 if (output_folder_exists == FALSE) {
-  dir.create("Output")
+  dir.create(output_folder)
 }
 
 date_time <- Sys.time()

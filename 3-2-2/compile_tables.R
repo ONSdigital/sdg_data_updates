@@ -83,7 +83,7 @@ bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
 
 years <- as.numeric(as.character(unique(bound_tables$Year)))
 
-if(max(years, na.rm = TRUE) >= 2019){
+if(max(years, na.rm = TRUE) >= 2018){
 
 # in tables prior to 2018, the England and Wales figure that is comparable to 
 # other 'country of occurrence' countries is in table 2. 
@@ -108,6 +108,25 @@ csv_data <- bound_tables %>%
   dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
+# Remove low reliability disaggregations ---------------------------------------
+# I have decided to remove some disaggregations due to large numbers of rates 
+# with low reliability. Someone may wish to reverse this decision in the future.
+# If so, this next block (up to the dashed line) can just be commented out.
+
+final_csv <- csv_data %>% 
+  mutate(remove = case_when(
+    Age != "" & Birthweight != "" ~ TRUE,
+    Sex != "" & `Neonatal period` == "Late neonatal" & 
+      Country %in% c("Northern Ireland", "Scotland", "Wales") ~ TRUE,
+    TRUE ~ FALSE # this line makes all other cases FALSE
+  )) %>% 
+  filter(remove == FALSE) %>% 
+  select(-remove)
+
+csv_data <- final_csv 
+
+
+#-------------------------------------------------------------------------------
 
 no_value_rows <- csv_data %>%
   dplyr::filter(is.na(Value))

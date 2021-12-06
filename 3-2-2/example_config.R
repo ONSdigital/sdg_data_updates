@@ -22,7 +22,7 @@ first_header_row_country_of_birth <- 4
 #-------------------------------------------------------------------------------
 # the following are unlikely to need changing:
 decimal_places <- 1
-expected_number_of_rows_in_output <- 315 
+expected_number_of_rows_in_output <- 71 # Currently 129 for real data
 
 # country of birth is different before 2010 so want to turn it off for these
 # (still include a valid table name otherwise it won't work)

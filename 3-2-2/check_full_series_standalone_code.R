@@ -11,7 +11,7 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
     TRUE ~ as.character(Region))) %>% 
   rename(Birthweight = Birth.weight,
          `Health board` = Health.Board,
-         `Unit measure` = Unit.measure,
+         Units = Unit.measure,
          `Unit multiplier` = Unit.multiplier,
          `Observation status` = Observation.status) %>% 
   filter(`Health board` == "") %>% 
@@ -19,10 +19,9 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
   mutate(dataset = "live") %>% 
   mutate(Value = round(Value, 1))
 
-new_data <- read.csv("D:/coding_repos/sdg_data_updates/3-2-2/Output/20211015_all_years.csv") %>% 
+new_data <- read.csv("D:/coding_repos/sdg_data_updates/3-2-2/Output/years_compiled.csv") %>% 
   mutate(dataset = "new") %>% 
-  rename(`Unit measure` = Unit.measure,
-         `Unit multiplier` = Unit.multiplier,
+  rename(`Unit multiplier` = Unit.multiplier,
          `Observation status` = Observation.status) 
 
 all_data <- old_data %>% 
@@ -64,7 +63,7 @@ age_weight_plot_data <- all_data %>%
            (Country == "England and Wales" | Country == "England and Wales linked deaths") & 
            (Country.of.birth == "" | is.na(Country.of.birth))) 
 plot_data(age_weight_plot_data) + 
-  facet_grid(Birthweight ~ Age) 
+  facet_grid(Birthweight ~ Age)
 # remove cross-disaggregation as it is largely unreliable (except for the grouped ones, which can be kept)
 
 region_plot_data <- all_data %>% 

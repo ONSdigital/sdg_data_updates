@@ -1,21 +1,28 @@
 Author(s): Emma Wood
 
 Create csv data for 3-2-2 (Neonatal mortality rate) with the following disaggregations:
-- birthweight by mother age
+- birthweight by mother age (though cross disaggregation not currently kept for the csv)
 - country of occurrence by sex of baby
 - area of residence (region)
 - mother's country of birth
+Neonatal period (early or late) is also included
 
 Runtime is less than 30 seconds
 
 Input data are stored in a folder named 'Input' (See 'Example Data'). Outputs are saved to a folder named 'Output'. 
 
-Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes as caveats may change in the future.
+Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs as caveats may change in the future.  
+  
+### Examples
+Example data are given in the Example data folder. These tables are based on 2017 tables but have been cropped.  
+Example data can be run through the script using `example_config.R` to produce the output in the 'Example output' folder.  
+To do this you will need to follow the instructions below from step 3. You will additionally need to edit `compile_tables.R` so that it reads `source('example_config.R')` rather
+than `source('config.R')`.  
         
 ### USER INSTRUCTIONS (SDG Data team): 
 
 1) Save 'Child mortality (death cohort) tables in England and Wales' as an **xlsx** file in Jemalex/code for updates/3.2.2/Input. You may need to create the Input folder if one does not already exist.
-2) Open config.yml in the 3-2-2 folder and check that all configurations are correct.
+2) Open config.yml in the 3-2-2 folder and check that all configurations are correct. For example, `input_folder` must be `'Input'`, not `'example_input'`.  
 > The `first_header_row` settings refer to the row number of the top level of column names. All rows above this just contain information like the country and year the data refer to.
 3) Open RStudio.
 4) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. 
@@ -23,6 +30,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 6) Change the indicator number to '3-2-2' (Dashes NOT dots).
 7) Click the 'source' button (in the top right of the top left window). This will run the code. You may need to install some packages if they are not already installed. ~Use `install.packages('name_of_package', dependencies = TRUE)` to install packages, then try running the code (using the source button) again.
 8) csv and html (QA) files will be exported to Output folder.
+9) If an error occurs (see troubleshooting section below), you will need to run the following code in the console: `setwd('./..')` before repeating step 7.
 
 Please check the data source to check for changes in the caveats, see if the best data are being reported, and check whether there are other series we sohould include
 
@@ -33,10 +41,47 @@ emaple if a line or point is missing, or looks strange, this may indicate a chan
 The QA report does not negate checking the source data for notes, but if everythig looks fine in the report, numbers should not need to be checked.
 
 ### TROUBLESHOOTING:
-If you get the error:
-Error in setwd(paste0("H:/Coding_repos/sdg_data_updates/", indicator)) : 
-  cannot change working directory
--The folder name you have given for indicator does not exist. Check you are using '-' not '.' between the numbers.
+Some possible errors (may not be an exact match) and solutions:    
+    
+```diff
+- Error in setwd(paste0("H:/Coding_repos/sdg_data_updates/", indicator)): 
+- cannot change working directory
+
+The folder name you have given for indicator does not exist. Check you are using '-' not '.' between the numbers.  
+  
+```  
+  
+```diff
+- Error: Sheets not found: "Table  2"  
+  
+There is a typo in one of the tables in the `config.R` file. e.g. here there is an extra space.
+  
+```
+  
+```diff
+- Error: Problem with `mutate()` column `number_late_neonatal_deaths`.
+- i `number_late_neonatal_deaths = neonatal_number - early_neonatal_number`.
+- x object 'neonatal_number' not found  
+  
+You may have entered an existing, but incorrect table number. OR    
+  
+The headings of the table may have changed, or, for example, been split over multiple cells. 
+Check the source table headings look like those in previous releases. 
+If not, either adapt the code and test it on old and new data tables, or edit the excel file (the former is recommended).  
+
+```
+  
+```diff
+- Error in setwd(indicator) : cannot change working directory
+  
+The folder name (`indicator`) in `update_indicator_main.R` is incorrectly typed. OR    
+  
+The script is looking in the wrong working directory. 
+To check which directory it is looking in, type `getwd()` in the console and hit enter.
+It should not have the indicator folder at the end of the filepath, but should end with 'sdg_data_updates'. 
+If it does not end with 'sdg_data_updates' type `setwd('./..')`, this will make R look in the directory above.
+
+```
 
 
 ### NOTES:
@@ -52,7 +97,10 @@ country_of_occurence_by_sex.R, birthweight_by_mum_age.R, region.R etc: where the
 	These scripts take the data from the input file, mung it into the format we want, and do calculations.
 	Each script uses a different tab in the xlsx file. Output from each is saved in the global environment
 	in case the user wants to see what data came from where, but they are not individually saved to the Output folder.
-
+  
+Table 1 in the source data is used from 2018 onwards for England and Wales figures, as this is no longer included in table 2.
+  
+See the available disaggregations, calculations, and other info fields on the live platform for more information on why certain disaggregations are not shown, and why calculations differ for some disaggregations.  
 #### still to do
 Index of Multiple Deprivation is in the 2021 download for all years - may want to add
 this as an automated table next year (no point this year as we don't know what it will look like)

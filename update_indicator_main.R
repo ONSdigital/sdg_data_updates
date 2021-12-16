@@ -11,8 +11,8 @@
 
 # setwd("D:/Coding_repos/sdg_data_updates")
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
-
 rm(list = ls())
+
 
 library(tidyr)
 library(dplyr)

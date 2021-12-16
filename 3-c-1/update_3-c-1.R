@@ -14,7 +14,7 @@ unique_months <- unique(months_no_years)
 # This is because the nomis download link is based on the number of quarters since the most recent data.
 multiple_quarters <- ifelse(length(unique_months) > 1, TRUE, FALSE)
 
-# if this is a standard update (i.e. quartlery data), need to filter for the right months
+# if this is a standard update (i.e. quarterly data), need to filter for the right months
 if(multiple_quarters == TRUE) {
   employment_data <- employment_data %>% 
     mutate(keep_quarter = ifelse(substr(DATE_CODE, 6, 7) == "12", TRUE, FALSE)) %>% 
@@ -27,7 +27,8 @@ occupation_lookup <- data.frame(minor = minor_occupations,
   mutate(across(where(is.factor), as.character))
 
 employment_data_clean <- employment_data %>% 
-  filter(MEASURES_NAME == "Value") %>%  # don't need confidence intervals
+  filter(MEASURES_NAME == "Value",  # don't need confidence intervals
+         C_SEX == 0) %>% 
   # split the geographies so country and region are in separate columns
   # and the occupation codes into minor group and unit group 
   mutate(Country = case_when(
@@ -39,11 +40,9 @@ employment_data_clean <- employment_data %>%
     `Occupation minor group` = ifelse(C_OCCPUK11H_0_TYPE == "3-digit occupation", C_OCCPUK11H_0_NAME,""),
     `Occupation unit group` = ifelse(C_OCCPUK11H_0_TYPE == "4-digit occupation",  C_OCCPUK11H_0_NAME, "")) %>% 
   rename(count = OBS_VALUE,
-         `Observation_status` = OBS_STATUS_NAME,
-         Sex = C_SEX_NAME) %>% 
+         `Observation_status` = OBS_STATUS_NAME) %>% 
   select(DATE_CODE, 
          Country, Region, 
-         Sex, 
          `Occupation minor group`, `Occupation unit group`, 
          GEOGRAPHY_CODE,
          `Observation_status`,
@@ -69,24 +68,21 @@ vets <- occupations_filled %>%
 
 non_vets <- occupations_filled %>% 
   filter(`Occupation unit group` != "2216 Veterinarians") %>% 
-  left_join(vets, by = c("DATE_CODE", "Country", "Region", "Sex", 
+  left_join(vets, by = c("DATE_CODE", "Country", "Region",
                          "Occupation minor group")) %>% 
   # subtract the vet count from the minor group total (health professionals)
   mutate(count = ifelse(`Occupation minor group` == "221 Health Professionals" &
                           `Occupation unit group` == "",
                         count - vet_count, count))
 
-# counts are small so remove:
-#        region by sex
-#        should we also remove region by unit group?
-reduced_disaggregations <- non_vets %>% 
-  mutate(remove = ifelse(Region != "" &
-                           Sex != "All persons", TRUE, FALSE)) %>%
-  # mutate(remove = ifelse(Region != "" & 
-  #                          `Occupation unit group` != "", TRUE, FALSE)) %>% 
-  filter(remove == FALSE) %>% 
-  select(-remove)
-
+# # counts are small so:
+# #        should we remove region by unit group?
+# reduced_disaggregations <- non_vets %>% 
+#   mutate(remove = ifelse(Region != "" & 
+#                            `Occupation unit group` != "", TRUE, FALSE)) %>%
+#   filter(remove == FALSE) %>% 
+#   select(-remove)
+reduced_disaggregations <- non_vets
 
 #----------------------------------------------------------------------------
 population_data_clean <- population_data %>% 
@@ -115,10 +111,11 @@ density <- reduced_disaggregations %>%
   
 # put in csv format
 csv_formatted <- density %>% 
-  mutate(Country = ifelse(Country == "United Kingdom", "", Country),
-         Sex = ifelse(Sex == "All persons", "", Sex)) %>% 
-  arrange(Country, Region, Sex, `Occupation unit group`, `Occupation minor group`) %>% 
+  mutate(Country = ifelse(Country == "United Kingdom", "", Country)) %>% 
+  arrange(Country, Region, `Occupation unit group`, `Occupation minor group`) %>% 
   rename(`Observation status` = Observation_status,
          GeoCode = GEOGRAPHY_CODE) %>% 
   select(Year, `Occupation minor group`, `Occupation unit group`,
-         Country, Region, Sex, GeoCode, `Observation status`, Value)
+         Country, Region, GeoCode, `Observation status`, Value) 
+
+

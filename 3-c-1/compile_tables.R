@@ -22,10 +22,10 @@ qa_filename <- paste0(date, "_3-c-1_checks.html")
 write.csv(csv_formatted, paste0("Output/", csv_filename), row.names = FALSE)
 
 # If you have a QA document written in Rmarkdown this is how you can run it and save it
-rmarkdown::render('3-c-1_checks.Rmd', output_file = paste0('Output/', qa_filename))
+rmarkdown::render('QA.Rmd', output_file = paste0('Output/', qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/Output'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
-setwd("..")
+setwd("./..")

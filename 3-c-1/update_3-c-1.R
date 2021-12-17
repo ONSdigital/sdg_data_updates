@@ -1,3 +1,9 @@
+# Author: Emma Wood
+# Initial date: 16/12/2021
+# purpose: does bulk of work to update 3-c-1. Called by compile_tables.R.
+#         uses info from config.R
+
+
 population_data <- read.csv(nomis_population_link) %>% 
   mutate(across(where(is.factor), as.character)) 
 employment_data <- read.csv(nomis_employment_link) %>% 

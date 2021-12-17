@@ -117,11 +117,23 @@ density <- reduced_disaggregations %>%
   
 # put in csv format
 csv_formatted <- density %>% 
-  mutate(Country = ifelse(Country == "United Kingdom", "", Country)) %>% 
+  mutate(Country = ifelse(Country == "United Kingdom", "", Country),
+         Observation_status = case_when(
+           Observation_status == "Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)" ~ "Missing value; suppressed",
+           Observation_status == "Estimate is less than 500" ~ "Missing value; data exist but were not collected",
+           TRUE ~ as.character(Observation_status)),
+         `Occupation minor group` = ifelse(`Occupation minor group` == "221 Health Professionals",
+                                           "221 Health Professionals (not including Veterinarians)",
+                                           `Occupation minor group`)) %>% 
   arrange(Country, Region, `Occupation unit group`, `Occupation minor group`) %>% 
   rename(`Observation status` = Observation_status,
          GeoCode = GEOGRAPHY_CODE) %>% 
   select(Year, `Occupation minor group`, `Occupation unit group`,
          Country, Region, GeoCode, `Observation status`, Value) 
 
+# remove NAs from the csv that will be saved in Outputs
+# this changes Value to a character so will still use csv_formatted in the 
+# Rmd file
+csv_output <- csv_formatted %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value))
 

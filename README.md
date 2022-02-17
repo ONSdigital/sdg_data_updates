@@ -1,5 +1,5 @@
 ## General info ##
-Open source code for updating SDG data files. For each indicator, data from the source file(s) (usually either excel or a weblink to a csv) are read in, calculations required for the indicator are performed, and data are reshaped to fit the tidy format required to upload data to the SDG data platform.
+Open source code for updating SDG data files. For each indicator, data are either manually stored in the Input folder, or automatically taken from a predictable weblink to a csv. Scripts read in the data, reshape it and join dataframes where necessary. Required calculations are performed, and data are reshaped to fit the tidy format required to upload data to the SDG data platform. QA html files are created to help users identify issues with the code and store run information (e.g. what configurations are used). The csv output is then uploaded to the [sdg-data repo](https://github.com/ONSdigital/sdg-data/).
 
 Contact: SDG team
 SustainableDevelopment@ons.gov.uk
@@ -16,21 +16,28 @@ To run an update open the folder of the indicator you want to update and read th
 Usually, you will need to edit the config file.
 
 Indicator specific files can be found in each indicator folder, 
-but with the exception of the config file you should notr need to open these unless you are doning development work. 
+but with the exception of the config file you should not need to open these unless you are doning development work. 
 
-### R ###
+### How to run updates written in R ###
 Indicators updated with R scripts have folder names that are just the indicator name (name structure xx-xx-xx)
 
-Work from `sdg_data_updates.Rproj` and use `update_indicator_main.R` to run all indicator update scripts. *Emma: change name of main script to `update_R_indicator.R`*
+Work from `sdg_data_updates.Rproj` and use `update_indicator_main.R` to run all indicator update scripts. 
+  
+Specific instructions for each indicator should be given in the README file in the indicator folder. General instructions are as follows:  
+  
+1) Open the folder for the indicator you want to update.
+2) Open RStudio.
+3) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. 
+4) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.
+5) Change the indicator number to the relevant idicator e.g. '3-2-2' (Dashes NOT dots).
+6) Open the config file for your indicator and check and edit the configs (see the README file for your indicator).
+7) Click the 'source' button (in the top right of the top left window). This will run the code. You may need to install some packages if they are not already installed. ~Use `install.packages('name_of_package', dependencies = TRUE)` to install packages, then try running the code (using the source button) again.
+8) csv and html (QA) files will be exported to Output folder.
 
-SDGupdater is a package used by R indicator update scripts. 
+![file_structure](https://user-images.githubusercontent.com/52452377/154540640-0ed8c673-60fa-4286-8c13-7009de6f620f.JPG)
 
-#### developer notes ####
-*to do:* 
-- *note about packrat*
-- *note about SDGupdater*
 
-### Python ###
+### How to run updates written in Python ###
 Indicators updated with Python scripts have folder names that are the indicator name followed by _ python (name structure xx-xx-xx_python)
 
 Use `update_python_indicator.py` to run all indicator update scripts. *Varun - does it have to be run from a project or does it work without?*
@@ -43,4 +50,4 @@ Use `update_python_indicator.py` to run all indicator update scripts. *Varun - d
 
 
 ### To do ### 
-Manage dependencies using packrat (all required packages are stored locally). 
+Manage dependencies using renv (all required packages are stored locally). 

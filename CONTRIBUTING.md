@@ -97,7 +97,7 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   >   
   > Create
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
-3) Start writing your indicator update automation
+3) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
 4) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. In Git GUI:
   > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout  
   >   

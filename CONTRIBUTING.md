@@ -16,6 +16,10 @@ I am going to assume that the only people who will be contributing will be membe
 [making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  
 [Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)  
 
+## File structure of automations ##
+For updates done in R, the following code structure should be used:
+![file_structure](https://user-images.githubusercontent.com/52452377/154530899-8cd585f4-f395-4ac2-8505-8419067be4bd.JPG)
+
 ## General guidelines ##
 
 - Only edit code for one indicator on any branch

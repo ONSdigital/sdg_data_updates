@@ -23,7 +23,7 @@ Each indicator must have it's own folder, using the same naming convention (indi
 - **Example_Input** and **Example_Output** folders. These contain smaller files than those in Input and Output to show what the inputs and outputs should look like.  
 - A **control script** called ‘compile_tables.R’ or ‘update_code.py’.  
 - A **config** file. This is stored only in the local repo and is edited by the person running the update.  
-- An **example config** file. This shows what the config file should look like. The configurations will relate to the data in Example_Input and Example_Output folders.  
+- An **example_config** file. This shows what the config file should look like. The configurations will relate to the data in Example_Input and Example_Output folders.  
 - One or several **scripts** that do the bulk of the work. The names of these files are not standardised, but will have a .R or .py extension.  
 - A **QA.Rmd** file. A script that creates an html document with QA information.  
    
@@ -33,7 +33,7 @@ For updates done in R, the following code structure should be used:
 ## General guidelines ##
 
 - Only edit code for one indicator on any branch
-- Commit at least once a day when you are writing code
+- Commit *at least once a day* when you are writing code. However, it is better to commit more frequently.  
 - Use informative commit messages and pull request comments  
 - Get code reviewed when merging into a branch that has other collaborators
 - Review is required to merge to main  

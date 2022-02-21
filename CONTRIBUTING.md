@@ -12,20 +12,20 @@ I am going to assume that the only people who will be contributing will be membe
 ## Useful resources ##
     
 [Quality Assurance of Code for Research Analysis](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) - this is where you will find a template for peer review    
-[packrat](https://rstudio.github.io/packrat)  - not yet used but we should move to using it to future proof ourselves against package changes    
+[renv](https://rstudio.github.io/renv/articles/renv.html)  - package dependency management.      
 [making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  
 [Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)  
 
 ## File structure of automations ##
 Each indicator must have it's own folder, using the same naming convention (indicator number separated with dashes). This folder should contain the following:    
-- A README file containing instructions for that specific indicator.  
-- Input and Output folders. These are stored only in the local repo.    
-- Example_Input and Example_Output folders. These contain smaller files than those in Input and Output to show what the inputs and outputs should look like.  
-- A control script called ‘compile_tables.R’ or ‘update_code.py’.  
-- A config file. This is stored only in the local repo and is.  
-- An example config file. This shows what the config file should look like. The configurations will relate to the data in Example_Input and Example_Output folders.  
-- One or several scripts that do the bulk of the work. The names of these files are not standardised, but will have a .R or .py extension.  
-- A QA.Rmd file. A script that creates an html document with QA information.  
+- A **README** file containing instructions for that specific indicator.  
+- **Input** and **Output** folders. These are stored only in the local repo.    
+- **Example_Input** and **Example_Output** folders. These contain smaller files than those in Input and Output to show what the inputs and outputs should look like.  
+- A **control script** called ‘compile_tables.R’ or ‘update_code.py’.  
+- A **config** file. This is stored only in the local repo and is edited by the person running the update.  
+- An **example config** file. This shows what the config file should look like. The configurations will relate to the data in Example_Input and Example_Output folders.  
+- One or several **scripts** that do the bulk of the work. The names of these files are not standardised, but will have a .R or .py extension.  
+- A **QA.Rmd** file. A script that creates an html document with QA information.  
    
 For updates done in R, the following code structure should be used:
 ![file_structure](https://user-images.githubusercontent.com/52452377/154530899-8cd585f4-f395-4ac2-8505-8419067be4bd.JPG)
@@ -112,17 +112,40 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > Commit  
   >   
   > Push (make sure you are pushing to the right branch)  
-
-
-## Working on an existing code ##
-If you want to make changes to an existing automation, unless it is a cosmetic change e.g. to the readme, please create a new branch for your changes. 
-1) Follow steps 1 and 2 for setting up a new indicator automation, but change the Starting Revision to the relevant branch. This may either be 'main' or a branch that has not yet been merged with 'main'. If you are not sure, check with whoever is currently working on that branch. Name your new branch something informative (e.g. 3-2-2-add_sex_data).  
-**Remember to fetch from origin and create from the Tracking Branch**
-2) Once you have made your changes, merge your branch with the branch it was created from using a pull request. 
+5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
+7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. Iti must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
+8) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   
  > Pull requests > New pull request  
  >   
  > Set base and compare branches  
  >   
  > Create pull request  
  >   
- > Request review using panel on the right. If you are merging into main this is required before the merge can be completed. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.  
+ > Request review using the panel on the right. This is required before a merge to main can be completed. Use a [template](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) so that there is a history of what has been checked.  
+    
+## Working on an existing code ##
+If you want to make changes to an existing automation, unless it is a cosmetic change e.g. to the readme, please create a new branch for your changes.  
+Edits to existing automations will follow a similar process to new automations.  
+1) Create a new branch with a meaningful name (e.g. 3-2-2_age_bugfix) from the relevant branch (this will probably be main but may be a feature branch that you don't want to accidentally mess up).   
+2) Make regular, meaningful commits.  
+3) Make any necessary changes to the example files.   
+4) Update the README file (may not be required).  
+5) Merge back into the original branch. If you are merging into main code review is required. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.  
+  
+## Finalising the automated update ## 
+Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
+Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  Using Git GUI:  
+> Open Git GUI and select `Open Existing Repository`  
+> 
+> Select the Jemalex/sdg_data_updates folder  
+> 
+> `Remote` > `Fetch from` > `origin`  
+> 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder 
+
+
+
+
+
+  
+

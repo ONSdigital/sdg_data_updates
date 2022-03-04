@@ -177,15 +177,27 @@ Edits to existing automations will follow a similar process to new automations.
   
 ## Finalising the automated update ## 
 Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
-Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repository clone in Jemalex.  Using Git GUI:  
+Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
+- Using Git GUI:  
 > Open Git GUI and select `Open Existing Repository`  
 > 
 > Select the Jemalex/sdg_data_updates folder  
 > 
 > `Remote` > `Fetch from` > `origin`  
 > 
-> Check that you can see the expected changes in Jemalex/sdg_data_updates folder 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
+- Using Git Bash:
+> 
+> Navigate to Jemalex/sdg_data_updates folder  
+> 
+> Right click > Git Bash here. Make sure you're on the (main) branch 
+> 
+> `git fetch` to check if/what changes there are relative to the remote "main" repo
+>
+> `git pull origin main` to merge the changes from the remote "main" to the local "main"
+> 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
 
 

@@ -112,7 +112,8 @@ You can also use `git pull` straight away without "fetching first". Performing a
  Make sure you are on the main branch - should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, which to it: 
   > `git checkout main`
   
-    Next, create a new branch with a suitable name - the indicator number:
+ Next, create a new branch with a suitable name - the indicator number:
+ 
   > `git checkout -b x-x-x` (-b suffix means you're creating a new branch and the checkout command automatically puts you on it after its creation)
 
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
@@ -145,9 +146,13 @@ You can also use `git pull` straight away without "fetching first". Performing a
   >
   > `git commit -m "Adding information on Git Bash to Contributing  instructions"` 
   >   
-  > Push the committed changes to update the remote repo on GitHub for the respective branch:
+  > Push the committed changes to update the remote repo on GitHub for the respective branch. If this was a branch you created locally and it's the first tme you are pushing to the remote repo, use:
   >
-  > `git push`
+  > `git push -u origin x-x-x`
+  >
+  > If you go on GitHub now, you will see your local branch is now listed as part of the existing branches, and your commit message should be visible next to the file(s) you changed.
+  >
+  > You can just use `git push` from now on, when you are on the same branch locally (but always following `git add .` and `git commit -m "message"` first).
   
 
 5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.

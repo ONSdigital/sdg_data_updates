@@ -86,17 +86,21 @@ To edit or create automation code, you will need to have the sdg_data_repository
 
 
 ## Setting up a new indicator automation ##
-Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**
-1) In Git GUI fetch the most recent version of the repo from Github
+There are several ways to move files between you local repository (on your laptop) and the online repository. All the instructions below are given for both Git GUI and Git bash, but you need only use one.  
+  
+Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**  
+  
+1) Fetch the most recent version of the repo from Github  
+- In Git GUI:  
   >   Remote > Fetch from > origin
 
-To do this with **Git Bash**, use the fetch command and then pull command if "fetch" suggested that your branch is not up to date:
+- In Git Bash:
+  > use the fetch command and then pull command if "fetch" suggests that your branch is not up to date.  
+  > You can also use `git pull` straight away without "fetching first". Performing a pull will automatically perform a fetch command first, but use fetch on its own to understand what has changed on the remote repo (if anything):  
   > `git fetch`
-  
+  >
   > `git pull`
-
-You can also use `git pull` straight away without "fetching first". Performing a pull will automatically perform a fetch command first, but use fetch on its own to understand what has changed on the remote repo (if anything).
-
+  
 2) Create a new branch for the indicator you want to work on
 - In Git GUI:
   > Branch > Create  
@@ -107,18 +111,16 @@ You can also use `git pull` straight away without "fetching first". Performing a
   >   
   > Create
   
-- In Git Bash:
-
- Make sure you are on the main branch - should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, which to it: 
+- In Git Bash:  
+  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, swhitch to it: 
   > `git checkout main`
-  
- Next, create a new branch with a suitable name - the indicator number:
- 
+  > 
+  >  Next, create a new branch with a suitable name - the indicator number:
   > `git checkout -b x-x-x` (-b suffix means you're creating a new branch and the checkout command automatically puts you on it after its creation)
 
-3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
-3) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
-4) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
+3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
+4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
+5) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
 - In Git GUI:
   > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout  
   >   
@@ -154,7 +156,6 @@ You can also use `git pull` straight away without "fetching first". Performing a
   >
   > You can just use `git push` from now on, when you are on the same branch locally (but always following `git add .` and `git commit -m "message"` first).
   
-
 5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
 7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. It must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
 8) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   

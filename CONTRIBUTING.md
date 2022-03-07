@@ -126,7 +126,7 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   >   
   > Click Rescan to pickup any changes  
   >   
-  > Changed files are displayed in the Upstaged changes panel. You can click on these to see details.   
+  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details.   
   >   
   > To move them down into the Staged changes panel click on the file icon to the left of the filename in the Unstaged changes panel  
   >   

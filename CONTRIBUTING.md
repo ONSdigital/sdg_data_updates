@@ -82,13 +82,27 @@ To edit or create automation code, you will need to have the sdg_data_repository
 > `cd D:/coding_repos` (cd stands for change directory)  
 > `git clone https://github.com/ONSdigital/sdg_data_updates.git` (from the Code dropdown shown in the image above).  
 > - A pop-up will appear. The ‘password’ it asks for is the personal access token that you created in step 1.
+> - Alternatively, go to the desired directory, right-click and choose 'Git Bash here'. You can then skip the `cd D:/coding_repos` step, as Bash will open in that directory.
 
 
 ## Setting up a new indicator automation ##
-Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**
-1) In Git GUI fetch the most recent version of the repo from Github
-  >   Remote > Fetch from > origin  
+There are several ways to move files between you local repository (on your laptop) and the online repository. All the instructions below are given for both Git GUI and Git bash, but you need only use one.  
+  
+Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**  
+  
+1) Fetch the most recent version of the repo from Github  
+- In Git GUI:  
+  >   Remote > Fetch from > origin
+
+- In Git Bash:
+  > use the fetch command and then pull command if "fetch" suggests that your branch is not up to date.  
+  > You can also use `git pull` straight away without "fetching first". Performing a pull will automatically perform a fetch command first, but use fetch on its own to understand what has changed on the remote repo (if anything):  
+  > `git fetch`
+  >
+  > `git pull`
+  
 2) Create a new branch for the indicator you want to work on
+- In Git GUI:
   > Branch > Create  
   >   
   > Name the branch with the indicator number  
@@ -96,24 +110,54 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > Starting Revision should be set to Tracking Branch > main  
   >   
   > Create
-3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)
-3) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
-4) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. In Git GUI:
+  
+- In Git Bash:  
+  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, swhitch to it: 
+  > `git checkout main`
+  > 
+  >  Next, create a new branch with a suitable name - the indicator number:
+  > `git checkout -b x-x-x` (-b suffix means you're creating a new branch and the checkout command automatically puts you on it after its creation)
+
+3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
+4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
+5) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
+- In Git GUI:
   > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout  
   >   
   > Click Rescan to pickup any changes  
   >   
   > Changed files are displayed in the Unstaged changes panel. You can click on these to see details.   
   >   
-  > To move them down into the Staged changes panel click on the file icon to the left of the filename inthe Unstaged changes panel  
+  > To move them down into the Staged changes panel click on the file icon to the left of the filename in the Unstaged changes panel  
   >   
   > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?  
   >   
   > Commit  
   >   
   > Push (make sure you are pushing to the right branch)  
+  
+- In Git Bash:
+  >   
+  > `git status` to check if you have any unstaged or uncommitted changes. Unstaged files with changes will be listed in red.  
+  >   
+  > Before committing, you need to add files for staging (tracking), then the commit will only include those files. To stage all new files for tracking (recommended):   
+  >   
+  > `git add .` ( . means "everything")
+  > 
+  > You can then commit the tracked files, and must add a short informative message:
+  >
+  > `git commit -m "Adding information on Git Bash to Contributing  instructions"` 
+  >   
+  > Push the committed changes to update the remote repo on GitHub for the respective branch. If this was a branch you created locally and it's the first tme you are pushing to the remote repo, use:
+  >
+  > `git push -u origin x-x-x`
+  >
+  > If you go on GitHub now, you will see your local branch is now listed as part of the existing branches, and your commit message should be visible next to the file(s) you changed.
+  >
+  > You can just use `git push` from now on, when you are on the same branch locally (but always following `git add .` and `git commit -m "message"` first).
+  
 5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
-7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. Iti must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
+7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. It must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
 8) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   
  > Pull requests > New pull request  
  >   
@@ -134,15 +178,27 @@ Edits to existing automations will follow a similar process to new automations.
   
 ## Finalising the automated update ## 
 Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
-Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  Using Git GUI:  
+Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
+- Using Git GUI:  
 > Open Git GUI and select `Open Existing Repository`  
 > 
 > Select the Jemalex/sdg_data_updates folder  
 > 
 > `Remote` > `Fetch from` > `origin`  
 > 
-> Check that you can see the expected changes in Jemalex/sdg_data_updates folder 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
+- Using Git Bash:
+> 
+> Navigate to Jemalex/sdg_data_updates folder  
+> 
+> Right click > Git Bash here. Make sure you're on the (main) branch 
+> 
+> `git fetch` to check if/what changes there are relative to the remote "main" repo
+>
+> `git pull origin main` to merge the changes from the remote "main" to the local "main"
+> 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
 
 

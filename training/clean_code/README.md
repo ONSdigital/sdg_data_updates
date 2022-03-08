@@ -9,7 +9,7 @@ code itself is the same as the original (there are no bugs).
   
 #### Instructions
 1. Fetch the main branch from Github
-2. Create a new branch e.g. 'code_cleaning_<your initials>'
+2. Create a new branch e.g. 'code_cleaning_your initials'
 3. Set this as your working branch  
 4. Open RStudio
 5. Open the sdg_data_updates project (File > Open Project > navigate to your cloned sdg_data_updates folder - it is in there)
@@ -20,7 +20,7 @@ code itself is the same as the original (there are no bugs).
 #### Tips  
 - Start with formatting the whole script so the code is easier to read
 	- break down long lines of code onto separate rows (an easy and logical place to add a new line is after a comma)
-	- put spaces between word and symbols (except). See clean code guidance.
+	- put spaces between word and symbols (except for dollar symbols- `dataframe$variable` should have no spaces). See clean code guidance.
 - Run bits of code to see what they do, and make names for the resulting objects that make sense. Try to make it so you
 don't need the 'what' comments - what the code is doing should be clear from the names you use.  
 - As you go along, check that the script still works and that you haven't inadvertently broken something.

@@ -1,19 +1,33 @@
-### 15.1.1 update instructions
-
-For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
+### Clean_code training
   
-1. Download and save the Forest Research Woodland Statistics excel file in the 'Input' folder in the 15-1-1 folder (if the Input folder doesn't exist, make it).  
-2. Download the latest Standard Area Measurements for Administrative Areas folder from the geoportal. This will be a zip folder - 
-you only need to save the country UK file in the 'Input' folder in the 15-1-1 folder. 
-3. Open the `sdg_data_updates.Rproj` from inside RStudio. 
-4. If it exists, open the `config.R` file in 15-1-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
-If not, save `example_config.R` as `config.R` in 15-1-1.  
-5. Check the configurations (filenames and tab names) are correct for the files you have saved, and if not correct them and save `config.R`.  
-     1. `woodland_area_tabname` is the name of the tab containing area data on all woodland area FOR EVERY YEAR. Check that 'Year' is one of the column headings (case is not important).
-     2. `certified_area_tabname` is the name of the tab containing area data on certified woodland area FOR EVERY YEAR. Check that 'AREALHECT' is one of the column headings (case is not important).
-     3. Check that areas are given in millions of hectares in the above two tabs. If not, the calculation will need to be changed
-6. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and click 'Source' button to run the script (top right corner of the script panel).  
-7. Outputs will be saved in the Outputs folder in 15-1-1 (which the script will create if it doesn't already exist).  
-8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. 
-**Please check this file before copying to the csv**
-9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.
+This task is designed to help contributors understand why clean code is important and to get some practice in naming objects
+and identifying which comments are useful.
+  
+The practice code is taken from the automation of 15-1-1. It has been consolidated into a single script and does not include the
+QA element (in Rmarkown). Names of objects, formatting, and comments have been edited to make the script less 'clean', however the 
+code itself is the same as the original (there are no bugs).  
+  
+#### Instructions
+1. Fetch the main branch from Github
+2. Create a new branch e.g. 'code_cleaning_<your initials>'
+3. Set this as your working branch  
+4. Open RStudio
+5. Open the sdg_data_updates project (File > Open Project > navigate to your cloned sdg_data_updates folder - it is in there)
+6. Open the code_cleaning_practice.R file
+7. Clean away! The original code_cleaning_practice.R will remain, unchanged on the main branch
+8. Make regular commits - this way if you make an error and want to step bac to an earlier version, you can.
+  
+#### Tips  
+- Start with formatting the whole script so the code is easier to read
+	- break down long lines of code onto separate rows (an easy and logical place to add a new line is after a comma)
+	- put spaces between word and symbols (except). See clean code guidance.
+- Run bits of code to see what they do, and make names for the resulting objects that make sense. Try to make it so you
+don't need the 'what' comments - what the code is doing should be clear from the names you use.  
+- As you go along, check that the script still works and that you haven't inadvertently broken something.
+- When renaming anything use `find > replace all` (with `whole word` selected). 
+If you forget to rename all in this way, you are likel to break the code and get confused.  
+- Take care not to rename something with a name you have already used.    
+- Avoid using (or keeping) the same name for different objects – 
+the original will be overwritten and you will have to rerun everything to see what the old object looked like.   
+- Remove unnecessary comments (the ones that just tell you what the code itself should tell you).  
+

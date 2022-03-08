@@ -5,15 +5,15 @@ library('stringr')
 
 #---- Import the datasets ----#
 # import the 'all' woodland data and change all factors to uppercase characters
-df1<-openxlsx::read.xlsx("training/clean_code/Input/PWS_2021.xlsx",sheet="Data for figure 1",colNames=FALSE)%>%
+df1<-openxlsx::read.xlsx("training/clean_code/Example_Input/PWS_2021.xlsx",sheet="Data for figure 1",colNames=FALSE)%>%
   mutate(across(where(is.factor),as.character))%>%
   mutate(across(where(is.character),toupper))
 # import the 'certified' woodland data and change all factors to uppercase characters
-df2<-openxlsx::read.xlsx("training/clean_code/Input/PWS_2021.xlsx",sheet="Data for figure 2",colNames=FALSE)%>%
+df2<-openxlsx::read.xlsx("training/clean_code/Example_Input/PWS_2021.xlsx",sheet="Data for figure 2",colNames=FALSE)%>%
   mutate(across(where(is.factor),as.character))%>%
   mutate(across(where(is.character),toupper))
 # import the land area data and change all factors to uppercase characters
-df3<-read.csv("training/clean_code/Input/SAM_CTRY_DEC_2020_UK.csv")%>%
+df3<-read.csv("training/clean_code/Example_Input/SAM_CTRY_DEC_2020_UK.csv")%>%
   mutate(across(where(is.factor),as.character))%>%
   mutate(across(where(is.character),toupper))
 
@@ -109,4 +109,14 @@ final<-all%>%pivot_longer(-c(YEAR,Country,Geocode),names_to="Sustainably managed
   select(Year,Country,`Sustainablymanagedstatus`,`Observationstatus`,`Unitmeasure`,`Unitmultiplier`,Value)
 
 #---- save the csv ----#
-write.csv(final,'training/clean_code/15-1-1_data.csv',row.names=TRUE)
+# list the existing files in the clean code training folder
+names <- list.files('training/clean_code/')
+# check if output folder already exists - TRUE or FALSE
+check <- ifelse("Output" %in% existing_files, TRUE, FALSE)
+
+# If an Output folder already exists don't do anything, but otherwise create one
+if (check == FALSE) {
+  dir.create("training/clean_code/Output")
+}
+# save the csv
+write.csv(final,'training/clean_code/Output/15-1-1_data.csv',row.names=TRUE)

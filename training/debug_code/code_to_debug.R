@@ -1,17 +1,22 @@
-# author: Emma Wood
-# date: 27/07/2021
+# author: Emma Wood & Atanaska Nikolova
+# date: 08/03/2021
 
 library('openxlsx')
+library('dplyr')
+library('tidyr')
+library('stringr')
 
-woodland_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
+woodland_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx",
                                      sheet = woodland_area_tabname, colNames = FALSE) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
-certified_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
+
+certified_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx",
                                       sheet = certified_area_tabname, colNames = FALSE) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
-area_source_data <- read.csv(paste0(input_folder, "/", area_filename)) %>% 
+
+area_source_data <- read.csv("training/clean_code/Example_Input/SAM_CTRY_DEC_2020_UK.csv") %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
@@ -118,3 +123,13 @@ csv_formatted <- indicator_data %>%
   select(Year, Country, `Sustainably managed status`, 
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)
+
+names <- list.files('training/debug_code/')
+check <- ifelse("Output" %in% existing_files, TRUE, FALSE)
+
+# If an Output folder already exists don't do anything, but otherwise create one
+if (check == FALSE) {
+  dir.create("training/debug_code/Output")
+}
+# save the csv
+write.csv(final,'training/debug_code/Output/15-1-1_data.csv',row.names=TRUE)

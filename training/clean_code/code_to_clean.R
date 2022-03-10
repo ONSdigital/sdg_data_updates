@@ -112,7 +112,7 @@ final<-all%>%pivot_longer(-c(YEAR,Country,Geocode),names_to="Sustainably managed
 # list the existing files in the clean code training folder
 names <- list.files('training/clean_code/')
 # check if output folder already exists - TRUE or FALSE
-check <- ifelse("Output" %in% existing_files, TRUE, FALSE)
+check <- ifelse("Output" %in% names, TRUE, FALSE)
 
 # If an Output folder already exists don't do anything, but otherwise create one
 if (check == FALSE) {

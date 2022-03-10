@@ -72,7 +72,25 @@ rounded_sum3 <- values %>%
 # Running snippets of code in a pipe
 # Exercise 3
 
-#....
+# a) split the following piped code into three separate datasets 
+#    (row_added, year_shortened, and age_renamed) 
+#    to see what each line produces when isolated from the rest of the pipe
+new_data <- dummy_data %>% 
+  add_row(Year = "2021", 
+          Age = "20-29",
+          Value = 86) %>% 
+  mutate(Year = ifelse(Year == "2018", "2017", Year)) %>% 
+  rename(Agegroup = Age)
+
+row_added <-
+
+year_corrected <- 
+
+age_renamed <- 
+
+# b) run the ifelse statement on line 82 outside the pipe
+
+
 
 #------------------
 # Finding bugs in if() statements

@@ -7,11 +7,11 @@ library('tidyr')
 library('stringr')
 
 woodland_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx",
-                                     sheet = "woodland_data", colNames = FALSE) %>% #AN sheet names wrong
+                                     sheet = "woodland_data", colNames = FALSE) %>%
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
-certified_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx" #AN: forget comma AND wrong sheet name
+certified_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx"
                                       sheet = "certified_data", colNames = FALSE) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
@@ -24,7 +24,7 @@ area_source_data <- read.csv("training/clean_code/Example_Input/SAM_CTRY_DEC_202
 # The name of the columns containing country names and codes will change depending on the year. 
 # We therefore need to identify these columns and give them a standard name that 
 #  we can refer to in the code, without having to change it every year:
-country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" #AN moved & to next row
+country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY"
                          & substr(names(area_source_data), 7, 8) == "NM")
 country_code_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
                           substr(names(area_source_data), 7, 8) == "CD")
@@ -41,7 +41,7 @@ country_and_UK_areas <- area_data %>%
 #  as there is metadata above the data.
 # The row the headers are in may differ for different years, so we identify
 #  which row they are in, using a column name we know will always exist
-header_row_woodland <- which(woodland_source_data$X1 == "Year") #AN "Year" instead of "YEAR": a nasty one as it will keep running until line 54 where it won't find YEAR for substr(), but error message is not obvious
+header_row_woodland <- which(woodland_source_data$X1 == "Year")
 
 woodland_data_with_headers <- woodland_source_data
 names(woodland_data_with_headers) <- woodland_data_with_headers[header_row_woodland, ]
@@ -81,7 +81,7 @@ certified_data_tidy <- certified_metadata_removed %>%
 
 #--- combine data and create csv ----#
 all_data <- woodland_data_tidy %>% 
-  left_join(certified_data_tidy, by = "YEAR", "Country") %>% #AN remove the c() and jts list
+  left_join(certified_data_tidy, by = "YEAR", "Country") %>%
   left_join(country_and_UK_areas, by = "Country") %>% 
   mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),
@@ -109,7 +109,7 @@ csv_formatted <- indicator_data %>%
   mutate(Country = str_to_title(Country)) %>% 
   # NI had a different method for calculating the area of non-certified woodland area before 2013, 
   #  so we need to get rid of rows that are impacted by that different methodology
-  mutate(different_method = ifelse((Country == "Northern Ireland" | "") & #AN replaced | Country == "" just with | ""
+  mutate(different_method = ifelse((Country == "Northern Ireland" | "") &
                                      YEAR < 2013 & 
                                      `Sustainably managed status` %in% c("", "Non-certified"),
                                    TRUE, FALSE)) %>% 
@@ -124,13 +124,13 @@ csv_formatted <- indicator_data %>%
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)
 
-files <- list.files('training/debug_code/') #(was names) AN files variable should be called existing_files
+files <- list.files('training/debug_code/') 
 check <- ifelse("Output" %in% existing_files, TRUE, FALSE)
 
 # If an Output folder already exists don't do anything, but otherwise create one
-if (check = FALSE) { #AN name == to be =
+if (check = FALSE) { 
   dir.create("training/debug_code/Output")
 }
 # save the csv
-write.csv(final,'training/debug_code/Output/15-1-1_data',row.names=FALSE) #AN forget the .csv extension
-#AN !final should be csv_formatted, also changed row.names to FALSE (not a bug, but seems like the better option)
+write.csv(final,'training/debug_code/Output/15-1-1_data',row.names=FALSE)
+

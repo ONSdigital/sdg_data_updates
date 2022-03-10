@@ -7,12 +7,12 @@ library('tidyr')
 library('stringr')
 
 woodland_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx",
-                                     sheet = woodland_area_tabname, colNames = FALSE) %>% 
+                                     sheet = "woodland_data", colNames = FALSE) %>%
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
-certified_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx",
-                                      sheet = certified_area_tabname, colNames = FALSE) %>% 
+certified_source_data <- openxlsx::read.xlsx("training/debug_code/Example_Input/PWS_2021.xlsx"
+                                      sheet = "certified_data", colNames = FALSE) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
@@ -24,8 +24,8 @@ area_source_data <- read.csv("training/clean_code/Example_Input/SAM_CTRY_DEC_202
 # The name of the columns containing country names and codes will change depending on the year. 
 # We therefore need to identify these columns and give them a standard name that 
 #  we can refer to in the code, without having to change it every year:
-country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
-                          substr(names(area_source_data), 7, 8) == "NM")
+country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY"
+                         & substr(names(area_source_data), 7, 8) == "NM")
 country_code_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
                           substr(names(area_source_data), 7, 8) == "CD")
 area_data <- area_source_data 
@@ -41,7 +41,7 @@ country_and_UK_areas <- area_data %>%
 #  as there is metadata above the data.
 # The row the headers are in may differ for different years, so we identify
 #  which row they are in, using a column name we know will always exist
-header_row_woodland <- which(woodland_source_data$X1 == "YEAR")
+header_row_woodland <- which(woodland_source_data$X1 == "Year")
 
 woodland_data_with_headers <- woodland_source_data
 names(woodland_data_with_headers) <- woodland_data_with_headers[header_row_woodland, ]
@@ -68,7 +68,7 @@ certified_data_with_headers <- certified_source_data
 names(certified_data_with_headers) <- certified_data_with_headers[header_row_certified, ]
 
 certified_metadata_removed <- certified_data_with_headers %>% 
-  mutate(keep = grepl('[0-9][0-9][0-9][0-9]',
+  mutate(keep = grepl('[0-9][0-9][0-9][0-9]', 
                             substr(YEAR, 5, 9))) %>% 
   mutate(YEAR = substr(YEAR, 5, 9)) %>% 
   filter(keep == TRUE) %>% 
@@ -81,7 +81,7 @@ certified_data_tidy <- certified_metadata_removed %>%
 
 #--- combine data and create csv ----#
 all_data <- woodland_data_tidy %>% 
-  left_join(certified_data_tidy, by = c("YEAR", "Country")) %>% 
+  left_join(certified_data_tidy, by = "YEAR", "Country") %>%
   left_join(country_and_UK_areas, by = "Country") %>% 
   mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),
@@ -94,7 +94,7 @@ indicator_data <- all_data %>%
   mutate(woodland_proportion = (woodland_area * 1000000) / AREALHECT * 100,
          certified_proportion = (certified_area * 1000000) / AREALHECT * 100,
          non_certified_proportion = ((woodland_area - certified_area) * 1000000) / AREALHECT * 100) %>% 
-  select(-c(woodland_area, certified_area, AREALHECT))
+  select(-c(woodland_area, certified_area, AREALHECT)) 
 
 # add required columns, rename disaggregation levels, and filter out values we don't want to display
 csv_formatted <- indicator_data %>% 
@@ -109,7 +109,7 @@ csv_formatted <- indicator_data %>%
   mutate(Country = str_to_title(Country)) %>% 
   # NI had a different method for calculating the area of non-certified woodland area before 2013, 
   #  so we need to get rid of rows that are impacted by that different methodology
-  mutate(different_method = ifelse((Country == "Northern Ireland" | Country == "") & 
+  mutate(different_method = ifelse((Country == "Northern Ireland" | "") &
                                      YEAR < 2013 & 
                                      `Sustainably managed status` %in% c("", "Non-certified"),
                                    TRUE, FALSE)) %>% 
@@ -124,12 +124,13 @@ csv_formatted <- indicator_data %>%
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)
 
-names <- list.files('training/debug_code/')
+files <- list.files('training/debug_code/') 
 check <- ifelse("Output" %in% existing_files, TRUE, FALSE)
 
 # If an Output folder already exists don't do anything, but otherwise create one
-if (check == FALSE) {
+if (check = FALSE) { 
   dir.create("training/debug_code/Output")
 }
 # save the csv
-write.csv(final,'training/debug_code/Output/15-1-1_data.csv',row.names=TRUE)
+write.csv(final,'training/debug_code/Output/15-1-1_data',row.names=FALSE)
+

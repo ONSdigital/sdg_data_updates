@@ -108,19 +108,36 @@ if(sqrt(x) > y*2){
 }
 
 #------------------
-# for loop 
+# Running a for loop one iteration at a time 
+# Exercise 5 (see line 124 onward for questions/activities)
 
-# create a vector filled with random normal values
+# this code creates a vector filled with random normal values
 random_values <- rnorm(30)
 
-# initialise 'random_values_sq'
+# this code initialises 'random_values_sq' (i.e. makes it an object)
 random_values_sq <- 0
 
 # populate the new sequence 'usq' 
 for(i in 1:length(random_values)){
-  usqrandom_values_sq <- random_values[i] * random_values[i]
-  print(random_values_sq[i])
+  random_values_sq <- random_values[i] * random_values[i]
 }
+
+print(random_values_sq)
+
+# a) Which value is printed in the console
+# b) Set i to find the 4th value
+# c) edit the code below (copied from above) so that all values are printed in 
+#    the console
+
+for(i in 1:length(random_values)){
+  random_values_sq <- random_values[i] * random_values[i]
+}
+
+print(random_values_sq)
+
+# bonus bits:
+# d) edit the code so that it produces a vector of squared values
+# e) create the vector of squared values without using a loop
 
 
 

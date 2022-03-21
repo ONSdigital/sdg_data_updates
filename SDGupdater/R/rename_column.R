@@ -19,7 +19,7 @@
 #' test_data <- data.frame("numbers_1_4" = c(10, 5),
 #'                         "numbers_10_14" = c(1, 3),
 #'                         "rates_1_4" = c(4, 7))
-#' renamed <- name_columns(dat = test_data,
+#' renamed <- rename_column(dat = test_data,
 #'                         primary = c("number", "1", "4"),
 #'                         alternate = c("death", "1", "4"),
 #'                         not_pattern = c("10"),
@@ -27,7 +27,7 @@
 #'                         
 #' @export
 
-name_columns <- function(dat, primary, alternate, not_pattern, new_name){
+rename_column <- function(dat, primary, alternate, not_pattern, new_name){
   
   column_indices <- get_column_index(dat, primary)
   
@@ -45,7 +45,7 @@ name_columns <- function(dat, primary, alternate, not_pattern, new_name){
   if(length(column_index) > 1 | length(column_index) == 0) {
     warning(paste(length(column_index), 
                "columns identified for", new_name, 
-               ". Please refine 'primary', 'alternate', and 'not_pattern' arguments"))
+               ". Please refine 'primary', 'alternate', and 'not_pattern' arguments. Column name not replaced"))
   } else {
     names(dat)[column_index] <- new_name
   }

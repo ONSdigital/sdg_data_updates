@@ -203,6 +203,31 @@ Once your code has passed [review](https://best-practice-and-impact.github.io/qa
 > 
 > Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
+## Adding functions to SDGupdater 
+This section is stil in progress...  
+  
+If a function is likely to be useful for other updates, please add it to the SDGupdater package.  
+Functions **must** be fully documented (using roxygen2) and have comprehensive unit tests.  
+  
+The code below can be used to create the documentation files from the information in the function file, 
+install the package and run all unit tests:  
+```
+library(devtools)
+library(roxygen2)
+
+setwd("D:\\coding_repos\\sdg_data_updates\\SDGupdater")
+# update documentation
+document()
+
+# install the package
+setwd("..")
+install("SDGupdater")
+
+# run tests
+devtools::test("SDGupdater")
+```
+
+  
 
 
 

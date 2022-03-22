@@ -103,11 +103,14 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   
 2) Create a new branch for the indicator you want to work on
 - In Git GUI:
+  > Checkout the branch you want to create the new branch from (this will usually be main)
+  > Branch > Checkout branch > seelct 'Tracking branch' then the one you want to checkout (main)
+  > 
   > Branch > Create  
   >   
-  > Name the branch with the indicator number  
+  > Name the new branch (usually with the indicator number)  
   >   
-  > Starting Revision should be set to Tracking Branch > main  
+  > Starting Revision should be set to Tracking Branch > main by default - you do not need to change this  
   >   
   > Create
   

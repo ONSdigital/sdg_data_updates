@@ -24,8 +24,8 @@ Y <- X + Y
 
 # exercise 1
 # check what each bit of code is doing, by running round brackets from the inside out
-# what does rep() do?
-# what is the difference between the arguments 'each' and 'times' in rep()
+# a) what does rep() do?
+# b) what is the difference between the arguments 'each' and 'times' in rep()?
 dummy_data <- data.frame(Year = rep(c("2018", "2019", "2020"), each = 3),
                          Age = rep(c("20-29", "30-39", "40-49"), times = 3),
                          Value = c(32, 50, 41,
@@ -38,13 +38,15 @@ dummy_data <- data.frame(Year = rep(c("2018", "2019", "2020"), each = 3),
 # create some dummy data
 values <- as.factor(c("0.109", "0.359", "0.63"))
 
-# what are the functions?
-# What do each of the functions do?
+# a) what are the functions?
+# b) What do each of the functions in the line of code below do?
 rounded_sum1 <- round(sum(as.numeric(as.character(values))), 1)
 
 
 
 
+
+# white space so you don't accidentally see the answers in the next bit!
 
 
 
@@ -75,6 +77,7 @@ rounded_sum3 <- values %>%
 # a) split the following piped code into three separate datasets 
 #    (row_added, year_shortened, and age_renamed) 
 #    to see what each line produces when isolated from the rest of the pipe
+#    The answers have been started just below the following block.
 new_data <- dummy_data %>% 
   add_row(Year = "2021", 
           Age = "20-29",
@@ -88,14 +91,15 @@ year_corrected <-
 
 age_renamed <- 
 
-# b) run the ifelse statement on line 82 outside the pipe
+# b) run the ifelse statement from the pipe outside the pipe 
+#      (i.e. from  `mutate(Year = ifelse(Year == "2018", "2017", Year)) %>%`) 
 
 
 
 #------------------
 # Finding bugs in if() statements
 # Exercise 4
-# a) why is this code not giving us a value for z?
+# a) why is the code below not giving us a value for z?
 # b) how could you fix it if you always wanted it to result in a value for z? 
 # c) how many answers can you come up with for b?
 x <- 196
@@ -109,7 +113,8 @@ if(sqrt(x) > y*2){
 
 #------------------
 # Running a for loop one iteration at a time 
-# Exercise 5 (see line 124 onward for questions/activities)
+# Exercise 5 (the first bit is just setting up the necessary variables -
+#              scroll to a) for the actual excercises/questions)
 
 # this code creates a vector filled with random normal values
 random_values <- rnorm(30)
@@ -117,16 +122,16 @@ random_values <- rnorm(30)
 # this code initialises 'random_values_sq' (i.e. makes it an object)
 random_values_sq <- 0
 
-# populate the new sequence 'usq' 
+# populate the new sequence 'random_values_sq' 
 for(i in 1:length(random_values)){
   random_values_sq <- random_values[i] * random_values[i]
 }
 
 print(random_values_sq)
 
-# a) Which value is printed in the console
-# b) Set i to find the 4th value
-# c) edit the code below (copied from above) so that all values are printed in 
+# a) What is printed in the console and why?
+# b) Set i to find the 4th value (type in the console)
+# c) edit the code below (copied from above) so that *all* values are printed in 
 #    the console
 
 for(i in 1:length(random_values)){

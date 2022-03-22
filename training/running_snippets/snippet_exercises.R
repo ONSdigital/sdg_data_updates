@@ -116,6 +116,8 @@ if(sqrt(x) > y*2){
 # Exercise 5 (the first bit is just setting up the necessary variables -
 #              scroll to a) for the actual excercises/questions)
 
+# Run the following code then do the questions:
+  
 # this code creates a vector filled with random normal values
 random_values <- rnorm(30)
 

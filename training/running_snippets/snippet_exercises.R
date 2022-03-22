@@ -131,9 +131,9 @@ for(i in 1:length(random_values)){
 
 print(random_values_sq)
 
-# a) What is printed in the console and why?
-# b) Set i to find the 4th value (type in the console)
-# c) edit the code below (copied from above) so that *all* values are printed in 
+# a) What is printed in the console when you run the code above, and why?
+# b) Set i to find the 4th value (type in the console, and then run the inside of the loop by running a snippet from the script)
+# c) edit the code below (copied from above) so that *all* values (from every iteration) are printed in 
 #    the console
 
 for(i in 1:length(random_values)){
@@ -143,7 +143,7 @@ for(i in 1:length(random_values)){
 print(random_values_sq)
 
 # bonus bits:
-# d) edit the code so that it produces a vector of squared values
+# d) edit the code so that it produces a named vector of squared values
 # e) create the vector of squared values without using a loop
 
 

@@ -84,6 +84,7 @@ To edit or create automation code, you will need to have the sdg_data_repository
 > `git clone https://github.com/ONSdigital/sdg_data_updates.git` (from the Code dropdown shown in the image above).  
 > - A pop-up will appear. The ‘password’ it asks for is the personal access token that you created in step 1.
 > - Alternatively, go to the desired directory, right-click and choose 'Git Bash here'. You can then skip the `cd D:/coding_repos` step, as Bash will open in that directory.
+> - Once you have cloned the repository, in order to access the main branch you need to navigate to the cloned folder that will now appear in your coding_repos. Use `cd sdg_data_updates`. You should now see (main) in blue colour at the end of the directory line.
 
 
 ## Setting up a new indicator automation ##
@@ -116,11 +117,13 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > Create
   
 - In Git Bash:  
-  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, swhitch to it: 
+  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, switch to it: 
   > `git checkout main`
   > 
   >  Next, create a new branch with a suitable name - the indicator number:
   > `git checkout -b x-x-x` (-b suffix means you're creating a new branch and the checkout command automatically puts you on it after its creation)
+  >
+  > If you ever need to delete a branch you created, use the command `git branch -d x-x-x`. You may need to use capital -D if you have made any changes on that branch (it will delete the branch regardless, so only use it if you're sure it's ok to be deleted)
 
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
 4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.

@@ -1,0 +1,37 @@
+# This file is directly called by update_indicator_main.R.
+# It has to be called compile_tables.R
+# It is the control script that runs all the others.
+
+library('openxlsx')
+library('stringr')
+library('janitor')
+
+source("type_1_config.R") # pulls in all the configurations. Change to "config.R" for real update
+source("update_type_1.R") # does the donkey-work of making the csv - 
+                          # for real update this might be called e.g. 'update_1-2-1.R' 
+
+existing_files <- list.files()
+output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
+
+if (output_folder_exists == FALSE) {
+  dir.create(output_folder)
+}
+
+date <- Sys.Date()
+
+# we add the date to the output file so that old outputs are not automatically overwritten.
+# However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
+# We may want to review the decision to add date to the filename.
+csv_filename <- paste0(date, "_update_type_1.csv")
+qa_filename <- paste0(date, "_update_type_1_checks.html") 
+
+write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+
+# If you have a QA document written in Rmarkdown this is how you can run it and save it
+rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+
+message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
+               " as ", csv_filename, "and ", qa_filename, "'\n\n"))
+
+# so we end on the same directory as we started before update_indicator_main.R was run:
+setwd("..")

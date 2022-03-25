@@ -20,7 +20,7 @@
 #' get_info_cells(test_dat, first_header_row)
 #'
 #' @export
-get_info_cells <- function(dat, first_header_row) {
+get_info_cells <- function(dat, first_header_row, type="xlsx_cells") {
 
   if(type == "xlsx_cells") {
     

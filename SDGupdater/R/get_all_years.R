@@ -30,7 +30,7 @@ get_all_years <- function (variable) {
                           str_extract_all(variable, year_pattern), NA)
 
   if (is.list(years)) {
-    collapse_list_to_strings(years)
+    years <- collapse_list_to_strings(years)
   } else {
     years <- NA
   }

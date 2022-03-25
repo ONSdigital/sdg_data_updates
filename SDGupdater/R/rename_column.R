@@ -7,7 +7,7 @@
 #' with it's original name
 #'
 #' @param dat dataframe or tibble.
-#' @param pattern vector of expected string patterns in the column to be renamed
+#' @param primary vector of expected patterns in the column to be renamed
 #' @param alternate alternative pattern to pattern. Only used if pattern is unmatched
 #' @param not_pattern vector of patterns that must not be present in the column to be renamed
 #' @param new_name new name for the column

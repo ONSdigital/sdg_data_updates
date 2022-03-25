@@ -4,7 +4,7 @@
 \alias{get_info_cells}
 \title{Isolate cells above column headings}
 \usage{
-get_info_cells(dat, first_header_row)
+get_info_cells(dat, first_header_row, type = "xlsx_cells")
 }
 \arguments{
 \item{dat}{Dataframe imported using xlsx_cells where there are header cells
@@ -17,11 +17,10 @@ containing the first set of column headings.}
 Tibble containing all year and country info.
 }
 \description{
-Gets year and country info from the rows above the column headings in a
-dataframe created using xlsx_cells
-}
-\details{
-Assumes that the cell containing the year ends with the year
+Gets year and country info from the rows above the column headings.
+Can be used for data imported using xlsx_cells, without first changing it to
+a more standard format. Alternatively it can be used on a more standard
+dataframe, for example one imported with read.xlsx.
 }
 \examples{
 first_header_row <- 4

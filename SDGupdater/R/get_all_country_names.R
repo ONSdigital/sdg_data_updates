@@ -19,7 +19,7 @@
 #'
 #' @export
 get_all_country_names <- function (variable) {
-
+  
   possible_countries_vector <- c("England\ and\ Wales", "England",  "Wales", "Scotland", "Northern\ Ireland",
                                  "UK", "United\ Kingdom", "Great\ Britain", "Britain", "GB",
                                  "England\ And\ Wales", "england\ and\ wales",
@@ -31,12 +31,18 @@ get_all_country_names <- function (variable) {
                                  "ENGLAND\ AND\ WALES", "ENGLAND",  "WALES", "SCOTLAND", "NORTHERN\ IRELAND",
                                  "UNITED\ KINGDOM", "GREAT\ BRITAIN", "BRITAIN")
   possible_countries <- paste(possible_countries_vector, collapse = "|")
-
+  
   list_of_countries <- ifelse(stringr::str_detect(variable, possible_countries),
                               stringr::str_extract_all(variable, possible_countries), NA)
-
-  suppressWarnings(collapse_list_to_strings(list_of_countries))
-
+  
+  if (is.list(list_of_countries)) {
+    countries <- collapse_list_to_strings(list_of_countries)
+  } else {
+    countries <- NA
+  }
+  
+  return(countries)
+  
 }
 
 #' Warning for when multiple countries have been identified by

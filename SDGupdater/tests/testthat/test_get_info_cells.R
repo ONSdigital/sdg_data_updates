@@ -5,7 +5,6 @@ output1 <- data.frame(character = c("data for 2017", "England and", "Wales"),
                      Country = c(NA, "England", "Wales"))
 output1[] <- lapply(output1, as.character)
 
-
 input2_no_countries <- input1 %>%
   mutate(character = ifelse(character == "England and", NA,  as.character(character)),
          character = ifelse(character == "Wales", NA,  as.character(character)))
@@ -20,7 +19,11 @@ input3_no_years <- input1 %>%
   mutate(row = ifelse(row == 2, 1, row),
          row = ifelse(row == 4, 2, row))
 
-
+input4 <- data.frame(X1 = c("data for the UK, 2018", NA, "Year"), 
+                     X2 = c(NA, NA, "value"))
+output4 <- data.frame("character" = c("data for the UK, 2018", NA, NA, NA),
+                      "Year" = c("2018", NA, NA, NA),
+                      "Country" = c("UK", NA, NA, NA))
 
 test_that("get_info_cells returns expected info", {
   expect_equal(get_info_cells(input1, 4), output1)
@@ -42,3 +45,6 @@ test_that("get_info_cells returns meaningful warning when no years are found", {
                  "No years were identified in the header section of input3_no_years")
 })
 
+test_that("get_info_cells works when standard xlsx data are used", {
+  expect_equal(get_info_cells(input4, 3, "xlsx"), output4)
+})

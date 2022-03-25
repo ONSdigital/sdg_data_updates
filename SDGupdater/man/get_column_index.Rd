@@ -8,6 +8,8 @@ get_column_index(dat, pattern)
 }
 \arguments{
 \item{dat}{dataframe or tibble.}
+
+\item{pattern}{vector of strings to look for}
 }
 \value{
 index of columns matching the pattern

@@ -26,11 +26,16 @@ get_all_years <- function (variable) {
   year_pattern <- paste(c(not_preceded_by_number, four_digits_starting_19_or_20, not_followed_by_number), collapse = "")
 
 
-  list_of_years <- ifelse(str_detect(variable, year_pattern),
+  years <- ifelse(str_detect(variable, year_pattern),
                           str_extract_all(variable, year_pattern), NA)
 
-  collapse_list_to_strings(list_of_years)
+  if (is.list(years)) {
+    years <- collapse_list_to_strings(years)
+  } else {
+    years <- NA
+  }
 
+  return(years)
 }
 
 #' @rdname get_all_years

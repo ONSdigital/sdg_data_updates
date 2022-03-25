@@ -45,6 +45,7 @@ For updates done in R, the following code structure should be used:
  - Please follow the [Tidyverse style guide](https://style.tidyverse.org/package-files.html#names-1)
  - Some key points:
     - Use informative names. Make it easy on future users (including yourself), by using names that tell you what is going on. This is not easy, but worth mastering. Well named objects and functions can negate the need for comments that tell you what the code does.
+    - Use verbs for function names (and only function names)
     - Use spaces the way they would be used in a sentence (e.g. the space comes *after* the comma `[, 1]`)
     - In R, assign using `<-` not `=`
     - Comment on *why* you are doing something not *what* the code is doing. If you need to state what the code does, consider improving names and using well-named functions.
@@ -53,7 +54,7 @@ For updates done in R, the following code structure should be used:
 To edit or create automation code, you will need to have the sdg_data_repository cloned on your computer. This is essentially a local version of what is on Github. You can navigate between branches, add new files and folders, update files, and push them up to the online Github repository using either Git GUI or the command line (e.g. using Git Bash).   
   
 1) If you don’t already have one, create a folder in a local drive (I recommend using D:) to store your repositories. Call it something logical like coding_repos.
-2) You should have 2-factor authentication on you Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
+2) You should have 2-factor authentication on your Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
 3) Copy the repo to your local drive (do not use a networked drive, as this will only cause you issues!). You can do this using the command line or Git GUI:  
    
 ### Using Git Gui to clone the repo ###
@@ -83,12 +84,13 @@ To edit or create automation code, you will need to have the sdg_data_repository
 > `git clone https://github.com/ONSdigital/sdg_data_updates.git` (from the Code dropdown shown in the image above).  
 > - A pop-up will appear. The ‘password’ it asks for is the personal access token that you created in step 1.
 > - Alternatively, go to the desired directory, right-click and choose 'Git Bash here'. You can then skip the `cd D:/coding_repos` step, as Bash will open in that directory.
+> - Once you have cloned the repository, in order to access the main branch you need to navigate to the cloned folder that will now appear in your coding_repos. Use `cd sdg_data_updates`. You should now see (main) in blue colour at the end of the directory line.
 
 
 ## Setting up a new indicator automation ##
-There are several ways to move files between you local repository (on your laptop) and the online repository. All the instructions below are given for both Git GUI and Git bash, but you need only use one.  
+There are several ways to move files between your local repository (on your laptop) and the online repository. All the instructions below are given for both Git GUI and Git bash, but you need only use one.  
   
-Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists.**  
+Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists for another indicator.**  
   
 1) Fetch the most recent version of the repo from Github  
 - In Git GUI:  
@@ -103,20 +105,25 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   
 2) Create a new branch for the indicator you want to work on
 - In Git GUI:
+  > Checkout the branch you want to create the new branch from (this will usually be main)
+  > Branch > Checkout branch > seelct 'Tracking branch' then the one you want to checkout (main)
+  > 
   > Branch > Create  
   >   
-  > Name the branch with the indicator number  
+  > Name the new branch (usually with the indicator number)  
   >   
-  > Starting Revision should be set to Tracking Branch > main  
+  > Starting Revision should be set to Tracking Branch > main by default - you do not need to change this  
   >   
   > Create
   
 - In Git Bash:  
-  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, swhitch to it: 
+  > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, switch to it: 
   > `git checkout main`
   > 
   >  Next, create a new branch with a suitable name - the indicator number:
   > `git checkout -b x-x-x` (-b suffix means you're creating a new branch and the checkout command automatically puts you on it after its creation)
+  >
+  > If you ever need to delete a branch you created, use the command `git branch -d x-x-x`. You may need to use capital -D if you have made any changes on that branch (it will delete the branch regardless, so only use it if you're sure it's ok to be deleted)
 
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
 4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
@@ -200,6 +207,31 @@ Once your code has passed [review](https://best-practice-and-impact.github.io/qa
 > 
 > Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
+## Adding functions to SDGupdater 
+This section is stil in progress...  
+  
+If a function is likely to be useful for other updates, please add it to the SDGupdater package.  
+Functions **must** be fully documented (using roxygen2) and have comprehensive unit tests.  
+  
+The code below can be used to create the documentation files from the information in the function file, 
+install the package and run all unit tests:  
+```
+library(devtools)
+library(roxygen2)
+
+setwd("D:\\coding_repos\\sdg_data_updates\\SDGupdater")
+# update documentation
+document()
+
+# install the package
+setwd("..")
+install("SDGupdater")
+
+# run tests
+devtools::test("SDGupdater")
+```
+
+  
 
 
 

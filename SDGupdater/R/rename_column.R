@@ -64,7 +64,7 @@ rename_column <- function(dat, primary, alternate, not_pattern, new_name){
 #' with it's original name
 #'
 #' @param dat dataframe or tibble.
-#' @pattern vector of strings to look for
+#' @param pattern vector of strings to look for
 #'
 #' @return index of columns matching the pattern
 #'

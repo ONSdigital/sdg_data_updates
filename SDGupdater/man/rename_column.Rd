@@ -9,13 +9,13 @@ rename_column(dat, primary, alternate, not_pattern, new_name)
 \arguments{
 \item{dat}{dataframe or tibble.}
 
+\item{primary}{vector of expected patterns in the column to be renamed}
+
 \item{alternate}{alternative pattern to pattern. Only used if pattern is unmatched}
 
 \item{not_pattern}{vector of patterns that must not be present in the column to be renamed}
 
 \item{new_name}{new name for the column}
-
-\item{pattern}{vector of expected string patterns in the column to be renamed}
 }
 \value{
 dat with columns renamed

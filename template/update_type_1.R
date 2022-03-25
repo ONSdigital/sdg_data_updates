@@ -2,39 +2,6 @@
 # change the warning given when year/country isn't present
 # it currently says 1: Problem while computing `Year = get_all_years(character)`.
 # i input is of class logical but should be a list 
-get_info_cells <- function (dat, first_header_row, type="xlsx_cells") {
-  
-  
-  if(type == "xlsx_cells") {
-    
-    clean_data <- dat %>% 
-      filter(row %in% 1:(first_header_row - 1)) %>% 
-      distinct(character) %>% filter(!is.na(character)) %>% 
-      mutate(character = trimws(character, which = "both")) 
-    
-  } else { 
-    
-    above_headers <- dat[1:(first_header_row - 1), ]
-    clean_data <- data.frame(character = c(t(above_headers)))
-    
-  }
-  
-  output <- clean_data %>% 
-    mutate(Year = get_all_years(character)) %>% 
-    mutate(Country = get_all_country_names(character))
-  number_of_country_NAs <- sum(is.na(output$Country))
-  number_of_year_NAs <- sum(is.na(output$Year))
-  if (number_of_country_NAs == nrow(output)) {
-    warning(paste("No countries were identified in the header section of", 
-                  substitute(dat)))
-  }
-  if (number_of_year_NAs == nrow(output)) {
-    warning(paste("No years were identified in the header section of", 
-                  substitute(dat)))
-  }
-  return(output)
-}
-
 # author: Emma Wood
 # date: 24/03/2022
 # THIS IS A TEMPLATE NOT A WORKING SCRIPT
@@ -105,72 +72,79 @@ names(main_data) <- SDGupdater::remove_superscripts(names(main_data))
 # clean up the column names (snake case, lowercase, no trailing dots etc.)
 main_data <- clean_names(main_data)
 
+# remove footnotes -------------------------------------------------------------
+# this assumes that:
+# footnotes might only be in the number of columns stated in check_columns.
+# if the data are likely to have non-footnote data in the first column(s) but NAs
+# in all other columns DO NOT use this function as it will likely remove more 
+# than just footnotes
+
+remove_footnotes <- function(data, check_columns) {
+  
+  column_count <- ncol(data)
+  footnote_na_count <- (column_count - check_columns):column_count
+  
+  data_na_count <-  data %>% 
+    mutate(na_count = rowSums(is.na(data)))
+  
+  for (i in nrow(data_na_count):1) {
+    
+    last_row <- data_na_count[i, ]
+    
+    na_count_end_columns <- sum(is.na(last_row[, (check_columns + 1):column_count]))
+    end_columns_all_NA <- na_count_end_columns  == (column_count - check_columns)
+    
+    if (last_row$na_count %in% footnote_na_count & end_columns_all_NA) {
+      
+      data_na_count <- data_na_count[-i, ]
+      
+    } else {
+      
+      break
+    }
+    
+  }
+  return(data_na_count)
+}
+# count the number of NAs in the bottom row of data
+# if all columns are NA remove bottom row
+# if the first column is not NA, and all other columns are NA remove the bottom row
+# if the 1st and 2nd columns are not NA but the others are remove the bottom row
+# move up a row and continur until this is false
+
+remove_footnotes(main_data, 2)
+
 # make column names consistent across years ------------------------------------
 
-# If the source has a history of slight column name changes, you can use the
-# rename_column function to rename them based on patterns that are always present
-# in the column name. You can then use the new name to refer to it through the 
+# If you know a column name may change year to year you can rename these columns
+# so that the code will always work regardless of the name.
+# You can use the rename_column function to rename them based on patterns that 
+# are always present in the column name. See below for some examples of usage.
+#
+# You can then use the new name to refer to the columns through the 
 # rest of the code.
 
+# If there aren't too many columns that you are going to use you could do this 
+# step for all columns but be careful you don't introduce errors!
 
-
-
-# CONTINUE FROM HERE ###########################################################
-
-
-
-#-------------------------------------------------------------------------------
-# make column names consistent across years-------------------------------------
-
-# If you know a column name will change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# First identify the location of the column that needs to be renamed. You may be
-# able to do this based on 1) part of the column name e.g. geospatial data may have
-# column names like CTRY20CD in 2020 which become CTRY21CD in 2021. Alternatively
-# you may be able to 2) identify a column based on it's contents. e.g the year 
-# column could be identified as having a 4 digit number between 1950 and the current
-# year (which you could extract from sys.Date()) in every filled cell. (make sure
-# this is the only possible column that would fulfill the criteria)
-
-
-
-#----
-# 2) identify column based on column contents, in this example, identify year
-# based on the criteria that all cells are a number between 1950 and the current year
-source_data <- data.frame("date" = rep(c(2010:2014), 2),
-                          "age" = c(rep("20 to 24", 5,),
-                                    rep("25 to 29", 5)),
-                          "value" = rnorm(10))
-
-year_now <- as.numeric(substr(Sys.Date(), 1, 4))
-
-# get the number of entries in each column that looks like a year
-number_of_year_entries <- source_data %>% 
-  # in this case we assume the year column is read in as numeric, though you may
-  # not want to make this assumption
-  # return TRUE (read by R as a 1) if value is between 1950 and now, 
-  # or FALSE (0) if not
-  # this first mutate makes all entries of non-numeric columns 'FALSE'
-  mutate(across(where(purrr::negate(is.numeric)), ~ FALSE)) %>% 
-  # the second mutate makes a value TRUE if it is numeric and between 1950 and now
-  mutate(across(where(is.numeric), ~ .x %in% c(1950:year_now))) %>%
-  # we can then add up the number of values between 1950 and now for each column          
-  summarise(across(where(is.logical), ~ sum(.x)))
-
-# and get the location of the column with the most entries that look like a year
-year_column <- which(number_of_year_entries == max(number_of_year_entries))
-# rename the identified column
-names(source_data)[year_column] <- "year"
+renamed_main <- main_data %>% 
+  rename_column(primary = "year", new_name = "year") %>% 
+  rename_column(primary = "sex", new_name = "sex") %>% 
+  rename_column(primary = c("sample", "size"), alternate = "count", 
+                new_name = "sample_size") %>% 
+  rename_column(primary = "series", not_pattern = "a|b|c|other",
+                new_name = "d")
+  
 
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-
 
 # Join dataframes, do relevant calculations etc
-# some useful functions:
-# left_join(), right_join, add_row(), filter(), select(), group_by() %>% summarise()
-# pivot_longer(), pivot_wider()
 
+# some useful dplyr functions:
+# left_join(), right_join, 
+# add_row(), filter(), select(), group_by(), summarise()
+# pivot_longer(), pivot_wider()
 
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------

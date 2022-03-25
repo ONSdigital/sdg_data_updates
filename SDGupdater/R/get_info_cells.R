@@ -1,9 +1,9 @@
 #' Isolate cells above column headings
 #'
-#' Gets year and country info from the rows above the column headings in a
-#' dataframe created using xlsx_cells
-#'
-#' Assumes that the cell containing the year ends with the year
+#' Gets year and country info from the rows above the column headings.
+#' Can be used for data imported using xlsx_cells, without first changing it to
+#' a more standard format. Alternatively it can be used on a more standard 
+#' dataframe, for example one imported with read.xlsx. 
 #'
 #' @importFrom dplyr %>% filter distinct mutate
 #'
@@ -22,11 +22,22 @@
 #' @export
 get_info_cells <- function(dat, first_header_row) {
 
-  output <- dat %>%
-    filter(row %in% 1:(first_header_row - 1)) %>%
-    distinct(character) %>%
-    filter(!is.na(character)) %>%
-    mutate(character = trimws(character,  which = "both")) %>%
+  if(type == "xlsx_cells") {
+    
+    clean_data <- dat %>% 
+      filter(row %in% 1:(first_header_row - 1)) %>% 
+      distinct(character) %>% 
+      filter(!is.na(character)) %>% 
+      mutate(character = trimws(character, which = "both")) 
+    
+  } else { 
+    
+    above_headers <- dat[1:(first_header_row - 1), ]
+    clean_data <- data.frame(character = c(t(above_headers)))
+    
+  }
+  
+  output <- clean_data %>% 
     mutate(Year = get_all_years(character)) %>%
     mutate(Country = get_all_country_names(character))
 

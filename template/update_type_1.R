@@ -1,14 +1,21 @@
 # EMMA - EDIT THIS FUNCTION IN A NEW BRANCH
+# change the warning given when year/country isn't present
+# it currently says 1: Problem while computing `Year = get_all_years(character)`.
+# i input is of class logical but should be a list 
 get_info_cells <- function (dat, first_header_row, type="xlsx_cells") {
+  
+  
   if(type == "xlsx_cells") {
     
-    clean_data <- dat %>% filter(row %in% 1:(first_header_row - 1)) %>% 
+    clean_data <- dat %>% 
+      filter(row %in% 1:(first_header_row - 1)) %>% 
       distinct(character) %>% filter(!is.na(character)) %>% 
       mutate(character = trimws(character, which = "both")) 
     
   } else { 
     
-    clean_data <- data.frame(character = c(t(dat)))
+    above_headers <- dat[1:(first_header_row - 1), ]
+    clean_data <- data.frame(character = c(t(above_headers)))
     
   }
   
@@ -33,26 +40,26 @@ get_info_cells <- function (dat, first_header_row, type="xlsx_cells") {
 # THIS IS A TEMPLATE NOT A WORKING SCRIPT
 
 # Type 1 data is simple - one row of column headings and no row names
-# There may or may not be metadata above the column headings. Here I have assumed there is metadata
+# There may or may not be metadata above the column headings - this code allows for both scenarios
 
 # comments can be deleted in your file 
 
 setwd("template") # this line is to run the template only - do not copy
 
-# read in and do initial cleaning step -----------------------------------------
-#------
-# if column names are NOT on the first row:
+# read in data -----------------------------------------------------------------
+
+if (header_row == 1) {
+  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
+                                     sheet = tabname, 
+                                     colNames = TRUE)  
+} else {
   source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
                                      sheet = tabname, 
                                      colNames = FALSE, skipEmptyRows = FALSE) 
-#------
-# if column names ARE on the first row:
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = tabname, 
-                                     colNames = TRUE)
-#------
+}
 
-# this bit is the same, regardless of where the column names are:
+# clean the columns that contain strings ---------------------------------------
+
 clean_data <- source_data %>% 
   # change factors to characters as each level of a factor is given a number and so doesn't behave like a string
   mutate(across(where(is.factor), as.character)) %>% 
@@ -69,41 +76,34 @@ clean_data <- source_data %>%
 
 
 # separate the data from the above-table metadata ------------------------------
-# If column names are NOT in the first row of the excel file:
-# (If the column names ARE in the first row of the excel file, ignore these lines)
-data_no_headers <- clean_data[header_row:nrow(clean_data), ]
 
-# only run the following if you need the country and year info contained above the headers 
-# (it may be useful to put the details the are output in the QA file)
-metadata <- get_metadata(clean_data, header_row, "xlsx")
-year <- SDGupdater::unique_to_string(metadata$Year) # only if year is expected in the info above the header
-country <- SDGupdater::unique_to_string(metadata$Country) # only if country is expected in the info above the header
+if (header_row > 1) {
+  data_no_headers <- clean_data[(header_row + 1):nrow(clean_data), ]
+  
+  # only use the following if you need the country and year info contained above the headers 
+  # (it may be useful to put the details the are output in the QA file)
+  metadata <- get_info_cells(clean_data, header_row, "xlsx")
+  year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
+  country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
+}
 
 # clean the column names -------------------------------------------------------
-#------
-# If column names are NOT in the first row of the excel file:
-names(data_no_headers) <- clean_data[header_row - 1, ]
+
+if (header_row > 1){
+  main_data <- data_no_headers
+  names(main_data) <- clean_data[header_row, ]
+} else {
+  main_data <- clean_data
+}
 
 # remove superscripts from column names
 # DO NOT use if there are column names containing words that end 
 #   in a number: It won't usually remove a number from the end of an alphanumeric code, 
 #   but will do so if the ONLY number is at the end)
-names(clean_data) <- SDGupdater::remove_superscripts(names(clean_data)) 
+names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
 
 # clean up the column names (snake case, lowercase, no trailing dots etc.)
 main_data <- clean_names(main_data)
-
-#------
-# If the column names ARE in the first row of the excel file:
-
-# remove superscripts from column names
-# DO NOT use if there are column names containing words that end 
-#   in a number: It won't usually remove a number from the end of an alphanumeric code, 
-#   but will do so if the ONLY number is at the end)
-names(clean_data) <- SDGupdater::remove_superscripts(names(clean_data)) 
-
-# clean up the column names (snake case, lowercase, no trailing dots etc.)
-main_data <- clean_names(clean_data)
 
 # make column names consistent across years ------------------------------------
 

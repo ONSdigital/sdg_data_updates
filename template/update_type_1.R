@@ -21,6 +21,19 @@ if (header_row == 1) {
                                      colNames = FALSE, skipEmptyRows = FALSE) 
 }
 
+# # if data is in a single tab in a csv, use the following:
+# if (header_row == 1) {
+#   source_data <- read.csv(paste0(input_folder, "/", filename),
+#                           header = TRUE,
+#                           na.strings = "",
+#                           check.names = TRUE)
+# } else {
+#   source_data <- read.csv(paste0(input_folder, "/", filename),
+#                           header = FALSE,
+#                           na.strings = "")
+# }
+
+
 # clean the columns that contain strings ---------------------------------------
 
 clean_data <- source_data %>% 
@@ -30,7 +43,7 @@ clean_data <- source_data %>%
   mutate(across(where(is.character), tolower)) %>% 
   # remove all trailing white space and change multiple spaces to single spaces within the string
   mutate(across(where(is.character), str_squish)) %>% 
-  # the following lines removes superscripts
+  # the following line removes superscripts (not done earlier, to avoid running this on columns that were numeric but seen as character)
   # DO NOT USE remove_superscripts() if there are cells containing words that end 
   #   in a number that you want to keep:
   #   It won't usually remove a number from the end of an alphanumeric code, 
@@ -48,15 +61,22 @@ if (header_row > 1) {
   metadata <- get_info_cells(clean_data, header_row, "xlsx")
   year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
   country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
+
 }
 
 # clean the column names -------------------------------------------------------
 
 if (header_row > 1){
-  main_data <- data_no_headers
-  names(main_data) <- clean_data[header_row, ]
+  with_headers <- data_no_headers
+  names(with_headers) <- clean_data[header_row, ]
+
+  # if you import a csv, numbers will now be read as characters - you can rectify this here
+  # NOTE: check that data types are what you expect after running this!
+  main_data <-  with_headers %>% 
+    type.convert(as.is = TRUE) 
+  
 } else {
-  main_data <- clean_data
+  main_data <- clean_data 
 }
 
 # remove superscripts from column names
@@ -96,6 +116,8 @@ main_data <- remove_footnotes(main_data)
 renamed_main <- main_data %>% 
   rename_column(primary = "year", new_name = "year") %>% 
   rename_column(primary = "sex", new_name = "sex") %>% 
+  rename_column(primary = "age", new_name = "age") %>% 
+  rename_column(primary = "all_households", new_name = "all_households_000s") %>% 
   rename_column(primary = c("sample", "size"), alternate = "count", 
                 new_name = "sample_size") #%>%
   # # the following isn't something we want to do here, but to show how you
@@ -156,7 +178,7 @@ tidy_data <- renamed_main %>%
 age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
                         age_order = c(1:3))
 
-formatted <- tidy_data %>% 
+csv_formatted <- tidy_data %>% 
   # rename columns that need renaming
   rename(`housing type` = type) %>%
   # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
@@ -171,6 +193,7 @@ formatted <- tidy_data %>%
          sex = ifelse(sex == "All", "", sex),
          # totals should be blank, not e.g. 'all'
          `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
+         sex = ifelse(sex == "all", "", sex),
          # If value is NA give a reason for why it is blank (as below) or...
          `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
          ) %>% 
@@ -200,7 +223,7 @@ formatted <- tidy_data %>%
          value)
 
 # finally, put the column names in sentence case
-names(formatted) <- str_to_sentence(names(formatted))
+names(csv_formatted) <- str_to_sentence(names(csv_formatted))
 
 
 

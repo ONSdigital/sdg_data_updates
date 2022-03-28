@@ -40,7 +40,7 @@ Currently, only the template for type_1 is ready to use, though it does not yet 
 3. Open the sdg_data+updates R.proj project
 4. Open the relevant config, compile_tables and workhorse files. E.g. If you have type 1 data, open type_1_config.R, type_1_compile_tables.R, and update_type_1.R
 5. Run the template code bit by bit on the example data (in template > Example_input) so you can see what it does
-6. Create a folder for your indicator in the main folder (**not in the template folder**
+6. Create a folder for your indicator in the main folder (**not in the template folder**)
 7. Save the relevant template scripts in your new folder
 8. Rename them. E.g. type_1_config.R will just be example_config.R or config.R. 
 9. Create your automation from the templates! (I would start with config.R, then the workhorse, and finally compile_tables.

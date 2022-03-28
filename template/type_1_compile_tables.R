@@ -13,6 +13,9 @@ source("type_1_config.R") # pulls in all the configurations. Change to "config.R
 source("update_type_1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 
 
+# at this point you should see lots of variables appear in the global environment 
+# pane (top right). These have been created by the update_type_1 script.
+
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
 
@@ -30,8 +33,8 @@ qa_filename <- paste0(date, "_update_type_1_checks.html")
 
 write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
-# If you have a QA document written in Rmarkdown this is how you can run it and save it
-rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+# # If you have a QA document written in Rmarkdown this is how you can run it and save it
+# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

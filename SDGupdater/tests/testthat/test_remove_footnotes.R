@@ -38,14 +38,12 @@ matrix_data <- matrix(c(1,2,3, 11,12,13), nrow = 2, ncol = 3, byrow = TRUE,
 
 test_that("remove_footnotes removes rows when footnotes in first column", {
   expect_equal(remove_footnotes(footnotes_col1, 1), footnotes_col1[1:3, ])
-  expect_equal(remove_footnotes(input_2, 1), input_2[1:3, ])
 })
 
-test_that("remove_footnotes removes rows when footnotes are in the first and/or second columns", {
+test_that("remove_footnotes removes rows when footnotes are in the first and/or 
+          second columns", {
   expect_equal(remove_footnotes(footnotes_2cols), footnotes_2cols[1:3, ])
   expect_equal(remove_footnotes(footnotes_col2), footnotes_col2[1:3, ])
-  
-  
 })
 
 test_that("remove footnotes does not remove rows when lots of NAs precede the data", {
@@ -66,6 +64,11 @@ test_that("remove_footnotes gives meaningful messages if check_columns is wrong"
                "check_columns must be less than the number of columns in the dataframe")
 })
 
+test_that("remove_footnotes return original data when footnotes are in a column 
+          further right than check_column", {
+            expect_equal(remove_footnotes(footnotes_2cols, 1), footnotes_2cols)
+            expect_equal(remove_footnotes(footnotes_col2, 1), footnotes_col2)
+          })
 
 test_that("remove_footnotes doesn't remove rows if the are non-NAs after the 
           column specified by check_columns", {

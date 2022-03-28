@@ -2,20 +2,25 @@
 #'
 #' Assuming footnotes are in the first few columns, this function removes those
 #' rows, leaving only rows with data.   
-#'   
-#' remove_footnotes starts at the bottom of the dataframe and stops looking
-#' for footnotes as soon as a row that looks like a non-footnote row is 
-#' encountered.
-#'   
+
 #' Footnotes must be in one or more of the first x columns, 
 #' where x = check_columns.  
 #' If the data are likely to have non-footnote (real) data in the first x 
 #' column(s) and NAs in all other columns DO NOT use this function as it will 
 #' likely remove more than just footnotes
+#'   
+#' remove_footnotes starts at the bottom of the dataframe and stops looking
+#' for footnotes as soon as a row that looks like a non-footnote row is 
+#' encountered. Therefore, you must enter the *maximum* column number in which
+#' you expect to find footnotes. 
+#'   
 #' 
-#' @param data dataframe with footnotes in which the footnote is followed by NA cells on the same row.
-#' @param check_columns numeric. The maximum column index in which you expect there to be footnotes. Default is 2.
-#' @return data frame with footnote, and all-NA rows removed
+#' @param data dataframe with footnotes in which the footnote is followed by NA 
+#' cells on the same row.
+#' @param check_columns numeric. The maximum column index in which you expect 
+#' there to be footnotes. The default is 2.
+#' @return data frame with footnote and all-NA rows removed. If no footnotes are 
+#' identified, the original dataframe is returned.
 #'
 #' @examples
 #'

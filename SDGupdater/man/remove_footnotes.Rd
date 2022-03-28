@@ -4,12 +4,12 @@
 \alias{remove_footnotes}
 \title{Remove footnotes below table}
 \usage{
-remove_footnotes(data, check_columns)
+remove_footnotes(data, check_columns = 2)
 }
 \arguments{
-\item{data}{dataframe or tibble.}
+\item{data}{dataframe with footnotes in which the footnote is followed by NA cells on the same row.}
 
-\item{check_columns}{numeric. The maximum index in which you expect there to be footnotes}
+\item{check_columns}{numeric. The maximum column index in which you expect there to be footnotes. Default is 2.}
 }
 \value{
 data frame with footnote, and all-NA rows removed

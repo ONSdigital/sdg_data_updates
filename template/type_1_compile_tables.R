@@ -6,6 +6,9 @@ library('openxlsx')
 library('stringr')
 library('janitor')
 
+setwd("template") # this line is to run the template only - 
+                  # do not copy into your code as this is usually found in update_indicator_main.R
+
 source("type_1_config.R") # pulls in all the configurations. Change to "config.R" for real update
 source("update_type_1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 

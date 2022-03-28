@@ -7,8 +7,6 @@
 
 # Most comments can (should) be deleted in your file 
 
-setwd("template") # this line is to run the template only - do not copy
-
 # read in data -----------------------------------------------------------------
 
 if (header_row == 1) {

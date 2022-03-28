@@ -115,7 +115,9 @@ renamed_main <- main_data %>%
   rename_column(primary = "year", new_name = "year") %>% 
   rename_column(primary = "sex", new_name = "sex") %>% 
   rename_column(primary = "age", new_name = "age") %>% 
-  rename_column(primary = "all_households", new_name = "all_households_000s") %>% 
+  rename_column(primary = "all_households", 
+                not_pattern = "sample",
+                new_name = "all_households_000s") %>% 
   rename_column(primary = c("sample", "size"), alternate = "count", 
                 new_name = "sample_size") #%>%
   # # the following isn't something we want to do here, but to show how you

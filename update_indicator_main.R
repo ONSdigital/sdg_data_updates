@@ -24,7 +24,7 @@ library(SDGupdater)
 
 #----------------------------------------------------------------------------------------------
 
-indicator <- "15-1-1" # name of folder for indicator
+indicator <- "9-a-1" # name of folder for indicator
 
 setwd(indicator)
 

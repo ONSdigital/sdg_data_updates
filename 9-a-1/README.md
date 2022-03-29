@@ -1,15 +1,24 @@
-Author: Atanaska Nikolova
+Author: Atanaska Nikolova, March 2022
 
-Create csv data for 9-a-1 with disaggregation of country income group. 
+Creating csv data for 9-a-1 (Net Official Development Assistance (ODA) to infrastructure) with disaggregation of country income group. 
 
-Input data are stored in a folder named 'Example_input'. Output is saved to a folder named 'Example_output'. Currently the function needs to be run twice (once for each csv in the inputs folder), the example run code at the end of the script does that, and then binds the two results into a single output file.
+### Input files
 
-The code works, but it needs to be polished to fit with the contributing standards.
+Input data are two .ods spreadsheets from Source 1 of the indicator, which should be saved as two .csv files in a sub-folder named "Input" in the 9-a-1 folder. These two spreadsheets cover all available years (2009 to 2020 at present). They are the "Data underlying SID.ods" files from the source. The latest one should be in the primary source link, and the second one (2009-2016) should be linked in the "Other information" section of the Source tab.
 
-### Outstanding actions:
+After you first open the two .ods spreadsheets, make sure the last column (the net ODA) is formatted as numbers and extended to at least 4 decimal places. Then you can save as .csv and place in the Input folder. 
 
-- Make sure the code is working as is, and there are no bugs
-- Transform the function so it outputs a single csv, rather than having to run the function twice. This could be done using lists, and reading the two datasets as two separate arguments in the function. See 1.a.1 (currently a feature branch) for an example of how this could be done.
-- Make compatible with the contributing.md standard (e.g. have config file for the user inputs, separate code for the main function and tables compilation. See examples of finalised indicators in the main repository)
+### Running the code
+
+For the code to run, you will need to edit the example_config.R so the filename_1 and filename_2 match the names of the two .csv spreadsheets (the order is not important). You will also need to change the input_folder to be called "Input", rather than "Example_input". Then save the example_config.R script as config.R
+
+Finally, you will have to edit line 7 of compile_tables.R to say `source("config.R")`, so it reads from your newly edited config file, rather than the example one.
+
+You can then run the automation script from update_indicator_main.R (make sure you open it via sdg_data_updates.RProject) and the results should be saved in an sub-folder Output folder in the 9-a-1 folder.
+
+
+### Possible future improvements:
+
 - Currently the code is using base R, but perhaps it can be made clearer with tidyverse packages
 - Possibly integrate an automated QA
+- Include checks for the data that raise errors

@@ -32,7 +32,8 @@ training folder.
    You will find the filenames in the read_xlsx arguments in the update_indicator.R file (originally split_code.R).
 2. Still in config.R - put the tabnames in, again with meaningful names.
 3. Set the input_folder name to whatever you want it to be (usually "Input" or "Example_Input")
-4. Set the output_folder name to whatever you want it to be (usually "Output" or "Example_Output")
+4. Set the output_folder name to whatever you want it to be (usually "Output" or "Example_Output")  
+**NOTE**: You can delete header_row as it is not relevant for this indicator
 ---
 5. Go to update_indicator.R and replace the hard-coded filename with a filepath (Hint: use paste0() to create a filepath from input_folder and the filename.
 6. Replace the tabnames with the object you created for the tabname in config.R

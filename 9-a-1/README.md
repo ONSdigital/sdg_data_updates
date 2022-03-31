@@ -10,11 +10,9 @@ After you first open the two .ods spreadsheets, make sure the last column (the n
 
 ### Running the code
 
-For the code to run, you will need to edit the example_config.R so the filename_1 and filename_2 match the names of the two .csv spreadsheets (the order is not important). You will also need to change the input_folder to be called "Input", rather than "Example_input". Then save the example_config.R script as config.R
+For the code to run, you will need to edit the example_config.R so the filename_1 and filename_2 match the names of the two .csv spreadsheets (the order is not important) in the Input folder. You will also need to create that Input folder in the 9-a-1 folder. Then save the example_config.R script as config.R (otherwise the script work work)
 
-Finally, you will have to edit line 7 of compile_tables.R to say `source("config.R")`, so it reads from your newly edited config file, rather than the example one.
-
-You can then run the automation script from update_indicator_main.R (make sure you open it via sdg_data_updates.RProject) and the results should be saved in an sub-folder Output folder in the 9-a-1 folder.
+You can then run the automation script from update_indicator_main.R (make sure you open it via sdg_data_updates.RProject) and the results should be saved in an sub-folder called Output in the 9-a-1 folder.
 
 
 ### Possible future improvements:

@@ -8,5 +8,5 @@ filename_1 <- "data-underlying-sid-2017.csv"
 filename_2 <- "dataunderSID-Final2020.csv"
 
 # The folder name may need changing to Input instead of Example_input for the real data
-input_folder  <- "Example_input"
+input_folder  <- "Input"
 output_folder <- "Output"

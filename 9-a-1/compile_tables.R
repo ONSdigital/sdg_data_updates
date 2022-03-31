@@ -4,13 +4,13 @@
 
 
 
-source("example_config.R") # pulls in all the configurations
+source("config.R") # pulls in all the configurations
 source("update_9-a-1.R") # does the donkey-work of making the csv
 
 # Using the sourced function, we run it on the two input files to get the final data for formatting
-ind_9_a_1_200916 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0("./Example_input/", filename_1),
+ind_9_a_1_200916 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0(input_folder, "/", filename_1),
                                                              header=TRUE)) 
-ind_9_a_1_201720 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0("./Example_input/", filename_2),
+ind_9_a_1_201720 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0(input_folder, "/", filename_2),
                                                              header=TRUE))
 
 

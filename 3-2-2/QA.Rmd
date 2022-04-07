@@ -251,15 +251,19 @@ datatable(wide_data,
                            className = 'dt-center', targets = 0:3))))
 ```
 
-For country and sex the rate for late neonatal deaths is calculated as 
-'neonatal death rate - early neonatal death rate' where the count of 
-late neonatal deaths is greater than 3. There are two reasons we don't use the 
-same calculation as is done for birthweight and age of mother:  
-1. Early neonatal death rate is not available for birthweight and age of mother    
-2. For Northern Ireland the number of live births *doesn't* include non-residents,
+For most disaggregations late neonatal rate (where the count of 
+late neonatal deaths is 3 or greater) is calculated as:  
+(number of neonatal deaths - number of early neonatal deaths) /  
+(number of live births / 1000)  
+However, where country of occurrence is Northern Ireland, 
+the rate for late neonatal deaths is calculated as 
+'neonatal death rate - early neonatal death rate' (where the count of 
+late neonatal deaths is 3 or greater). the number of live births *doesn't* include non-residents,
 but the number of deaths *does* include non-residents. The published rates use number of 
-live births including non-residents so that the numerator and denominator are comparable.
-
+live births including non-residents so that the numerator and denominator are comparable.  
+The reason I haven't used this simpler calculation for all disaggregations is twofold:  
+1. The former calculation is more precise because of rounding in the rates  
+2. Early neonatal death rate is not available for birthweight by age of mother    
 
 
 ## Plots
@@ -276,13 +280,11 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
     TRUE ~ as.character(Region)),
     Value = round(Value, decimal_places),
     dataset = "current") %>% 
-  rename(Birthweight = Birth.weight,
-         `Health board` = Health.Board,
-         # `Unit measure` = Unit.measure,
+  rename(Birthweight = Birthweight..grams.,
+         `Country of birth` = Country.of.birth,
          `Unit multiplier` = Unit.multiplier,
-         `Observation status` = Observation.status) %>% 
-  filter(`Health board` == "") %>% 
-  select(-`Health board`) 
+         `Neonatal period` = Neonatal.period,
+         `Observation status` = Observation.status) 
 
 csv_data <- csv_data %>% 
   mutate(Year = year) %>% 
@@ -316,9 +318,7 @@ age_plot <- all_data %>%
            Sex == "" &
            Birthweight == "" &
            Age != "Not stated" &
-           ((Country == "England and Wales linked deaths" & dataset == "new")| 
-              (Country == "England and Wales" & dataset == "current") ) &
-           (`Country of birth` == "" | is.na(`Country of birth`))) %>% 
+           (Country == "England and Wales" & Age != "")) %>% 
   ggplot(data = .,
        aes(x = Year,
            y = Value)) +
@@ -348,7 +348,7 @@ region_plot <- all_data %>%
   filter(Birthweight == "" &
            Sex == "" &
            Age == "" &
-           Country == "England" &
+           Country == "England" & Region != "" &
            (`Country of birth` == "" | is.na(`Country of birth`))) %>% 
   ggplot(data = .,
        aes(x = Year,

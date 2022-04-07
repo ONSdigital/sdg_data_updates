@@ -1,3 +1,18 @@
+# functions: move to SDGupdater if useful for more indicators:
+
+# This function looks for all the words given in `pattern` vector to identify which
+# column to rename, and then renames that column with `new_name`
+name_columns <- function(dat, pattern, new_name){
+  
+  column_location <- which(apply(sapply(pattern, grepl, 
+                                        names(dat)), 1, all) == TRUE)
+  names(dat)[column_location] <- new_name
+  return(dat)
+  
+}
+
+#-------------------------------------------------------------------------------
+
 source("config.R")
 
 # filename <- SDGupdater::ask_user_for_filename(input_folder)
@@ -6,12 +21,22 @@ if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
 }
 
-source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                  sheets = c(england_and_wales_timeseries_tab_name,
-                                             area_of_residence_tab_name,
-                                             birthweight_by_mum_age_tab_name,
-                                             country_of_occurrence_by_sex_tab_name,
-                                             country_of_birth_tab_name))
+# datasets after 2018 use an extra tab for England and Wales headline figure
+# so there are two options here
+if(england_and_wales_timeseries_tab_name == "NA"){
+  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                    sheets = c(area_of_residence_tab_name,
+                                               birthweight_by_mum_age_tab_name,
+                                               country_of_occurrence_by_sex_tab_name,
+                                               country_of_birth_tab_name))
+} else {
+  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                    sheets = c(england_and_wales_timeseries_tab_name, 
+                                               area_of_residence_tab_name,
+                                               birthweight_by_mum_age_tab_name,
+                                               country_of_occurrence_by_sex_tab_name,
+                                               country_of_birth_tab_name))
+}
 
 source("region.R")
 source("birthweight_by_mum_age.R")
@@ -56,11 +81,20 @@ bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_country_by_sex,
                                  clean_csv_data_country_of_birth)
 
+years <- as.numeric(as.character(unique(bound_tables$Year)))
+
+if(max(years, na.rm = TRUE) >= 2018){
+
 # in tables prior to 2018, the England and Wales figure that is comparable to 
 # other 'country of occurrence' countries is in table 2. 
 # In 2018 and 2019 table 2 does not include this figure, so need to get it from table 1.
 # This is where 'england_and_wales.R' will be sourced when we know what format the table will settle in
 # as it needs to take 'year' from bound_tables
+source("england_and_wales.R")
+
+  bound_tables <- dplyr::bind_rows(bound_tables, 
+                                   clean_csv_data_england_and_wales)
+}
 
 csv_data <- bound_tables %>%
   dplyr::left_join(age_order, by = "Age") %>% 
@@ -74,6 +108,25 @@ csv_data <- bound_tables %>%
   dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
+# Remove low reliability disaggregations ---------------------------------------
+# I have decided to remove some disaggregations due to large numbers of rates 
+# with low reliability. Someone may wish to reverse this decision in the future.
+# If so, this next block (up to the dashed line) can just be commented out.
+
+final_csv <- csv_data %>% 
+  mutate(remove = case_when(
+    Age != "" & Birthweight != "" ~ TRUE,
+    Sex != "" & `Neonatal period` == "Late neonatal" & 
+      Country %in% c("Northern Ireland", "Scotland", "Wales") ~ TRUE,
+    TRUE ~ FALSE # this line makes all other cases FALSE
+  )) %>% 
+  filter(remove == FALSE) %>% 
+  select(-remove)
+
+csv_data <- final_csv 
+
+
+#-------------------------------------------------------------------------------
 
 no_value_rows <- csv_data %>%
   dplyr::filter(is.na(Value))
@@ -83,10 +136,10 @@ year <- SDGupdater::unique_to_string(SDGupdater::get_all_years(csv_data$Year))
 
 # Don't want to overwrite an Output folder that already exists, or depend on the user having remembered to create an Output folder themselves
 existing_files <- list.files()
-output_folder_exists <- ifelse("Output" %in% existing_files, TRUE, FALSE)
+output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
 
 if (output_folder_exists == FALSE) {
-  dir.create("Output")
+  dir.create(output_folder)
 }
 
 date_time <- Sys.time()

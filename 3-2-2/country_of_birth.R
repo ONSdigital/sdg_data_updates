@@ -52,24 +52,19 @@ data_for_calculations <- clean_data %>%
                      values_from = numeric)
 
 # rename columns so they are the same each year --------------------------------
-neonatal_rate_patterns <- c("Rates", "Neo")
-live_births_patterns <- c("Live")
-early_neonatal_numbers_patterns <- c("Numbers", "Early")
-neonatal_numbers_patterns <- c("Numbers", "Neo", "Deaths")
 
-neonatal_rate_column <- which(apply(sapply(neonatal_rate_patterns, grepl, 
-                                           names(data_for_calculations)), 1, all) == TRUE)
-live_births_column <- which(apply(sapply(live_births_patterns, grepl, 
-                                         names(data_for_calculations)), 1, all) == TRUE)
-early_neonatal_numbers_column <- which(apply(sapply(early_neonatal_numbers_patterns, grepl, 
-                                                    names(data_for_calculations)), 1, all) == TRUE)
-neonatal_numbers_column <- which(apply(sapply(neonatal_numbers_patterns, grepl, 
-                                              names(data_for_calculations)), 1, all) == TRUE)
-
-names(data_for_calculations)[neonatal_rate_column] <- "Neonatal_rate"
-names(data_for_calculations)[live_births_column] <- "number_live_births"
-names(data_for_calculations)[early_neonatal_numbers_column] <- "number_early_neonatal_deaths"
-names(data_for_calculations)[neonatal_numbers_column] <- "number_neonatal_deaths"
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Rates", "Neo"),
+                                      "Neonatal_rate")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Live"),
+                                      "number_live_births")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Numbers", "Early"),
+                                      "number_early_neonatal_deaths")
+data_for_calculations <- name_columns(data_for_calculations, 
+                                      c("Numbers", "Neo", "Deaths"),
+                                      "number_neonatal_deaths")
 #-------------------------------------------------------------------------------
 
 calculations_country_of_birth <- data_for_calculations %>%
@@ -125,7 +120,7 @@ clean_csv_data_country_of_birth <- data_in_csv_format %>%
                   mother_country == "Other/Not stated" ~ "Other/Not stated",
                   TRUE ~ paste0("Born in ", mother_country)
                 ),
-                mother_country = str_replace(mother_country, "and", "or"),
+                # mother_country = str_replace(mother_country, "and", "or"),
                 mother_country = str_replace(mother_country, "United Kingdom", "UK")) %>% 
   dplyr::rename(`Neonatal period` = Neonatal_period,
                 `Country of birth` = mother_country) %>%

@@ -1,11 +1,9 @@
 # Author: Atanaska Nikolova (October 2021)
-# function and code to get data for part a) for indicator 15.a.1 and duplicate 15.b.1
+# function code to get data for part a) for indicator 15.a.1 and duplicate 15.b.1
 # Part a) is Official development assistance on conservation and sustainable use of biodiversity
 # the function takes arguments data_underlying_SID (as a csv file)
-# output is year x income group (DAC classification) breakdown of gross ODA (AmountExtended variable)
+# output is year x country income group (DAC classification) breakdown of gross ODA (AmountExtended variable)
 
-
-# main function
 
 ODA_15.a.1 <- function(data_underlying_SID){
   CRScode <- 41030
@@ -16,28 +14,28 @@ ODA_15.a.1 <- function(data_underlying_SID){
   
   biodiversity <- aggregate(data_underlying_SID$GrossODA,
                             by = list(Year = data_underlying_SID$Year, 
-                                      IncomeGroup = data_underlying_SID$IncomeGroup,
+                                      `Country income classification` = data_underlying_SID$IncomeGroup,
                                       CRS_code = data_underlying_SID$SectorPurposeCode.CRScode. == CRScode), 
                             FUN = sum)
   biodiversity <- biodiversity[biodiversity$CRS_code == TRUE,]
   biodiversity <- biodiversity[ , -3]
   
-  colnames(biodiversity)[3] <- "ODA(?thousands)"
+  colnames(biodiversity)[3] <- "Value"
   
   # grouping up income group that doesn't follow official DAC into "Undefined" for consistency
-  biodiversity[(biodiversity$IncomeGroup == "0" | biodiversity$IncomeGroup == "Part I unallocated by income"),
-               "IncomeGroup"] <- "Unspecified"
+  biodiversity[(biodiversity$`Country income classification` == "0" | biodiversity$`Country income classification` == "Part I unallocated by income"),
+               "Country income classification"] <- "Unspecified"
   # adding totals to the headline and combine with the final table
-  headline <- aggregate(biodiversity$`ODA(?thousands)`, 
+  headline <- aggregate(biodiversity$`Value`, 
                         by=list(Year = biodiversity$Year),
                         FUN = sum)
-  colnames(headline)[2] <- "ODA(?thousands)"
-  headline$IncomeGroup <- ""
+  colnames(headline)[2] <- "Value"
+  headline$`Country income classification` <- ""
   
   biodiversity <- rbind(biodiversity,headline)
   
   # divide by 1000 to get millions instead of thousands (will change the col name after)
-  biodiversity$`ODA(?thousands)` <- biodiversity$`ODA(?thousands)` / 1000
+  biodiversity$`Value` <- biodiversity$`Value` / 1000
   
   return(biodiversity)
 }

@@ -1,7 +1,7 @@
 Author: Atanaska Nikolova (October 2021)
 
 Code to get csv output for part a) for indicator 15.a.1 and duplicate 15.b.1
-Part a) is Official development assistance on conservation and sustainable use of biodiversity
+Part a) is Official development assistance on conservation and sustainable use of biodiversity. Note that the code does not include part b) of the indicator, which is currently done manually (so the rows associated with that will have to be added to the csv output manually).
 
 ### Input files
 
@@ -21,3 +21,4 @@ You can then run the automation script from update_indicator_main.R (make sure y
 - Currently the code is using base R, but perhaps it can be made clearer with tidyverse packages
 - Possibly integrate an automated QA
 - Include checks for the data that raise errors
+- Automate the whole indicator (including part b)

@@ -13,20 +13,20 @@ if (output_folder_exists == FALSE) {
   dir.create("Output")
 }
 
-csv_formatted <- ODA_15.a.1(data_underlying_SID = read.csv(paste0(getwd(),"/",input_folder,"/",filename), 
+first_input_file <- ODA_15.a.1(data_underlying_SID = read.csv(paste0(getwd(),"/",input_folder,"/",filename_1), 
                                                            header=T))
-csv_formatted$Units <- "GBP (Â£ Millions)"
+second_input_file <- ODA_15.a.1(data_underlying_SID = read.csv(paste0(getwd(),"/",input_folder,"/",filename_2), 
+                                                              header=T))
+csv_formatted <- rbind(first_input_file, second_input_file)
+csv_formatted$Units <- "GBP (£ Millions)"
 csv_formatted$Series <- "Total official development assistance for biodiversity, by recipient countries"
-csv_formatted$UnitMeasure <- "GBP"
 csv_formatted$UnitMultiplier <- "Millions"
 csv_formatted$ObservationStatus <- "Normal value"
-csv_formatted <- csv_formatted[order(csv_formatted$IncomeGroup), ]
 
-# reordering columns so they match with csv spreadsheet for indicator
-csv_formatted <- csv_formatted[, c(1, 4, 5, 2, 6, 7, 8, 3)]
-colnames(csv_formatted) <- c("Year",	"Units",	"Series", 
-                             "Country income classification",	"Unit measure",	
-                             "Unit multiplier",	"Observation status",	"Value")
+#reordering the columns to make compatible with csv ordering
+csv_formatted <- csv_formatted[, c(1, 5, 2, 4, 6, 7, 3)]
+csv_formatted <- csv_formatted[order(csv_formatted$Year, csv_formatted$`Country income classification`), ]
+
 
 date <- Sys.Date()
 csv_filename <- paste0(date, "_15.a.1a_15.b.1a.csv")

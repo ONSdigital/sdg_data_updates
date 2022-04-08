@@ -18,7 +18,7 @@ After you first open the two .ods spreadsheets, make sure the last column (the n
 - From the files box (bottom right panel) open the update_indicator_main.R script
 - Make sure `indicator <- "9-a-1"`
 - Run the automation by clicking the Source button towards the top right of the script window 
-- The results should be saved in an sub-folder called Output in the 9-a-1 folder, and there should be a message confirming the name and location of the output csv. You may get some warning messages about packages, but as longas tyou get the message that the csv has been saved in the Output folder, it should be fine.
+- The results should be saved in an sub-folder called Output in the 9-a-1 folder, and there should be a message confirming the name and location of the output csv. You may get some warning messages about packages, but as long as you get the message that the csv has been saved in the Output folder, it should be fine.
 
 
 ### Possible future improvements:

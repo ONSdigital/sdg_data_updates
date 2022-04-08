@@ -22,7 +22,7 @@ library(stringr)
 
 library(SDGupdater)
 
-#----------------------------------------------------------------------------------------------
+
 
 indicator <- "9-a-1" # name of folder for indicator
 

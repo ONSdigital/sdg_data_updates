@@ -1,13 +1,13 @@
 Author: Atanaska Nikolova (October 2021)
 
-Code to get csv output for part a) for indicator 15.a.1 and duplicate 15.b.1
-Part a) is Official development assistance on conservation and sustainable use of biodiversity. Note that the code does not include part b) of the indicator, which is currently done manually (so the rows associated with that will have to be added to the csv output manually).
+Code to get csv output for **part a)** for indicator 15.a.1 and duplicate 15.b.1
+Part a) is Official development assistance on conservation and sustainable use of biodiversity. Part b of this indicator is currently done manually, so it will have to be appended to the output csv.
 
 ### Input files
 
 Input data are two .ods spreadsheets from Source 1 of the indicator, which should be saved as two .csv files in an input sub-folder in the 15-a-1_and_15-b-1a folder. These two spreadsheets cover all available years (2009 to 2020 at present). They are the "Data underlying SID.ods" files from the source. The latest one should be in the primary source link, and the second one (2009-2016) should be linked in the "Other information" section of the Source tab.
 
-After you first open the two .ods spreadsheets, make sure the one but last column (the gross ODA, called "AmountExtended") is formatted as numbers and extended to at least 4 decimal places. Then you can save as .csv and place in the Input folder. 
+After you first open the two .ods spreadsheets, make sure the third from last column (the gross ODA, called "AmountExtended") is formatted as numbers and extended to at least 4 decimal places. Then you can save as .csv and place in the Input folder. 
 
 ### Running the code
 

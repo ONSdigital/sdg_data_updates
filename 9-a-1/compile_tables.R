@@ -7,16 +7,15 @@
 source("config.R") # pulls in all the configurations
 source("update_9-a-1.R") # does the donkey-work of making the csv
 
-# Using the sourced function, we run it on the two input files to get the final data for formatting
-ind_9_a_1_200916 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0(input_folder, "/", filename_1),
-                                                             header=TRUE)) 
-ind_9_a_1_201720 <- ODA_9.a.1(data_underlying_SID = read.csv(paste0(input_folder, "/", filename_2),
-                                                             header=TRUE))
+first_file <- read.csv(paste0(getwd(), "/", input_folder, "/", filename_1), header = TRUE)
+second_file <- read.csv(paste0(getwd(), "/", input_folder, "/", filename_2), header = TRUE)
 
+# Using the sourced function ODA_9.a.1, we run it on the two input files to get the final data 
+infrastructure_values_file_1 <- ODA_9.a.1(data_underlying_SID = first_file)
+infrastructure_values_file_2 <- ODA_9.a.1(data_underlying_SID = second_file)
 
-csv_formatted <- rbind(ind_9_a_1_200916, ind_9_a_1_201720) 
+csv_formatted <- rbind(infrastructure_values_file_1, infrastructure_values_file_2)
 csv_formatted <- csv_formatted[order(csv_formatted$`Country income classification`),]
-
 
 
 existing_files <- list.files()
@@ -34,7 +33,6 @@ date <- Sys.Date()
 csv_filename <- paste0(date, "_update_9-a-1.csv")
 
 write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-
 
 message(paste0("The csv file has been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename))

@@ -9,7 +9,7 @@
 ODA_9.a.1 <- function(data_underlying_SID){
   colnames(data_underlying_SID)[ncol(data_underlying_SID)] <- "ODA"
   
-  # Renaming the SIDsector column to have a consistent name 
+  # Renaming the SIDsector rows to have a consistent name 
   # because it differs slightly between the two csv spreadsheets
   rows_to_rename <- which(grepl("Economic Infrastructure",data_underlying_SID$SIDsector))
   data_underlying_SID$SIDsector[rows_to_rename] <- "Economic Infrastructure" 
@@ -24,8 +24,10 @@ ODA_9.a.1 <- function(data_underlying_SID){
                               FUN = sum)
   infrastructure <- infrastructure[infrastructure$SID_sector == TRUE,]
   infrastructure[infrastructure$SID_sector == TRUE,"SID_sector"] <- "Economic Infrastructure and Services"
-  colnames(infrastructure)[4] <- "Value"
-  infrastructure[(infrastructure$IncomeGroup == "0" | infrastructure$IncomeGroup == "Part I unallocated by income"),
+  colnames(infrastructure)[which(names(infrastructure) == "x")] <- "Value"
+  infrastructure[(infrastructure$IncomeGroup 
+                  == "0" | infrastructure$IncomeGroup 
+                  == "Part I unallocated by income"),
                  "IncomeGroup"] <- "Unspecified"
   
   headline<-aggregate(infrastructure$Value,
@@ -34,13 +36,13 @@ ODA_9.a.1 <- function(data_underlying_SID){
   headline$IncomeGroup <- ""
   headline$SID_sector <- "Economic Infrastructure and Services"
   headline$Value <- headline$x
-  headline <- headline[,-2]
+  headline <- headline[, -2]
   
   infrastructure <- rbind(infrastructure, headline)
   infrastructure$`Observation status` <- "Definition differs"
   infrastructure$`Unit multiplier` <- "Thousands"
   names(infrastructure)[names(infrastructure) == 'IncomeGroup'] <- 'Country income classification'
-  infrastructure$Units <- "GBP (£ thousands)"
+  infrastructure$Units <- "GBP (Â£ thousands)"
   
   # we don't need the SID sector column anymore, so removing it
   infrastructure <- infrastructure[,-3]

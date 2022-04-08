@@ -12,7 +12,8 @@ After you first open the two .ods spreadsheets, make sure the last column (the n
 
 #### Running the code
 
-- Edit the example_config.R so the `filename_1` and `filename_2` variables match the names of the two .csv spreadsheets (the order is not important) in the Input folder. R scripts can be edited throug RStudio or they can be opened with Notepad or Notepad++
+- Edit the example_config.R so the `filename_1` and `filename_2` variables match the names of the two .csv spreadsheets (the order is not important) in the Input folder. R scripts can be edited through RStudio or they can be opened with Notepad or Notepad++
+- Also edit the assignment of the `input_folder` so it says `"Input"`, rather than `"Example_input"` (unless you want to run the code on the example input files)
 - Save the edited example_config.R script as config.R
 - Open RStudio (if you haven't already), navigate to File -> Open Project... and open the sdg_data_updates.Rproj located in the sdg_data_updates folder
 - From the files box (bottom right panel) open the update_indicator_main.R script

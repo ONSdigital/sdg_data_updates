@@ -22,3 +22,4 @@ You can then run the automation script from update_indicator_main.R (make sure y
 - Possibly integrate an automated QA
 - Include checks for the data that raise errors
 - Automate the whole indicator (including part b)
+- Remove the internal function in `update_15.a.1a_15.b.1a.R` - the code doesn't need to be hosted in a function

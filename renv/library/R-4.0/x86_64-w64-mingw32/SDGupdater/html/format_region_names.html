@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Format region names</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for format_region_names {SDGupdater}"><tr><td>format_region_names {SDGupdater}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Format region names</h2>
+
+<h3>Description</h3>
+
+<p>Corrects the capitalisation of region names, and corrects East
+of England to East (which is standard for charts and tables).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+format_region_names(variable)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>Character vector of region names</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character vector. Function overwrites region variable with correct
+capitalisation.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+test_dat &lt;- tibble(Region = c("YORKSHIRE AND THE HUMBER", "EAST OF ENGLAND", "The shire"))
+test_dat %&gt;% mutate(Region = format_region_names(Region))
+
+test_var &lt;- c("YORKSHIRE AND THE HUMBER", "EAST OF ENGLAND", "The shire")
+Region &lt;- format_region_names(test_var)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>SDGupdater</em> version 0.0.0.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

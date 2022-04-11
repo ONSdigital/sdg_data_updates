@@ -15,7 +15,10 @@ area_source_data <- read.csv(paste0(input_folder, "/", area_filename)) %>%
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), toupper))
 
-# get relevant area data (of all land)
+#---- get relevant area data (of all land) ----#
+# The name of the columns containing country names and codes will change depending on the year. 
+# We therefore need to identify these columns and give them a standard name that 
+#  we can refer to in the code, without having to change it every year:
 country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
                           substr(names(area_source_data), 7, 8) == "NM")
 country_code_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
@@ -24,48 +27,57 @@ area_data <- area_source_data
 names(area_data)[country_column] <- "Country"
 names(area_data)[country_code_column] <- "Geocode"
 
-relevant_area_data <- select(area_data, Geocode, Country, AREALHECT) %>% 
-  add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) %>% 
-  mutate()
+country_and_UK_areas <- area_data %>% 
+  select(Geocode, Country, AREALHECT) %>% 
+  add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) 
 
-# get woodland area data (of all woodland)
+#---- get woodland area data (of all woodland)----#
+# The column names (headers) for the woodland data are not in the first row,
+#  as there is metadata above the data.
+# The row the headers are in may differ for different years, so we identify
+#  which row they are in, using a column name we know will always exist
 header_row_woodland <- which(woodland_source_data$X1 == "YEAR")
 
-woodland_data_with_header <- woodland_source_data
+woodland_data_with_headers <- woodland_source_data
+names(woodland_data_with_headers) <- woodland_data_with_headers[header_row_woodland, ]
 
-names(woodland_data_with_header) <- woodland_data_with_header[header_row_woodland, ]
-
-woodland_data <- woodland_data_with_header %>% 
-  mutate(Year_entry = grepl('[0-9][0-9][0-9][0-9]',
+woodland_metadata_removed <- woodland_data_with_headers %>% 
+  # Identify metadata rows by using the year column. 
+  # We know year should have 4 numbers as the first 4 characters, 
+  # so if it doesn't it isn't a data entry.
+  mutate(keep = grepl('[0-9][0-9][0-9][0-9]',
                             substr(YEAR, 1, 4)))%>% 
-  filter(Year_entry == TRUE) %>% 
-  select(-Year_entry) %>% 
+  filter(keep == TRUE) %>% 
+  select(-keep) 
+
+woodland_data_tidy <- woodland_metadata_removed %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
                values_to = "woodland_area") 
 
 
-# get certified woodland area data 
+#---- get certified woodland area data ----#
 header_row_certified <- which(certified_source_data$X1 == "YEAR")
 
-certified_data_with_header <- certified_source_data
+certified_data_with_headers <- certified_source_data
+names(certified_data_with_headers) <- certified_data_with_headers[header_row_certified, ]
 
-names(certified_data_with_header) <- certified_data_with_header[header_row_certified, ]
-
-certified_data <- certified_data_with_header %>% 
-  mutate(Year_entry = grepl('[0-9][0-9][0-9][0-9]',
+certified_metadata_removed <- certified_data_with_headers %>% 
+  mutate(keep = grepl('[0-9][0-9][0-9][0-9]',
                             substr(YEAR, 5, 9))) %>% 
   mutate(YEAR = substr(YEAR, 5, 9)) %>% 
-  filter(Year_entry == TRUE) %>% 
-  select(-Year_entry) %>% 
+  filter(keep == TRUE) %>% 
+  select(-keep)  
+
+certified_data_tidy <- certified_metadata_removed %>% 
   pivot_longer(-YEAR,
                names_to = "Country",
                values_to = "certified_area") 
 
-# join data and do calculations
-all_data <- woodland_data %>% 
-  left_join(certified_data, by = c("YEAR", "Country")) %>% 
-  left_join(relevant_area_data, by = "Country") %>% 
+#--- combine data and create csv ----#
+all_data <- woodland_data_tidy %>% 
+  left_join(certified_data_tidy, by = c("YEAR", "Country")) %>% 
+  left_join(country_and_UK_areas, by = "Country") %>% 
   mutate(YEAR = as.numeric(YEAR),
          AREALHECT = as.numeric(AREALHECT),
          woodland_area = as.numeric(woodland_area),
@@ -90,6 +102,8 @@ csv_formatted <- indicator_data %>%
     `Sustainably managed status` == "non_certified_proportion" ~ "Non-certified"),
     Country = ifelse(Country == "UK", "", Country)) %>% 
   mutate(Country = str_to_title(Country)) %>% 
+  # NI had a different method for calculating the area of non-certified woodland area before 2013, 
+  #  so we need to get rid of rows that are impacted by that different methodology
   mutate(different_method = ifelse((Country == "Northern Ireland" | Country == "") & 
                                      YEAR < 2013 & 
                                      `Sustainably managed status` %in% c("", "Non-certified"),
@@ -104,7 +118,3 @@ csv_formatted <- indicator_data %>%
   select(Year, Country, `Sustainably managed status`, 
          `Observation status`, `Unit measure`, `Unit multiplier`,
          Value)
-    
-
-  
-

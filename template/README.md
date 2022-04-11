@@ -34,6 +34,10 @@ Currently, only the template for type_1 is ready to use, though it does not yet 
 #### Type 3: Excel file with headers hidden in a data column
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
   
+#### Type 4: Nomis
+  
+#### Type 5: ONS CDID 
+
 ### Instructions
 1. Identify which type is closest to the data you want to write an automation for.
 2. Open RStudio

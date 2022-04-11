@@ -11,8 +11,8 @@
 
 # setwd("D:/Coding_repos/sdg_data_updates")
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
-
 rm(list = ls())
+
 
 library(tidyr)
 library(dplyr)
@@ -22,7 +22,9 @@ library(stringr)
 
 library(SDGupdater)
 
+
 indicator <- "15-a-1_and_15-b-1a" # name of folder for indicator
+
 
 setwd(indicator)
 

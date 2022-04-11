@@ -1,0 +1,645 @@
+"Year","Occupation minor group","Occupation unit group","Country","Region","GeoCode","Observation status","Value"
+"2019","221 Health Professionals","","","","K02000001","Normal Value",85.4831279584966
+"2020","221 Health Professionals","","","","K02000001","Normal Value",91.4115563228905
+"2019","222 Therapy Professionals","","","","K02000001","Normal Value",30.4056449883899
+"2020","222 Therapy Professionals","","","","K02000001","Normal Value",33.0792960666168
+"2019","223 Nursing and Midwifery Professionals","","","","K02000001","Normal Value",106.741629132063
+"2020","223 Nursing and Midwifery Professionals","","","","K02000001","Normal Value",100.60935969067
+"2019","321 Health Associate Professionals","","","","K02000001","Normal Value",24.8514872874088
+"2020","321 Health Associate Professionals","","","","K02000001","Normal Value",26.7735086686092
+"2019","221 Health Professionals","2211 Medical practitioners","","","K02000001","Normal Value",44.3733785059516
+"2020","221 Health Professionals","2211 Medical practitioners","","","K02000001","Normal Value",47.7331708000482
+"2019","221 Health Professionals","2212 Psychologists","","","K02000001","Normal Value",5.32959606886599
+"2020","221 Health Professionals","2212 Psychologists","","","K02000001","Normal Value",5.05357429769405
+"2019","221 Health Professionals","2213 Pharmacists","","","K02000001","Normal Value",10.4496012810912
+"2020","221 Health Professionals","2213 Pharmacists","","","K02000001","Normal Value",10.9270500301172
+"2019","221 Health Professionals","2214 Ophthalmic opticians","","","K02000001","Normal Value",2.66479803443299
+"2020","221 Health Professionals","2214 Ophthalmic opticians","","","K02000001","Normal Value",3.56284441636837
+"2019","221 Health Professionals","2215 Dental practitioners","","","K02000001","Normal Value",6.13801794448049
+"2020","221 Health Professionals","2215 Dental practitioners","","","K02000001","Normal Value",7.27476182086931
+"2019","221 Health Professionals","2217 Medical radiographers","","","K02000001","Normal Value",5.07509288580216
+"2020","221 Health Professionals","2217 Medical radiographers","","","K02000001","Normal Value",4.97903780362776
+"2019","221 Health Professionals","2218 Podiatrists","","","K02000001","Normal Value",1.81146383239546
+"2020","221 Health Professionals","2218 Podiatrists","","","K02000001","Normal Value",2.11683643148246
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","","","K02000001","Normal Value",9.61123785452799
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","","","K02000001","Normal Value",9.76428072268319
+"2019","222 Therapy Professionals","2221 Physiotherapists","","","K02000001","Normal Value",10.9286660962701
+"2020","222 Therapy Professionals","2221 Physiotherapists","","","K02000001","Normal Value",11.5680638790873
+"2019","222 Therapy Professionals","2222 Occupational therapists","","","K02000001","Normal Value",7.08117679936408
+"2020","222 Therapy Professionals","2222 Occupational therapists","","","K02000001","Normal Value",7.27476182086931
+"2019","222 Therapy Professionals","2223 Speech and language therapists","","","K02000001","Normal Value",2.99415509486853
+"2020","222 Therapy Professionals","2223 Speech and language therapists","","","K02000001","Normal Value",3.35414223298277
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","","","K02000001","Normal Value",9.38667622241285
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","","","K02000001","Normal Value",10.8674208348642
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","","","K02000001","Normal Value",100.049692495032
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","","","K02000001","Normal Value",93.6178365472526
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","","","K02000001","Normal Value",6.67696586155683
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","","","K02000001","Normal Value",6.99152314341743
+"2019","321 Health Associate Professionals","3213 Paramedics","","","K02000001","Normal Value",4.25170023471332
+"2020","321 Health Associate Professionals","3213 Paramedics","","","K02000001","Normal Value",5.1728326882001
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","","","K02000001","Normal Value",1.30245746626781
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","","","K02000001","Normal Value",1.80378315640407
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","","","K02000001","Normal Value",4.94035590653308
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","","","K02000001","Normal Value",4.42746774753726
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","","","K02000001","Normal Value",6.28772569922392
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","","","K02000001","Normal Value",6.94680124697766
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","","","K02000001","Normal Value",8.06924798067069
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","","","K02000001","Normal Value",8.42262382949008
+"2019","221 Health Professionals","","England","","E92000001","Normal Value",83.7671801112162
+"2020","221 Health Professionals","","England","","E92000001","Normal Value",89.8494712780365
+"2019","222 Therapy Professionals","","England","","E92000001","Normal Value",30.5754648931926
+"2020","222 Therapy Professionals","","England","","E92000001","Normal Value",33.4393525264253
+"2019","223 Nursing and Midwifery Professionals","","England","","E92000001","Normal Value",102.847975750547
+"2020","223 Nursing and Midwifery Professionals","","England","","E92000001","Normal Value",98.3198308021812
+"2019","321 Health Associate Professionals","","England","","E92000001","Normal Value",25.2633998129691
+"2020","321 Health Associate Professionals","","England","","E92000001","Normal Value",27.1086871618244
+"2019","221 Health Professionals","2211 Medical practitioners","England","","E92000001","Normal Value",43.349293631255
+"2020","221 Health Professionals","2211 Medical practitioners","England","","E92000001","Normal Value",47.2147388924144
+"2019","221 Health Professionals","2212 Psychologists","England","","E92000001","Normal Value",5.578556639432
+"2020","221 Health Professionals","2212 Psychologists","England","","E92000001","Normal Value",5.12819261378283
+"2019","221 Health Professionals","2213 Pharmacists","England","","E92000001","Normal Value",10.0023165222937
+"2020","221 Health Professionals","2213 Pharmacists","England","","E92000001","Normal Value",9.90271677144271
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","","E92000001","Normal Value",2.36289182498234
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","","E92000001","Normal Value",3.51900113842339
+"2019","221 Health Professionals","2215 Dental practitioners","England","","E92000001","Normal Value",6.41356352495208
+"2020","221 Health Professionals","2215 Dental practitioners","England","","E92000001","Normal Value",7.21483650490826
+"2019","221 Health Professionals","2217 Medical radiographers","England","","E92000001","Normal Value",5.06333962496216
+"2020","221 Health Professionals","2217 Medical radiographers","England","","E92000001","Normal Value",5.0397754997521
+"2019","221 Health Professionals","2218 Podiatrists","England","","E92000001","Normal Value",1.75884429077633
+"2020","221 Health Professionals","2218 Podiatrists","England","","E92000001","Normal Value",2.12201073673772
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","","E92000001","Normal Value",9.25614015650978
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","","E92000001","Normal Value",9.69051569776894
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","","E92000001","Normal Value",10.6241301604469
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","","E92000001","Normal Value",11.6710590520575
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","","E92000001","Normal Value",6.91101443547467
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","","E92000001","Normal Value",6.61360012949924
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","","E92000001","Normal Value",3.09130208681901
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","","E92000001","Normal Value",3.41290060158651
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","","E92000001","Normal Value",9.96678431439921
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","","E92000001","Normal Value",11.7417927432821
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","","E92000001","Normal Value",96.0080257308615
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","","E92000001","Normal Value",91.0873108744668
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","","E92000001","Normal Value",6.83995001968573
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","","E92000001","Normal Value",7.23251992771441
+"2019","321 Health Associate Professionals","3213 Paramedics","England","","E92000001","Normal Value",4.26386494733656
+"2020","321 Health Associate Professionals","3213 Paramedics","England","","E92000001","Normal Value",5.32271026465046
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","","E92000001","Normal Value",1.35022389998991
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","","E92000001","Normal Value",1.85675939464551
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","","E92000001","Normal Value",5.02780741706769
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","","E92000001","Normal Value",3.97877013138323
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","","E92000001","Normal Value",6.52016014863549
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","","E92000001","Normal Value",7.16178623648982
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","","E92000001","Normal Value",8.10134339993946
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","","E92000001","Normal Value",8.78866113465541
+"2019","221 Health Professionals","","England","East","E12000006","Normal Value",81.3011780492592
+"2020","221 Health Professionals","","England","East","E12000006","Normal Value",68.7492313564766
+"2019","222 Therapy Professionals","","England","East","E12000006","Normal Value",30.3075397461736
+"2020","222 Therapy Professionals","","England","East","E12000006","Normal Value",29.5095308606686
+"2019","223 Nursing and Midwifery Professionals","","England","East","E12000006","Normal Value",94.6108383610709
+"2020","223 Nursing and Midwifery Professionals","","England","East","E12000006","Normal Value",92.8353889778872
+"2019","321 Health Associate Professionals","","England","East","E12000006","Normal Value",32.2318279840258
+"2020","321 Health Associate Professionals","","England","East","E12000006","Normal Value",31.5831735697967
+"2019","221 Health Professionals","2211 Medical practitioners","England","East","E12000006","Normal Value",39.7686235822806
+"2020","221 Health Professionals","2211 Medical practitioners","England","East","E12000006","Normal Value",35.889969965678
+"2019","221 Health Professionals","2212 Psychologists","England","East","E12000006","Normal Value",7.21608089194608
+"2020","221 Health Professionals","2212 Psychologists","England","East","E12000006","Normal Value",5.26386226163278
+"2019","221 Health Professionals","2213 Pharmacists","England","East","E12000006","Normal Value",9.30072648295273
+"2020","221 Health Professionals","2213 Pharmacists","England","East","E12000006","Normal Value",7.33750497076084
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","East","E12000006","Normal Value",1.1225014720805
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","East","E12000006","Normal Value",2.2331536867533
+"2019","221 Health Professionals","2215 Dental practitioners","England","East","E12000006","Normal Value",8.49893971718094
+"2020","221 Health Professionals","2215 Dental practitioners","England","East","E12000006","Normal Value",3.34973053012995
+"2019","221 Health Professionals","2217 Medical radiographers","England","East","E12000006","Normal Value",4.65036324147637
+"2020","221 Health Professionals","2217 Medical radiographers","England","East","E12000006","Normal Value",6.06141714975896
+"2019","221 Health Professionals","2218 Podiatrists","England","East","E12000006","Normal Value",1.76393088469793
+"2020","221 Health Professionals","2218 Podiatrists","England","East","E12000006","Normal Value",0.797554888126178
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","East","E12000006","Normal Value",8.98001177664402
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","East","E12000006","Normal Value",7.33750497076084
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","East","E12000006","Normal Value",9.30072648295273
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","East","E12000006","Normal Value",7.65652692601131
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","East","E12000006","Normal Value",3.36750441624151
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","East","E12000006","Normal Value",6.06141714975896
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","East","E12000006","Normal Value",3.52786176939586
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","East","E12000006","Normal Value",2.71168661962901
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","East","E12000006","Normal Value",14.1114470775835
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","East","E12000006","Normal Value",12.9203891876441
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","East","E12000006","Normal Value",88.837973647514
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","East","E12000006","Normal Value",86.7739718281282
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","East","E12000006","Normal Value",5.77286471355687
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","East","E12000006","Normal Value",6.06141714975896
+"2019","321 Health Associate Professionals","3213 Paramedics","England","East","E12000006","Normal Value",7.05572353879173
+"2020","321 Health Associate Professionals","3213 Paramedics","England","East","E12000006","Normal Value",9.09212572463843
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","East","E12000006","Normal Value",1.76393088469793
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","East","E12000006","Normal Value",0.797554888126178
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","East","E12000006","Normal Value",9.46108383610709
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","East","E12000006","Normal Value",3.82826346300566
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","East","E12000006","Normal Value",4.00893382885894
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","East","E12000006","Normal Value",7.1779939931356
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","East","E12000006","Normal Value",9.7817985424158
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","East","E12000006","Normal Value",10.846746478516
+"2019","221 Health Professionals","","England","East Midlands","E12000004","Normal Value",70.3070848035785
+"2020","221 Health Professionals","","England","East Midlands","E12000004","Normal Value",76.2498553616288
+"2019","222 Therapy Professionals","","England","East Midlands","E12000004","Normal Value",15.5089157654953
+"2020","222 Therapy Professionals","","England","East Midlands","E12000004","Normal Value",23.6353999099389
+"2019","223 Nursing and Midwifery Professionals","","England","East Midlands","E12000004","Normal Value",100.084203073329
+"2020","223 Nursing and Midwifery Professionals","","England","East Midlands","E12000004","Normal Value",90.8421457408085
+"2019","321 Health Associate Professionals","","England","East Midlands","E12000004","Normal Value",29.7771182697509
+"2020","321 Health Associate Professionals","","England","East Midlands","E12000004","Normal Value",29.1845807583593
+"2019","221 Health Professionals","2211 Medical practitioners","England","East Midlands","E12000004","Normal Value",37.6349689242685
+"2020","221 Health Professionals","2211 Medical practitioners","England","East Midlands","E12000004","Normal Value",33.5006103071307
+"2019","221 Health Professionals","2212 Psychologists","England","East Midlands","E12000004","Normal Value",1.24071326123962
+"2020","221 Health Professionals","2212 Psychologists","England","East Midlands","E12000004","Normal Value",2.67182781590613
+"2019","221 Health Professionals","2213 Pharmacists","England","East Midlands","E12000004","Normal Value",6.20356630619811
+"2020","221 Health Professionals","2213 Pharmacists","England","East Midlands","E12000004","Normal Value",8.01548344771839
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","East Midlands","E12000004","Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)",NA
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","East Midlands","E12000004","Normal Value",2.87735303251429
+"2019","221 Health Professionals","2215 Dental practitioners","England","East Midlands","E12000004","Normal Value",8.89177837221729
+"2020","221 Health Professionals","2215 Dental practitioners","England","East Midlands","E12000004","Normal Value",12.1259877798817
+"2019","221 Health Professionals","2217 Medical radiographers","England","East Midlands","E12000004","Normal Value",8.06463619805754
+"2020","221 Health Professionals","2217 Medical radiographers","England","East Midlands","E12000004","Normal Value",4.72707998198777
+"2019","221 Health Professionals","2218 Podiatrists","England","East Midlands","E12000004","Estimate is less than 500",NA
+"2020","221 Health Professionals","2218 Podiatrists","England","East Midlands","E12000004","Normal Value",3.08287824912246
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","East Midlands","E12000004","Normal Value",7.44427956743773
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","East Midlands","E12000004","Normal Value",9.24863474736738
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","East Midlands","E12000004","Normal Value",8.06463619805754
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","East Midlands","E12000004","Normal Value",12.7425634297062
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","East Midlands","E12000004","Estimate is less than 500",NA
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","East Midlands","E12000004","Normal Value",3.90497911555511
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","East Midlands","E12000004","Normal Value",3.10178315309905
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","East Midlands","E12000004","Normal Value",4.31602954877144
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","East Midlands","E12000004","Normal Value",3.72213978371886
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","East Midlands","E12000004","Normal Value",2.87735303251429
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","East Midlands","E12000004","Normal Value",93.2602801365116
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","East Midlands","E12000004","Normal Value",83.2377127263064
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","East Midlands","E12000004","Normal Value",7.03070848035785
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","East Midlands","E12000004","Normal Value",7.60443301450206
+"2019","321 Health Associate Professionals","3213 Paramedics","England","East Midlands","E12000004","Normal Value",3.10178315309905
+"2020","321 Health Associate Professionals","3213 Paramedics","England","East Midlands","E12000004","Normal Value",3.69945389894695
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","East Midlands","E12000004","Normal Value",1.86106989185943
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","East Midlands","E12000004","Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)",NA
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","East Midlands","E12000004","Normal Value",8.89177837221729
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","East Midlands","E12000004","Normal Value",4.52155476537961
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","East Midlands","E12000004","Normal Value",9.5121350028371
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","East Midlands","E12000004","Normal Value",9.6596851805837
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","East Midlands","E12000004","Normal Value",6.61713739327798
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","East Midlands","E12000004","Normal Value",11.5094121300572
+"2019","221 Health Professionals","","England","London","E12000007","Normal Value",99.754641519868
+"2020","221 Health Professionals","","England","London","E12000007","Normal Value",136.962137577967
+"2019","222 Therapy Professionals","","England","London","E12000007","Normal Value",37.7148420958785
+"2020","222 Therapy Professionals","","England","London","E12000007","Normal Value",32.9908798545469
+"2019","223 Nursing and Midwifery Professionals","","England","London","E12000007","Normal Value",84.1331092908059
+"2020","223 Nursing and Midwifery Professionals","","England","London","E12000007","Normal Value",88.5310816298783
+"2019","321 Health Associate Professionals","","England","London","E12000007","Normal Value",17.4068501980978
+"2020","321 Health Associate Professionals","","England","London","E12000007","Normal Value",29.1030657302737
+"2019","221 Health Professionals","2211 Medical practitioners","England","London","E12000007","Normal Value",50.5468149983224
+"2020","221 Health Professionals","2211 Medical practitioners","England","London","E12000007","Normal Value",75.6457548180014
+"2019","221 Health Professionals","2212 Psychologists","England","London","E12000007","Normal Value",9.03817221824307
+"2020","221 Health Professionals","2212 Psychologists","England","London","E12000007","Normal Value",11.219120758617
+"2019","221 Health Professionals","2213 Pharmacists","England","London","E12000007","Normal Value",13.0551376485733
+"2020","221 Health Professionals","2213 Pharmacists","England","London","E12000007","Normal Value",14.5515328651368
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","London","E12000007","Normal Value",3.23588881887715
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","London","E12000007","Normal Value",5.88726138818513
+"2019","221 Health Professionals","2215 Dental practitioners","England","London","E12000007","Normal Value",7.47601899533686
+"2020","221 Health Professionals","2215 Dental practitioners","England","London","E12000007","Normal Value",12.3299247941236
+"2019","221 Health Professionals","2217 Medical radiographers","England","London","E12000007","Normal Value",4.5748772956539
+"2020","221 Health Professionals","2217 Medical radiographers","England","London","E12000007","Normal Value",6.44266340593845
+"2019","221 Health Professionals","2218 Podiatrists","England","London","E12000007","Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)",NA
+"2020","221 Health Professionals","2218 Podiatrists","England","London","E12000007","Normal Value",0.888643228405303
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","London","E12000007","Normal Value",11.8277315448613
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","London","E12000007","Normal Value",9.99723631955966
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","London","E12000007","Normal Value",15.1752027368032
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","London","E12000007","Normal Value",9.55291470535701
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","London","E12000007","Normal Value",7.69918374146632
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","London","E12000007","Normal Value",5.10969856333049
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","London","E12000007","Normal Value",2.00848271516513
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","London","E12000007","Normal Value",3.33241210651989
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","London","E12000007","Normal Value",12.9435552755086
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","London","E12000007","Normal Value",15.2180152864408
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","London","E12000007","Normal Value",75.0949370725628
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","London","E12000007","Normal Value",81.8662574168386
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","London","E12000007","Normal Value",9.03817221824307
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","London","E12000007","Normal Value",6.66482421303977
+"2019","321 Health Associate Professionals","3213 Paramedics","England","London","E12000007","Normal Value",2.34322983435931
+"2020","321 Health Associate Professionals","3213 Paramedics","England","London","E12000007","Normal Value",6.8869850201411
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","London","E12000007","Normal Value",1.33898847677675
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","London","E12000007","Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)",NA
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","London","E12000007","Normal Value",1.78531796903567
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","London","E12000007","Normal Value",2.22160807101326
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","London","E12000007","Normal Value",7.14127187614267
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","London","E12000007","Normal Value",7.44238703789441
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","London","E12000007","Normal Value",4.90962441484809
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","London","E12000007","Normal Value",12.5520856012249
+"2019","221 Health Professionals","","England","North East","E12000001","Normal Value",83.8969849895559
+"2020","221 Health Professionals","","England","North East","E12000001","Normal Value",99.5985098272395
+"2019","222 Therapy Professionals","","England","North East","E12000001","Normal Value",23.9705671398731
+"2020","222 Therapy Professionals","","England","North East","E12000001","Normal Value",36.1837282892967
+"2019","223 Nursing and Midwifery Professionals","","England","North East","E12000001","Normal Value",123.22369670341
+"2020","223 Nursing and Midwifery Professionals","","England","North East","E12000001","Normal Value",126.829563075885
+"2019","321 Health Associate Professionals","","England","North East","E12000001","Normal Value",26.2178078092362
+"2020","321 Health Associate Professionals","","England","North East","E12000001","Normal Value",30.9613345155838
+"2019","221 Health Professionals","2211 Medical practitioners","England","North East","E12000001","Normal Value",41.948492494778
+"2020","221 Health Professionals","2211 Medical practitioners","England","North East","E12000001","Normal Value",40.2870376829283
+"2019","221 Health Professionals","2212 Psychologists","England","North East","E12000001","Normal Value",4.86902145028673
+"2020","221 Health Professionals","2212 Psychologists","England","North East","E12000001","Normal Value",3.73028126693781
+"2019","221 Health Professionals","2213 Pharmacists","England","North East","E12000001","Normal Value",13.1089039046181
+"2020","221 Health Professionals","2213 Pharmacists","England","North East","E12000001","Normal Value",19.3974625880766
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","North East","E12000001","Normal Value",2.99632089248414
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","North East","E12000001","Normal Value",6.34147815379427
+"2019","221 Health Professionals","2215 Dental practitioners","England","North East","E12000001","Normal Value",3.74540111560518
+"2020","221 Health Professionals","2215 Dental practitioners","England","North East","E12000001","Normal Value",6.34147815379427
+"2019","221 Health Professionals","2217 Medical radiographers","England","North East","E12000001","Normal Value",5.24356156184725
+"2020","221 Health Professionals","2217 Medical radiographers","England","North East","E12000001","Normal Value",7.46056253387562
+"2019","221 Health Professionals","2218 Podiatrists","England","North East","E12000001","Normal Value",1.87270055780259
+"2020","221 Health Professionals","2218 Podiatrists","England","North East","E12000001","Normal Value",4.47633752032537
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","North East","E12000001","Normal Value",10.112583012134
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","North East","E12000001","Normal Value",11.5638719275072
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","North East","E12000001","Normal Value",6.3671818965288
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","North East","E12000001","Normal Value",9.6987312940383
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","North East","E12000001","Normal Value",3.74540111560518
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","North East","E12000001","Normal Value",11.5638719275072
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","North East","E12000001","Normal Value",4.86902145028673
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","North East","E12000001","Normal Value",4.84936564701915
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","North East","E12000001","Normal Value",8.98896267745242
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","North East","E12000001","Normal Value",9.32570316734452
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","North East","E12000001","Normal Value",112.736573579716
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","North East","E12000001","Normal Value",118.622944288622
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","North East","E12000001","Normal Value",10.4871231236945
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","North East","E12000001","Normal Value",8.20661878726318
+"2019","321 Health Associate Professionals","3213 Paramedics","England","North East","E12000001","Normal Value",10.112583012134
+"2020","321 Health Associate Professionals","3213 Paramedics","England","North East","E12000001","Normal Value",8.95267504065074
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","North East","E12000001","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","North East","E12000001","Estimate is less than 500",NA
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","North East","E12000001","Normal Value",3.74540111560518
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","North East","E12000001","Normal Value",7.8335906605694
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","North East","E12000001","Normal Value",5.24356156184725
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","North East","E12000001","Normal Value",4.84936564701915
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","North East","E12000001","Normal Value",6.3671818965288
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","North East","E12000001","Normal Value",7.8335906605694
+"2019","221 Health Professionals","","England","North West","E12000002","Normal Value",94.6712225092478
+"2020","221 Health Professionals","","England","North West","E12000002","Normal Value",79.4032567008205
+"2019","222 Therapy Professionals","","England","North West","E12000002","Normal Value",37.8684890036991
+"2020","222 Therapy Professionals","","England","North West","E12000002","Normal Value",35.8332645624215
+"2019","223 Nursing and Midwifery Professionals","","England","North West","E12000002","Normal Value",117.147124256048
+"2020","223 Nursing and Midwifery Professionals","","England","North West","E12000002","Normal Value",107.635525750001
+"2019","321 Health Associate Professionals","","England","North West","E12000002","Normal Value",22.6121193331441
+"2020","321 Health Associate Professionals","","England","North West","E12000002","Normal Value",23.7531109788779
+"2019","221 Health Professionals","2211 Medical practitioners","England","North West","E12000002","Normal Value",52.0351179835002
+"2020","221 Health Professionals","2211 Medical practitioners","England","North West","E12000002","Normal Value",46.2846333931278
+"2019","221 Health Professionals","2212 Psychologists","England","North West","E12000002","Normal Value",4.90383310839269
+"2020","221 Health Professionals","2212 Psychologists","England","North West","E12000002","Normal Value",1.76451681557379
+"2019","221 Health Professionals","2213 Pharmacists","England","North West","E12000002","Normal Value",12.8044531163587
+"2020","221 Health Professionals","2213 Pharmacists","England","North West","E12000002","Normal Value",8.6868520151325
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","North West","E12000002","Normal Value",3.67787483129452
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","North West","E12000002","Normal Value",3.12183744293824
+"2019","221 Health Professionals","2215 Dental practitioners","England","North West","E12000002","Normal Value",8.03683759431025
+"2020","221 Health Professionals","2215 Dental practitioners","England","North West","E12000002","Normal Value",8.14392376418671
+"2019","221 Health Professionals","2217 Medical radiographers","England","North West","E12000002","Normal Value",4.22274517667149
+"2020","221 Health Professionals","2217 Medical radiographers","England","North West","E12000002","Normal Value",4.61489013303914
+"2019","221 Health Professionals","2218 Podiatrists","England","North West","E12000002","Normal Value",3.54165724495028
+"2020","221 Health Professionals","2218 Podiatrists","England","North West","E12000002","Normal Value",1.62878475283734
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","North West","E12000002","Normal Value",5.31248586742542
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","North West","E12000002","Normal Value",5.29355044672136
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","North West","E12000002","Normal Value",14.1666289798011
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","North West","E12000002","Normal Value",15.8806513401641
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","North West","E12000002","Normal Value",9.12657828506418
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","North West","E12000002","Normal Value",4.61489013303914
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","North West","E12000002","Normal Value",3.950310003983
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","North West","E12000002","Normal Value",2.7146412547289
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","North West","E12000002","Normal Value",10.4887541485066
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","North West","E12000002","Normal Value",12.7588138972259
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","North West","E12000002","Normal Value",111.017332870557
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","North West","E12000002","Normal Value",100.170262299497
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","North West","E12000002","Normal Value",6.12979138549086
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","North West","E12000002","Normal Value",7.46526345050449
+"2019","321 Health Associate Professionals","3213 Paramedics","England","North West","E12000002","Normal Value",5.31248586742542
+"2020","321 Health Associate Professionals","3213 Paramedics","England","North West","E12000002","Normal Value",2.9861053802018
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","North West","E12000002","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","North West","E12000002","Normal Value",2.03598094104668
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","North West","E12000002","Normal Value",5.17626828108118
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","North West","E12000002","Normal Value",2.30744506651957
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","North West","E12000002","Normal Value",7.2195320762448
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","North West","E12000002","Normal Value",7.1937993250316
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","North West","E12000002","Normal Value",4.22274517667149
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","North West","E12000002","Normal Value",9.22978026607828
+"2019","221 Health Professionals","","England","South East","E12000008","Normal Value",65.5763776894348
+"2020","221 Health Professionals","","England","South East","E12000008","Normal Value",82.4539600412921
+"2019","222 Therapy Professionals","","England","South East","E12000008","Normal Value",31.6988802452252
+"2020","222 Therapy Professionals","","England","South East","E12000008","Normal Value",36.6703138078378
+"2019","223 Nursing and Midwifery Professionals","","England","South East","E12000008","Normal Value",91.7197840772494
+"2020","223 Nursing and Midwifery Professionals","","England","South East","E12000008","Normal Value",92.218244783024
+"2019","321 Health Associate Professionals","","England","South East","E12000008","Normal Value",24.4005126286269
+"2020","321 Health Associate Professionals","","England","South East","E12000008","Normal Value",23.2172992747849
+"2019","221 Health Professionals","2211 Medical practitioners","England","South East","E12000008","Normal Value",28.9756087464945
+"2020","221 Health Professionals","2211 Medical practitioners","England","South East","E12000008","Normal Value",38.6231707561842
+"2019","221 Health Professionals","2212 Psychologists","England","South East","E12000008","Normal Value",6.86264417680132
+"2020","221 Health Professionals","2212 Psychologists","England","South East","E12000008","Normal Value",5.64158673966735
+"2019","221 Health Professionals","2213 Pharmacists","England","South East","E12000008","Normal Value",8.49660707603973
+"2020","221 Health Professionals","2213 Pharmacists","England","South East","E12000008","Normal Value",11.5001575847065
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","South East","E12000008","Normal Value",2.396478918883
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","South East","E12000008","Normal Value",3.90571389669278
+"2019","221 Health Professionals","2215 Dental practitioners","England","South East","E12000008","Normal Value",4.03044181812141
+"2020","221 Health Professionals","2215 Dental practitioners","England","South East","E12000008","Normal Value",6.40103110846873
+"2019","221 Health Professionals","2217 Medical radiographers","England","South East","E12000008","Normal Value",5.44654299746137
+"2020","221 Health Professionals","2217 Medical radiographers","England","South East","E12000008","Normal Value",4.01420594937869
+"2019","221 Health Professionals","2218 Podiatrists","England","South East","E12000008","Normal Value",1.08930859949227
+"2020","221 Health Professionals","2218 Podiatrists","England","South East","E12000008","Normal Value",2.60380926446186
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","South East","E12000008","Normal Value",8.27874535614128
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","South East","E12000008","Normal Value",9.76428474173196
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","South East","E12000008","Normal Value",9.91270825537969
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","South East","E12000008","Normal Value",10.5237291105333
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","South East","E12000008","Normal Value",10.4573625551258
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","South East","E12000008","Normal Value",8.78785626755876
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","South East","E12000008","Normal Value",3.5947183783245
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","South East","E12000008","Normal Value",4.1226980020646
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","South East","E12000008","Normal Value",7.73409105639514
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","South East","E12000008","Normal Value",13.2360304276811
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","South East","E12000008","Normal Value",86.1643102198388
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","South East","E12000008","Normal Value",83.755864673523
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","South East","E12000008","Normal Value",5.55547385741059
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","South East","E12000008","Normal Value",8.46238010950103
+"2019","321 Health Associate Professionals","3213 Paramedics","England","South East","E12000008","Normal Value",1.63396289923841
+"2020","321 Health Associate Professionals","3213 Paramedics","England","South East","E12000008","Normal Value",3.47174568594914
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","South East","E12000008","Normal Value",1.1982394594415
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","South East","E12000008","Normal Value",3.0377774752055
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","South East","E12000008","Normal Value",3.48578751837527
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","South East","E12000008","Normal Value",3.36325363326323
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","South East","E12000008","Normal Value",5.22868127756291
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","South East","E12000008","Normal Value",7.05198342458419
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","South East","E12000008","Normal Value",12.9627723339581
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","South East","E12000008","Normal Value",6.29253905578282
+"2019","221 Health Professionals","","England","South West","E12000009","Normal Value",88.0047561681556
+"2020","221 Health Professionals","","England","South West","E12000009","Normal Value",78.9872247440999
+"2019","222 Therapy Professionals","","England","South West","E12000009","Normal Value",32.8906664466844
+"2020","222 Therapy Professionals","","England","South West","E12000009","Normal Value",34.9876297524201
+"2019","223 Nursing and Midwifery Professionals","","England","South West","E12000009","Normal Value",103.116683995011
+"2020","223 Nursing and Midwifery Professionals","","England","South West","E12000009","Normal Value",95.0673980141516
+"2019","321 Health Associate Professionals","","England","South West","E12000009","Normal Value",31.4683673570981
+"2020","321 Health Associate Professionals","","England","South West","E12000009","Normal Value",34.1041037485711
+"2019","221 Health Professionals","2211 Medical practitioners","England","South West","E12000009","Normal Value",47.6470195011428
+"2020","221 Health Professionals","2211 Medical practitioners","England","South West","E12000009","Normal Value",39.0518493701255
+"2019","221 Health Professionals","2212 Psychologists","England","South West","E12000009","Normal Value",4.62247204115565
+"2020","221 Health Professionals","2212 Psychologists","England","South West","E12000009","Normal Value",6.36138722771275
+"2019","221 Health Professionals","2213 Pharmacists","England","South West","E12000009","Normal Value",7.28928283413006
+"2020","221 Health Professionals","2213 Pharmacists","England","South West","E12000009","Normal Value",4.41763001924496
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","South West","E12000009","Normal Value",1.42229908958635
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","South West","E12000009","Normal Value",1.23693640538859
+"2019","221 Health Professionals","2215 Dental practitioners","England","South West","E12000009","Normal Value",7.28928283413006
+"2020","221 Health Professionals","2215 Dental practitioners","England","South West","E12000009","Normal Value",5.30115602309396
+"2019","221 Health Professionals","2217 Medical radiographers","England","South West","E12000009","Normal Value",4.62247204115565
+"2020","221 Health Professionals","2217 Medical radiographers","England","South West","E12000009","Normal Value",5.30115602309396
+"2019","221 Health Professionals","2218 Podiatrists","England","South West","E12000009","Normal Value",4.44468465495735
+"2020","221 Health Professionals","2218 Podiatrists","England","South West","E12000009","Normal Value",5.83127162540335
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","South West","E12000009","Normal Value",10.3116683995011
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","South West","E12000009","Normal Value",11.4858380500369
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","South West","E12000009","Normal Value",11.0228179442942
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","South West","E12000009","Normal Value",13.4295952585047
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","South West","E12000009","Normal Value",6.93370806173347
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","South West","E12000009","Normal Value",4.59433522001476
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","South West","E12000009","Normal Value",0.888936930991471
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","South West","E12000009","Normal Value",3.35739881462617
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","South West","E12000009","Normal Value",14.0452035096652
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","South West","E12000009","Normal Value",13.6063004592745
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","South West","E12000009","Normal Value",96.8941254780703
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","South West","E12000009","Normal Value",89.0594211879785
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","South West","E12000009","Normal Value",6.22255851694029
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","South West","E12000009","Normal Value",6.00797682617315
+"2019","321 Health Associate Professionals","3213 Paramedics","England","South West","E12000009","Normal Value",4.97804681355223
+"2020","321 Health Associate Professionals","3213 Paramedics","England","South West","E12000009","Normal Value",5.65456642463355
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","South West","E12000009","Normal Value",2.84459817917271
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","South West","E12000009","Normal Value",5.47786122386375
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","South West","E12000009","Normal Value",5.33362158594882
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","South West","E12000009","Normal Value",4.77104042078456
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","South West","E12000009","Normal Value",5.68919635834541
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","South West","E12000009","Normal Value",11.4858380500369
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","South West","E12000009","Normal Value",12.6229044200789
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","South West","E12000009","Normal Value",6.71479762925235
+"2019","221 Health Professionals","","England","West Midlands","E12000005","Normal Value",79.5411285773917
+"2020","221 Health Professionals","","England","West Midlands","E12000005","Normal Value",86.5491689015418
+"2019","222 Therapy Professionals","","England","West Midlands","E12000005","Normal Value",24.0982656495064
+"2020","222 Therapy Professionals","","England","West Midlands","E12000005","Normal Value",32.7075347593036
+"2019","223 Nursing and Midwifery Professionals","","England","West Midlands","E12000005","Normal Value",119.143173525881
+"2020","223 Nursing and Midwifery Professionals","","England","West Midlands","E12000005","Normal Value",107.683268284476
+"2019","321 Health Associate Professionals","","England","West Midlands","E12000005","Normal Value",27.9742104742522
+"2020","321 Health Associate Professionals","","England","West Midlands","E12000005","Normal Value",25.8305659124756
+"2019","221 Health Professionals","2211 Medical practitioners","England","West Midlands","E12000005","Normal Value",45.5002218557114
+"2020","221 Health Professionals","2211 Medical practitioners","England","West Midlands","E12000005","Normal Value",53.506172247271
+"2019","221 Health Professionals","2212 Psychologists","England","West Midlands","E12000005","Normal Value",3.20186746392043
+"2020","221 Health Professionals","2212 Psychologists","England","West Midlands","E12000005","Normal Value",2.34823326477051
+"2019","221 Health Professionals","2213 Pharmacists","England","West Midlands","E12000005","Normal Value",8.08892832990425
+"2020","221 Health Professionals","2213 Pharmacists","England","West Midlands","E12000005","Normal Value",7.54789263676236
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","West Midlands","E12000005","Normal Value",2.69630944330141
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","West Midlands","E12000005","Normal Value",3.18688800218855
+"2019","221 Health Professionals","2215 Dental practitioners","England","West Midlands","E12000005","Normal Value",3.70742548453945
+"2020","221 Health Professionals","2215 Dental practitioners","England","West Midlands","E12000005","Normal Value",3.52234989715577
+"2019","221 Health Professionals","2217 Medical radiographers","England","West Midlands","E12000005","Normal Value",5.05558020619015
+"2020","221 Health Professionals","2217 Medical radiographers","England","West Midlands","E12000005","Normal Value",5.36739031947546
+"2019","221 Health Professionals","2218 Podiatrists","England","West Midlands","E12000005","Normal Value",1.85371274226972
+"2020","221 Health Professionals","2218 Podiatrists","England","West Midlands","E12000005","Normal Value",1.17411663238526
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","West Midlands","E12000005","Normal Value",9.43708305155495
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","West Midlands","E12000005","Normal Value",10.2315877965001
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","West Midlands","E12000005","Normal Value",6.5722542680472
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","West Midlands","E12000005","Normal Value",10.3993187439837
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","West Midlands","E12000005","Normal Value",6.06669624742818
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","West Midlands","E12000005","Normal Value",7.04469979431154
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","West Midlands","E12000005","Normal Value",1.68519340206338
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","West Midlands","E12000005","Normal Value",3.52234989715577
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","West Midlands","E12000005","Normal Value",9.77412173196763
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","West Midlands","E12000005","Normal Value",11.573435376369
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","West Midlands","E12000005","Normal Value",112.233880577421
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","West Midlands","E12000005","Normal Value",100.974030385132
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","West Midlands","E12000005","Normal Value",6.90929294845988
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","West Midlands","E12000005","Normal Value",6.70923789934432
+"2019","321 Health Associate Professionals","3213 Paramedics","England","West Midlands","E12000005","Normal Value",6.5722542680472
+"2020","321 Health Associate Professionals","3213 Paramedics","England","West Midlands","E12000005","Normal Value",8.55427832166401
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","West Midlands","E12000005","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","West Midlands","E12000005","Normal Value",1.34184757986886
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","West Midlands","E12000005","Normal Value",6.5722542680472
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","West Midlands","E12000005","Normal Value",5.19965937199185
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","West Midlands","E12000005","Normal Value",7.92040898969791
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","West Midlands","E12000005","Normal Value",4.52873558205742
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","West Midlands","E12000005","Normal Value",6.40373492784086
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","West Midlands","E12000005","Normal Value",6.37377600437711
+"2019","221 Health Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",88.1342737472349
+"2020","221 Health Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",85.4089950871733
+"2019","222 Therapy Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",28.7117840248724
+"2020","222 Therapy Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",36.5521546771377
+"2019","223 Nursing and Midwifery Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",116.664337620051
+"2020","223 Nursing and Midwifery Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",104.227926208076
+"2019","321 Health Associate Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",21.2612577905701
+"2020","321 Health Associate Professionals","","England","Yorkshire and The Humber","E12000003","Normal Value",20.4474924679038
+"2019","221 Health Professionals","2211 Medical practitioners","England","Yorkshire and The Humber","E12000003","Normal Value",46.8837992304878
+"2020","221 Health Professionals","2211 Medical practitioners","England","Yorkshire and The Humber","E12000003","Normal Value",46.5044740199227
+"2019","221 Health Professionals","2212 Psychologists","England","Yorkshire and The Humber","E12000003","Normal Value",4.36128364934771
+"2020","221 Health Professionals","2212 Psychologists","England","Yorkshire and The Humber","E12000003","Normal Value",3.43807395478028
+"2019","221 Health Professionals","2213 Pharmacists","England","Yorkshire and The Humber","E12000003","Normal Value",10.9032091233693
+"2020","221 Health Professionals","2213 Pharmacists","England","Yorkshire and The Humber","E12000003","Normal Value",9.40946556045129
+"2019","221 Health Professionals","2214 Ophthalmic opticians","England","Yorkshire and The Humber","E12000003","Normal Value",2.72580228084232
+"2020","221 Health Professionals","2214 Ophthalmic opticians","England","Yorkshire and The Humber","E12000003","Normal Value",2.89522017244655
+"2019","221 Health Professionals","2215 Dental practitioners","England","Yorkshire and The Humber","E12000003","Normal Value",5.45160456168463
+"2020","221 Health Professionals","2215 Dental practitioners","England","Yorkshire and The Humber","E12000003","Normal Value",5.60948908411519
+"2019","221 Health Professionals","2217 Medical radiographers","England","Yorkshire and The Humber","E12000003","Normal Value",4.36128364934771
+"2020","221 Health Professionals","2217 Medical radiographers","England","Yorkshire and The Humber","E12000003","Normal Value",2.17141512933491
+"2019","221 Health Professionals","2218 Podiatrists","England","Yorkshire and The Humber","E12000003","Normal Value",1.27204106439308
+"2020","221 Health Professionals","2218 Podiatrists","England","Yorkshire and The Humber","E12000003","Normal Value",0.904756303889547
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",11.9935300357062
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",14.4761008622328
+"2019","222 Therapy Professionals","2221 Physiotherapists","England","Yorkshire and The Humber","E12000003","Normal Value",9.44944790692003
+"2020","222 Therapy Professionals","2221 Physiotherapists","England","Yorkshire and The Humber","E12000003","Normal Value",15.5618084269002
+"2019","222 Therapy Professionals","2222 Occupational therapists","England","Yorkshire and The Humber","E12000003","Normal Value",8.72256729869541
+"2020","222 Therapy Professionals","2222 Occupational therapists","England","Yorkshire and The Humber","E12000003","Normal Value",10.4951731251187
+"2019","222 Therapy Professionals","2223 Speech and language therapists","England","Yorkshire and The Humber","E12000003","Normal Value",5.08816425757232
+"2020","222 Therapy Professionals","2223 Speech and language therapists","England","Yorkshire and The Humber","E12000003","Normal Value",2.53331765089073
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",5.45160456168463
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",7.96185547422802
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","England","Yorkshire and The Humber","E12000003","Normal Value",110.485852450142
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","England","Yorkshire and The Humber","E12000003","Normal Value",95.904168212292
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","England","Yorkshire and The Humber","E12000003","Normal Value",6.17848516990925
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","England","Yorkshire and The Humber","E12000003","Normal Value",8.32375799578383
+"2019","321 Health Associate Professionals","3213 Paramedics","England","Yorkshire and The Humber","E12000003","Normal Value",2.36236197673001
+"2020","321 Health Associate Professionals","3213 Paramedics","England","Yorkshire and The Humber","E12000003","Estimate is less than 500",NA
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","England","Yorkshire and The Humber","E12000003","Normal Value",1.45376121644924
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","England","Yorkshire and The Humber","E12000003","Normal Value",2.89522017244655
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","Yorkshire and The Humber","E12000003","Normal Value",2.90752243289847
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","England","Yorkshire and The Humber","E12000003","Normal Value",5.7904403448931
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","England","Yorkshire and The Humber","E12000003","Normal Value",6.72364562607771
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","England","Yorkshire and The Humber","E12000003","Normal Value",4.16187899789192
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",7.81396653841464
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","England","Yorkshire and The Humber","E12000003","Normal Value",6.87614790956056
+"2019","221 Health Professionals","","Northern Ireland","","N92000002","Normal Value",103.502886199105
+"2020","221 Health Professionals","","Northern Ireland","","N92000002","Normal Value",99.7093130608649
+"2019","222 Therapy Professionals","","Northern Ireland","","N92000002","Normal Value",33.7968607997077
+"2020","222 Therapy Professionals","","Northern Ireland","","N92000002","Normal Value",27.9608126572796
+"2019","223 Nursing and Midwifery Professionals","","Northern Ireland","","N92000002","Normal Value",115.120557099004
+"2020","223 Nursing and Midwifery Professionals","","Northern Ireland","","N92000002","Normal Value",107.622750605378
+"2019","321 Health Associate Professionals","","Northern Ireland","","N92000002","Normal Value",19.0107341998356
+"2020","321 Health Associate Professionals","","Northern Ireland","","N92000002","Normal Value",13.716625077156
+"2019","221 Health Professionals","2211 Medical practitioners","Northern Ireland","","N92000002","Normal Value",39.6056962496574
+"2020","221 Health Professionals","2211 Medical practitioners","Northern Ireland","","N92000002","Normal Value",33.236437686955
+"2019","221 Health Professionals","2212 Psychologists","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","221 Health Professionals","2212 Psychologists","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2019","221 Health Professionals","2213 Pharmacists","Northern Ireland","","N92000002","Normal Value",23.7634177497944
+"2020","221 Health Professionals","2213 Pharmacists","Northern Ireland","","N92000002","Normal Value",24.2678751365068
+"2019","221 Health Professionals","2214 Ophthalmic opticians","Northern Ireland","","N92000002","Normal Value",3.69653164996803
+"2020","221 Health Professionals","2214 Ophthalmic opticians","Northern Ireland","","N92000002","Normal Value",6.85831253857801
+"2019","221 Health Professionals","2215 Dental practitioners","Northern Ireland","","N92000002","Normal Value",9.50536709991778
+"2020","221 Health Professionals","2215 Dental practitioners","Northern Ireland","","N92000002","Normal Value",10.0236875563832
+"2019","221 Health Professionals","2217 Medical radiographers","Northern Ireland","","N92000002","Normal Value",4.75268354995889
+"2020","221 Health Professionals","2217 Medical radiographers","Northern Ireland","","N92000002","Normal Value",9.4961250534157
+"2019","221 Health Professionals","2218 Podiatrists","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","221 Health Professionals","2218 Podiatrists","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",15.842278499863
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",11.6063750652859
+"2019","222 Therapy Professionals","2221 Physiotherapists","Northern Ireland","","N92000002","Normal Value",14.7861265998721
+"2020","222 Therapy Professionals","2221 Physiotherapists","Northern Ireland","","N92000002","Normal Value",11.0788125623183
+"2019","222 Therapy Professionals","2222 Occupational therapists","Northern Ireland","","N92000002","Normal Value",9.50536709991778
+"2020","222 Therapy Professionals","2222 Occupational therapists","Northern Ireland","","N92000002","Normal Value",10.0236875563832
+"2019","222 Therapy Professionals","2223 Speech and language therapists","Northern Ireland","","N92000002","Normal Value",3.69653164996803
+"2020","222 Therapy Professionals","2223 Speech and language therapists","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",6.33691139994519
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",5.80318753264293
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","Northern Ireland","","N92000002","Normal Value",113.008253299022
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","Northern Ireland","","N92000002","Normal Value",103.929813084605
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","Northern Ireland","","N92000002","Normal Value",3.69293752077277
+"2019","321 Health Associate Professionals","3213 Paramedics","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3213 Paramedics","Northern Ireland","","N92000002","Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)",NA
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","Northern Ireland","","N92000002","Normal Value",4.75268354995889
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","Northern Ireland","","N92000002","Normal Value",6.85831253857801
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","Northern Ireland","","N92000002","Estimate is less than 500",NA
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",11.0895949499041
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Northern Ireland","","N92000002","Normal Value",4.74806252670785
+"2019","221 Health Professionals","","Scotland","","S92000003","Normal Value",98.29224095327
+"2020","221 Health Professionals","","Scotland","","S92000003","Normal Value",99.1584339553604
+"2019","222 Therapy Professionals","","Scotland","","S92000003","Normal Value",29.1032892208006
+"2020","222 Therapy Professionals","","Scotland","","S92000003","Normal Value",33.6626417855836
+"2019","223 Nursing and Midwifery Professionals","","Scotland","","S92000003","Normal Value",139.11006168433
+"2020","223 Nursing and Midwifery Professionals","","Scotland","","S92000003","Normal Value",114.52616172704
+"2019","321 Health Associate Professionals","","Scotland","","S92000003","Normal Value",22.1477861365841
+"2020","321 Health Associate Professionals","","Scotland","","S92000003","Normal Value",25.4299304793267
+"2019","221 Health Professionals","2211 Medical practitioners","Scotland","","S92000003","Normal Value",57.6574597770578
+"2020","221 Health Professionals","2211 Medical practitioners","Scotland","","S92000003","Normal Value",53.9699963410172
+"2019","221 Health Professionals","2212 Psychologists","Scotland","","S92000003","Normal Value",4.57598887119507
+"2020","221 Health Professionals","2212 Psychologists","Scotland","","S92000003","Normal Value",5.85437248444932
+"2019","221 Health Professionals","2213 Pharmacists","Scotland","","S92000003","Normal Value",8.96893818754233
+"2020","221 Health Professionals","2213 Pharmacists","Scotland","","S92000003","Normal Value",14.0870837907062
+"2019","221 Health Professionals","2214 Ophthalmic opticians","Scotland","","S92000003","Normal Value",4.94206798089067
+"2020","221 Health Professionals","2214 Ophthalmic opticians","Scotland","","S92000003","Normal Value",3.65898280278083
+"2019","221 Health Professionals","2215 Dental practitioners","Scotland","","S92000003","Normal Value",4.75902842604287
+"2020","221 Health Professionals","2215 Dental practitioners","Scotland","","S92000003","Normal Value",4.39077936333699
+"2019","221 Health Professionals","2217 Medical radiographers","Scotland","","S92000003","Normal Value",4.94206798089067
+"2020","221 Health Professionals","2217 Medical radiographers","Scotland","","S92000003","Normal Value",4.20783022319795
+"2019","221 Health Professionals","2218 Podiatrists","Scotland","","S92000003","Normal Value",2.01343510332583
+"2020","221 Health Professionals","2218 Podiatrists","Scotland","","S92000003","Normal Value",2.56128796194658
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","Scotland","","S92000003","Normal Value",10.4332546263248
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","Scotland","","S92000003","Normal Value",10.2451518477863
+"2019","222 Therapy Professionals","2221 Physiotherapists","Scotland","","S92000003","Normal Value",13.5449270587374
+"2020","222 Therapy Professionals","2221 Physiotherapists","Scotland","","S92000003","Normal Value",12.6234906695939
+"2019","222 Therapy Professionals","2222 Occupational therapists","Scotland","","S92000003","Normal Value",8.41981952299892
+"2020","222 Therapy Professionals","2222 Occupational therapists","Scotland","","S92000003","Normal Value",12.0746432491767
+"2019","222 Therapy Professionals","2223 Speech and language therapists","Scotland","","S92000003","Normal Value",2.19647465817363
+"2020","222 Therapy Professionals","2223 Speech and language therapists","Scotland","","S92000003","Normal Value",3.47603366264179
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Scotland","","S92000003","Normal Value",4.94206798089067
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Scotland","","S92000003","Normal Value",5.48847420417124
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","Scotland","","S92000003","Normal Value",133.2527959292
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","Scotland","","S92000003","Normal Value",108.488840102452
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","Scotland","","S92000003","Normal Value",6.04030530997749
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","Scotland","","S92000003","Normal Value",6.03732162458836
+"2019","321 Health Associate Professionals","3213 Paramedics","Scotland","","S92000003","Normal Value",5.67422620028188
+"2020","321 Health Associate Professionals","3213 Paramedics","Scotland","","S92000003","Normal Value",6.03732162458836
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","Scotland","","S92000003","Estimate is less than 500",NA
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","Scotland","","S92000003","Normal Value",0.914745700695207
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","Scotland","","S92000003","Normal Value",4.02687020665166
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","Scotland","","S92000003","Normal Value",6.22027076472741
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","Scotland","","S92000003","Normal Value",5.30814709058628
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","Scotland","","S92000003","Normal Value",7.86681302597878
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Scotland","","S92000003","Normal Value",6.22334486482529
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Scotland","","S92000003","Normal Value",4.39077936333699
+"2019","221 Health Professionals","","Wales","","W92000004","Normal Value",84.6845058119896
+"2020","221 Health Professionals","","Wales","","W92000004","Normal Value",101.275056111429
+"2019","222 Therapy Professionals","","Wales","","W92000004","Normal Value",27.593827736491
+"2020","222 Therapy Professionals","","Wales","","W92000004","Normal Value",28.71037416243
+"2019","223 Nursing and Midwifery Professionals","","Wales","","W92000004","Normal Value",115.132867452256
+"2020","223 Nursing and Midwifery Professionals","","Wales","","W92000004","Normal Value",112.948504946703
+"2019","321 Health Associate Professionals","","Wales","","W92000004","Normal Value",26.0079755677272
+"2020","321 Health Associate Professionals","","Wales","","W92000004","Normal Value",30.918864482617
+"2019","221 Health Professionals","2211 Medical practitioners","Wales","","W92000004","Normal Value",42.5008381228712
+"2020","221 Health Professionals","2211 Medical practitioners","Wales","","W92000004","Normal Value",54.8967593875036
+"2019","221 Health Professionals","2212 Psychologists","Wales","","W92000004","Normal Value",4.75755650629155
+"2020","221 Health Professionals","2212 Psychologists","Wales","","W92000004","Normal Value",3.78598340603473
+"2019","221 Health Professionals","2213 Pharmacists","Wales","","W92000004","Normal Value",13.0039877838636
+"2020","221 Health Professionals","2213 Pharmacists","Wales","","W92000004","Normal Value",15.774930858478
+"2019","221 Health Professionals","2214 Ophthalmic opticians","Wales","","W92000004","Normal Value",3.48887477128047
+"2020","221 Health Professionals","2214 Ophthalmic opticians","Wales","","W92000004","Normal Value",2.20849032018693
+"2019","221 Health Professionals","2215 Dental practitioners","Wales","","W92000004","Estimate is less than 500",NA
+"2020","221 Health Professionals","2215 Dental practitioners","Wales","","W92000004","Normal Value",11.3579502181042
+"2019","221 Health Professionals","2217 Medical radiographers","Wales","","W92000004","Normal Value",5.70906780754986
+"2020","221 Health Professionals","2217 Medical radiographers","Wales","","W92000004","Normal Value",2.52398893735649
+"2019","221 Health Professionals","2218 Podiatrists","Wales","","W92000004","Normal Value",2.85453390377493
+"2020","221 Health Professionals","2218 Podiatrists","Wales","","W92000004","Estimate is less than 500",NA
+"2019","221 Health Professionals","2219 Health professionals n.e.c.","Wales","","W92000004","Normal Value",10.7837947475942
+"2020","221 Health Professionals","2219 Health professionals n.e.c.","Wales","","W92000004","Normal Value",9.46495851508683
+"2019","222 Therapy Professionals","2221 Physiotherapists","Wales","","W92000004","Normal Value",9.5151130125831
+"2020","222 Therapy Professionals","2221 Physiotherapists","Wales","","W92000004","Normal Value",8.51846266357814
+"2019","222 Therapy Professionals","2222 Occupational therapists","Wales","","W92000004","Normal Value",6.66057910880817
+"2020","222 Therapy Professionals","2222 Occupational therapists","Wales","","W92000004","Normal Value",9.14945989791727
+"2019","222 Therapy Professionals","2223 Speech and language therapists","Wales","","W92000004","Normal Value",2.53736347002216
+"2020","222 Therapy Professionals","2223 Speech and language therapists","Wales","","W92000004","Normal Value",3.15498617169561
+"2019","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Wales","","W92000004","Normal Value",8.88077214507756
+"2020","222 Therapy Professionals","2229 Therapy professionals n.e.c.","Wales","","W92000004","Normal Value",7.88746542923902
+"2019","223 Nursing and Midwifery Professionals","2231 Nurses","Wales","","W92000004","Normal Value",107.520777042189
+"2020","223 Nursing and Midwifery Professionals","2231 Nurses","Wales","","W92000004","Normal Value",106.638532603312
+"2019","223 Nursing and Midwifery Professionals","2232 Midwives","Wales","","W92000004","Normal Value",7.61209041006648
+"2020","223 Nursing and Midwifery Professionals","2232 Midwives","Wales","","W92000004","Normal Value",6.30997234339122
+"2019","321 Health Associate Professionals","3213 Paramedics","Wales","","W92000004","Normal Value",3.48887477128047
+"2020","321 Health Associate Professionals","3213 Paramedics","Wales","","W92000004","Normal Value",4.10148202320429
+"2019","321 Health Associate Professionals","3216 Dispensing opticians","Wales","","W92000004","Normal Value",1.58585216876385
+"2020","321 Health Associate Professionals","3216 Dispensing opticians","Wales","","W92000004","Normal Value",2.52398893735649
+"2019","321 Health Associate Professionals","3217 Pharmaceutical technicians","Wales","","W92000004","Normal Value",5.07472694004432
+"2020","321 Health Associate Professionals","3217 Pharmaceutical technicians","Wales","","W92000004","Normal Value",7.88746542923902
+"2019","321 Health Associate Professionals","3218 Medical and dental technicians","Wales","","W92000004","Normal Value",6.97774954256094
+"2020","321 Health Associate Professionals","3218 Medical and dental technicians","Wales","","W92000004","Normal Value",5.36347649188254
+"2019","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Wales","","W92000004","Normal Value",8.56360171132479
+"2020","321 Health Associate Professionals","3219 Health associate professionals n.e.c.","Wales","","W92000004","Normal Value",11.0424516009346

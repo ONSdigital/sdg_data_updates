@@ -211,7 +211,7 @@ csv_formatted <- tidy_data %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
   # if you then have to change country as well:
   # mutate(Country = str_to_title(Country)) %>% 
-  
+
   # order of disaggregations depend on order they appear, so sort these now
   # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
   left_join(age_order, by = "age") %>% 
@@ -222,10 +222,14 @@ csv_formatted <- tidy_data %>%
          `observation status`, `units`, `unit multiplier`,
          value)
 
-# finally, put the column names in sentence case
+# put the column names in sentence case
 names(csv_formatted) <- str_to_sentence(names(csv_formatted))
 
-
+# remove NAs from the csv that will be saved in Outputs
+# this changes Value to a character so will still use csv_formatted in the 
+# R markdown QA file
+csv_output <- csv_formatted %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value))
 
 
 

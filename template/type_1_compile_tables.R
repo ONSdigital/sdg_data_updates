@@ -31,7 +31,7 @@ date <- Sys.Date()
 csv_filename <- paste0(date, "_update_type_1.csv")
 qa_filename <- paste0(date, "_update_type_1_checks.html") 
 
-write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
 # rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))

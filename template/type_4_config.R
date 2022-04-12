@@ -15,4 +15,4 @@ population_link <- "https://www.nomisweb.co.uk/api/v01/dataset/NM_31_1.data.csv?
 # will usually be data up to the end of the year (month 12), but can be specified here.
 required_month <- "12"
 
-output_folder <- "Output"
+output_folder <- "Example_output"

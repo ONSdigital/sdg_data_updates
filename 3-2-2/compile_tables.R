@@ -11,6 +11,8 @@ name_columns <- function(dat, pattern, new_name){
   
 }
 
+library('janitor')
+
 #-------------------------------------------------------------------------------
 
 source("config.R")
@@ -21,31 +23,40 @@ if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
 }
 
-# datasets after 2018 use an extra tab for England and Wales headline figure
-# so there are two options here
-if(england_and_wales_timeseries_tab_name == "NA"){
-  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                    sheets = c(area_of_residence_tab_name,
-                                               birthweight_by_mum_age_tab_name,
-                                               country_of_occurrence_by_sex_tab_name,
-                                               country_of_birth_tab_name))
+if (pre_2020_data == TRUE) {  
+  # datasets after 2018 use an extra tab for England and Wales headline figure
+  # so there are two options here
+  if(england_and_wales_timeseries_tab_name == "NA"){
+    source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                      sheets = c(area_of_residence_tab_name,
+                                                 birthweight_by_mum_age_tab_name,
+                                                 country_of_occurrence_by_sex_tab_name,
+                                                 country_of_birth_tab_name))
+  } else {
+    source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                      sheets = c(england_and_wales_timeseries_tab_name, 
+                                                 area_of_residence_tab_name,
+                                                 birthweight_by_mum_age_tab_name,
+                                                 country_of_occurrence_by_sex_tab_name,
+                                                 country_of_birth_tab_name))
+  }
+  
+  source("region.R")
+  source("birthweight_by_mum_age.R")
+  source("country_of_occurence_by_sex.R")
+  
+  if(include_country_of_birth == TRUE){ 
+    source("country_of_birth.R")
+  }else {
+    clean_csv_data_country_of_birth <- NULL
+  }
+  
+} else if (pre_2020_data == FALSE) {
+  
+  source("region_new.R")
+  
 } else {
-  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                    sheets = c(england_and_wales_timeseries_tab_name, 
-                                               area_of_residence_tab_name,
-                                               birthweight_by_mum_age_tab_name,
-                                               country_of_occurrence_by_sex_tab_name,
-                                               country_of_birth_tab_name))
-}
-
-source("region.R")
-source("birthweight_by_mum_age.R")
-source("country_of_occurence_by_sex.R")
-
-if(include_country_of_birth == TRUE){ 
-  source("country_of_birth.R")
-}else {
-  clean_csv_data_country_of_birth <- NULL
+  stop("please set pre_2020_data to TRUE or FALSE in the configs")
 }
 
 age_order <- data.frame(Age = c("19 and under",

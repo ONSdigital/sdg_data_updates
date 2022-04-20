@@ -34,6 +34,9 @@ if (header_row > 1) {
   year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
   country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
 
+} else {
+  year <- NA
+  country <- NA
 }
 
 # clean the column names -------------------------------------------------------
@@ -115,5 +118,15 @@ clean_csv_data_area_of_residence <- data_in_csv_format %>%
 names(clean_csv_data_area_of_residence) <- 
   str_to_sentence(names(clean_csv_data_area_of_residence))
 
+# clean environment ------------------------------------------------------------
+rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format)
 
-
+if (header_row > 1) {
+  rm(
+    data_no_headers,
+    metadata,
+    year,
+    country,
+    with_headers
+    )
+}

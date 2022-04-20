@@ -54,6 +54,7 @@ if (pre_2020_data == TRUE) {
 } else if (pre_2020_data == FALSE) {
   
   source("region_new.R")
+  source("birthweight_age_new.R")
   
 } else {
   stop("please set pre_2020_data to TRUE or FALSE in the configs")

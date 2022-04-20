@@ -19,7 +19,6 @@ if (header_row == 1) {
 
 clean_data <- source_data %>% 
   mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), tolower)) %>% 
   mutate(across(where(is.character), str_squish)) %>% 
   mutate(across(everything(), ~ SDGupdater::remove_superscripts(.x)))
 
@@ -70,7 +69,9 @@ renamed_main <- main_data %>%
   rename_column(primary = "code",
                 new_name = "GeoCode") %>% 
   rename_column(primary = c("area", "name"),
-                new_name = "Region")
+                new_name = "Region") %>% 
+  rename_column(primary = "geography",
+                new_name = "geography")
 
 #-------------------------------------------------------------------------------
 
@@ -80,24 +81,27 @@ calculations_region <- renamed_main %>%
     number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
     number_neonatal_deaths > 19  ~ "Normal value"))
 
+# remove welsh health boards and local authorities 
+# due to high incidence of low reliability
+lower_geography_removed <- calculations_region %>% 
+  dplyr::filter(geography %in% c("Region", "region",
+                          "Country", "country") &
+           # remove'outside of England and wales' entries
+           grepl("J99000001", GeoCode) == FALSE) 
 
-data_in_csv_format <- calculations_region %>%
-  dplyr::select(GeoCode, Region, 
+data_in_csv_format <- lower_geography_removed %>%
+  dplyr::select(GeoCode, Region, geography,
                 neonatal_rate,
                 obs_status_neonatal) 
 
-# done up to here.............................
-# Need to get rid of the welsh health boards!
-
-
-
-
-
-
+# finalise csv -----------------------------------------------------------------
 
 clean_csv_data_area_of_residence <- data_in_csv_format %>%
-  dplyr::rename(Value = Neonatal_rate,
+  dplyr::rename(Value = neonatal_rate,
                 `Observation status` = obs_status_neonatal) %>%
+  # suppressed data may be indicatoed by a colon, which prevents the column from 
+  # being numeric. Needsremoving so that we can control the number of decimal places
+  dplyr::mutate(Value = ifelse(Value == ":", NA, as.numeric(Value))) %>%
   dplyr::mutate(Year = year,
                 Sex = "",
                 `Neonatal period` = "",
@@ -107,75 +111,9 @@ clean_csv_data_area_of_residence <- data_in_csv_format %>%
                 Country = "England",
                 Region = SDGupdater::format_region_names(Region))
 
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# finalise csv -----------------------------------------------------------------
-
-# make column names sentence case
-
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
-
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
-
-csv_formatted <- tidy_data %>% 
-  # rename columns that need renaming
-  rename(`housing type` = type) %>%
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "All", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-         ) %>% 
-  # you can also use pattern matching to change level names, e.g. removing the 
-  # word 'type' fromthe housing types column
-  mutate(`housing type` = stringr::str_replace(`housing type`,"type_|_types",  "")) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # ... or remove it using filter() as the commented line below
-  # filter(!is.na(Value)) %>%
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
-
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
-
 # put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
-
-# remove NAs from the csv that will be saved in Outputs
-# this changes Value to a character so will still use csv_formatted in the 
-# R markdown QA file
-csv_output <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
-
+names(clean_csv_data_area_of_residence) <- 
+  str_to_sentence(names(clean_csv_data_area_of_residence))
 
 
 

@@ -1,4 +1,4 @@
-# date: 13/04/2022
+# date: 20/04/2022
 # automation for 3-2-2 for data published from 2022 onward
 # birth weight and mother age disaggregations
 
@@ -61,7 +61,7 @@ main_data <- clean_names(main_data)
 
 renamed_main <- main_data %>% 
   rename_column(primary = c("rate", "neo"), 
-                not_pattern = "peri|post",
+                not_pattern = "peri|post|early",
                 new_name = "neonatal_rate") %>% 
   rename_column(primary = c("live", "birth"), 
                 new_name = "number_live_births") %>% 
@@ -76,7 +76,7 @@ renamed_main <- main_data %>%
   rename_column(primary = c("mother", "age"),
                 new_name = "mother_age") 
 
-#-------------------------------------------------------------------------------
+# calculate late neonatal rates-------------------------------------------------
 remove_symbols <- function(column) {
   ifelse(column %in% c("z", ":"),
          NA, 
@@ -173,7 +173,8 @@ names(clean_csv_data_birtweight_by_mum_age) <-
   str_to_sentence(names(clean_csv_data_birtweight_by_mum_age))
 
 # clean environment ------------------------------------------------------------
-rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format)
+rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
+   calculations)
 
 if (header_row > 1) {
   rm(

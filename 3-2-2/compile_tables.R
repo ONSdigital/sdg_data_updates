@@ -1,15 +1,15 @@
 # functions: move to SDGupdater if useful for more indicators:
 
-# This function looks for all the words given in `pattern` vector to identify which
-# column to rename, and then renames that column with `new_name`
-name_columns <- function(dat, pattern, new_name){
-  
-  column_location <- which(apply(sapply(pattern, grepl, 
-                                        names(dat)), 1, all) == TRUE)
-  names(dat)[column_location] <- new_name
-  return(dat)
-  
-}
+# # This function looks for all the words given in `pattern` vector to identify which
+# # column to rename, and then renames that column with `new_name`
+# name_columns <- function(dat, pattern, new_name){
+#   
+#   column_location <- which(apply(sapply(pattern, grepl, 
+#                                         names(dat)), 1, all) == TRUE)
+#   names(dat)[column_location] <- new_name
+#   return(dat)
+#   
+# }
 
 library('janitor')
 

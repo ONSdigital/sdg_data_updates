@@ -9,72 +9,28 @@
 
 # read in data -----------------------------------------------------------------
 
-if (header_row == 1) {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = tabname, 
-                                     colNames = TRUE)  
-} else {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = tabname, 
-                                     colNames = FALSE, skipEmptyRows = FALSE) 
-}
+source_data <- get_type1_data(header_row, filename, tabname)
 
-# # if data is in a single tab in a csv, use the following:
-# if (header_row == 1) {
-#   source_data <- read.csv(paste0(input_folder, "/", filename),
-#                           header = TRUE,
-#                           na.strings = "",
-#                           check.names = TRUE)
-# } else {
-#   source_data <- read.csv(paste0(input_folder, "/", filename),
-#                           header = FALSE,
-#                           na.strings = "")
-# }
+# clean the data and get yer and country info from above the headers -----------
 
+# clean_strings() has remove_ss (stands for remove_superscripts) as an argument. 
+# The default is TRUE. IMPORTANT: Set to FALSE if there strings of letters that 
+# end in a number that you want to keep. Where a number falls at the end of an 
+# alphanumeric code, it will  not be interpreted as a superscript and will not 
+# be removed. However, if the ONLY number in an alphanumeric code is at the end, 
+# the number will be seen as a superscript. 
 
-# clean the columns that contain strings ---------------------------------------
+clean_data <- clean_strings(source_data, remove_ss = TRUE)
 
-clean_data <- source_data %>% 
-  # change factors to characters as each level of a factor is given a number and so doesn't behave like a string
-  mutate(across(where(is.factor), as.character)) %>% 
-  # change all strings to lowercase so that if the case is different in the future the code will still work
-  mutate(across(where(is.character), tolower)) %>% 
-  # remove all trailing white space and change multiple spaces to single spaces within the string
-  mutate(across(where(is.character), str_squish)) %>% 
-  # the following line removes superscripts (not done earlier, to avoid running this on columns that were numeric but seen as character)
-  # DO NOT USE remove_superscripts() if there are cells containing words that end 
-  #   in a number that you want to keep:
-  #   It won't usually remove a number from the end of an alphanumeric code, 
-  #   but will do so if the ONLY number is at the end
-  mutate(across(everything(), ~ SDGupdater::remove_superscripts(.x)))
+metadata <- extract_metadata(clean_data, header_row)
 
+main_data <- extract_data(clean_data, header_row)
 
-# separate the data from the above-table metadata ------------------------------
-
-if (header_row > 1) {
-  data_no_headers <- clean_data[(header_row + 1):nrow(clean_data), ]
-  
-  # only use the following if you need the country and year info contained above the headers 
-  # (it may be useful to put the details the are output in the QA file)
-  metadata <- get_info_cells(clean_data, header_row, "xlsx")
-  year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
-  country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
-
-}
-
-# clean the column names -------------------------------------------------------
-
+# if you import a csv, numbers will now be read as characters - you can rectify this here
+# NOTE: check that data types are what you expect after running th
 if (header_row > 1){
-  with_headers <- data_no_headers
-  names(with_headers) <- clean_data[header_row, ]
-
-  # if you import a csv, numbers will now be read as characters - you can rectify this here
-  # NOTE: check that data types are what you expect after running this!
-  main_data <-  with_headers %>% 
+  main_data <-  main_data %>% 
     type.convert(as.is = TRUE) 
-  
-} else {
-  main_data <- clean_data 
 }
 
 # remove superscripts from column names
@@ -181,6 +137,10 @@ age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
 csv_formatted <- tidy_data %>% 
   # rename columns that need renaming
   rename(`housing type` = type) %>%
+  # you might want to use the country and year we got from extract_metadata above.
+  # These are in a list called metadata. Make sure there is only ONE country / ONE 
+  # year given. If so, they can be accessed like this:
+  mutate(country = metadata$country) %>% 
   # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
   # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
   mutate(age = 
@@ -194,6 +154,7 @@ csv_formatted <- tidy_data %>%
          # totals should be blank, not e.g. 'all'
          `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
          sex = ifelse(sex == "all", "", sex),
+         country = ifelse(country == "UK", "", country),
          # If value is NA give a reason for why it is blank (as below) or...
          `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
          ) %>% 

@@ -2,42 +2,13 @@
 # automation for 3-2-2 for data published from 2022 onward
 # birth weight and mother age disaggregations
 
-header_row <- first_header_row_birthweight_by_mum_age 
+source_data <- get_data(header_row = first_header_row_birthweight_by_mum_age,
+                        filename = filename,
+                        tabname = birthweight_by_mum_age_tab_name)
 
-# read in data -----------------------------------------------------------------
-
-if (header_row == 1) {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = birthweight_by_mum_age_tab_name, 
-                                     colNames = TRUE)  
-} else {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = birthweight_by_mum_age_tab_name, 
-                                     colNames = FALSE, skipEmptyRows = FALSE) 
-}
-
-# clean the columns that contain strings ---------------------------------------
-
-clean_data <- source_data %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_squish)) %>% 
-  mutate(across(everything(), ~ SDGupdater::remove_superscripts(.x)))
-
-# separate the data from the above-table metadata ------------------------------
-
-if (header_row > 1) {
-  data_no_headers <- clean_data[(header_row + 1):nrow(clean_data), ]
-  
-  # only use the following if you need the country and year info contained above the headers 
-  # (it may be useful to put the details the are output in the QA file)
-  metadata <- get_info_cells(clean_data, header_row, "xlsx")
-  year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
-  country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
-  
-} else {
-  year <- NA
-  country <- NA
-}
+clean_data <- clean_strings(source_data)
+metadata <- extract_metadata(clean_data, first_header_row_birthweight_by_mum_age)
+data_no_headers <- extract_data(clean_data, first_header_row_birthweight_by_mum_age)
 
 # clean the column names -------------------------------------------------------
 if (header_row > 1){
@@ -77,11 +48,6 @@ renamed_main <- main_data %>%
                 new_name = "mother_age") 
 
 # calculate late neonatal rates-------------------------------------------------
-remove_symbols <- function(column) {
-  ifelse(column %in% c("z", ":"),
-         NA, 
-         as.numeric(column))
-  }
 
 clean_numeric_columns <- renamed_main %>% 
   mutate(number_neonatal_deaths = remove_symbols(number_neonatal_deaths),
@@ -146,14 +112,14 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          birthweight = gsub("<", "Under ", birthweight),
          birthweight = ifelse(birthweight == "Notstated", "Not stated", birthweight),
          birthweight = ifelse(birthweight == "All", "", birthweight),
-         Country = country,
+         Country = metadata$country,
          GeoCode = ifelse(country == "England and Wales", "K04000001", "")) %>%
   dplyr::mutate(mother_age = ifelse(mother_age == "Less than 20", "19 and under", mother_age),
                 mother_age = ifelse(mother_age == "40  and  over", "40 and over", mother_age)) %>% 
   dplyr::rename(`Neonatal period` = Neonatal_period,
          Age = mother_age,
          Birthweight = birthweight) %>%
-  dplyr::mutate(Year = year,
+  dplyr::mutate(Year = metadata$year,
          Sex = "",
          Region = "",
          `Country of birth` = "")  %>% 
@@ -164,7 +130,8 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
   dplyr::filter(England_Wales_headline == FALSE) %>% 
   dplyr::select(-England_Wales_headline)
 
-
+year <- metadata$year
+country <- metadata$country
 SDGupdater::multiple_year_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 SDGupdater::multiple_country_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 
@@ -176,7 +143,7 @@ names(clean_csv_data_birtweight_by_mum_age) <-
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
    calculations)
 
-if (header_row > 1) {
+if (first_header_row_birthweight_by_mum_age > 1) {
   rm(
     data_no_headers,
     metadata,

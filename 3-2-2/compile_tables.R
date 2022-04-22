@@ -10,17 +10,14 @@
 #   return(dat)
 #   
 # }
-remove_symbols <- function(column) {
-  ifelse(column %in% c("z", ":"),
-         NA, 
-         as.numeric(column))
-}
+
 
 library('janitor')
 
 #-------------------------------------------------------------------------------
 
 source("config.R")
+source("read_and_clean_functions.R")
 
 # filename <- SDGupdater::ask_user_for_filename(input_folder)
 

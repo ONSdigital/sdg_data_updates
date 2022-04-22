@@ -8,25 +8,14 @@ source_data <- get_data(header_row = first_header_row_birthweight_by_mum_age,
 
 clean_data <- clean_strings(source_data)
 metadata <- extract_metadata(clean_data, first_header_row_birthweight_by_mum_age)
-data_no_headers <- extract_data(clean_data, first_header_row_birthweight_by_mum_age)
+main_data <- extract_data(clean_data, first_header_row_country_of_birth)
 
-# clean the column names -------------------------------------------------------
 if (header_row > 1){
-  with_headers <- data_no_headers
-  names(with_headers) <- clean_data[header_row, ]
-  
-  # if you import a csv, numbers will now be read as characters - you can rectify this here
-  # NOTE: check that data types are what you expect after running this!
-  main_data <-  with_headers %>% 
-    type.convert(as.is = TRUE) 
-  
-} else {
-  main_data <- clean_data 
-  names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-  
+  main_data <- type.convert(main_data, as.is = TRUE) 
 }
 
-main_data <- clean_names(main_data)
+main_data <- clean_names(main_data) %>% 
+  janitor::remove_empty(which = "rows")
 
 # make column names consistent across years ------------------------------------
 

@@ -7,23 +7,10 @@ source_data <- get_data(header_row = first_header_row_area_of_residence,
  
 clean_data <- clean_strings(source_data)
 metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
-data_no_headers <- extract_data(clean_data, first_header_row_area_of_residence)
-
-# clean the column names -------------------------------------------------------
+main_data <- extract_data(clean_data, first_header_row_area_of_residence)
 
 if (header_row > 1){
-  with_headers <- data_no_headers
-  names(with_headers) <- clean_data[header_row, ]
-
-  # if you import a csv, numbers will now be read as characters - you can rectify this here
-  # NOTE: check that data types are what you expect after running this!
-  main_data <-  with_headers %>%
-    type.convert(as.is = TRUE)
-
-} else {
-  main_data <- clean_data
-  names(main_data) <- SDGupdater::remove_superscripts(names(main_data))
-
+  main_data <- type.convert(main_data, as.is = TRUE) 
 }
 
 main_data <- clean_names(main_data)

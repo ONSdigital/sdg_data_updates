@@ -1,43 +1,13 @@
 # date: 13/04/2022
 # automation for 3-2-2 for data published from 2022 onward
 
-header_row <- first_header_row_area_of_residence
-
-# read in data -----------------------------------------------------------------
-
-if (header_row == 1) {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = area_of_residence_tab_name, 
-                                     colNames = TRUE)  
-} else {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = area_of_residence_tab_name, 
-                                     colNames = FALSE, skipEmptyRows = FALSE) 
-}
-
-# clean the columns that contain strings ---------------------------------------
-
-clean_data <- source_data %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_squish)) %>% 
-  mutate(across(everything(), ~ SDGupdater::remove_superscripts(.x)))
-
-
-# separate the data from the above-table metadata ------------------------------
-
-if (header_row > 1) {
-  data_no_headers <- clean_data[(header_row + 1):nrow(clean_data), ]
-  
-  # only use the following if you need the country and year info contained above the headers 
-  # (it may be useful to put the details the are output in the QA file)
-  metadata <- get_info_cells(clean_data, header_row, "xlsx")
-  year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
-  country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
-
-} else {
-  year <- NA
-  country <- NA
-}
+source_data <- get_data(header_row = first_header_row_area_of_residence,
+                        filename = filename,
+                        tabname = area_of_residence_tab_name)
+ 
+clean_data <- clean_strings(source_data)
+metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
+data_no_headers <- extract_data(clean_data, first_header_row_area_of_residence)
 
 # clean the column names -------------------------------------------------------
 
@@ -47,13 +17,13 @@ if (header_row > 1){
 
   # if you import a csv, numbers will now be read as characters - you can rectify this here
   # NOTE: check that data types are what you expect after running this!
-  main_data <-  with_headers %>% 
-    type.convert(as.is = TRUE) 
-  
+  main_data <-  with_headers %>%
+    type.convert(as.is = TRUE)
+
 } else {
-  main_data <- clean_data 
-  names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-  
+  main_data <- clean_data
+  names(main_data) <- SDGupdater::remove_superscripts(names(main_data))
+
 }
 
 main_data <- clean_names(main_data)
@@ -105,7 +75,7 @@ clean_csv_data_area_of_residence <- data_in_csv_format %>%
   # suppressed data may be indicatoed by a colon, which prevents the column from 
   # being numeric. Needsremoving so that we can control the number of decimal places
   dplyr::mutate(Value = ifelse(Value == ":", NA, as.numeric(Value))) %>%
-  dplyr::mutate(Year = year,
+  dplyr::mutate(Year = metadata$year,
                 Sex = "",
                 `Neonatal period` = "",
                 Birthweight = "",
@@ -121,7 +91,7 @@ names(clean_csv_data_area_of_residence) <-
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format)
 
-if (header_row > 1) {
+if (first_header_row_area_of_residence > 1) {
   rm(
     data_no_headers,
     metadata,

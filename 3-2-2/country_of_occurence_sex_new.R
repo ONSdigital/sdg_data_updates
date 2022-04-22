@@ -2,57 +2,17 @@
 # automation for 3-2-2 for data published from 2022 onward
 # birth weight and mother age disaggregations
 
-header_row <- first_header_row_country_by_sex 
 
-# read in data -----------------------------------------------------------------
+source_data <- get_data(header_row = first_header_row_country_by_sex,
+                        filename = filename,
+                        tabname = country_of_occurrence_by_sex_tab_name)
 
-if (header_row == 1) {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = country_of_occurrence_by_sex_tab_name, 
-                                     colNames = TRUE)  
-} else {
-  source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
-                                     sheet = country_of_occurrence_by_sex_tab_name, 
-                                     colNames = FALSE, skipEmptyRows = FALSE) 
-}
+clean_data <- clean_strings(source_data)
+metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
+main_data <- extract_data(clean_data, first_header_row_area_of_residence)
 
-# clean the columns that contain strings ---------------------------------------
-
-clean_data <- source_data %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_squish)) %>% 
-  mutate(across(everything(), ~ SDGupdater::remove_superscripts(.x)))
-
-# separate the data from the above-table metadata ------------------------------
-
-if (header_row > 1) {
-  data_no_headers <- clean_data[(header_row + 1):nrow(clean_data), ]
-  
-  # only use the following if you need the country and year info contained above the headers 
-  # (it may be useful to put the details the are output in the QA file)
-  metadata <- get_info_cells(clean_data, header_row, "xlsx")
-  year <- unique_to_string(metadata$Year) # only if year is expected in the info above the header
-  country <- unique_to_string(metadata$Country) # only if country is expected in the info above the header
-  
-} else {
-  year <- NA
-  country <- NA
-}
-
-# clean the column names -------------------------------------------------------
 if (header_row > 1){
-  with_headers <- data_no_headers
-  names(with_headers) <- clean_data[header_row, ]
-  
-  # if you import a csv, numbers will now be read as characters - you can rectify this here
-  # NOTE: check that data types are what you expect after running this!
-  main_data <-  with_headers %>% 
-    type.convert(as.is = TRUE) 
-  
-} else {
-  main_data <- clean_data 
-  names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-  
+  main_data <- type.convert(main_data, as.is = TRUE) 
 }
 
 main_data <- clean_names(main_data) %>% 

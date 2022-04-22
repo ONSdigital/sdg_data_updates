@@ -11,19 +11,17 @@
 #   
 # }
 
-
+library('openxlsx')
+library('stringr')
 library('janitor')
+library('tidyr')
+library('dplyr')
+
+library('SDGupdater')
 
 #-------------------------------------------------------------------------------
 
 source("config.R")
-source("read_and_clean_functions.R")
-
-# filename <- SDGupdater::ask_user_for_filename(input_folder)
-
-if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
-  stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
-}
 
 if (pre_2020_data == TRUE) {  
   # datasets after 2018 use an extra tab for England and Wales headline figure

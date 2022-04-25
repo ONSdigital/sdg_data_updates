@@ -3,15 +3,15 @@
 # birth weight and mother age disaggregations
 
 
-source_data <- get_data(header_row = first_header_row_country_by_sex,
-                        filename = filename,
-                        tabname = country_of_occurrence_by_sex_tab_name)
+source_data <- get_type1_data(header_row = first_header_row_country_by_sex,
+                              filename = filename,
+                              tabname = country_of_occurrence_by_sex_tab_name)
 
 clean_data <- clean_strings(source_data)
 metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
 main_data <- extract_data(clean_data, first_header_row_area_of_residence)
 
-if (header_row > 1){
+if (first_header_row_country_by_sex > 1){
   main_data <- type.convert(main_data, as.is = TRUE) 
 }
 

@@ -6,7 +6,7 @@ source_data <- get_type1_data(header_row = first_header_row_birthweight_by_mum_a
                               filename = filename,
                               tabname = birthweight_by_mum_age_tab_name)
 
-clean_data <- clean_strings(source_data)
+clean_data <- suppressWarnings(clean_strings(source_data))
 metadata <- extract_metadata(clean_data, first_header_row_birthweight_by_mum_age)
 main_data <- extract_data(clean_data, first_header_row_country_of_birth)
 
@@ -102,7 +102,7 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          birthweight = ifelse(birthweight == "Notstated", "Not stated", birthweight),
          birthweight = ifelse(birthweight == "All", "", birthweight),
          Country = metadata$country,
-         GeoCode = ifelse(country == "England and Wales", "K04000001", "")) %>%
+         GeoCode = ifelse(Country == "England and Wales", "K04000001", "")) %>%
   dplyr::mutate(mother_age = ifelse(mother_age == "Less than 20", "19 and under", mother_age),
                 mother_age = ifelse(mother_age == "40  and  over", "40 and over", mother_age)) %>% 
   dplyr::rename(`Neonatal period` = Neonatal_period,
@@ -130,16 +130,11 @@ names(clean_csv_data_birtweight_by_mum_age) <-
 
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
-   calculations)
-
-if (first_header_row_birthweight_by_mum_age > 1) {
-  rm(
-    data_no_headers,
+   calculations, clean_numeric_columns,
     metadata,
     year,
-    country,
-    with_headers
+    country
   )
-}
+
 
 

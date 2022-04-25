@@ -10,7 +10,7 @@ source_data <- get_type1_data(header_row = first_header_row_england_and_wales,
                               filename = filename,
                               tabname = england_and_wales_timeseries_tab_name)
 
-clean_data <- clean_strings(source_data)
+clean_data <- suppressWarnings(clean_strings(source_data))
 metadata <- extract_metadata(clean_data, first_header_row_england_and_wales)
 main_data <- extract_data(clean_data, first_header_row_england_and_wales)
 
@@ -45,7 +45,7 @@ renamed_main <- main_data %>%
 
 #-------------------------------------------------------------------------------
 
-calculation_england_and_wales <- renamed_main %>% 
+calculations <- renamed_main %>% 
   dplyr::mutate(obs_status_early = case_when(
     early_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
@@ -60,7 +60,7 @@ calculation_england_and_wales <- renamed_main %>%
       neonatal_number > 19  ~ "Normal value")) %>% 
   dplyr::filter(year == unique(bound_tables$Year)[1])
 
-data_in_csv_format <- calculation_england_and_wales %>% 
+data_in_csv_format <- calculations %>% 
   dplyr::select(year, early_neonatal_rate, late_neonatal_rate, neonatal_rate,
                 obs_status_early, obs_status_late, obs_status_neonatal) %>% 
   tidyr::pivot_longer(
@@ -84,6 +84,17 @@ clean_csv_data_england_and_wales <- data_in_csv_format %>%
                 Age = "",
                 Region = "",
                 Sex = "",
-                Country = country,
-                `Country of birth` =  "")
+                Country = metadata$country,
+                `Country of birth` =  "",
+                Year = as.character(Year))
+
+year <- metadata$year
+country <- metadata$country
+SDGupdater::multiple_year_warning(filename, england_and_wales_timeseries_tab_name,"birthweight by age")
+SDGupdater::multiple_country_warning(filename, england_and_wales_timeseries_tab_name,"birthweight by age")
+
+# clean environment ------------------------------------------------------------
+rm(source_data, clean_data, metadata,
+   renamed_main, calculations, data_in_csv_format,
+   year, country)
   

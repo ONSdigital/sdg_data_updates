@@ -21,6 +21,13 @@ library('SDGupdater')
 
 #-------------------------------------------------------------------------------
 
+remove_symbols <- function(column) {
+  ifelse(column %in% c("z", ":"),
+         NA, 
+         as.numeric(column))
+}
+#-------------------------------------------------------------------------------
+
 source("config.R")
 
 if (pre_2020_data == TRUE) {  
@@ -97,14 +104,23 @@ bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
 
 years <- as.numeric(as.character(unique(bound_tables$Year)))
 
-if(max(years, na.rm = TRUE) >= 2018){
+if (max(years, na.rm = TRUE) >= 2018){
 
 # in tables prior to 2018, the England and Wales figure that is comparable to 
 # other 'country of occurrence' countries is in table 2. 
 # In 2018 and 2019 table 2 does not include this figure, so need to get it from table 1.
 # This is where 'england_and_wales.R' will be sourced when we know what format the table will settle in
 # as it needs to take 'year' from bound_tables
-source("england_and_wales.R")
+  
+  if (pre_2020_data == TRUE) {
+    
+    source("england_and_wales.R")
+    
+  } else if (pre_2020_data == FALSE) {
+    
+    source("england_and_wales_new.R")
+    
+    }
 
   bound_tables <- dplyr::bind_rows(bound_tables, 
                                    clean_csv_data_england_and_wales)

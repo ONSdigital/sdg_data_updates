@@ -7,7 +7,7 @@ source_data <- get_type1_data(header_row = first_header_row_country_by_sex,
                               filename = filename,
                               tabname = country_of_occurrence_by_sex_tab_name)
 
-clean_data <- clean_strings(source_data)
+clean_data <- suppressWarnings(clean_strings(source_data))
 metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
 main_data <- extract_data(clean_data, first_header_row_area_of_residence)
 
@@ -53,9 +53,9 @@ calculations <- clean_numeric_columns %>%
   # on the same numerator and denominator populations, but number of births
   # and number of deaths use different populations (they treat non-residents differently)
   dplyr::mutate(late_neonatal_rate = case_when(
-    grepl("orthern", country) == TRUE ~ ifelse(number_late_neonatal_deaths >= 3,
+    grepl("orthern", country_of_occurrence) == TRUE ~ ifelse(number_late_neonatal_deaths >= 3,
                                            neonatal_rate - early_neonatal_rate, NA),
-    grepl("orthern", country) == FALSE ~  SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
+    grepl("orthern", country_of_occurrence) == FALSE ~  SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
                                                                                      number_live_births, decimal_places))
     ) %>% 
   dplyr::mutate(obs_status_early = case_when(
@@ -95,7 +95,7 @@ clean_csv_data_country_by_sex <- data_in_csv_format %>%
   dplyr::rename(`Neonatal period` = Neonatal_period,
          Sex = sex,
          Country = country_of_occurrence) %>%
-  dplyr::mutate(Year = year,
+  dplyr::mutate(Year = metadata$year,
          Birthweight = "",
          Age = "",
          Region = "",
@@ -111,7 +111,8 @@ clean_csv_data_country_by_sex <- clean_csv_data_country_by_sex %>%
     dplyr::rename(GeoCode = area_code) %>% 
     dplyr::mutate(GeoCode = ifelse(Country == "England and Wales", "K04000001", GeoCode))
 
-
+year <- metadata$year
+country <- metadata$country
 SDGupdater::multiple_year_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
 SDGupdater::multiple_country_warning(filename, country_of_occurrence_by_sex_tab_name,"country of occurrence by sex")
 
@@ -123,13 +124,11 @@ names(clean_csv_data_birtweight_by_mum_age) <-
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
    calculations)
 
-if (header_row > 1) {
+if (first_header_row_country_by_sex > 1) {
   rm(
-    data_no_headers,
     metadata,
     year,
-    country,
-    with_headers
+    country
   )
 }
 

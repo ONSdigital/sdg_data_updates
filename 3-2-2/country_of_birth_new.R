@@ -6,7 +6,7 @@ source_data <- get_type1_data(header_row = first_header_row_country_of_birth,
                         filename = filename,
                         tabname = country_of_birth_tab_name)
 
-clean_data <- clean_strings(source_data)
+clean_data <- suppressWarnings(clean_strings(source_data))
 metadata <- extract_metadata(clean_data, first_header_row_country_of_birth)
 main_data <- extract_data(clean_data, first_header_row_country_of_birth)
 
@@ -66,8 +66,8 @@ calculations <- clean_numeric_columns %>%
                                                              number_live_births, 
                                                              decimal_places)) 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
-  calculations_country_of_birth$rates_Neonatal_check, 
-  calculations_country_of_birth$neonatal_rate)
+  calculations$rates_Neonatal_check, 
+  calculations$neonatal_rate)
 
 observation_status <- calculations %>% 
   dplyr::mutate(obs_status_early = case_when(
@@ -132,11 +132,9 @@ rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
 
 if (first_header_row_country_of_birth > 1) {
   rm(
-    data_no_headers,
     metadata,
     year,
-    country,
-    with_headers
+    country
   )
 }
 

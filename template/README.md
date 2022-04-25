@@ -18,7 +18,7 @@ It/they can be called anything, but try to keep it informative.
   
 There are a number of different input layouts that impact the way an automation is written. There are, therefore, separate template scripts for each of these types. Each file layout type has it's own input, config, compile_tables, and workhorse files.  
   
-Currently, only the template for type_1 is ready to use, though it does not yet include a markdown template.  
+Currently, only the templates for type_1, type_2 and type_4 are ready to use, though they do not yet include markdown templates.  
   
 ### Input types
 #### Type 1: Simple excel or csv file 
@@ -34,6 +34,12 @@ Currently, only the template for type_1 is ready to use, though it does not yet 
 #### Type 3: Excel file with headers hidden in a data column
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
   
+#### Type 4: Nomis
+- Data that are on Nomis do not need to be manually downloaded as they have stable weblinks
+- Headers are simple and stable (I think the latter is true)
+   
+#### Type 5: ONS CDID 
+
 ### Instructions
 1. Identify which type is closest to the data you want to write an automation for.
 2. Open RStudio

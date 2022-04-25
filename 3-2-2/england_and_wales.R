@@ -3,8 +3,6 @@
 # Purpose: To create csv data for country of occurrence, where country is 
 # England and Wales (this figure is available in country of occurrence by sex 
 # before 2018)
-#
-# THIS SCRIPT MAY NEED EDITING AS THE TABLE FORMAT HAS RECENTLY CHANGED -
 
 england_and_wales <- dplyr::filter(source_data, sheet == england_and_wales_timeseries_tab_name)
 

@@ -2,15 +2,15 @@
 # automation for 3-2-2 for data published from 2022 onward
 # birth weight and mother age disaggregations
 
-source_data <- get_data(header_row = first_header_row_birthweight_by_mum_age,
-                        filename = filename,
-                        tabname = birthweight_by_mum_age_tab_name)
+source_data <- get_type1_data(header_row = first_header_row_birthweight_by_mum_age,
+                              filename = filename,
+                              tabname = birthweight_by_mum_age_tab_name)
 
 clean_data <- clean_strings(source_data)
 metadata <- extract_metadata(clean_data, first_header_row_birthweight_by_mum_age)
 main_data <- extract_data(clean_data, first_header_row_country_of_birth)
 
-if (header_row > 1){
+if (first_header_row_birthweight_by_mum_age > 1){
   main_data <- type.convert(main_data, as.is = TRUE) 
 }
 

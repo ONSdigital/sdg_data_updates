@@ -23,7 +23,7 @@ clean_strings <- function(dat, remove_ss = TRUE) {
   
   clean_data <- dat %>% 
     mutate(across(where(is.factor), as.character)) %>% 
-    mutate(across(where(is.character), str_squish)) 
+    mutate(across(where(is.character), stringr::str_squish)) 
   
   if (remove_ss == TRUE) {
     

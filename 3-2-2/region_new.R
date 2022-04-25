@@ -5,7 +5,7 @@ source_data <- get_type1_data(header_row = first_header_row_area_of_residence,
                         filename = filename,
                         tabname = area_of_residence_tab_name)
  
-clean_data <- clean_strings(source_data)
+clean_data <- suppressWarnings(clean_strings(source_data))
 metadata <- extract_metadata(clean_data, first_header_row_area_of_residence)
 main_data <- extract_data(clean_data, first_header_row_area_of_residence)
 
@@ -35,7 +35,7 @@ renamed_main <- main_data %>%
 
 #-------------------------------------------------------------------------------
 
-calculations_region <- renamed_main %>%
+calculations <- renamed_main %>%
   dplyr::mutate(obs_status_neonatal = case_when(
     number_neonatal_deaths < 3 | is.na(number_neonatal_deaths) ~ "Missing value; suppressed", 
     number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
@@ -43,7 +43,7 @@ calculations_region <- renamed_main %>%
 
 # remove welsh health boards and local authorities 
 # due to high incidence of low reliability
-lower_geography_removed <- calculations_region %>% 
+lower_geography_removed <- calculations %>% 
   dplyr::filter(geography %in% c("Region", "region",
                           "Country", "country") &
            # remove'outside of England and wales' entries
@@ -76,14 +76,11 @@ names(clean_csv_data_area_of_residence) <-
   str_to_sentence(names(clean_csv_data_area_of_residence))
 
 # clean environment ------------------------------------------------------------
-rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format)
+rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
+   calculations, lower_geography_removed)
 
 if (first_header_row_area_of_residence > 1) {
   rm(
-    data_no_headers,
-    metadata,
-    year,
-    country,
-    with_headers
+    metadata
     )
 }

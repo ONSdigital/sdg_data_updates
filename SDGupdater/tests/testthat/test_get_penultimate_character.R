@@ -20,11 +20,11 @@ test_that("get_penultimate_character returns expected data datatype", {
 
 test_that("get_penultimate_character raises appropriate warnings", {
   expect_warning(get_penultimate_character(1),
-                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned as the penultimate character")
   expect_warning(get_penultimate_character("a"),
-                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned as the penultimate character")
   expect_warning(get_penultimate_character(c("a", "quick brown fox")),
-                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned as the penultimate character")
   expect_warning(get_penultimate_character(c("quick brown fox", "a")),
-                 "At least one string had fewer than two characters. Where this is the case, '' is returned")
+                 "At least one string had fewer than two characters. Where this is the case, '' is returned as the penultimate character")
 })

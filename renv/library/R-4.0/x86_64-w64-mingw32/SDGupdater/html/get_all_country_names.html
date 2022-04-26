@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Extract country from string containing country name</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for get_all_country_names {SDGupdater}"><tr><td>get_all_country_names {SDGupdater}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Extract country from string containing country name</h2>
+
+<h3>Description</h3>
+
+<p>Identifies whether a string contains the name of one or more of the UK
+countries and if it does, it gives the names of that country as a string,
+otherwise it returns NA.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+get_all_country_names(variable)
+
+multiple_country_warning(filename, tab, description)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>variable</code></td>
+<td>
+<p>Character vector you want to check to see if it contains the
+name of a UK country.</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>string giving name of the file (so warning is specific)</p>
+</td></tr>
+<tr valign="top"><td><code>tab</code></td>
+<td>
+<p>string giving name of the tab (so warning is specific)</p>
+</td></tr>
+<tr valign="top"><td><code>description</code></td>
+<td>
+<p>string describing the data that is affected (e.g. which
+disaggregation)</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Future improvements - return countries with correct capitalisation (possibly
+as option in arguments)
+</p>
+
+
+<h3>Value</h3>
+
+<p>Character vector giving name of country or NA.
+</p>
+<p>a warning
+</p>
+
+
+<h3>Functions</h3>
+
+
+<ul>
+<li> <p><code>multiple_country_warning</code>: Extract country from string containing
+country name
+</p>
+</li></ul>
+
+
+<h3>Examples</h3>
+
+<pre>
+test_dat &lt;- c("England is a country of the UK", "this does not contain a
+country name")
+get_all_country_names(test_dat)
+
+country &lt;- "England, Scotland"
+multiple_country_warning("foo.xlsx", "Tab 1", "sex_by_age disaggregation")
+
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>SDGupdater</em> version 0.0.0.9000 <a href="00Index.html">Index</a>]</div>
+</body></html>

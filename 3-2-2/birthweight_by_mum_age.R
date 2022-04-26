@@ -51,7 +51,7 @@ data_for_calculations <- name_columns(data_for_calculations,
 #-------------------------------------------------------------------------------
 
 
-calculations <- data_for_calculations %>%
+calculations_weight_age <- data_for_calculations %>%
   dplyr::mutate(number_late_neonatal_deaths = number_neonatal_deaths - number_early_neonatal_deaths) %>%
   dplyr::mutate(Late_neonatal_rate = SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
                                                                                 number_live_births, decimal_places),
@@ -75,11 +75,11 @@ calculations <- data_for_calculations %>%
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value"))
 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
-  calculations$Rates_Neonatal_check, calculations$Neonatal_rate)
+rate_mismatches_weight_age <- SDGupdater::count_mismatches(
+  calculations_weight_age$Rates_Neonatal_check, calculations_weight_age$Neonatal_rate)
 
 
-data_in_csv_format <- calculations %>%
+data_in_csv_format <- calculations_weight_age %>%
   dplyr::select(birthweight, mother_age,
                 Early_neonatal_rate, Late_neonatal_rate, Neonatal_rate,
                 obs_status_early, obs_status_late, obs_status_neonatal) %>%
@@ -135,6 +135,5 @@ rm(clean_data,
    data_for_calculations, data_in_csv_format,
    info_cells, 
    tidy_data,
-   country, year,
-   number_of_rate_calculation_mismatches)
+   country, year)
 

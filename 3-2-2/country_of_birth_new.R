@@ -22,7 +22,7 @@ main_data <- clean_names(main_data) %>%
 renamed_main <- main_data %>% 
   rename_column(primary = c("rate", "neo"), 
                 not_pattern = "peri|post|early",
-                new_name = "neonatal_rate") %>% 
+                new_name = "Neonatal_rate") %>% 
   
   rename_column(primary = c("live", "birth"), 
                 new_name = "number_live_births") %>% 
@@ -47,16 +47,16 @@ clean_numeric_columns <- renamed_main %>%
    mutate(number_neonatal_deaths = suppressWarnings(remove_symbols(number_neonatal_deaths)),
          number_early_neonatal_deaths = suppressWarnings(remove_symbols(number_early_neonatal_deaths)),
          number_live_births =  suppressWarnings(remove_symbols(number_live_births)),
-         neonatal_rate = suppressWarnings(remove_symbols(neonatal_rate)))
+         Neonatal_rate = suppressWarnings(remove_symbols(Neonatal_rate)))
          
-calculations <- clean_numeric_columns %>%
+calculations_country_of_birth <- clean_numeric_columns %>%
   dplyr::mutate(number_late_neonatal_deaths = 
                   number_neonatal_deaths - number_early_neonatal_deaths) %>%
-  dplyr::mutate(late_neonatal_rate = 
+  dplyr::mutate(Late_neonatal_rate = 
                   SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
                                                              number_live_births, 
                                                              decimal_places),
-                early_neonatal_rate = 
+                Early_neonatal_rate = 
                   SDGupdater::calculate_valid_rates_per_1000(number_early_neonatal_deaths,
                                                              number_live_births, 
                                                              decimal_places),
@@ -66,10 +66,10 @@ calculations <- clean_numeric_columns %>%
                                                              number_live_births, 
                                                              decimal_places)) 
 number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
-  calculations$rates_Neonatal_check, 
-  calculations$neonatal_rate)
+  calculations_country_of_birth$rates_Neonatal_check, 
+  calculations_country_of_birth$Neonatal_rate)
 
-observation_status <- calculations %>% 
+observation_status <- calculations_country_of_birth %>% 
   dplyr::mutate(obs_status_early = case_when(
     number_early_neonatal_deaths < 3 | is.na(number_early_neonatal_deaths) ~ "Missing value; suppressed", 
     number_early_neonatal_deaths >= 3 & number_early_neonatal_deaths <= 19 ~ "Low reliability",
@@ -83,18 +83,23 @@ observation_status <- calculations %>%
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value"))
 
-data_in_csv_format <- observation_status %>%
+birthweight_removed <- observation_status %>% 
+  mutate(keep = grepl("all", tolower(birthweight))) %>% 
+  filter(keep == TRUE) %>% 
+  select(-keep)
+
+data_in_csv_format <- birthweight_removed %>%
   dplyr::select(mother_country,
-                early_neonatal_rate, late_neonatal_rate, neonatal_rate,
+                Early_neonatal_rate, Late_neonatal_rate, Neonatal_rate,
                 obs_status_early, obs_status_late, obs_status_neonatal) %>%
   tidyr::pivot_longer(
     cols = ends_with("rate"),
     names_to = "Neonatal_period",
     values_to = "Value") %>% 
   dplyr::mutate(`Observation status` = case_when(
-    Neonatal_period == "early_neonatal_rate" ~ obs_status_early,
-    Neonatal_period == "late_neonatal_rate" ~ obs_status_late,
-    Neonatal_period == "neonatal_rate" ~ obs_status_neonatal)) %>% 
+    Neonatal_period == "Early_neonatal_rate" ~ obs_status_early,
+    Neonatal_period == "Late_neonatal_rate" ~ obs_status_late,
+    Neonatal_period == "Neonatal_rate" ~ obs_status_neonatal)) %>% 
   select(-c(obs_status_early, obs_status_late, obs_status_neonatal))
 
 clean_csv_data_country_of_birth <- data_in_csv_format %>%
@@ -128,13 +133,7 @@ SDGupdater::multiple_country_warning(filename, country_of_birth_tab_name,"countr
 
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
-   calculations)
-
-if (first_header_row_country_of_birth > 1) {
-  rm(
-    metadata,
-    year,
-    country
-  )
-}
+   metadata,
+   year,
+   country)
 

@@ -44,7 +44,7 @@ clean_numeric_columns <- renamed_main %>%
          number_live_births = remove_symbols(number_live_births),
          neonatal_rate = remove_symbols(neonatal_rate)) 
 
-calculations <- clean_numeric_columns %>%
+calculations_weight_age <- clean_numeric_columns %>%
   dplyr::mutate(number_late_neonatal_deaths = number_neonatal_deaths - number_early_neonatal_deaths) %>%
   dplyr::mutate(Late_neonatal_rate = SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
                                                                                 number_live_births, decimal_places),
@@ -68,11 +68,11 @@ calculations <- clean_numeric_columns %>%
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value")) 
 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
-  round(calculations$Rates_Neonatal_check, decimal_places), 
-  round(calculations$neonatal_rate, decimal_places))
+rate_mismatches_weight_age <- SDGupdater::count_mismatches(
+  round(calculations_weight_age$Rates_Neonatal_check, decimal_places), 
+  round(calculations_weight_age$neonatal_rate, decimal_places))
 
-data_in_csv_format <- calculations %>%
+data_in_csv_format <- calculations_weight_age %>%
   dplyr::select(birthweight, mother_age,
                 Early_neonatal_rate, Late_neonatal_rate, neonatal_rate,
                 obs_status_early, obs_status_late, obs_status_neonatal) %>%
@@ -90,7 +90,7 @@ data_in_csv_format <- calculations %>%
 clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
   dplyr::mutate(Neonatal_period = gsub("_rate", "", Neonatal_period),
          Neonatal_period = gsub("_", " ", Neonatal_period),
-         Neonatal_period = ifelse(Neonatal_period == "Neonatal", "", Neonatal_period),
+         Neonatal_period = ifelse(Neonatal_period == "neonatal", "", Neonatal_period),
          mother_age = gsub("-", " to ", mother_age),
          mother_age = gsub("&", " and ", mother_age),
          mother_age = gsub("<", "Less than ", mother_age),
@@ -130,7 +130,7 @@ names(clean_csv_data_birtweight_by_mum_age) <-
 
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
-   calculations, clean_numeric_columns,
+   clean_numeric_columns,
     metadata,
     year,
     country

@@ -149,20 +149,6 @@ datatable(no_value_rows,
                            className = 'dt-center', targets = 0:3))))
 
 ```
-
-### Number of rows
-We expect there to be `r expected_number_of_rows_in_output` rows in the output 
-csv (expected number of rows is set in config.R).  
-```{r, echo = FALSE}
-if(expected_number_of_rows_in_output != nrow(csv_data)) {
-  message <- paste0("*There are ", nrow(csv_data), ". *This is different to the expected number of rows. *Please investigate*. The difference might be due to a blank value, which will be shown above. Another likely casue is that there is a different number of rows for 'not stated' and 'impalusible' birthweight rows.")
-} else {
-  message <- paste0("Check passed: there are ", nrow(csv_data), " rows in the csv.")
-}
-```
-`r message`
- 
-
 ### Calculations
 For birthweight and mother age, and for country of mother's birth, 
 number of late neonatal deaths are calculated as
@@ -182,12 +168,10 @@ function rounds .5 to the even number, as always rounding up (as Excel does) lea
   
 See tables below for mismatches:
 ```{r, echo = FALSE}
-rate_mismatches_weight <- SDGupdater::count_mismatches(calculations$Rates_Neonatal_check, 
-                                                       calculations$Neonatal_rate)
 
-if(rate_mismatches_weight > 0){
+if(rate_mismatches_weight_age > 0){
   
-table1 <- calculations %>% 
+table1 <- calculations_weight_age %>% 
   filter(Rates_Neonatal_check != Neonatal_rate) %>% 
     distinct(birthweight, mother_age, Rates_Neonatal_check, Neonatal_rate)
 
@@ -202,10 +186,7 @@ datatable(table1,
 } else {"there are no mismatches for birthweight and age of mother"}
 
 if(include_country_of_birth == TRUE){
-  rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(calculations_country_of_birth$Rates_Neonatal_check,
-                                                                   calculations_country_of_birth$Neonatal_rate)
-  
-  if(rate_mismatches_country_of_birth > 0){
+                                                        if(rate_mismatches_country_of_birth > 0){
     
     table2 <- calculations_country_of_birth %>% 
       filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
@@ -237,8 +218,9 @@ wide_data <- csv_data %>%
                                     "Neonatal", `Neonatal period`)) %>% 
   pivot_wider(names_from = `Neonatal period`,
               values_from = Value) %>% 
-  mutate(sum_early_late = `Early neonatal` + `Late neonatal`) %>% 
-  mutate(difference = sum_early_late - Neonatal) %>% 
+  mutate(sum_early_late = as.numeric(`Early neonatal`) + 
+           as.numeric(`Late neonatal`)) %>% 
+  mutate(difference = sum_early_late - as.numeric(Neonatal)) %>% 
   filter(difference >= 0.1) %>% 
   arrange(desc(difference)) 
 
@@ -287,7 +269,7 @@ old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2
          `Observation status` = Observation.status) 
 
 csv_data <- csv_data %>% 
-  mutate(Year = year) %>% 
+  # mutate(Year = year) %>% 
   mutate(Year = as.integer(Year),
          dataset = "new")
 

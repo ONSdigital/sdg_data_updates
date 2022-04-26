@@ -91,7 +91,7 @@ calculations_country_of_birth <- data_for_calculations %>%
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value"))
 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
+rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(
   calculations_country_of_birth$Rates_Neonatal_check, calculations_country_of_birth$Neonatal_rate)
 
 
@@ -142,6 +142,5 @@ rm(clean_data,
    data_for_calculations, data_in_csv_format,
    info_cells, 
    tidy_data,
-   country, year,
-   number_of_rate_calculation_mismatches)
+   country, year)
 

@@ -186,12 +186,13 @@ datatable(table1,
 } else {"there are no mismatches for birthweight and age of mother"}
 
 if(include_country_of_birth == TRUE){
-                                                        if(rate_mismatches_country_of_birth > 0){
+
+    if(rate_mismatches_country_of_birth > 0){
     
     table2 <- calculations_country_of_birth %>% 
-      filter(Rates_Neonatal_check != `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`) %>% 
-      distinct(country, sex, Rates_Neonatal_check, 
-               `Rates_Per_1,000_live_births_Childhood_deaths_Neonatal`)
+      filter(Rates_Neonatal_check != Neonatal_rate) %>% 
+      distinct(mother_country, Rates_Neonatal_check, 
+               Neonatal_rate)
     
     datatable(table2, 
               rownames = FALSE, 
@@ -199,7 +200,7 @@ if(include_country_of_birth == TRUE){
               options = list(dom = 'tp', 
                              pageLength = 5,
                              columnDefs = list(list(
-                               className = 'dt-center', targets = 0:3))))
+                               className = 'dt-center'))))
     
   } else {print("there are no mismatches for mother's country of birth")}
   
@@ -254,7 +255,7 @@ Plots of the data are shown below. If you see anything unexpected in the plots,
 please manually check the data are correct, and edit the code if necessary.
 
 ```{r, echo = FALSE, fig.width=10}
-old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2-2.csv") %>% 
+old_data <- read.csv("Y:/Data Collection and Reporting/Jemalex/CSV/indicator_3-2-2.csv", encoding = "UTF-8") %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(Region = case_when(
     Region == "East of England" ~ "East", 

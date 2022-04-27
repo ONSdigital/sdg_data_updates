@@ -65,6 +65,9 @@ data_for_calculations <- name_columns(data_for_calculations,
 data_for_calculations <- name_columns(data_for_calculations, 
                                       c("Numbers", "Neo", "Deaths"),
                                       "number_neonatal_deaths")
+data_for_calculations <- rename_column(data_for_calculations,
+                                       primary = c("mother", "country"),
+                                       new_name = "mother_country") 
 #-------------------------------------------------------------------------------
 
 calculations_country_of_birth <- data_for_calculations %>%

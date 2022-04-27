@@ -61,12 +61,12 @@ calculations_country_of_birth <- clean_numeric_columns %>%
                                                              number_live_births, 
                                                              decimal_places),
                 # overall neonatal rates are calculated already in the download, so we can check our calcs against these
-                rates_Neonatal_check = 
+                Rates_Neonatal_check = 
                   SDGupdater::calculate_valid_rates_per_1000(number_neonatal_deaths,
                                                              number_live_births, 
                                                              decimal_places)) 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
-  calculations_country_of_birth$rates_Neonatal_check, 
+rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(
+  calculations_country_of_birth$Rates_Neonatal_check, 
   calculations_country_of_birth$Neonatal_rate)
 
 observation_status <- calculations_country_of_birth %>% 
@@ -102,14 +102,37 @@ data_in_csv_format <- birthweight_removed %>%
     Neonatal_period == "Neonatal_rate" ~ obs_status_neonatal)) %>% 
   select(-c(obs_status_early, obs_status_late, obs_status_neonatal))
 
+low_level_country_of_birth <- c("Scotland",
+                                "England and Wales",
+                                "Northern Ireland",
+                                "New EU",
+                                "Irish Republic",
+                                "North Africa",
+                                "Western Africa",
+                                "Central Africa",
+                                "Eastern Africa",
+                                "Southern Africa",
+                                "North America and Central America",
+                                "South America",
+                                "Caribbean",
+                                "Middle East and Central Asia",
+                                "Eastern Asia",
+                                "Southern Asia",
+                                "India",
+                                "Pakistan",
+                                "Bangladesh",
+                                "South East Asia")
+
 clean_csv_data_country_of_birth <- data_in_csv_format %>%
-  dplyr::filter(mother_country != "Total") %>% 
+  dplyr::filter(mother_country != "Total" &
+                  mother_country %not_in% low_level_country_of_birth) %>% 
   dplyr::mutate(Neonatal_period = gsub("_rate", "", Neonatal_period),
                 Neonatal_period = gsub("_", " ", Neonatal_period),
                 Neonatal_period = ifelse(Neonatal_period == "Neonatal", "", Neonatal_period),
                 mother_country = case_when(
                   mother_country == "Total outside the United Kingdom" ~ "Not born in UK",
-                  mother_country == "The Americas and the Caribbean" ~ "Born in the Americas or the Caribbean",
+                  mother_country == "The Americas and the Caribbean" ~ "Born in the Americas and the Caribbean",
+                  mother_country == "United Kingdom, Isle of Man and Channel Islands" ~ "Born in UK, Isle of Man and Channel Islands",
                   mother_country == "Other/Not stated" ~ "Other/Not stated",
                   TRUE ~ paste0("Born in ", mother_country)
                 ),

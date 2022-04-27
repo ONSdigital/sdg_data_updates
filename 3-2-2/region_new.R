@@ -43,13 +43,15 @@ calculations <- renamed_main %>%
 
 # remove welsh health boards and local authorities 
 # due to high incidence of low reliability
-lower_geography_removed <- calculations %>% 
-  dplyr::filter(geography %in% c("Region", "region",
-                          "Country", "country") &
-           # remove'outside of England and wales' entries
-           grepl("J99000001", GeoCode) == FALSE) 
+unwanted_geography_removed <- calculations %>% 
+  dplyr::filter(tolower(geography) == "region" &
+           # remove'outside of England and wales' and other country entries
+           substr(GeoCode, 1, 1) == "E" &
+             # inner and outer london were classed as metropolitan districts not 
+             # regions in the old data, so removing them from the new data for consistency)
+             tolower(geography) %not_in% c("inner london", "outer london"))
 
-data_in_csv_format <- lower_geography_removed %>%
+data_in_csv_format <- unwanted_geography_removed %>%
   dplyr::select(GeoCode, Region, geography,
                 neonatal_rate,
                 obs_status_neonatal) 
@@ -77,7 +79,7 @@ names(clean_csv_data_area_of_residence) <-
 
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
-   calculations, lower_geography_removed)
+   calculations, unwanted_geography_removed)
 
 if (first_header_row_area_of_residence > 1) {
   rm(

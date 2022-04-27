@@ -143,7 +143,7 @@ csv_data <- bound_tables %>%
 # with low reliability. Someone may wish to reverse this decision in the future.
 # If so, this next block (up to the dashed line) can just be commented out.
 
-final_csv <- csv_data %>% 
+csv_data <- csv_data %>% 
   mutate(remove = case_when(
     Age != "" & Birthweight != "" ~ TRUE,
     Sex != "" & `Neonatal period` == "Late neonatal" & 
@@ -152,8 +152,6 @@ final_csv <- csv_data %>%
   )) %>% 
   filter(remove == FALSE) %>% 
   select(-remove)
-
-csv_data <- final_csv 
 
 
 #-------------------------------------------------------------------------------
@@ -178,7 +176,7 @@ filename_date_time <- SDGupdater::create_datetime_for_filename(date_time)
 csv_data_filename <- paste0('Output/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
 markdown_filename <- paste0('Output/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
 
-write.csv(csv_data, csv_data_filename, row.names = FALSE)
+write.csv(csv_data, csv_data_filename, row.names = FALSE, na = "")
 rmarkdown::render('QA.Rmd', output_file = markdown_filename)
 
 message(paste0("csv for ", year, " has been created and saved in '", current_directory,

@@ -51,11 +51,11 @@ calculations <- renamed_main %>%
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
     early_neonatal_number > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      late_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      late_neonatal_number < 3 | is.na(late_neonatal_number) ~ "Missing value; suppressed", 
       late_neonatal_number >= 3 & late_neonatal_number <= 19 ~ "Low reliability",
       late_neonatal_number > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      neonatal_number < 3 | is.na(neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
       neonatal_number > 19  ~ "Normal value")) %>% 
   dplyr::filter(year == unique(bound_tables$Year)[1])

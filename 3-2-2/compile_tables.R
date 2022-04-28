@@ -28,7 +28,7 @@ remove_symbols <- function(column) {
 }
 #-------------------------------------------------------------------------------
 
-source("config.R")
+source("example_config.R")
 
 if (pre_2020_data == TRUE) {  
   # datasets after 2018 use an extra tab for England and Wales headline figure
@@ -179,8 +179,8 @@ if (output_folder_exists == FALSE) {
 date_time <- Sys.time()
 filename_date_time <- SDGupdater::create_datetime_for_filename(date_time)
 
-csv_data_filename <- paste0('Output/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
-markdown_filename <- paste0('Output/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
+csv_data_filename <- paste0(output_folder, '/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
+markdown_filename <- paste0(output_folder, '/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
 
 write.csv(csv_data, csv_data_filename, row.names = FALSE, na = "")
 rmarkdown::render('QA.Rmd', output_file = markdown_filename)

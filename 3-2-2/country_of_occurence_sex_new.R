@@ -63,11 +63,11 @@ calculations <- clean_numeric_columns %>%
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
     early_neonatal_number > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      number_late_neonatal_deaths < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      number_late_neonatal_deaths < 3 | is.na(number_late_neonatal_deaths) ~ "Missing value; suppressed", 
       number_late_neonatal_deaths >= 3 & number_late_neonatal_deaths <= 19 ~ "Low reliability",
       number_late_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      neonatal_number < 3 | is.na(neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
       neonatal_number > 19  ~ "Normal value"))
 
@@ -122,14 +122,11 @@ names(clean_csv_data_birtweight_by_mum_age) <-
 
 # clean environment ------------------------------------------------------------
 rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
-   calculations)
-
-if (first_header_row_country_by_sex > 1) {
-  rm(
+   calculations,
     metadata,
     year,
     country
   )
-}
+
 
 

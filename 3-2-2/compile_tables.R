@@ -64,6 +64,7 @@ if (pre_2020_data == TRUE) {
   source("birthweight_age_new.R")
   source("country_of_occurence_sex_new.R")
   source("country_of_birth_new.R")
+  source("ethnicity_new.R")
   
 } else {
   stop("please set pre_2020_data to TRUE or FALSE in the configs")
@@ -101,6 +102,10 @@ bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_birtweight_by_mum_age,
                                  clean_csv_data_country_by_sex,
                                  clean_csv_data_country_of_birth)
+if (pre_2020_data == FALSE) {
+  bound_tables <- dplyr::bind_rows(bound_tables, 
+                                   clean_csv_data_ethnicity)
+}
 
 years <- as.numeric(as.character(unique(bound_tables$Year)))
 
@@ -135,7 +140,8 @@ csv_data <- bound_tables %>%
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
                  Region, Sex) %>%
-  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
+  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+                `Country of birth`, `Ethnic group`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
 # Remove low reliability disaggregations ---------------------------------------

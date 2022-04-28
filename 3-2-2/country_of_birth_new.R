@@ -75,11 +75,11 @@ observation_status <- calculations_country_of_birth %>%
     number_early_neonatal_deaths >= 3 & number_early_neonatal_deaths <= 19 ~ "Low reliability",
     number_early_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      number_late_neonatal_deaths < 3 | is.na(number_early_neonatal_deaths) ~ "Missing value; suppressed", 
+      number_late_neonatal_deaths < 3 | is.na(number_late_neonatal_deaths) ~ "Missing value; suppressed", 
       number_late_neonatal_deaths >= 3 & number_late_neonatal_deaths <= 19 ~ "Low reliability",
       number_late_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      number_neonatal_deaths < 3 | is.na(number_early_neonatal_deaths) ~ "Missing value; suppressed", 
+      number_neonatal_deaths < 3 | is.na(number_neonatal_deaths) ~ "Missing value; suppressed", 
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value"))
 

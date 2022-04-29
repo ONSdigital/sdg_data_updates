@@ -1,16 +1,3 @@
-# functions: move to SDGupdater if useful for more indicators:
-
-# # This function looks for all the words given in `pattern` vector to identify which
-# # column to rename, and then renames that column with `new_name`
-# name_columns <- function(dat, pattern, new_name){
-#   
-#   column_location <- which(apply(sapply(pattern, grepl, 
-#                                         names(dat)), 1, all) == TRUE)
-#   names(dat)[column_location] <- new_name
-#   return(dat)
-#   
-# }
-
 library('openxlsx')
 library('stringr')
 library('janitor')
@@ -20,7 +7,6 @@ library('dplyr')
 library('SDGupdater')
 
 #-------------------------------------------------------------------------------
-
 remove_symbols <- function(column) {
   ifelse(column %in% c("z", ":"),
          NA, 
@@ -139,10 +125,20 @@ csv_data <- bound_tables %>%
                 `Unit multiplier` = "Units",
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
-                 Region, Sex) %>%
-  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+                 Region, Sex) 
+
+if (pre_2020_data == FALSE) {
+  csv_data <- csv_data %>% 
+    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
                 `Country of birth`, `Ethnic group`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
+} else {
+  # doesn't contain ethnic group
+  csv_data <- csv_data %>% 
+    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+                `Country of birth`, Sex, 
+                GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
+  }
 
 # Remove low reliability disaggregations ---------------------------------------
 # I have decided to remove some disaggregations due to large numbers of rates 

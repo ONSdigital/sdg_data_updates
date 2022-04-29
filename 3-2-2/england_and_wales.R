@@ -32,26 +32,20 @@ data_for_calculations <- clean_data %>%
 
 #-------------------------------------------------------------------------------
 
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "1,000", "Neonatal", "28 days"),
-                                      "neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "1,000", "Early", "7 days"),
-                                      "early_neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "Late", "neonatal"),
-                                      "late_neonatal_rate")
+data_for_calculations <- data_for_calculations %>% 
+  rename_column(primary = c("Rates", "1,000", "Neonatal", "28 days"),
+                new_name = "neonatal_rate") %>% 
+  rename_columns(primary = c("Rates", "1,000", "Early", "7 days"),
+                 new_name = "early_neonatal_rate") %>% 
+  rename_columns(primary = c("Rates", "Late", "neonatal"),
+                 new_name =  "late_neonatal_rate") %>% 
 
-
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Neonatal", "28 days"),
-                                      "neonatal_number")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Early", "7 days"),
-                                      "early_neonatal_number")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Late", "neonatal"),
-                                      "late_neonatal_number")
+  rename_columns(primary = c("NA", "Neonatal", "28 days"),
+                 new_name =  "neonatal_number") %>% 
+  rename_columns(primary = c("NA", "Early", "7 days"),
+                 new_name =  "early_neonatal_number") %>%
+  rename_columns(primary = c("NA", "Late", "neonatal"),
+                 new_name =  "late_neonatal_number")
 
 # 
 # 

@@ -282,6 +282,11 @@ all_data <- old_data %>%
   mutate(`Neonatal period` = ifelse(is.na(`Neonatal period`), "", `Neonatal period`)) %>% 
   mutate(`period and dataset` = paste(dataset, `Neonatal period`))
 
+if ("Ethnic group" %not_in% names(all_data)) {
+  all_data <- all_data %>% 
+    mutate(`Ethnic group` = NA)
+}
+
 # country by sex
 country_sex_plot <- all_data %>% 
   filter(Birthweight == "" &

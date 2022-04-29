@@ -53,12 +53,12 @@ data_for_calculations <- clean_data %>%
 
 # rename columns so they are the same each year --------------------------------
 
+data_for_calculations <- rename_column(data_for_calculations, 
+                                      primary = c("Rates", "Neo"),
+                                      new_name = "Neonatal_rate")
 data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "Neo"),
-                                      "Neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Live"),
-                                      "number_live_births")
+                                      primary = "Live",
+                                      new_name = "number_live_births")
 data_for_calculations <- name_columns(data_for_calculations, 
                                       c("Numbers", "Early"),
                                       "number_early_neonatal_deaths")

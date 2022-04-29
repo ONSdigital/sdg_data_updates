@@ -83,6 +83,19 @@ If it does not end with 'sdg_data_updates' type `setwd('./..')`, this will make 
 
 ```
 
+```diff
+- Warning messages:
+1: In rename_column(., primary = c("rate", "neo"), not_pattern = "peri|post|early|late|stillbirth",  :
+  0 columns identified for neonatal_rate . Please refine 'primary', 'alternate', and 'not_pattern' arguments. Column name not replaced
+  
+The name of the column (in this case for neonal=tal mortality rate) has changed and is not longer captured by the arguments in  
+rename_column. Adapt the arguments as described in the warning message.
+  
+If there are multiple warnings that are very similar, the first_header_row is probably incorrect for one of the tables. Correct this in the config file.
+
+
+```
+
 
 ### NOTES:
 	

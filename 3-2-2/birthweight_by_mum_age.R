@@ -36,18 +36,15 @@ data_for_calculations <- clean_data %>%
               values_from = numeric)
 
 # rename columns so they are the same each year --------------------------------
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "Neo"),
-                                      "Neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Live"),
-                                      "number_live_births")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Early"),
-                                      "number_early_neonatal_deaths")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Neo", "Deaths"),
-                                      "number_neonatal_deaths")
+data_for_calculations <- data_for_calculations %>% 
+  rename_column(primary = c("Rates", "Neo"),
+                new_name = "Neonatal_rate") %>% 
+  rename_column(primary = c("Live"),
+                new_name = "number_live_births") %>% 
+  rename_column(primary = c("Numbers", "Early"),
+                new_name = "number_early_neonatal_deaths") %>% 
+  rename_column(primary = c("Numbers", "Neo", "Deaths"),
+                new_name = "number_neonatal_deaths")
 #-------------------------------------------------------------------------------
 
 

@@ -66,7 +66,5 @@ when census 2021 numbers are out.*
 - to be SDMX compatible maybe use the subset of SOC2010 codes specified in the metadata. 
   This will require generating the nomis link agaiin and putting it in the config.R file.
   It will also require a simplification of the code:
-  - get rid of the section where vets are subtracted from health professsionals
-  - get a headline figure (e.g. `group_by(Year) %>% summarise(Value = sum(Value))`)
-
-  
+  - get rid of the section where vets are subtracted from health professsionals.
+  - get a headline figure (e.g. `group_by(Year) %>% summarise(Value = sum(Value))`). 

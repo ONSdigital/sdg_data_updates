@@ -9,7 +9,7 @@ There are four main files that should be relatively consistent in what they do a
 You should not need to change anything on it, other than the indicator number when you are testing your automation
 2. `compile_tables.R` Every standard R update needs a script with this exact name. It is the script called by `update_indicator_main.R`, 
 and which calls the scripts that do the donkey-work. The csv may be saved from here. The Rmarkdown html file is run and saved from here.
-3. `config.R` This could be written as a yaml, but usually the configs are straightforward enough that an R config file is fine. This is where
+3. `config.R` This could be written as a yaml file, but usually the configs are straightforward enough that an R config file is fine. This is where
 user configurations are set - these are aspects of the code that may need to be changed depending on when it is run, but that we can't or don't want to automate.
 It should have this name to save any confusion, and because this is a standard name for this kind of file. It is called by `compile_tables.R`
 4. A .R script or scripts that do the bulk of the work called by `compile_tables.R` (I refer to this as the 'workhorse' file). 
@@ -18,7 +18,7 @@ It/they can be called anything, but try to keep it informative.
   
 There are a number of different input layouts that impact the way an automation is written. There are, therefore, separate template scripts for each of these types. Each file layout type has it's own input, config, compile_tables, and workhorse files.  
   
-Currently, only the template for type_1 is ready to use, though it does not yet include a markdown template.  
+Currently, only the templates for type_1, type_2 and type_4 are ready to use, though they do not yet include markdown templates.  
   
 ### Input types
 #### Type 1: Simple excel or csv file 
@@ -35,7 +35,9 @@ Currently, only the template for type_1 is ready to use, though it does not yet 
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
   
 #### Type 4: Nomis
-  
+- Data that are on Nomis do not need to be manually downloaded as they have stable weblinks
+- Headers are simple and stable (I think the latter is true)
+   
 #### Type 5: ONS CDID 
 
 ### Instructions

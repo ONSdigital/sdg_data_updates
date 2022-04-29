@@ -2,15 +2,21 @@
 # It has to be called compile_tables.R
 # It is the control script that runs all the others.
 
-library('openxlsx')
-library('stringr')
-library('janitor')
+# library('openxlsx')
+# library('stringr')
+# library('janitor')
 
 setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R
 
-source("type_1_config.R") # pulls in all the configurations. Change to "config.R" for real update
-source("update_type_1.R") # does the donkey-work of making the csv - 
+source("type_2_config.R") # pulls in all the configurations. Change to "config.R" for real update
+
+
+if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
+  stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
+}
+
+source("update_type_2.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 
 
 # at this point you should see lots of variables appear in the global environment 
@@ -31,7 +37,7 @@ date <- Sys.Date()
 csv_filename <- paste0(date, "_update_type_1.csv")
 qa_filename <- paste0(date, "_update_type_1_checks.html") 
 
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
 # rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))

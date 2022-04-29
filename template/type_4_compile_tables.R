@@ -1,18 +1,18 @@
-# This file is directly called by update_indicator_main.R.
-# It has to be called compile_tables.R
-# It is the control script that runs all the others.
+# Author: Emma Wood
+# Initial date: 16/12/2021
+# purpose: set up for 3-c-1 indicator update, and save output files
+#     This file is directly called by update_indicator_main.R.
+#     It has to be named compile_tables.R
+#     It is the control script that runs all the others.
 
-library('openxlsx')
 library('stringr')
-library('janitor')
+library("dplyr")
 
 setwd("template") # this line is to run the template only - 
-                  # do not copy into your code as this is usually found in update_indicator_main.R
+# do not copy into your code as this is usually found in update_indicator_main.R
 
-source("type_1_config.R") # pulls in all the configurations. Change to "config.R" for real update
-source("update_type_1.R") # does the donkey-work of making the csv - 
-                          # for real update this might be called e.g. 'update_1-2-1.R' 
-
+source("type_4_config.R") # pulls in all the configurations
+source("update_type_4.R") # does the donkey-work of making the csv
 # at this point you should see lots of variables appear in the global environment 
 # pane (top right). These have been created by the update_type_1 script.
 
@@ -28,8 +28,8 @@ date <- Sys.Date()
 # we add the date to the output file so that old outputs are not automatically overwritten.
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_type_1.csv")
-qa_filename <- paste0(date, "_update_type_1_checks.html") 
+csv_filename <- paste0(date, "_update_type_4.csv")
+qa_filename <- paste0(date, "_update_type_4_checks.html") 
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
@@ -41,3 +41,4 @@ message(paste0("The csv and QA file have been created and saved in '", paste0(ge
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")
+

@@ -31,7 +31,22 @@ if(multiple_quarters == TRUE) {
   unique_months_retained <- unique(months_no_years_retained)
 }
 
+# check that both datasets run to the same year --------------------------------
+max_years <- data.frame("dataset" = c("employment", "population"),
+                        "max_year" = c(
+                          max(as.numeric(substr(employment_data$DATE, 1, 4))),
+                          max(population_data$DATE)))
 
+full_data_max_year <- min(max_years$max_year)
+
+if (length(unique(max_years$max_year)) > 1) {
+  not_all_data_available <- TRUE
+  dataset_behind <- max_years$dataset[max_years$max_year == full_data_max_year]
+} else {
+  not_all_data_available <- FALSE
+}
+
+#-------------------------------------------------------------------------------
 
 minor_occupations <- unique(employment_data$C_OCCPUK11H_0_NAME[employment_data$C_OCCPUK11H_0_TYPE == "3-digit occupation"])
 occupation_lookup <- data.frame(minor = minor_occupations,
@@ -87,15 +102,6 @@ non_vets <- occupations_filled %>%
                           `Occupation unit group` == "",
                         count - vet_count, count))
 
-# # counts are small so:
-# #        should we remove region by unit group?
-# reduced_disaggregations <- non_vets %>% 
-#   mutate(remove = ifelse(Region != "" & 
-#                            `Occupation unit group` != "", TRUE, FALSE)) %>%
-#   filter(remove == FALSE) %>% 
-#   select(-remove)
-reduced_disaggregations <- non_vets
-
 #----------------------------------------------------------------------------
 population_data_clean <- population_data %>% 
   filter(MEASURES_NAME == "Value" &
@@ -115,11 +121,12 @@ population_data_clean <- population_data %>%
          population)
 
 # calculate density
-density <- reduced_disaggregations %>% 
+density <- non_vets %>% 
   # We are using Jan to Dec data so can remove the month from the date code 
   mutate(Year = substr(DATE_CODE, 1, 4)) %>% 
   left_join(population_data_clean, by = c("Year" = "DATE_CODE", "Country", "Region")) %>% 
-  mutate(Value = (count/population) * 10000)
+  mutate(Value = (count/population) * 10000) %>% 
+  filter(Year == as.character(full_data_max_year))
   
 # put in csv format
 csv_formatted <- density %>% 

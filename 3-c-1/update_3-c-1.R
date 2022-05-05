@@ -25,7 +25,13 @@ if(multiple_quarters == TRUE) {
   employment_data <- employment_data %>% 
     mutate(keep_quarter = ifelse(substr(DATE_CODE, 6, 7) == "12", TRUE, FALSE)) %>% 
     filter(keep_quarter == TRUE)
+  
+  months_retained <- as.character(unique(employment_data$DATE_NAME))
+  months_no_years_retained <- gsub('[[:digit:]]+', '', months_retained)
+  unique_months_retained <- unique(months_no_years_retained)
 }
+
+
 
 minor_occupations <- unique(employment_data$C_OCCPUK11H_0_NAME[employment_data$C_OCCPUK11H_0_TYPE == "3-digit occupation"])
 occupation_lookup <- data.frame(minor = minor_occupations,

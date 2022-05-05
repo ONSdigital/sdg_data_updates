@@ -38,9 +38,10 @@ The details of how these links are generated is given in the README file in the
 occupations) change.
   
 ## Basic checks
-Data should all be from the Jan-December months. The months containied in the 
-data for this run are: `R unique_months`. If this is incorrect please check the 
-nomis selections are correct, and regenerate the link (see the 3-c-1 README file).
+We should only use data for the calendar year (Jan-Dec). The months contained in 
+the data for this run are: `r unique_months_retained`.  If the given months are 
+incorrect please check the nomis selections are correct, and regenerate the link 
+(see the 3-c-1 README file).
   
 ## Plots
 Please check the plots below for any differences between the live and new data.

@@ -311,8 +311,8 @@ def calculate_indicator(df, start_year):
     annual_growth_rates = calculate_growth_rates(df, annual_lookup)
     quarterly_growth_rates = calculate_growth_rates(annual_growth_rates, quarterly_lookup)
     
-    weights_by_year = add_weights_by_year(quarterly_growth_rates, start_year)
-    annual_weighted_growth_rates = calculate_weighted_growth_rates(weights_by_year, annual_lookup)
+    year_count = add_year_count(quarterly_growth_rates, start_year)
+    annual_weighted_growth_rates = calculate_weighted_growth_rates(year_count, annual_lookup)
     all_weighted_growth_rates = calculate_weighted_growth_rates(annual_weighted_growth_rates, quarterly_lookup)
     
     annual_weighted_mean =  calculate_weighted_mean(all_weighted_growth_rates, annual_lookup)
@@ -358,14 +358,20 @@ def calculate_growth_rates(index_df, lookup):
             
     return(index_df)
 
-def add_weights_by_year(index_df, start_year):
+def add_year_count(index_df, start_year):
     """
-    Adds a column giving the weight for each year
+    In older version of code was add_weights_by_year
+    Adds a column giving the sum of the years up to that point. It isn't clear
+    to me whether year count for the quarters should start before the annuals 
+    (as some quarterly growth rates can be calculated during the first year in 
+    the dataset). For now we use the same year 1 for both quarterly and annual
+    data as both are required to calculate the final value.
     
     Details
     -------
-    Weight increases with year, as more recent years are more important - 
-    first year has weight 1, second has 2, etc. 
+    Weight increases with year. We class the first year as the 
+    first year for which we can calculate growth rates, which is the second 
+    year in the dataframe.
 
     Parameters
     ----------
@@ -380,7 +386,7 @@ def add_weights_by_year(index_df, start_year):
         CPIH data for one indicator including weight column
 
     """
-    index_df['weight'] = pd.to_numeric(index_df['year'].str[0:4]) - (start_year - 1)
+    index_df['sum_years'] = pd.to_numeric(index_df['year'].str[0:4]) - start_year
     return(index_df)
 
 def calculate_weighted_growth_rates(index_df, lookup):
@@ -410,6 +416,8 @@ def calculate_weighted_growth_rates(index_df, lookup):
 def calculate_weighted_mean(index_df, lookup):
     """
     Calculates weighted mean
+    Need to edit this so that it is the weighted mean up to each year, done 
+    separately for each month. (I think)
 
     Parameters
     ----------
@@ -425,8 +433,10 @@ def calculate_weighted_mean(index_df, lookup):
     Returns
     -------
     float 
-
+    
     """
+    #index_df['annual_weight']
+    # index_df['quarterly_weight']
     weighted_mean = sum(index_df.loc[lookup["months"]:len(index_df['value']), lookup["weighted_growth_rate"]]) / sum(index_df.loc[lookup["months"]:len(index_df['value']), 'weight'])   
     return(weighted_mean)
 

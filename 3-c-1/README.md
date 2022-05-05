@@ -61,10 +61,11 @@ when census 2021 numbers are out.*
 #### Checking the QA file ####
 The main thing to check in this file is that the graphs look how you expect them to. If you have not made any changes to the 
 disaggregations there should be both red and blue lines on every facet of every chart. However, if you have added or removed 
-any disaggregations you may get warnings such as 'Removed 20 rows containing missing values (geom_point).' In such cases this
-is to be expected. *However*, if you have not intentionally changed which disaggregations should be output, and you still get 
-this warning something has gone wrong. As an initial check, remake the nomis link and try again.  
+any disaggregations this may not be the case. *However*, if you have not intentionally changed which disaggregations should be output, 
+and you still get missing values on charts, something may have gone wrong. As an initial check, remake the nomis link and try again.    
   
+If there are any blank values you may get warnings such as 'Removed 20 rows containing missing values (geom_point).'  
+    
 If graphs have got strange looking vertical lines on them, an extra disaggregation has crept into the data (i.e. there are
 extra unexpected rows in the data), or a column name has changed.  
 

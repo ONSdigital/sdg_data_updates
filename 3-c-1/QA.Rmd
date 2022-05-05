@@ -43,7 +43,7 @@ the data for this run are: `r unique_months_retained`.  If the given months are
 incorrect please check the nomis selections are correct, and regenerate the link 
 (see the 3-c-1 README file).
 
-```{r}
+```{r, include=FALSE}
 if (not_all_data_available == TRUE) {
   print(paste("NOTE: Data for", dataset_behind, "data are only available up to", 
               max_years$max_year[max_years$dataset == dataset_behind], 
@@ -138,17 +138,17 @@ region_unit_plot <- joined_data %>%
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-country_minor_plot
+suppressMessages(print(country_minor_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height=15}
-country_unit_plot
+suppressMessages(print(country_unit_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height=15}
-region_minor_plot
+suppressMessages(print(region_minor_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=15, fig.height = 15}
-region_unit_plot
+suppressMessages(print(region_unit_plot))
 ```

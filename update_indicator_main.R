@@ -23,7 +23,7 @@ library(stringr)
 library(SDGupdater)
 
 
-indicator <- "15-a-1_and_15-b-1a" # name of folder for indicator
+indicator <- "3-c-1" # name of folder for indicator
 
 
 setwd(indicator)

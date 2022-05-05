@@ -8,7 +8,7 @@
 library('openxlsx')
 library('stringr')
 
-source("config.R") # pulls in all the configurations
+source("example_config.R") # pulls in all the configurations
 source("update_3-c-1.R") # does the donkey-work of making the csv
 
 existing_files <- list.files()

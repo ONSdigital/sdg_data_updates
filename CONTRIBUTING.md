@@ -7,7 +7,9 @@ I am going to assume that the only people who will be contributing will be membe
 [Coding conventions](#coding-conventions)  
 [Setting up your computer to work on indicator automations](#setting-up-your-computer-to-work-on-indicator-automations)  
 [Setting up a new indicator automation](#setting-up-a-new-indicator-automation)  
-[Working on an existing code](#working-on-an-existing-code)  
+[Reviewing indicator automations](#reviewing-indicator-automations)    
+[Finalising the automated update](#finalising-the-automated-update)  
+[Adding functions to SDGupdater ](#adding-functions-to-sdgupdater )    
 
 ## Useful resources ##
     
@@ -172,7 +174,7 @@ Every new indicator automation requires it's own branch. **Do not work on code i
  >   
  > Create pull request  
  >   
- > Request review using the panel on the right. This is required before a merge to main can be completed. Use a [template](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) so that there is a history of what has been checked.  
+ > Request review using the panel on the right. This is required before a merge to main can be completed. Use a [template](#Reviewing-indicator-automations) so that there is a history of what has been checked.  
     
 ## Working on an existing code ##
 If you want to make changes to an existing automation, unless it is a cosmetic change e.g. to the readme, please create a new branch for your changes.  
@@ -183,9 +185,72 @@ Edits to existing automations will follow a similar process to new automations.
 4) Update the README file (may not be required).  
 5) Merge back into the original branch. If you are merging into main code review is required. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.  
   
+## Reviewing indicator automations ##
+Before indicator automations can be merged into the main branch, they must be reviewd.   
+  
+Please use the template below as the basis for your review - copy and paste it into the
+conversation and make comments on all relevant sections. This template is based on the 
+on the [Quality Assurance of Code for Research Analysis template](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html).  
+  
+```
+##  Code review
+
+#### Documentation
+
+Any new code includes all the following forms of documentation:
+  
+- [ ] README file for the indicator
+- [ ] Example input and output that run successfully locally.
+  
+If the code includes functions, or is a function/set of functions for SDGupdater:  
+- [ ] **Function Documentation** as docstrings within the function definition.
+- [ ] **Examples** demonstrating major functionality, which runs successfully locally.
+
+#### Functionality
+
+- [ ] **Installation**: Installation or build of the code succeeds.
+- [ ] *Guidelines**: New code conforms to the project contribution
+  guidelines.  
+- [ ] **Example data**: Example output generated using the example input matches the given example output. 
+- [ ] **csv formatting**: The csv output is correct, given general guidance for csvs (e.g. columns are in 
+a logical order, values within columns are in the correct order, sentence case is used, correct terms are 
+used (i.e. ar in the data dictionary), observation status column is correctly filled in).  
+     
+If the code includes functions, or is a function/set of functions for SDGupdater:  
+- [ ] **Automated tests**: Unit tests cover essential functions for a reasonable range
+  of inputs and conditions. All tests pass on your local machine.
+
+
+#### Final approval (post-review)
+
+The author has responded to my review and made changes to my satisfaction.
+- [ ] **I recommend merging this request.**
+
+Estimated time spent reviewing: #
+
+---
+
+### Review comments
+
+*Insert detailed comments here!*
+
+These might include, but not exclusively:
+
+- bugs that need fixing (does it work as expected? and does it work with other code
+  that it is likely to interact with?)
+- alternative methods (could it be written more efficiently or with more clarity?)
+- documentation improvements (does the documentation reflect how the code actually works?)
+- additional tests that should be implemented (do the tests effectively assure that it
+  works correctly?)
+- code style improvements (could the code be written more clearly?)
+
+Your suggestions should be tailored to the code that you are reviewing.
+Be critical and clear, but not mean. Ask questions and set actions.
+```
+  
 ## Finalising the automated update ## 
 Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
-Once your code has passed [review](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
+Once your code has passed [review](#reviewing-indicator-automations) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
 - Using Git GUI:  
 > Open Git GUI and select `Open Existing Repository`  
 > 
@@ -230,6 +295,8 @@ install("SDGupdater")
 # run tests
 devtools::test("SDGupdater")
 ```
+
+
 
   
 

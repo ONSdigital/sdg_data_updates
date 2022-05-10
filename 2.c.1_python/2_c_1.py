@@ -311,26 +311,15 @@ def calculate_indicator(df, start_year):
     annual_growth_rates = calculate_growth_rates(df, annual_lookup)
     quarterly_growth_rates = calculate_growth_rates(annual_growth_rates, quarterly_lookup)
     
-    weights_table = make_weights_table(quarterly_growth_rates)
-    
-    weighted_growth_rates = calculate_weighted_growth_rates(quarterly_growth_rates, annual_lookup, weights_table)
-    # all_weighted_growth_rates = calculate_weighted_growth_rates(annual_weighted_growth_rates, quarterly_lookup)
-    
-#==============================================================================
-#     annual_weighted_mean =  calculate_weighted_mean(all_weighted_growth_rates, annual_lookup)
-#     quarterly_weighted_mean = calculate_weighted_mean(all_weighted_growth_rates, quarterly_lookup)
-#     
-#     annual_weighted_standard_deviation = calculate_weighted_standard_deviation(all_weighted_growth_rates, annual_lookup, annual_weighted_mean)
-#     quarterly_weighted_standard_deviation = calculate_weighted_standard_deviation(all_weighted_growth_rates, quarterly_lookup, quarterly_weighted_mean)
-#     
-#==============================================================================
+    year_and_month = get_year_and_month(quarterly_growth_rates)
 
-
-# GO FROM HERE!
-    annual_z_scores = calculate_z_scores(weighted_growth_rates, annual_lookup, annual_weighted_mean, annual_weighted_standard_deviation)
-    all_z_scores = calculate_z_scores(annual_z_scores, quarterly_lookup, quarterly_weighted_mean, quarterly_weighted_standard_deviation)
+    weights_table = make_weights_table(year_and_month)
     
-    indicator = calculate_indicator_z_scores(all_z_scores)
+    weighted_growth_rates = calculate_weighted_growth_rates(year_and_month, weights_table)
+
+    z_scores = calculate_z_scores(weighted_growth_rates, year_and_month)
+    
+    indicator = calculate_weighted_z(z_scores)
     
     return(indicator)
 
@@ -356,13 +345,25 @@ def calculate_growth_rates(index_df, lookup):
         column
 
     """
+    
     index_df[lookup["growth_rate"]] = np.nan
     
     for i in range(0, len(index_df)):
         if i >= lookup["months"]:
             index_df.loc[i, lookup["growth_rate"]] =+ (pd.to_numeric(index_df.loc[i, 'value']) / pd.to_numeric(index_df.loc[i - lookup["months"], 'value']))**(1/lookup["months"]) - 1
-            
-    return(index_df)
+       
+
+    return index_df
+
+def get_year_and_month(df):
+    
+        year_split = (df
+                .rename(columns = {'year':'year_month'})
+                .assign(year = pd.to_numeric(df['year'].str[0:4]))
+                .assign(month = pd.to_numeric(df['year'].str[5:7]))
+                )
+        
+        return year_split
 
 def make_weights_table(df):
     """
@@ -386,10 +387,9 @@ def make_weights_table(df):
     """
      
     years = (df
-               .assign(year = pd.to_numeric(df['year'].str[0:4]))
-               .filter(['year'])
-               .drop_duplicates()
-               )
+             .filter(['year'])
+             .drop_duplicates()
+             )
         
     year_numbers = pd.DataFrame(
             {
@@ -424,7 +424,7 @@ def make_weights_table(df):
     
     return weights
 
-def calculate_weighted_growth_rates(index_df, lookup, weights_table):
+def calculate_weighted_growth_rates(index_df, weights_table):
     """
     Calculates the weighted mean and standard deviation of growth rates in 
     the same month over all previous years. More recent years have higher
@@ -436,10 +436,7 @@ def calculate_weighted_growth_rates(index_df, lookup, weights_table):
     ----------
     index_df : dataframe
         CPIH data for one indicator containing growth rates and year weights
-    lookup : dictionary
-        Column names specific to the index_data and data being caluclated:
-            growth_rate: column for growth rates 
-            weighted_growth_rate: column for weighted growth rates 
+
      
     Returns
     -------
@@ -448,10 +445,10 @@ def calculate_weighted_growth_rates(index_df, lookup, weights_table):
         rate column.
 
     """
-    index_df['weight_year'] = pd.to_numeric(index_df['year'].str[0:4]) 
-    index_df['month'] = pd.to_numeric(index_df['year'].str[5:7]) 
+
     weighted_rates = (index_df
-                      .rename(columns = {'year': 'weight_year_month'})
+                      .rename(columns = {'year':'weight_year',
+                                         'year_month':'weight_year_month'})
                       .merge(weights_table, 
                              how = "left",
                              on = "weight_year")
@@ -483,65 +480,7 @@ def calculate_weighted_growth_rates(index_df, lookup, weights_table):
     
     return summary_rates
 
-#==============================================================================
-# def calculate_weighted_mean(index_df, lookup):
-#     """
-#     Calculates weighted mean
-# 
-#     Parameters
-#     ----------
-#    dataframe
-#         CPIH data for one indicator, sorted by date, including weighted growth 
-#         rate column.
-#     lookup : dictionary
-#         Column names and numbers specific to the index_data and data being
-#         caluclated for:
-#             weighted_growth_rate: column for weighted growth rates 
-#             months: 3 for quarterly, 12 for annual
-# 
-#     Returns
-#     -------
-#     #float 
-#     dataframe with extra columns
-#     """
-#     index_df['annual_weight']
-#     index_df['quarterly_weight']
-#     weighted_mean = sum(index_df.loc[lookup["months"]:len(index_df['value']), lookup["weighted_growth_rate"]]) / sum(index_df.loc[lookup["months"]:len(index_df['value']), 'weight'])   
-#     return(weighted_mean)
-#==============================================================================
-
-#==============================================================================
-# def calculate_weighted_standard_deviation(index_df, lookup, weighted_mean):
-#     """
-#     Calculates weighted standard deviation
-# 
-#     Parameters
-#     ----------
-#    dataframe
-#         CPIH data for one indicator, sorted by date, including growth 
-#         rate column.
-#     lookup : dictionary
-#         Column names and numbers specific to the index_data and data being
-#         caluclated for:
-#             growth_rate: column for growth rates 
-#             deviation_numerator_by_row: column to hold the calculation 
-#                 w*(x-mu)^two
-#             months: 3 for quarterly, 12 for annual
-# 
-#     Returns
-#     -------
-#     float 
-# 
-#     """
-#     index_df[lookup["deviation_numerator_by_row"]] = index_df['weight'] * (index_df[lookup["growth_rate"]] - weighted_mean)**2 
-#     numerator = sum(index_df[lookup["deviation_numerator_by_row"]][lookup["months"]:])
-#     denominator = (sum(index_df['weight'][lookup["months"]:])*(len(index_df['weight'][lookup["months"]:]) - 1)/
-#                    len(index_df['weight'][lookup["months"]:]))
-#     standard_deviation = (numerator / denominator)**0.5
-#     return(standard_deviation)
-#==============================================================================
-
-def calculate_z_scores(index_df, lookup, weighted_mean, weighted_standard_deviation):
+def calculate_z_scores(weighted_growth_rates, growth_rates):
     """
     Calculates z-scores for each quarter or year
 
@@ -563,13 +502,29 @@ def calculate_z_scores(index_df, lookup, weighted_mean, weighted_standard_deviat
         CPIH data for one indicator, with column for z-scores
 
     """
-    index_df[lookup["z-score"]] = (index_df[lookup["growth_rate"]] - weighted_mean) / weighted_standard_deviation
-    return(index_df)
+    
+    rates_and_weighted_rates = (growth_rates
+                                .merge(weighted_growth_rates,
+                                       how = "left",
+                                       on = ["year", "month"]))
+    
+    z_scores = (rates_and_weighted_rates
+                .assign(z_score_q = (
+                        pd.to_numeric(rates_and_weighted_rates['quarterly_growth_rate']) - pd.to_numeric(rates_and_weighted_rates['quarterly_growth_rate_mean'])) / \
+    pd.to_numeric(rates_and_weighted_rates['quarterly_growth_rate_std']))
+                .assign(z_score_a = (
+                        pd.to_numeric(rates_and_weighted_rates['annual_growth_rate']) - \
+                        pd.to_numeric(rates_and_weighted_rates['annual_growth_rate_mean'])) / \
+    pd.to_numeric(rates_and_weighted_rates['annual_growth_rate_std']))
+                )
+    
+    return(z_scores)
 
-def calculate_indicator_z_scores(index_df):
+def calculate_weighted_z(z_scores):
     """
     Calculates indicator specific z-scores, which take into account both 
-    quarterly and yearly changes.
+    quarterly and annual changes. Annual scores have a weight of 0.6, 
+    quarterly of 0.4
 
     Parameters
     ----------
@@ -583,14 +538,14 @@ def calculate_indicator_z_scores(index_df):
         CPIH data for one indicator, with column for indicator z-scores
     """
 
-    index_df['indicator'] = 0.4*index_df['z-score_quarterly'] + 0.6*index_df['z-score_annual']
-    return(index_df[['year','indicator']])
+    z_scores['indicator'] = 0.4*z_scores['z_score_q'] + 0.6*z_scores['z_score_a']
+    return(z_scores[['year_month','indicator']])
 
 ###----------------------------------------------------------------------------
 
 def get_final_values_for_csv(data_dict):
     """
-    Add rolling averages and unaveraged monthly valuse to dataframe.
+    Add rolling averages and unaveraged monthly values to dataframe.
 
     Parameters
     ----------
@@ -699,7 +654,9 @@ def finalise_csv_columns(csv_data):
         Dataframe as it needs to be for csv.
         
     """
-    csv_data = csv_data.rename(index = str, columns = {'year' : 'Year', 'indicator' : 'Value'})
+    csv_data = csv_data.rename(index = str,\
+                               columns = {'year_month' : 'Year', 
+                                          'indicator' : 'Value'})
         
     csv_data["Unit measure"] = "Index"
     csv_data["Unit multiplier"] = "Units"

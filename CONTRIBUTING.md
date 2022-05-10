@@ -10,6 +10,7 @@ I am going to assume that the only people who will be contributing will be membe
 [Reviewing indicator automations](#reviewing-indicator-automations)    
 [Finalising the automated update](#finalising-the-automated-update)  
 [Adding functions to SDGupdater ](#adding-functions-to-sdgupdater )    
+[Git GUI instructions](#git-gui-instructions) - Git bash instructions are given throughout, but the alternative instructions for GIt GUI are given here
 
 ## Useful resources ##
     
@@ -133,8 +134,9 @@ Edits to existing automations will follow a similar process to new automations.
 5) Merge back into the original branch. If you are merging into main code review is required. If you are merging into your own branch you may want to skip this step, however if you are merging into a colleagues code, please request review/sign-off before merging.  
   
 ## Reviewing indicator automations ##
-Before indicator automations can be merged into the main branch, they must be reviewd.   
-  
+Before indicator automations can be merged into the main branch, they must be reviewd.  More comprehensive [instructions for review](https://officenationalstatistics.sharepoint.com/:w:/r/sites/SusIneqSDG/Sample/Data_team/Guidance/Guidance%20-%20Peer%20review%20of%20code%20for%20automation.docx?d=w952aec2a912a44398796354c0b6bd08e&csf=1&web=1&e=ZloOWx) are given 
+in the [guidance folder](https://officenationalstatistics.sharepoint.com/sites/SusIneqSDG/Sample/Forms/AllItems.aspx?id=%2Fsites%2FSusIneqSDG%2FSample%2FData%5Fteam%2FGuidance&viewid=af1c3b4f%2Dfc56%2D4c14%2D80cc%2D63f2d2a75464) on Sharepoint.  
+    
 Please use the template below as the basis for your review - copy and paste it into the
 conversation and make comments on all relevant sections. This template is based on the 
 on the [Quality Assurance of Code for Research Analysis template](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html).  

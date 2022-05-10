@@ -53,33 +53,13 @@ For updates done in R, the following code structure should be used:
     - Comment on *why* you are doing something not *what* the code is doing. If you need to state what the code does, consider improving names and using well-named functions.
 
 ## Setting up your computer to work on indicator automations ##
-To edit or create automation code, you will need to have the sdg_data_repository cloned on your computer. This is essentially a local version of what is on Github. You can navigate between branches, add new files and folders, update files, and push them up to the online Github repository using either Git GUI or the command line (e.g. using Git Bash).   
+To edit or create automation code, you will need to have the sdg_data_repository cloned on your computer. This is essentially a local version of what is on Github. You can navigate between branches, add new files and folders, update files, and push them up to the online Github repository using either Git GUI or the command line. All instructions in the main body of this document are given for the command line software Git Bash. [Git GUI instructions](#git-gui-instructions) are given at the end of this document.    
   
 1) If you don’t already have one, create a folder in a local drive (I recommend using D:) to store your repositories. Call it something logical like coding_repos.
 2) You should have 2-factor authentication on your Github account. This means that you may need to use a Personal access token to get your Git to sync with Github. To get a Personal access token, in Github go to Settings (your settings, not the repository settings) > Developer Settings > Personal Access Tokens. Copy the token and save it. When you are prompted for your password from Git, use this rather than your Github password.
 3) Copy the repo to your local drive (do not use a networked drive, as this will only cause you issues!). You can do this using the command line or Git GUI:  
    
-### Using Git Gui to clone the repo ###
- >   
- > - Open Git GUI  
- >   
- > - Click on 'clone existing repository'  
- >   
- > - In the [sdg_data_updates repo](https://github.com/ONSdigital/sdg_data_updates/) on Github go to the main branch, then click on the Code dropdown and copy the https link (see image below).  
- > ![image](https://user-images.githubusercontent.com/52452377/115564316-46297d00-a2b0-11eb-958b-c578235d14a5.png)
- > - Paste this link into the 'Source Location' field in Git GUI  
- >   
- > - In the 'Target Directory' field navigate (using Browse) to the folder you just created.   
- >   
- > - Add '/sdg_data_updates' to the end of the filepath in the 'Target Directory' field  
- >   
- > - Clone  
- >   
- > - You may be prompted for a password. Use the token you created in step 1.  
- >   
- > - You are now ready to get started!  
-   
-### Using Git bash to clone the repo ###
+### Clone the repo ###
 > - Open Git bash
 > - Type the following, hitting enter after each line to run the command     
 > `cd D:/coding_repos` (cd stands for change directory)  
@@ -95,30 +75,13 @@ There are several ways to move files between your local repository (on your lapt
 Every new indicator automation requires it's own branch. **Do not work on code in a branch that already exists for another indicator.**  
   
 1) Fetch the most recent version of the repo from Github  
-- In Git GUI:  
-  >   Remote > Fetch from > origin
-
-- In Git Bash:
   > use the fetch command and then pull command if "fetch" suggests that your branch is not up to date.  
   > You can also use `git pull` straight away without "fetching first". Performing a pull will automatically perform a fetch command first, but use fetch on its own to understand what has changed on the remote repo (if anything):  
   > `git fetch`
   >
   > `git pull`
   
-2) Create a new branch for the indicator you want to work on
-- In Git GUI:
-  > Checkout the branch you want to create the new branch from (this will usually be main)
-  > Branch > Checkout branch > seelct 'Tracking branch' then the one you want to checkout (main)
-  > 
-  > Branch > Create  
-  >   
-  > Name the new branch (usually with the indicator number)  
-  >   
-  > Starting Revision should be set to Tracking Branch > main by default - you do not need to change this  
-  >   
-  > Create
-  
-- In Git Bash:  
+2) Create a new branch for the indicator you want to work on  
   > Make sure you are on the main branch - you should see (main) at the end of the directory line. You can also try the command `git branch` to see a list of available branches on your local repo, and there will be a green star next to the one you are currently on. If you're not on main, switch to it: 
   > `git checkout main`
   > 
@@ -130,22 +93,6 @@ Every new indicator automation requires it's own branch. **Do not work on code i
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
 4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
 5) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
-- In Git GUI:
-  > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout  
-  >   
-  > Click Rescan to pickup any changes  
-  >   
-  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details.   
-  >   
-  > To move them down into the Staged changes panel click on the file icon to the left of the filename in the Unstaged changes panel  
-  >   
-  > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?  
-  >   
-  > Commit  
-  >   
-  > Push (make sure you are pushing to the right branch)  
-  
-- In Git Bash:
   >   
   > `git status` to check if you have any unstaged or uncommitted changes. Unstaged files with changes will be listed in red.  
   >   
@@ -251,14 +198,6 @@ Be critical and clear, but not mean. Ask questions and set actions.
 ## Finalising the automated update ## 
 Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
 Once your code has passed [review](#reviewing-indicator-automations) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
-- Using Git GUI:  
-> Open Git GUI and select `Open Existing Repository`  
-> 
-> Select the Jemalex/sdg_data_updates folder  
-> 
-> `Remote` > `Fetch from` > `origin`  
-> 
-> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
 - Using Git Bash:
 > 
@@ -295,12 +234,81 @@ install("SDGupdater")
 # run tests
 devtools::test("SDGupdater")
 ```
-
-
-
+## Git GUI instructions
+Most people will use Git bash, so those instructions are given throughout this document. 
+The equivalent processes in Git GUI are given below, though without some of the surrounding text):  
   
+### Clone the repo - in Git GUI ###
+ >   
+ > - Open Git GUI  
+ >   
+ > - Click on 'clone existing repository'  
+ >   
+ > - In the [sdg_data_updates repo](https://github.com/ONSdigital/sdg_data_updates/) on Github go to the main branch, then click on the Code dropdown and copy the https link (see image below).  
+ > ![image](https://user-images.githubusercontent.com/52452377/115564316-46297d00-a2b0-11eb-958b-c578235d14a5.png)
+ > - Paste this link into the 'Source Location' field in Git GUI  
+ >   
+ > - In the 'Target Directory' field navigate (using Browse) to the folder you just created.   
+ >   
+ > - Add '/sdg_data_updates' to the end of the filepath in the 'Target Directory' field  
+ >   
+ > - Clone  
+ >   
+ > - You may be prompted for a password. Use the token you created in step 1.  
+ >   
+ > - You are now ready to get started! 
 
-
-
+### Setting up a new indicator automation - in Git GUI ###
+1) Fetch the most recent version of the repo from Github  
+  >   Remote > Fetch from > origin
   
+2) Create a new branch for the indicator you want to work on
+  > Checkout the branch you want to create the new branch from (this will usually be main)
+  > Branch > Checkout branch > seelct 'Tracking branch' then the one you want to checkout (main)
+  > 
+  > Branch > Create  
+  >   
+  > Name the new branch (usually with the indicator number)  
+  >   
+  > Starting Revision should be set to Tracking Branch > main by default - you do not need to change this  
+  >   
+  > Create
+  
+3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
+4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
+5) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
+- In Git GUI:
+  > Make sure you are in the right branch by looking at Current branch (in the top left of the window just below the menu bar). If current branch is not correct, go to Branch > Checkout  
+  >   
+  > Click Rescan to pickup any changes  
+  >   
+  > Changed files are displayed in the Unstaged changes panel. You can click on these to see details.   
+  >   
+  > To move them down into the Staged changes panel click on the file icon to the left of the filename in the Unstaged changes panel  
+  >   
+  > Write a meaningful commit message. The first line is the title - keep this quite short. Hit enter twice then enter further details e.g. was it a bug fix/ progress on a certain aspect of the code?  
+  >   
+  > Commit  
+  >   
+  > Push (make sure you are pushing to the right branch)  
+  
+  5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
+7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. It must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
+8) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   
+ > Pull requests > New pull request  
+ >   
+ > Set base and compare branches  
+ >   
+ > Create pull request  
+ >   
+ > Request review using the panel on the right. This is required before a merge to main can be completed. Use a [template](#Reviewing-indicator-automations) so that there is a history of what has been checked.  
+
+### Finalising the automated update - in Git GUI 
+> Open Git GUI and select `Open Existing Repository`  
+> 
+> Select the Jemalex/sdg_data_updates folder  
+> 
+> `Remote` > `Fetch from` > `origin`  
+> 
+> Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 

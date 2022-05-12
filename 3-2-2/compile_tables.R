@@ -1,51 +1,59 @@
-# functions: move to SDGupdater if useful for more indicators:
+library('openxlsx')
+library('stringr')
+library('janitor')
+library('tidyr')
+library('dplyr')
 
-# This function looks for all the words given in `pattern` vector to identify which
-# column to rename, and then renames that column with `new_name`
-name_columns <- function(dat, pattern, new_name){
-  
-  column_location <- which(apply(sapply(pattern, grepl, 
-                                        names(dat)), 1, all) == TRUE)
-  names(dat)[column_location] <- new_name
-  return(dat)
-  
-}
+library('SDGupdater')
 
 #-------------------------------------------------------------------------------
-
-source("config.R")
-
-# filename <- SDGupdater::ask_user_for_filename(input_folder)
-
-if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
-  stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))
+remove_symbols <- function(column) {
+  ifelse(column %in% c("z", ":"),
+         NA, 
+         as.numeric(column))
 }
+#-------------------------------------------------------------------------------
 
-# datasets after 2018 use an extra tab for England and Wales headline figure
-# so there are two options here
-if(england_and_wales_timeseries_tab_name == "NA"){
-  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                    sheets = c(area_of_residence_tab_name,
-                                               birthweight_by_mum_age_tab_name,
-                                               country_of_occurrence_by_sex_tab_name,
-                                               country_of_birth_tab_name))
+source("example_config.R")
+
+if (pre_2020_data == TRUE) {  
+  # datasets after 2018 use an extra tab for England and Wales headline figure
+  # so there are two options here
+  if(england_and_wales_timeseries_tab_name == "NA"){
+    source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                      sheets = c(area_of_residence_tab_name,
+                                                 birthweight_by_mum_age_tab_name,
+                                                 country_of_occurrence_by_sex_tab_name,
+                                                 country_of_birth_tab_name))
+  } else {
+    source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
+                                      sheets = c(england_and_wales_timeseries_tab_name, 
+                                                 area_of_residence_tab_name,
+                                                 birthweight_by_mum_age_tab_name,
+                                                 country_of_occurrence_by_sex_tab_name,
+                                                 country_of_birth_tab_name))
+  }
+  
+  source("region.R")
+  source("birthweight_by_mum_age.R")
+  source("country_of_occurence_by_sex.R")
+  
+  if(include_country_of_birth == TRUE){ 
+    source("country_of_birth.R")
+  }else {
+    clean_csv_data_country_of_birth <- NULL
+  }
+  
+} else if (pre_2020_data == FALSE) {
+  
+  source("region_new.R")
+  source("birthweight_age_new.R")
+  source("country_of_occurence_sex_new.R")
+  source("country_of_birth_new.R")
+  source("ethnicity_new.R")
+  
 } else {
-  source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                    sheets = c(england_and_wales_timeseries_tab_name, 
-                                               area_of_residence_tab_name,
-                                               birthweight_by_mum_age_tab_name,
-                                               country_of_occurrence_by_sex_tab_name,
-                                               country_of_birth_tab_name))
-}
-
-source("region.R")
-source("birthweight_by_mum_age.R")
-source("country_of_occurence_by_sex.R")
-
-if(include_country_of_birth == TRUE){ 
-  source("country_of_birth.R")
-}else {
-  clean_csv_data_country_of_birth <- NULL
+  stop("please set pre_2020_data to TRUE or FALSE in the configs")
 }
 
 age_order <- data.frame(Age = c("19 and under",
@@ -80,17 +88,30 @@ bound_tables <- dplyr::bind_rows(clean_csv_data_area_of_residence,
                                  clean_csv_data_birtweight_by_mum_age,
                                  clean_csv_data_country_by_sex,
                                  clean_csv_data_country_of_birth)
+if (pre_2020_data == FALSE) {
+  bound_tables <- dplyr::bind_rows(bound_tables, 
+                                   clean_csv_data_ethnicity)
+}
 
 years <- as.numeric(as.character(unique(bound_tables$Year)))
 
-if(max(years, na.rm = TRUE) >= 2018){
+if (max(years, na.rm = TRUE) >= 2018){
 
 # in tables prior to 2018, the England and Wales figure that is comparable to 
 # other 'country of occurrence' countries is in table 2. 
 # In 2018 and 2019 table 2 does not include this figure, so need to get it from table 1.
 # This is where 'england_and_wales.R' will be sourced when we know what format the table will settle in
 # as it needs to take 'year' from bound_tables
-source("england_and_wales.R")
+  
+  if (pre_2020_data == TRUE) {
+    
+    source("england_and_wales.R")
+    
+  } else if (pre_2020_data == FALSE) {
+    
+    source("england_and_wales_new.R")
+    
+    }
 
   bound_tables <- dplyr::bind_rows(bound_tables, 
                                    clean_csv_data_england_and_wales)
@@ -104,16 +125,27 @@ csv_data <- bound_tables %>%
                 `Unit multiplier` = "Units",
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
-                 Region, Sex) %>%
-  dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, `Country of birth`, Sex, 
+                 Region, Sex) 
+
+if (pre_2020_data == FALSE) {
+  csv_data <- csv_data %>% 
+    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+                `Country of birth`, `Ethnic group`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
+} else {
+  # doesn't contain ethnic group
+  csv_data <- csv_data %>% 
+    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+                `Country of birth`, Sex, 
+                GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
+  }
 
 # Remove low reliability disaggregations ---------------------------------------
 # I have decided to remove some disaggregations due to large numbers of rates 
 # with low reliability. Someone may wish to reverse this decision in the future.
 # If so, this next block (up to the dashed line) can just be commented out.
 
-final_csv <- csv_data %>% 
+csv_data <- csv_data %>% 
   mutate(remove = case_when(
     Age != "" & Birthweight != "" ~ TRUE,
     Sex != "" & `Neonatal period` == "Late neonatal" & 
@@ -122,8 +154,6 @@ final_csv <- csv_data %>%
   )) %>% 
   filter(remove == FALSE) %>% 
   select(-remove)
-
-csv_data <- final_csv 
 
 
 #-------------------------------------------------------------------------------
@@ -145,10 +175,10 @@ if (output_folder_exists == FALSE) {
 date_time <- Sys.time()
 filename_date_time <- SDGupdater::create_datetime_for_filename(date_time)
 
-csv_data_filename <- paste0('Output/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
-markdown_filename <- paste0('Output/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
+csv_data_filename <- paste0(output_folder, '/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
+markdown_filename <- paste0(output_folder, '/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
 
-write.csv(csv_data, csv_data_filename, row.names = FALSE)
+write.csv(csv_data, csv_data_filename, row.names = FALSE, na = "")
 rmarkdown::render('QA.Rmd', output_file = markdown_filename)
 
 message(paste0("csv for ", year, " has been created and saved in '", current_directory,

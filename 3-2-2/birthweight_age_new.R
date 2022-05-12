@@ -1,54 +1,50 @@
-# Author: Emma Wood
-# Date (start): 26/01/2021
-# Purpose: To create csv data for birthweight by mother age disaggregation for indicator 3.2.2
-# Requirements: This script is called by compile_tables.R, which is called by update_indicator_main.R
+# date: 20/04/2022
+# automation for 3-2-2 for data published from 2022 onward
+# birth weight and mother age disaggregations
 
+source_data <- get_type1_data(header_row = first_header_row_birthweight_by_mum_age,
+                              filename = filename,
+                              tabname = birthweight_by_mum_age_tab_name)
 
-birthweight_by_mum_age <- dplyr::filter(source_data, sheet == birthweight_by_mum_age_tab_name)
+clean_data <- suppressWarnings(clean_strings(source_data))
+metadata <- extract_metadata(clean_data, first_header_row_birthweight_by_mum_age)
+main_data <- extract_data(clean_data, first_header_row_country_of_birth)
 
-info_cells <- SDGupdater::get_info_cells(birthweight_by_mum_age, first_header_row_birthweight_by_mum_age)
-year <- SDGupdater::unique_to_string(info_cells$Year)
-country <- SDGupdater::unique_to_string(info_cells$Country)
+if (first_header_row_birthweight_by_mum_age > 1){
+  main_data <- type.convert(main_data, as.is = TRUE) 
+}
 
-main_data <- birthweight_by_mum_age %>%
-  dplyr::mutate(character = str_squish(character)) %>% 
-  SDGupdater::remove_blanks_and_info_cells(first_header_row_birthweight_by_mum_age) %>%
-  dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
+main_data <- clean_names(main_data) %>% 
+  janitor::remove_empty(which = "rows")
 
-tidy_data <- main_data %>%
-  unpivotr::behead("left-up", birthweight) %>%
-  unpivotr::behead("left", mother_age) %>%
-  unpivotr::behead("up-left", measure) %>%
-  unpivotr::behead("up-left", event) %>%
-  unpivotr::behead("up-left", baby_age) %>%
-  dplyr::select(birthweight, mother_age, measure, event, baby_age,
-         numeric)
+# make column names consistent across years ------------------------------------
 
-clean_data <- tidy_data %>%
-  dplyr::filter(!is.na(numeric)) %>% # to remove cells that are just ends of a header that have run on to the next row
-  dplyr::mutate(birthweight = trimws(birthweight,  which = "both"),
-                mother_age = trimws(mother_age, which = "both")) %>%
-  dplyr::mutate(birthweight = ifelse(birthweight == "4000 and" | birthweight == "over",
-                              "4000 and over", birthweight))
-
-data_for_calculations <- clean_data %>%
-  tidyr::pivot_wider(names_from = c(measure, baby_age, event),
-              values_from = numeric)
-
-# rename columns so they are the same each year --------------------------------
-data_for_calculations <- data_for_calculations %>% 
-  rename_column(primary = c("Rates", "Neo"),
-                new_name = "Neonatal_rate") %>% 
-  rename_column(primary = c("Live"),
+renamed_main <- main_data %>% 
+  rename_column(primary = c("rate", "neo"), 
+                not_pattern = "peri|post|early",
+                new_name = "neonatal_rate") %>% 
+  rename_column(primary = c("live", "birth"), 
                 new_name = "number_live_births") %>% 
-  rename_column(primary = c("Numbers", "Early"),
+  rename_column(primary = c("early", "neo", "death"),
+                not_pattern = "rate|post|peri",
                 new_name = "number_early_neonatal_deaths") %>% 
-  rename_column(primary = c("Numbers", "Neo", "Deaths"),
-                new_name = "number_neonatal_deaths")
-#-------------------------------------------------------------------------------
+  rename_column(primary = c("neo", "death"),
+                not_pattern = "rate|post|peri|early",
+                new_name = "number_neonatal_deaths") %>% 
+  rename_column(primary = "weight",
+                new_name = "birthweight") %>% 
+  rename_column(primary = c("mother", "age"),
+                new_name = "mother_age") 
 
+# calculate late neonatal rates-------------------------------------------------
 
-calculations_weight_age <- data_for_calculations %>%
+clean_numeric_columns <- renamed_main %>% 
+  mutate(number_neonatal_deaths = remove_symbols(number_neonatal_deaths),
+         number_early_neonatal_deaths = remove_symbols(number_early_neonatal_deaths),
+         number_live_births = remove_symbols(number_live_births),
+         neonatal_rate = remove_symbols(neonatal_rate)) 
+
+calculations_weight_age <- clean_numeric_columns %>%
   dplyr::mutate(number_late_neonatal_deaths = number_neonatal_deaths - number_early_neonatal_deaths) %>%
   dplyr::mutate(Late_neonatal_rate = SDGupdater::calculate_valid_rates_per_1000(number_late_neonatal_deaths,
                                                                                 number_live_births, decimal_places),
@@ -70,15 +66,15 @@ calculations_weight_age <- data_for_calculations %>%
     obs_status_neonatal = case_when(
       number_neonatal_deaths < 3 | is.na(number_neonatal_deaths) ~ "Missing value; suppressed", 
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
-      number_neonatal_deaths > 19  ~ "Normal value"))
+      number_neonatal_deaths > 19  ~ "Normal value")) 
 
 rate_mismatches_weight_age <- SDGupdater::count_mismatches(
-  calculations_weight_age$Rates_Neonatal_check, calculations_weight_age$Neonatal_rate)
-
+  round(calculations_weight_age$Rates_Neonatal_check, decimal_places), 
+  round(calculations_weight_age$neonatal_rate, decimal_places))
 
 data_in_csv_format <- calculations_weight_age %>%
   dplyr::select(birthweight, mother_age,
-                Early_neonatal_rate, Late_neonatal_rate, Neonatal_rate,
+                Early_neonatal_rate, Late_neonatal_rate, neonatal_rate,
                 obs_status_early, obs_status_late, obs_status_neonatal) %>%
   tidyr::pivot_longer(
     cols = ends_with("rate"),
@@ -87,14 +83,14 @@ data_in_csv_format <- calculations_weight_age %>%
   dplyr::mutate(`Observation status` = case_when(
     Neonatal_period == "Early_neonatal_rate" ~ obs_status_early,
     Neonatal_period == "Late_neonatal_rate" ~ obs_status_late,
-    Neonatal_period == "Neonatal_rate" ~ obs_status_neonatal
+    Neonatal_period == "neonatal_rate" ~ obs_status_neonatal
   )) %>% 
   select(-c(obs_status_early, obs_status_late, obs_status_neonatal))
 
 clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
   dplyr::mutate(Neonatal_period = gsub("_rate", "", Neonatal_period),
          Neonatal_period = gsub("_", " ", Neonatal_period),
-         Neonatal_period = ifelse(Neonatal_period == "Neonatal", "", Neonatal_period),
+         Neonatal_period = ifelse(Neonatal_period == "neonatal", "", Neonatal_period),
          mother_age = gsub("-", " to ", mother_age),
          mother_age = gsub("&", " and ", mother_age),
          mother_age = gsub("<", "Less than ", mother_age),
@@ -105,14 +101,14 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
          birthweight = gsub("<", "Under ", birthweight),
          birthweight = ifelse(birthweight == "Notstated", "Not stated", birthweight),
          birthweight = ifelse(birthweight == "All", "", birthweight),
-         Country = country,
-         GeoCode = ifelse(country == "England and Wales", "K04000001", "")) %>%
+         Country = metadata$country,
+         GeoCode = ifelse(Country == "England and Wales", "K04000001", "")) %>%
   dplyr::mutate(mother_age = ifelse(mother_age == "Less than 20", "19 and under", mother_age),
                 mother_age = ifelse(mother_age == "40  and  over", "40 and over", mother_age)) %>% 
   dplyr::rename(`Neonatal period` = Neonatal_period,
          Age = mother_age,
          Birthweight = birthweight) %>%
-  dplyr::mutate(Year = year,
+  dplyr::mutate(Year = metadata$year,
          Sex = "",
          Region = "",
          `Country of birth` = "")  %>% 
@@ -123,14 +119,22 @@ clean_csv_data_birtweight_by_mum_age <- data_in_csv_format %>%
   dplyr::filter(England_Wales_headline == FALSE) %>% 
   dplyr::select(-England_Wales_headline)
 
-
+year <- metadata$year
+country <- metadata$country
 SDGupdater::multiple_year_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 SDGupdater::multiple_country_warning(filename, birthweight_by_mum_age_tab_name,"birthweight by age")
 
-# clean up environment as the same names are used for multiple scripts called in the same session
-rm(clean_data,
-   data_for_calculations, data_in_csv_format,
-   info_cells, 
-   tidy_data,
-   country, year)
+# put the column names in sentence case
+names(clean_csv_data_birtweight_by_mum_age) <- 
+  str_to_sentence(names(clean_csv_data_birtweight_by_mum_age))
+
+# clean environment ------------------------------------------------------------
+rm(source_data, clean_data, main_data, renamed_main, data_in_csv_format,
+   clean_numeric_columns,
+    metadata,
+    year,
+    country
+  )
+
+
 

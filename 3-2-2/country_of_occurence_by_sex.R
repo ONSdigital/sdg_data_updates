@@ -49,25 +49,19 @@ data_for_calculations <- clean_data %>%
   tidyr::pivot_wider(names_from = c(measure, rate_type, life_event_age, baby_age),
               values_from = numeric)
 
-data_for_calculations <- name_columns(data_for_calculations, 
-                                           c("Rates", "1,000", "Neonatal"),
-                                           "neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "1,000", "Early"),
-                                      "early_neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Deaths", "Early"),
-                                      "early_neonatal_number")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Deaths", "Neo"),
-                                      "neonatal_number") # if the publication starts putting 'neonatal' in the same cell as 'early' and 'late', this might need editing
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Number", "Live"),
-                                      "number_live_births")
-# because the name varies across datasets, this is an alternative
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Births", "Live"),
-                                      "number_live_births")
+data_for_calculations <- data_for_calculations%>% 
+  rename_column(primary = c("Rates", "1,000", "Neonatal"),
+                new_name = "neonatal_rate") %>% 
+  rename_column(primary = c("Rates", "1,000", "Early"),
+                new_name = "early_neonatal_rate") %>%
+  rename_column(primary = c("Numbers", "Deaths", "Early"),
+                new_name = "early_neonatal_number")%>% 
+  rename_column(primary = c("Numbers", "Deaths", "Neo"),
+                not_pattern = "early|late",
+                new_name = "neonatal_number") %>% 
+  rename_column(primary = c("Number", "Live"),
+                alternate = c("Births", "Live"),
+                new_name = "number_live_births")
 
 calculation <- data_for_calculations %>%
   dplyr::mutate(number_late_neonatal_deaths = neonatal_number - early_neonatal_number) %>% 
@@ -83,11 +77,11 @@ calculation <- data_for_calculations %>%
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
     early_neonatal_number > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      number_late_neonatal_deaths < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      number_late_neonatal_deaths < 3 | is.na(number_late_neonatal_deaths) ~ "Missing value; suppressed", 
       number_late_neonatal_deaths >= 3 & number_late_neonatal_deaths <= 19 ~ "Low reliability",
       number_late_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      neonatal_number < 3 | is.na(neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
       neonatal_number > 19  ~ "Normal value"))
 

@@ -53,18 +53,17 @@ data_for_calculations <- clean_data %>%
 
 # rename columns so they are the same each year --------------------------------
 
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "Neo"),
-                                      "Neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Live"),
-                                      "number_live_births")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Early"),
-                                      "number_early_neonatal_deaths")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Numbers", "Neo", "Deaths"),
-                                      "number_neonatal_deaths")
+data_for_calculations <- data_for_calculations %>% 
+  rename_column(primary = c("Rates", "Neo"),
+                new_name = "Neonatal_rate") %>% 
+  rename_column(primary = "Live",
+                new_name = "number_live_births") %>% 
+  rename_column(primary = c("Numbers", "Early"),
+                new_name = "number_early_neonatal_deaths") %>% 
+  rename_column(primary = c("Numbers", "Neo", "Deaths"),
+                new_name = "number_neonatal_deaths") %>% 
+  rename_column(primary = c("mother", "country"),
+                new_name = "mother_country") 
 #-------------------------------------------------------------------------------
 
 calculations_country_of_birth <- data_for_calculations %>%
@@ -83,15 +82,15 @@ calculations_country_of_birth <- data_for_calculations %>%
     number_early_neonatal_deaths >= 3 & number_early_neonatal_deaths <= 19 ~ "Low reliability",
     number_early_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      number_late_neonatal_deaths < 3 | is.na(number_early_neonatal_deaths) ~ "Missing value; suppressed", 
+      number_late_neonatal_deaths < 3 | is.na(number_late_neonatal_deaths) ~ "Missing value; suppressed", 
       number_late_neonatal_deaths >= 3 & number_late_neonatal_deaths <= 19 ~ "Low reliability",
       number_late_neonatal_deaths > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      number_neonatal_deaths < 3 | is.na(number_early_neonatal_deaths) ~ "Missing value; suppressed", 
+      number_neonatal_deaths < 3 | is.na(number_neonatal_deaths) ~ "Missing value; suppressed", 
       number_neonatal_deaths >= 3 & number_neonatal_deaths <= 19 ~ "Low reliability",
       number_neonatal_deaths > 19  ~ "Normal value"))
 
-number_of_rate_calculation_mismatches <- SDGupdater::count_mismatches(
+rate_mismatches_country_of_birth <- SDGupdater::count_mismatches(
   calculations_country_of_birth$Rates_Neonatal_check, calculations_country_of_birth$Neonatal_rate)
 
 
@@ -142,6 +141,5 @@ rm(clean_data,
    data_for_calculations, data_in_csv_format,
    info_cells, 
    tidy_data,
-   country, year,
-   number_of_rate_calculation_mismatches)
+   country, year)
 

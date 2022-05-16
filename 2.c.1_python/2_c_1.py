@@ -275,11 +275,7 @@ def calculate_indicator(df, start_year):
     
     Details
     -------
-    Z-scores are based on a single weighted mean and a single weighted standard
-    deviation so that it is easier to compare between years (rather than 
-    calculating each up to each timepoint). Therefore, each time the indicator 
-    is updated, values for past years will change slighlty.
-
+    ...
     Parameters
     ----------
     df : dataframe

@@ -4,6 +4,7 @@
 #' space.
 #'
 #' @import dplyr
+#' @import stringr
 #'
 #' @param source_data dataframe or tibble
 #' @param remove_ss logical. Default is TRUE. If TRUE superscripts are removed. 

@@ -51,3 +51,6 @@ test_that("clean_strings superscripts arg works as expected", {
     names(test_data))
 
 })
+
+
+clean_strings(test_data, case = str_to_lower)

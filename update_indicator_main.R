@@ -13,7 +13,9 @@
 # install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 rm(list = ls())
 
+
 indicator <- "3-2-2" # name of folder for indicator
+
 
 setwd(indicator)
 

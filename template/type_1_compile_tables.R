@@ -5,6 +5,10 @@
 library('openxlsx')
 library('stringr')
 library('janitor')
+library('tidyr')
+library('dplyr')
+
+library(SDGupdater)
 
 setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R
@@ -16,12 +20,15 @@ source("update_type_1.R") # does the donkey-work of making the csv -
 # at this point you should see lots of variables appear in the global environment 
 # pane (top right). These have been created by the update_type_1 script.
 
+# create an output file if one does not already exist --------------------------
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
 
 if (output_folder_exists == FALSE) {
   dir.create(output_folder)
 }
+
+# create elements we will use to name files ------------------------------------
 
 date <- Sys.Date()
 
@@ -30,6 +37,8 @@ date <- Sys.Date()
 # We may want to review the decision to add date to the filename.
 csv_filename <- paste0(date, "_update_type_1.csv")
 qa_filename <- paste0(date, "_update_type_1_checks.html") 
+
+# save files and print messages ------------------------------------------------
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 

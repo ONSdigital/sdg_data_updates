@@ -3,8 +3,6 @@
 # Purpose: To create csv data for country of occurrence, where country is 
 # England and Wales (this figure is available in country of occurrence by sex 
 # before 2018)
-#
-# THIS SCRIPT MAY NEED EDITING AS THE TABLE FORMAT HAS RECENTLY CHANGED -
 
 england_and_wales <- dplyr::filter(source_data, sheet == england_and_wales_timeseries_tab_name)
 
@@ -34,26 +32,20 @@ data_for_calculations <- clean_data %>%
 
 #-------------------------------------------------------------------------------
 
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "1,000", "Neonatal", "28 days"),
-                                      "neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "1,000", "Early", "7 days"),
-                                      "early_neonatal_rate")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("Rates", "Late", "neonatal"),
-                                      "late_neonatal_rate")
+data_for_calculations <- data_for_calculations %>% 
+  rename_column(primary = c("Rates", "1,000", "Neonatal", "28 days"),
+                new_name = "neonatal_rate") %>% 
+  rename_columns(primary = c("Rates", "1,000", "Early", "7 days"),
+                 new_name = "early_neonatal_rate") %>% 
+  rename_columns(primary = c("Rates", "Late", "neonatal"),
+                 new_name =  "late_neonatal_rate") %>% 
 
-
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Neonatal", "28 days"),
-                                      "neonatal_number")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Early", "7 days"),
-                                      "early_neonatal_number")
-data_for_calculations <- name_columns(data_for_calculations, 
-                                      c("NA", "Late", "neonatal"),
-                                      "late_neonatal_number")
+  rename_columns(primary = c("NA", "Neonatal", "28 days"),
+                 new_name =  "neonatal_number") %>% 
+  rename_columns(primary = c("NA", "Early", "7 days"),
+                 new_name =  "early_neonatal_number") %>%
+  rename_columns(primary = c("NA", "Late", "neonatal"),
+                 new_name =  "late_neonatal_number")
 
 # 
 # 
@@ -68,11 +60,11 @@ calculation_england_and_wales <- data_for_calculations %>%
     early_neonatal_number >= 3 & early_neonatal_number <= 19 ~ "Low reliability",
     early_neonatal_number > 19  ~ "Normal value"),
     obs_status_late = case_when(
-      late_neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      late_neonatal_number < 3 | is.na(late_neonatal_number) ~ "Missing value; suppressed", 
       late_neonatal_number >= 3 & late_neonatal_number <= 19 ~ "Low reliability",
       late_neonatal_number > 19  ~ "Normal value"),
     obs_status_neonatal = case_when(
-      neonatal_number < 3 | is.na(early_neonatal_number) ~ "Missing value; suppressed", 
+      neonatal_number < 3 | is.na(neonatal_number) ~ "Missing value; suppressed", 
       neonatal_number >= 3 & neonatal_number <= 19 ~ "Low reliability",
       neonatal_number > 19  ~ "Normal value")) %>% 
   dplyr::filter(year == unique(bound_tables$Year)[1])

@@ -16,7 +16,7 @@ get_penultimate_character <- function(variable) {
   number_of_characters <- nchar(variable)
 
   if(any(number_of_characters < 2, na.rm = TRUE)){
-    warning("At least one string had fewer than two characters. Where this is the case, '' is returned")
+    warning("At least one string had fewer than two characters. Where this is the case, '' is returned as the penultimate character")
   }
 
   return(output)

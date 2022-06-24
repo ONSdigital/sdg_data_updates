@@ -92,8 +92,9 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   > If you ever need to delete a branch you created, use the command `git branch -d x-x-x`. You may need to use capital -D if you have made any changes on that branch (it will delete the branch regardless, so only use it if you're sure it's ok to be deleted)
 
 3) Create a new folder for the indicator, using the indicator name (x-x-x) as the folder name (use dashes to separate numbers)  
-4) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
-5) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
+4) If the source data needs to be downloaded manually (i.e. when there is not a predictable link), create a folder called 'Input' and save the data in this folder. Note that this will NOT be uploaded to Github (see point 7 below).
+5) Start writing your indicator update automation. Hint: Start with the template code in the templates folder.
+6) Make regular commits to Github, so that others can pick up your changes, and so you can roll back to an earlier version if it all starts to go pear-shaped. 
   >   
   > `git status` to check if you have any unstaged or uncommitted changes. Unstaged files with changes will be listed in red.  
   >   
@@ -113,9 +114,9 @@ Every new indicator automation requires it's own branch. **Do not work on code i
   >
   > You can just use `git push` from now on, when you are on the same branch locally (but always following `git add .` and `git commit -m "message"` first).
   
-5) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data does not have to include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
-7) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. It must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
-8) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   
+7) Add example input to the Example_Input folder, and write an example_config file. Use these to create example output. The example data should not include all data. For example, delete any tabs in the input excel that are not used for the indicator. If there are multiple years of data you may choose to keep only one or two years in the file. If there is a disaggregation with a lot of levels (e.g. Local Authority) keep rows only for some of the levels. This is so we don't end up storing lots of large files in the repo.
+8) **Write a README file**. This should be aimed at someone who is unfamiliar with the indicator. It must include all the information that will need to know to successfully update the data. Include instructions on where to find the input data, and any other instructions specific to the indicator. Explain what to do to switch between running example data and real data. Note anything that you suspect may be an issue in future runs, or things that need to be checked in the QA. Explain any important decisions you made.  
+9) Before automations are available to the team they need to be merged into the main branch using a pull request on Github:   
  > Pull requests > New pull request  
  >   
  > Set base and compare branches  

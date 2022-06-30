@@ -14,8 +14,13 @@ info_cells <-  SDGupdater::get_info_cells(source_data,
 
 # get the info from above the headers-------------------------------------------
 years <- unique_to_string(info_cells$Year)
-latest_year <- max(as.numeric(strsplit(years, ",")[[1]]))
-earliest_year <- min(as.numeric(strsplit(years, ",")[[1]]))
+if(!is.na(years)) {
+  latest_year <- max(as.numeric(strsplit(years, ",")[[1]]))
+  earliest_year <- min(as.numeric(strsplit(years, ",")[[1]]))
+} else {
+  latest_year <- "not given"
+  earliest_year <- "not given"
+}
 
 country <- unique_to_string(info_cells$Country)
 

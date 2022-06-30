@@ -9,7 +9,7 @@
 source_data <- xlsx_cells(paste0(input_folder, "/", filename), sheets = headline_tab_name) 
 
 info_cells <-  SDGupdater::get_info_cells(source_data, 
-                                          first_header_row, 
+                                          header_row, 
                                           "xlsx_cells")
 
 # get the info from above the headers-------------------------------------------
@@ -21,7 +21,7 @@ country <- unique_to_string(info_cells$Country)
 
 # remove info cells and clean character column ---------------------------------
 clean_cells <- source_data %>%
-  SDGupdater::remove_blanks_and_info_cells(first_header_row) %>%
+  SDGupdater::remove_blanks_and_info_cells(header_row) %>%
   dplyr::mutate(character = str_squish(character)) %>% 
   dplyr::mutate(character = SDGupdater::remove_superscripts(character))
 

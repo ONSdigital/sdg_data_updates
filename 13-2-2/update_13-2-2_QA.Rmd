@@ -1,0 +1,16 @@
+---
+title: "13-2-2 QA"
+author: "Emma Wood"
+date: "29/06/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+## Things to check manually
+Are the most recent figures provisional? Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.

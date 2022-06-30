@@ -4,13 +4,103 @@ author: "Emma Wood"
 date: "29/06/2022"
 output: html_document
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+
+```
+**Run date and time: `r Sys.time()`**  
+   
 ## Introduction
 
-## Things to check manually
-Are the most recent figures provisional? Check this in the source data. If they 
+13-2-2 is a very straightforward indicator and automation isn't particularly 
+necessary, however it will speed up the addition of extra disaggregations
+if that is wanted.
+  
+This file runs some basic checks and gives information about the update.
+  
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
 are, in the indicator csv file change the observation status to 'Provisional'.
+
+## Configurations
+The configurations for this run are:    
+  
+- filepath: `r paste0(input_folder, "/", filename)`  
+- name of the tab the data are in: `r tab_name`  
+- row number of the column names: `r header_row`  
+- output folder: `r output_folder`  
+  
+  
+## Basic checks
+The dates listed in the information above `r tab_name`, should match the dates 
+produced in the output csv. It is 
+`r earliest_year == min(as.numeric(csv_formatted$Year))` 
+that the earliest date in the dataset matches the earliest date given above the
+table. It is `r latest_year == max(as.numeric(csv_formatted$Year))` 
+that the lastest date in the dataset matches the latest date given above the
+table. If either of these are 'FALSE' please manually check that the numbers in 
+the output csv match those in `r paste0(input_folder, "/", filename)`  
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing.  
+
+```{r, echo = FALSE, fig.width=10}
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv')
+
+new_data <- csv_formatted %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") 
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data)
+
+# plot the data
+plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(Gas),
+             nrow = 2) +
+  theme_bw() 
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(plot))
+```
+
+At the time of writing this code (June 2022), the following note is given in the
+source notes tab: ' in these statistics the entire time series going back to 
+1990 is revised each year to take account of methodological improvements.'.  
+  
+**If there are differences (see table below) please check that this still stands**
+
+```{r, include = TRUE}
+comparison <- joined_data %>% 
+  select(Year, Gas, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0)
+
+```
+
+```{r}
+
+```
+

@@ -2,6 +2,12 @@
 # Contact: emma.wood@ons.gov.uk
 # compile tables for indicator 13-2-2
 
+library(tidyxl)
+library(dplyr)
+library(stringr)
+library(unpivotr)
+
+library(SDGupdater)
 
 #--- get input from user ---
 source("config.R") # pulls in all the configurations. Change to "config.R" for real update
@@ -22,12 +28,10 @@ if (output_folder_exists == FALSE) {
 date <- Sys.Date()
 
 csv_filename <- paste0(date, "_13-2-2.csv")
-# qa_filename <- paste0(date, "_update_type_1_checks.html") 
+qa_filename <- paste0(date, "_13-2-2_checks.html") 
 
 write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-
-
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('update_13-2-2_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 # 
 # message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
 #                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

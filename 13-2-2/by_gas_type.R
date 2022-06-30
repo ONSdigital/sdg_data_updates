@@ -6,7 +6,7 @@
 
 # read in data -----------------------------------------------------------------
 
-source_data <- xlsx_cells(paste0(input_folder, "/", filename), sheets = headline_tab_name) 
+source_data <- xlsx_cells(paste0(input_folder, "/", filename), sheets = tab_name) 
 
 info_cells <-  SDGupdater::get_info_cells(source_data, 
                                           header_row, 
@@ -52,4 +52,4 @@ csv_formatted  <- beheaded %>%
          `Unit multiplier`, Units,
          Value)
 
-rm(info_cells, clean_cells, source_data, beheaded, units, years)
+rm(info_cells, clean_cells, source_data, beheaded, years)

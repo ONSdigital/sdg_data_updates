@@ -9,7 +9,7 @@ library(unpivotr)
 library(SDGupdater)
 
 #--- get input from user ---
-source("config.R") # pulls in all the configurations. Change to "config.R" for real update
+source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
 
 if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))

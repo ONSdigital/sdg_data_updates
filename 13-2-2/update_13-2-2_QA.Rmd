@@ -44,10 +44,14 @@ produced in the output csv. It is
 `r earliest_year == min(as.numeric(csv_formatted$Year))` 
 that the earliest date in the dataset matches the earliest date given above the
 table. It is `r latest_year == max(as.numeric(csv_formatted$Year))` 
-that the lastest date in the dataset matches the latest date given above the
+that the latest date in the dataset matches the latest date given above the
 table. If either of these are 'FALSE' please manually check that the numbers in 
-the output csv match those in `r paste0(input_folder, "/", filename)`  
-
+the output csv match those in `r paste0(input_folder, "/", filename)`.  
+  
+The geography listed in the information at the top of 
+`r paste0(filename, ", table ", tab_name)` is `r country`. Please check that 
+this matches the geography given in the indicator file metadata.  
+  
 
 ## Plots
 Please check the plots below for any differences between the live and new data.

@@ -1,5 +1,4 @@
 # Author: Emma Wood 
-# Contact: emma.wood@ons.gov.uk
 # compile tables for indicator 13-2-2
 
 library(tidyxl)
@@ -32,9 +31,6 @@ qa_filename <- paste0(date, "_13-2-2_checks.html")
 
 write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 rmarkdown::render('update_13-2-2_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
-# 
-# message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
-#                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

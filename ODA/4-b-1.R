@@ -1,5 +1,5 @@
 
-chosen_type_of_aid <-  filter(oda_renamed, Aid_code == type_of_aid_code)
+chosen_type_of_aid <-  filter(oda_renamed, Aid_code == type_of_aid_code_4b1)
 
 by_sector <- chosen_type_of_aid %>% 
   group_by(year, Sector) %>% 
@@ -18,4 +18,14 @@ total <- chosen_type_of_aid %>%
   group_by(year) %>% 
   summarise(Value = sum(Value))
 
-csv_4b1 <- bind_rows(by_sector, by_cic, by_education_type, total)  
+gbp_data <- bind_rows(by_sector, by_cic, by_education_type, total) %>% 
+  mutate(Units = "GBP (£ thousands)")
+
+constant_usd_data <- gbp_to_constant_usd(exchange_rates, deflators, gbp_data)
+
+csv_4b1 <- gbp_data %>% 
+  bind_rows(constant_usd_data) %>% 
+  select(year, Country_income_classification, Units, Value)
+
+
+rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)

@@ -4,6 +4,8 @@
 # library('openxlsx')
 # library('stringr')
 # library('janitor')
+library('unpivotr')
+library('tidyxl')
 library('tidyr')
 library('dplyr')
 
@@ -13,6 +15,11 @@ source("config.R") # pulls in all the configurations. Change to "config.R" for r
 
 # import data -------------------------------------------------------------------
 oda_data <- read.csv(paste0(input_folder, "/", filename))
+exchange_rates <- tidyxl::xlsx_cells(paste0(input_folder, "/", exchange_filename))
+deflators <- tidyxl::xlsx_cells(paste0(input_folder, "/", deflators_filename),
+                                sheets = "Deflators")
+
+
 names(oda_data) <- tolower(names(oda_data))
 
 # create stable column names based on elements of column names -----------------
@@ -30,7 +37,7 @@ oda_renamed <- oda_data %>%
   rename_column(primary = c("income", "group"), new_name = "Country_income_classification") %>% 
   rename_column(primary = c("broad", "sector", "code"), new_name = "Broad_sector_code") %>% 
   rename_column(primary = c("sid", "sector"), new_name = "Sector") %>% 
-  rename_column(primary = c("sector", "purpose", "tenew_name = xt"), new_name = "Type_of_study") %>% 
+  rename_column(primary = c("sector", "purpose", "text"), new_name = "Type_of_study") %>% 
   rename_column(primary = c("type", "aid", "code"), new_name = "Aid_code") %>% 
   rename_column(primary = c("type", "aid", "text"), new_name = "Aid_description") 
 

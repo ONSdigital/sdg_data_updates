@@ -1,14 +1,14 @@
 
 gbp_to_constant_usd <- function(exchange_rates, deflators, gbp_data) {
-  usd_data <- to_usd(exchange_rates, gbp_data)
-  constant_usd <- to_constant_usd(deflators, usd_data)
+  usd_data <- gbp_to_usd(exchange_rates, gbp_data)
+  constant_usd <- usd_to_constant_usd(deflators, usd_data)
   
   return(constant_usd)
 }
 
 #----
 
-to_usd <- function(exchange_rates, gbp_data) {
+gbp_to_usd <- function(exchange_rates, gbp_data) {
   
   heading_row <- which(!is.na(exchange_rates$numeric))[1]
   exchange_data <- tidy_data(exchange_rates, heading_row)
@@ -18,7 +18,7 @@ to_usd <- function(exchange_rates, gbp_data) {
   return(usd_data)
 }
 
-to_constant_usd <- function(deflators, usd_data) {
+usd_to_constant_usd <- function(deflators, usd_data) {
   heading_row <- which(!is.na(deflators$numeric))[1]
   deflators_data <- tidy_data(deflators, heading_row)
   uk_deflators <- get_uk_values(deflators_data, deflator)

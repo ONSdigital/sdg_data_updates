@@ -3,45 +3,22 @@
 
 # Code to automate data update for indicator 15-7-1 and 15-c-1 (number of endangered species seizures)
 
-# Type 1 data is simple - one row of column headings and no row names
-# There may or may not be metadata above the column headings - this code allows for both scenarios
+# read in data 
 
-# Most comments can (should) be deleted in your file 
+seizures_source_data <- get_type1_data(header_row, filename, tabname)
 
-# read in data -----------------------------------------------------------------
+# remove cells above column names
 
-seizures_data <- get_type1_data(header_row, filename, tabname)
-
-# clean the data and get yer and country info from above the headers -----------
-
-# clean_strings() has remove_ss (stands for remove_superscripts) as an argument. 
-# The default is TRUE. IMPORTANT: Set to FALSE if there strings of letters that 
-# end in a number that you want to keep. Where a number falls at the end of an 
-# alphanumeric code, it will  not be interpreted as a superscript and will not 
-# be removed. However, if the ONLY number in an alphanumeric code is at the end, 
-# the number will be seen as a superscript. 
-
-seizures_clean <- clean_strings(seizures_data, remove_ss = TRUE)
-
-metadata <- extract_metadata(seizures_clean, header_row)
-
-seizures_main_data <- extract_data(seizures_clean, header_row)
-
-# if you import a csv, numbers will now be read as characters - you can rectify this here
-# NOTE: check that data types are what you expect after running th
-# if (header_row > 1){
-#  main_data <-  main_data %>% 
-#    type.convert(as.is = TRUE) 
-# }
+seizures_main_data <- extract_data(seizures_source_data, header_row)
 
 # remove superscripts from column names
 # DO NOT use if there are column names containing words that end 
 #   in a number: It won't usually remove a number from the end of an alphanumeric code, 
 #   but will do so if the ONLY number is at the end)
-names(seizures_main_data) <- SDGupdater::remove_superscripts(names(seizures_main_data)) 
+#names(seizures_main_data) <- SDGupdater::remove_superscripts(names(seizures_main_data)) 
 
 # clean up the column names (snake case, lowercase, no trailing dots etc.)
-seizures_main_data <- clean_names(seizures_main_data)
+#seizures_main_data <- clean_names(seizures_main_data)
 
 # remove footnotes -------------------------------------------------------------
 # this assumes that:
@@ -53,7 +30,7 @@ seizures_main_data <- clean_names(seizures_main_data)
 #   in all other columns DO NOT use this function as it will likely remove more 
 #   than just footnotes
 
-# main_data <- remove_footnotes(main_data)
+# seizures_main_data <- remove_footnotes(seizures_main_data)
 
 # make column names consistent across years ------------------------------------
 
@@ -78,14 +55,13 @@ renamed_seizures_main_data <- seizures_main_data %>%
   rename_column(primary = "Number of Times seized: Parts or Derivatives of Plants", new_name = "Parts or Derivatives of Plants") %>%
   rename_column(primary = "Number of Times seized: Timber or Wood Products", new_name = "Timber or Wood Products") %>%
   rename_column(primary = "Number of Times seized: Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species", new_name = "Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species") %>%
-  rename_column(primary = "Number of Times seized: Butterflies", new_name = "Butterflies") %>%
+  rename_column(primary = "Number of Times seized: Butterflies", new_name = "Butterflies") 
   
 
 # # the following isn't something we want to do here, but to show how you
 # # match multiple potential patterns using the OR operator:
 # rename_column(primary = "type", not_pattern = "a|b|c|other",
 #               new_name = "d")
-
 
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------

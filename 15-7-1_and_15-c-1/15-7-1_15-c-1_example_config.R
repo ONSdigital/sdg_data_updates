@@ -11,7 +11,7 @@ filename <- "Border_Force_Q4_2020_example.xlsx"
 tabname <- "BF_04"
 
 # header_row <- 1
-header_row <- 4
+header_row <- 3
 
-input_folder  <- "Example_input"
-output_folder <- "Example_output"
+input_folder  <- "Example_Input"
+output_folder <- "Example_Output"

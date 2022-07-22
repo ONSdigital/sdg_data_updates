@@ -18,7 +18,7 @@ than `source('config.R')`.
         
 ### USER INSTRUCTIONS (SDG Data team): 
 
-1) Save '' as an **xlsx** file in Jemalex/code for updates/13-2-2/Input. You may need to create the Input folder if one does not already exist.
+1) Save the most recent [UK greenhouse gas emissions final figures](https://www.gov.uk/government/statistics/final-uk-greenhouse-gas-emissions-national-statistics-1990-to-2020) as an **xlsx** file in Jemalex/code for updates/13-2-2/Input. You may need to create the Input folder if one does not already exist.
 2) Open RStudio.
 3) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. 
 4) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.

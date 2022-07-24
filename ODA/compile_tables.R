@@ -13,13 +13,14 @@ library(SDGupdater)
 
 source("config.R") # pulls in all the configurations. Change to "config.R" for real update
 
+# create filepaths for exchange rates and deflators files ----------------------
+rates_filepath <- paste0(input_folder, "/", exchange_filename)
+deflators_filepath <- paste0(input_folder, "/", deflators_filename)
+
 # import data -------------------------------------------------------------------
+# exchange rate and deflator data are imported using the gbp_to_constant_usd 
+# function so don't need to do that here
 oda_data <- read.csv(paste0(input_folder, "/", filename))
-exchange_rates <- tidyxl::xlsx_cells(paste0(input_folder, "/", exchange_filename))
-deflators <- tidyxl::xlsx_cells(paste0(input_folder, "/", deflators_filename),
-                                sheets = "Deflators")
-
-
 names(oda_data) <- tolower(names(oda_data))
 
 # create stable column names based on elements of column names -----------------

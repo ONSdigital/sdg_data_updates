@@ -14,7 +14,7 @@ total <- chosen_type_of_aid %>%
 gbp_data <- bind_rows(by_cic, total) %>% 
   mutate(Units = "GBP (£ thousands)") 
 
-constant_usd_data <- gbp_to_constant_usd(exchange_rates, deflators, gbp_data)
+constant_usd_data <- gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
 
 csv_8a1 <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 

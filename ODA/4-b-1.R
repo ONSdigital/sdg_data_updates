@@ -12,7 +12,8 @@ by_cic <- chosen_type_of_aid %>%
 by_education_type <- chosen_type_of_aid %>% 
   filter(Sector == "Education") %>% # make this more robust
   group_by(year, Type_of_study) %>% 
-  summarise(Value = sum(Value))
+  summarise(Value = sum(Value)) %>% 
+  mutate(Sector = "Education")
 
 total <- chosen_type_of_aid %>% 
   group_by(year) %>% 
@@ -21,11 +22,16 @@ total <- chosen_type_of_aid %>%
 gbp_data <- bind_rows(by_sector, by_cic, by_education_type, total) %>% 
   mutate(Units = "GBP (£ thousands)")
 
-constant_usd_data <- gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
+constant_usd_data <-  gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
+
+names(gbp_data) <- str_to_sentence(names(gbp_data))
+names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
 csv_4b1 <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
-  select(year, Country_income_classification, Units, Value)
+  select(Year, Sector, Country_income_classification, Type_of_study, 
+         Units, Value) %>% 
+  replace(is.na(.), "")
 
 rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
 

@@ -64,42 +64,36 @@ if (length(failed_scripts) > 0) {
 ```
 
 ## Plots
-The plots are one of the most important parts of the QA file. If anything has 
-gone wrong in the automation it will show up on the plots. Below is an example
-plots section:  
-  
-  Please check the plots below for any differences between the live data (which 
-  is pulled in from Jemalex) and the new data.  
-  
-  Live data will appear over the top of new data. You should therefore only 
-  see points for the live data for previous years and only points for the new data 
-  in the years you are updating. 
 
+Please check the plots below for any differences between the live data (which 
+is pulled in from Jemalex) and the new data.  
+  
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
+
+### 4-b-1
 ```{r, echo = FALSE, fig.width=10}
 
-# This example is taken from the 13-2-2 update because it is a straightforward
-# one.
-#
-# Some will be more complex, for example when there are multiple disaggregations.
-# See the 3-c-1 QA.Rmd file for an example of more complex QA plots
-#
-# Note that you may have improved the indicator at the same time as updating it
-# when writing the automation. If this is the case, the plots code you write for 
-# the first round of checks may need to be slightly different to how it will 
-# need to be in future years. So you will need to check the Rmd file works
-# with 'live' data that looks like the new data (for testing you could pull the 
-# 'live' data from the in progress file once you have put the new csv in there).
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_4-b-1.csv') %>% 
+  janitor::clean_names()
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv')
-
-new_data <- csv_formatted %>% 
+new_data <- csv_4b1 %>% 
   mutate(Year = as.integer(Year),
-         dataset = "new") 
+         dataset = "new") %>% 
+  janitor::clean_names()
   
 # join to the new data
 joined_data <- live_data %>% 
   mutate(dataset = "live") %>% 
   bind_rows(new_data)
+
+# by sector
+
+# by cic
+
+# by type of study
+
 
 # plot the data
 plot <- joined_data %>% 

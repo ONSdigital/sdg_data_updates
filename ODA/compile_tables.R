@@ -2,7 +2,7 @@
 # It is the control script that runs all the others.
 
 # library('openxlsx')
-# library('stringr')
+library('stringr')
 # library('janitor')
 library('unpivotr')
 library('tidyxl')
@@ -56,7 +56,7 @@ for (i in 1:length(indicators)) {
 
 
 
-.
+
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()

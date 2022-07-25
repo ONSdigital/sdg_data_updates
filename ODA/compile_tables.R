@@ -43,14 +43,20 @@ oda_renamed <- oda_data %>%
   rename_column(primary = c("type", "aid", "text"), new_name = "Aid_description") 
 
 # run code to create specific indicators ---------------------------------------
-source("4-b-1.R") 
-source("8-a-1.R")
+scripts_run <- c()
 
-## test:
-# source(c("4-b-1.R", "8-a-1.R"))
+for (i in 1:length(indicators)) {
+  script_name <- paste0(indicators[i], ".R")
+  try(source(script_name))
+}
 
-# at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_type_1 script.
+
+
+
+
+
+
+.
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()

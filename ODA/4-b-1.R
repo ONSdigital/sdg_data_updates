@@ -27,5 +27,6 @@ csv_4b1 <- gbp_data %>%
   bind_rows(constant_usd_data) %>% 
   select(year, Country_income_classification, Units, Value)
 
-
 rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
+
+scripts_run <- c(scripts_run, "4-b-1")

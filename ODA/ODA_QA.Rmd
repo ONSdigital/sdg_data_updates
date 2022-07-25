@@ -1,0 +1,157 @@
+---
+title: "QA of ODA indicator data"
+author: "Emma Wood"
+date: "25/07/2022"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+
+Most of the ODA indicators use the same source: 
+[Statistics on International Development (SID) Final UK Aid Spend](https://www.gov.uk/government/statistics/statistics-on-international-development-final-uk-aid-spend-2020).
+This code has not been tested on the provisional data set, only the final spend.
+   
+It therefore makes sense to use automation to update these all at the same time,
+even though most of them are very straightforward.   
+  
+This file records which indicators were run, shows which indicators failed (if 
+any), and shows how the new data compare to the live data on charts.    
+  
+Please check the source data for any footnotes.
+  
+## Configurations
+
+The input filepaths used for this output are:  
+
+- ODA data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
+- Exchange rates: **`r paste0(getwd(), "/", input_folder, "/", exchange_filename)`**
+- Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**
+  
+The following indicators were included in the run:  
+**`r indicators`**. See the next section to see if they all ran successfully.  
+  
+Indicator specific settings are:
+- 4-b-1 type of aid code: **`r type_of_aid_code_4b1`**  
+- 8-a-1 broad sector code: **`r broad_sector_code_8a1`**
+ 
+The outputs are saved in: **`r  paste0(getwd(), "/",output_folder)`**  
+  
+  
+## Basic checks
+
+```{r}
+failed_scripts <- setdiff(indicators, scripts_run)
+
+if (length(failed_scripts) > 0) {
+  print("The following indicators were not produced because they encountered an error:")
+  failed_scripts
+} else {
+  print("All scripts ran successfully")
+}
+
+
+```
+
+## Plots
+The plots are one of the most important parts of the QA file. If anything has 
+gone wrong in the automation it will show up on the plots. Below is an example
+plots section:  
+  
+  Please check the plots below for any differences between the live data (which 
+  is pulled in from Jemalex) and the new data.  
+  
+  Live data will appear over the top of new data. You should therefore only 
+  see points for the live data for previous years and only points for the new data 
+  in the years you are updating. 
+
+```{r, echo = FALSE, fig.width=10}
+
+# This example is taken from the 13-2-2 update because it is a straightforward
+# one.
+#
+# Some will be more complex, for example when there are multiple disaggregations.
+# See the 3-c-1 QA.Rmd file for an example of more complex QA plots
+#
+# Note that you may have improved the indicator at the same time as updating it
+# when writing the automation. If this is the case, the plots code you write for 
+# the first round of checks may need to be slightly different to how it will 
+# need to be in future years. So you will need to check the Rmd file works
+# with 'live' data that looks like the new data (for testing you could pull the 
+# 'live' data from the in progress file once you have put the new csv in there).
+
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv')
+
+new_data <- csv_formatted %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") 
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data)
+
+# plot the data
+plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(Gas),
+             nrow = 2) +
+  theme_bw() 
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+```
+
+Finally, it is sometimes hard to see where new numbers don't match live numbers
+especially if there are lots of disaggregations. In such cases a table of 
+differences is also useful. The following example is taken from 13-2-2:
+  
+  At the time of writing this code (June 2022), the following note is given in the
+  source notes tab: 'in these statistics the entire time series going back to 
+  1990 is revised each year to take account of methodological improvements'.  
+  
+  **If there are differences (see table below) please check that this still stands**
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Gas, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+

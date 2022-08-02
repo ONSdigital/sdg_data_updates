@@ -1,0 +1,191 @@
+---
+title: "14-1-1b checks"
+author: "Emma Wood"
+date: "13/06/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+```
+
+## Introduction
+
+We use Beachwatch data from the Marine Conservation Society (MCS) to report 
+14-1-1b. Prior to the first time we used these data this we explored it 
+thoroughly to ensure the trends were not being overly influenced by any 
+variables. 
+  
+It is not necessary to perform all checks every year, however we do need to 
+check certain aspects of the data before using it:  
+1. Number of volunteers impacts the estimate - Is the range of number of 
+volunteers is very different to a 'normal' year? If so, data will need further 
+scrutiny and a time series break and footnote may be needed.  
+2. Are there any duplicate entries that need merging into a single entry?  
+3. Have any litter types been dropped that should be included?  
+4. Are all litter types in the main data are matched to a litter type in the 
+sources data?  
+6. Do trends look sensible given previous figures?  
+   
+## 1. Number of volunteers
+The range for number of volunteers each year can be seen in the box-plots below.  
+The red line shows where number of volunteers = 10, and is just intended as a
+visual guide, however I think if the inter-quartile range falls above or below
+this line, we may not want to use the data for that year:  
+```{r, echo=FALSE}
+# box plot of volunteer numbers by year.
+GBBC_from_2008 %>% 
+  distinct(year, survey_id, total_volunteer_count) %>% 
+  ggplot(.,
+       aes(x = as.numeric(year),
+           y = total_volunteer_count)) +
+  geom_boxplot(aes(group = year)) +
+  # facet_wrap(vars(beach_country), nrow = 2) +
+  geom_hline(yintercept = 10,
+             colour = "red") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45,
+                                   vjust = 1, hjust = 1)) +
+  xlab('Year') +
+  ylab('Number of volunteers') +
+  ggtitle('Number of volunteers per beach')
+
+```
+   
+There is a positive correlation between the number of volunteers and the
+amount of plastic litter collected. Note however that this is, as there is an 
+interaction with duration of survey. See QMI for details.
+  
+In 2020 the number of volunteers was much lower than usual (significantly 
+different to many of the earlier years based on non-overlapping boxes). 
+Therefore, litter counts for 2020 are likely to be an under-estimate. In 2021
+the number of volunteers was higher than usual (possibly significantly so based 
+on the median not overlapping the boxes of earlier years) so counts for 2021 are 
+likely to be an over-estimate compared to earlier years.  
+    
+If the range does not look normal for the updated year please investigate and 
+include a footnote in the data tables and on the platform. The observation 
+status in the csv should also be changed (do all this in the 14_1_1b_update.R 
+script).   
+
+## 2. Duplicate entries
+It is possible that two entries have been made for the same clean - this could
+for example occur if a volunteer sheet is missed by the organiser and therefore
+added as a separate entry.  
+  
+This is the case for the following surveys that have already been dealt with: 
+`r surveys_to_sum`. Check the table below to see if any of these surveys look 
+like their counts need to be summed. For example, where everything is the same
+except in one the litter counts are much lower.  Make sure you check the 
+comments, as some may state that two 100m surveys were carried out. All 
+potential duplicates are shown below:
+
+```{r, echo=FALSE}
+datatable(possible_repeats, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+## 3. Litter types not included
+The full MCS data includes litter categories, such as wood and ceramic, which 
+are not pertinent to the  indicator (which is only about plastic).    
+  
+Columns (litter types) are selected based on some key words that are set in the 
+14.1.1b config file. The keywords used in this run were `r plastic_keywords`.  
+  
+Typos and column name changes in the data may lead to errors in future runs. 
+Please check that the list of dropped columns in the table below does not 
+include any items that should be included in the estimate of plastic litter. 
+If there are, please edit the plastic_keywords in the config file so they are 
+included.
+  
+It is also possible that some non-plastic litter items will be included in the 
+estimate. The table showing litter type by source in the next section lists
+all items used in the estimate. Please check through them - if any items
+are included that should not be you may be able to edit the plastic_keywords to 
+remove them, or you may need to edit 14-1-1b_update.R.  
+    
+Please check all pages of the table below:
+
+```{r, echo=FALSE}
+
+print('Columns dropped from the data: ')
+data.frame(`not included` = rev(columns_removed))
+```
+
+
+## 4. Matching of litter types to sources
+There is a step in the code where litter types in the main data set are matched 
+to a spreadsheet with the suspected source of each litter type. If there are 
+discrepancies between the litter type names in the two datasets they will not 
+join correctly.  
+  
+There are `r length(unmatched_litter_types)` unmatched litter types. If there 
+are any they will be listed below.  
+  
+```{r, echo=FALSE}
+if (length(unmatched_litter_types) > 0) {
+  print('Unmatched litter types: ')
+  unmatched_litter_types
+}
+
+```
+
+The following table shows the litter types retained in the dataset classified by
+suspected source (please check that there is nothing weird in here, and that all
+items are plastic related):
+```{r, echo=FALSE}
+ print('Litter types included in estimate and classified by suspected source: ')
+types_classified_by_source 
+```
+
+## 5. Trends
+The plots below show the data plotted by year and country. Please check that 
+they look reasonable, and investigate anything that looks strange.
+```{r, echo=FALSE}
+headline_plot <- output_data %>% 
+  filter(grepl("all", tolower(source)) == TRUE) %>% 
+  ggplot(.,
+         aes(x = year,
+             y = median_count,
+             colour = country)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45,
+                                   hjust = 1,
+                                   vjust = 1)) +
+  ggtitle("All plastic liter")
+
+source_plot <- output_data %>% 
+  filter(substr(tolower(source), 1, 3) != "all") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = median_count,
+             colour = source)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(country), nrow = 3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45,
+                                   hjust = 1,
+                                   vjust = 1)) +
+  ggtitle("Plastic liter by suspected source")
+
+print(headline_plot)
+print(source_plot)
+```
+
+
+## Add section to show new data plotted against old data
+

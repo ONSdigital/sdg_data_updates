@@ -34,13 +34,15 @@ names(oda_data) <- tolower(names(oda_data))
 
 oda_renamed <- oda_data %>% 
   rename_column(primary = c("year"), new_name = "year") %>% 
-  rename_column(primary = c("extend", "amount"), new_name = "Value") %>% 
-  rename_column(primary = c("income", "group"), new_name = "Country_income_classification") %>% 
-  rename_column(primary = c("broad", "sector", "code"), new_name = "Broad_sector_code") %>% 
-  rename_column(primary = c("sid", "sector"), new_name = "Sector") %>% 
-  rename_column(primary = c("sector", "purpose", "text"), new_name = "Type_of_study") %>% 
-  rename_column(primary = c("type", "aid", "code"), new_name = "Aid_code") %>% 
-  rename_column(primary = c("type", "aid", "text"), new_name = "Aid_description") 
+  rename_column(primary = c("extend", "amount"), new_name = "value") %>% 
+  rename_column(primary = c("income", "group"), new_name = "country_income_classification") %>% 
+  rename_column(primary = c("broad", "sector", "code"), new_name = "broad_sector_code") %>% 
+  rename_column(primary = c("sid", "sector"), new_name = "sector") %>% 
+  rename_column(primary = c("sector", "purpose", "code"), new_name = "sector_purpose_code") %>% 
+  rename_column(primary = c("sector", "purpose", "text"), new_name = "type_of_study") %>% 
+  rename_column(primary = c("type", "aid", "code"), new_name = "aid_code") %>% 
+  rename_column(primary = c("type", "aid", "text"), new_name = "aid_description") %>% 
+  rename_column(primary = c("headline", "oda", "thousands"), new_name = "oda")
 
 # run code to create specific indicators ---------------------------------------
 scripts_run <- c()

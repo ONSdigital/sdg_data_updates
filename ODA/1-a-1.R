@@ -23,21 +23,22 @@ headlines <- disaggregations %>%
   summarise(value = sum(value))
   
 gbp_data <- bind_rows(disaggregations, headlines) %>% 
-  mutate(Units = "GBP (£ thousands)")
+  mutate(Units = "Percentage (%)",
+         Series = "Official development assistance grants for poverty reduction (percentage of GNI)",
+         `Observation status` = "Normal value") 
 
-constant_usd_data <-  gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
+# calculate % of GDP  
 
 names(gbp_data) <- str_to_sentence(names(gbp_data))
-names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
 csv_1a1 <- gbp_data %>% 
-  bind_rows(constant_usd_data) %>% 
-  select(Year, Aid_type, Crs_code,  
-         Units, Value) %>% 
+  # bind_rows(constant_usd_data) %>% 
+  select(Year, Series, Aid_type, Crs_code,  
+         Units, `Observation status`, Value) %>% 
   replace(is.na(.), "") %>% 
   rename(`Aid type` = Aid_type,
          `CRS code` = Crs_code)
 
-rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
+rm(aid_types, disaggregations, headlines, gbp_data, constant_usd_data)
 
 scripts_run <- c(scripts_run, "1-a-1")

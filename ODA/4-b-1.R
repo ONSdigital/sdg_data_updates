@@ -1,5 +1,10 @@
 
-chosen_type_of_aid <-  filter(oda_renamed, Aid_code == type_of_aid_code_4b1)
+chosen_type_of_aid <-  oda_renamed %>% 
+  filter(aid_code == type_of_aid_code_4b1) %>% 
+  mutate(country_income_classification = ifelse(
+    grepl("unallocated", country_income_classification)== TRUE |
+      country_income_classification == "0",
+    "Unspecified", country_income_classification))
 
 by_sector <- chosen_type_of_aid %>% 
   group_by(year, sector) %>% 

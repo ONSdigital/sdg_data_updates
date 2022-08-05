@@ -68,9 +68,7 @@ if (length(failed_scripts) > 0) {
 Please check the plots below for any differences between the live data (which 
 is pulled in from Jemalex) and the new data.  
   
-Live data will appear over the top of new data. You should therefore only 
-see points for the live data for previous years and only points for the new data 
-in the years you are updating. 
+New data will appear over the top of currently live data. 
 
 ### 4-b-1
 ```{r, echo = FALSE, fig.width=10}
@@ -86,59 +84,102 @@ new_data <- csv_4b1 %>%
 # join to the new data
 joined_data <- live_data %>% 
   mutate(dataset = "live") %>% 
-  bind_rows(new_data)
-
-# by sector
+  bind_rows(new_data) 
+#----
 
 # by cic
-
-# by type of study
-
-
-# plot the data
-plot <- joined_data %>% 
+cic_plot_4b1 <- joined_data %>% 
+  filter((is.na(type_of_study) | type_of_study == "") & 
+           (is.na(sector) | sector == "") & 
+           substr(units, 1, 3) == "GBP") %>% 
   ggplot(.,
-         aes(x = Year,
-             y = Value,
+         aes(x = year,
+             y = value,
              colour = dataset)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(vars(Gas),
-             nrow = 2) +
-  theme_bw() 
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  theme_bw() +
+  ggtitle("4-b-1 by country income classification")
+
+# by sector
+sector_plot_4b1 <- joined_data %>% 
+  filter((is.na(type_of_study) | type_of_study == "") & 
+           (is.na(country_income_classification) | country_income_classification == "") & 
+           substr(units, 1, 3) == "GBP") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(sector), nrow = 3) +
+  theme_bw() +
+  ggtitle("4-b-1 sector") 
+
+# by type of study
+study_plot_4b1 <- joined_data %>% 
+  filter((is.na(country_income_classification) | country_income_classification == "") & 
+           sector == "Education" & 
+           substr(units, 1, 3) == "GBP") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(type_of_study), nrow = 3) +
+  theme_bw() +
+  ggtitle("4-b-1 by type of study")
+
 
 ```
 
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot))
+suppressMessages(print(cic_plot_4b1))
+suppressMessages(print(sector_plot_4b1))
+suppressMessages(print(study_plot_4b1))
 ```
 
-Finally, it is sometimes hard to see where new numbers don't match live numbers
-especially if there are lots of disaggregations. In such cases a table of 
-differences is also useful. The following example is taken from 13-2-2:
-  
-  At the time of writing this code (June 2022), the following note is given in the
-  source notes tab: 'in these statistics the entire time series going back to 
-  1990 is revised each year to take account of methodological improvements'.  
-  
-  **If there are differences (see table below) please check that this still stands**
+
+## Differences between live data and new data
+It is sometimes hard to see where new numbers don't match live numbers
+especially if there are lots of disaggregations.
+The tables below show all instances where the old values do not match the new 
+values. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
 
 ```{r, , echo = FALSE}
-comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+
+# at time of writing, the live data didn't include USD, so the pivot wider below
+# didn't work correctly, so need to make sure the live and new datasets contain the same info
+USD_in_live <- TRUE %in% grepl("USD", unique(live_data$units))
+if (USD_in_live == FALSE) {
+  comparison_data <- joined_data %>% 
+    filter(grepl("USD", units) == FALSE) %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units))
+} else {
+  comparison_data <- joined_data %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units))
+}
+
+comparison <- comparison_data %>% 
+  select(year, sector, type_of_study, country_income_classification, 
+         units, dataset, value) %>% 
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
+              values_from = value) %>% 
   mutate(difference = new - live) %>% 
-  filter(difference != 0) %>% 
+  filter(difference != 0) %>%
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
 ```
-  
-  The table below shows all instances where the old value does not match the new 
-  value. It is sorted so the largest absolute differences appear first, but can
-  be sorted in other ways using the arrows at the top.
+
+
+### 4-b-1
 ```{r, echo = FALSE}
 datatable(comparison, 
           rownames = FALSE, 

@@ -37,6 +37,7 @@ The input filepaths used for this output are:
 - ODA data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
 - Exchange rates: **`r paste0(getwd(), "/", input_folder, "/", exchange_filename)`**
 - Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**
+- GNI url (for 1-a-1) **`r gni_api`**
   
 The following indicators were included in the run:  
 **`r indicators`**. See the next section to see if they all ran successfully.  
@@ -70,8 +71,46 @@ is pulled in from Jemalex) and the new data.
   
 New data will appear over the top of currently live data. 
 
+### 1-a-1
+```{r}
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_1-a-1.csv') %>% 
+  janitor::clean_names()
+
+new_data <- csv_1a1 %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") %>% 
+  janitor::clean_names()
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data) 
+#----
+
+# by aid type
+plot_1a1 <- joined_data %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(poverty_reduction_aid_type), nrow = 3) +
+  theme_bw() +
+  ggtitle("1-a-1 by poverty reduction aid type")
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot_1a1))
+
+```
+
+
+
+
 ### 4-b-1
-```{r, echo = FALSE, fig.width=10}
+```{r}
 
 live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_4-b-1.csv') %>% 
   janitor::clean_names()
@@ -190,3 +229,5 @@ datatable(comparison,
                            className = 'dt-center', targets = 0:3))))
 ```
 
+## Session Info
+`r sessionInfo()`

@@ -26,6 +26,8 @@
 #' description.
 #' @param gbp_data Dataframe with year and value as columns 
 #' (case is unimportant). Value should be GBP
+#' @param unit_multiplier String that follows "Constant USD" or "USD" in units. 
+#' Defaults to "($ thousands)"
 #' 
 #' @seealso tidy_data
 #' @seealso get_uk_values
@@ -33,21 +35,24 @@
 #' @return Dataframe - same as gbp_data but with constant USD instead of GBP
 #' 
 #' @examples {
-#' gbp_data <- read.csv(system.file("testdata", "test_data_8-a-1.csv",
+#' gbp_data <- read.csv(system.file("testdata", "year_value.csv",
 #' package = "SDGupdater"))
-#' rates_filepath <- paste0(system.file(package = "SDGupdater"), "/testdata/Exchange-rates.xlsx")
-#' deflators_filepath <- paste0(system.file(package = "SDGupdater"), "/testdata/Deflators-base-2020.xlsx")
+#' rates_filepath <- system.file("testdata", "Exchange-rates.xlsx", 
+#' package = "SDGupdater")
+#' deflators_filepath <- system.file("testdata", "Deflators-base-2020.xlsx", 
+#' package = "SDGupdater")
 #' gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
 #' }
 #'
 #' @export
-gbp_to_constant_usd <- function(rates_filepath, deflators_filepath, gbp_data) {
+gbp_to_constant_usd <- function(rates_filepath, deflators_filepath, gbp_data,
+                                unit_multiplier = "($ thousands)") {
 
   exchange_rates <- read_exchange_rates(rates_filepath)
   deflators <- read_deflators(deflators_filepath)
 
-  usd_data <- gbp_to_usd(exchange_rates, gbp_data)
-  constant_usd <- usd_to_constant_usd(deflators, usd_data)
+  usd_data <- gbp_to_usd(exchange_rates, gbp_data, unit_multiplier)
+  constant_usd <- usd_to_constant_usd(deflators, usd_data, unit_multiplier)
   
   return(constant_usd)
 }
@@ -63,22 +68,25 @@ read_deflators <- function(deflators_filepath) {
 }
 
 #' @describeIn gbp_to_constant_usd convert GBP to (non-constant) USD
-gbp_to_usd <- function(exchange_rates, gbp_data) {
+gbp_to_usd <- function(exchange_rates, gbp_data, 
+                       unit_multiplier = "($ thousands)") {
   
   heading_row <- which(!is.na(exchange_rates$numeric))[1]
   exchange_data <- tidy_data(exchange_rates, heading_row)
   uk_exchange_data <- get_uk_values(exchange_data, exchange_rate)
-  usd_data <- apply_exchange_rate(gbp_data, uk_exchange_data)
+  usd_data <- apply_exchange_rate(gbp_data, uk_exchange_data, unit_multiplier)
   
   return(usd_data)
 }
 
 #' @describeIn gbp_to_constant_usd convert USD to constant USD
-usd_to_constant_usd <- function(deflators, usd_data) {
+usd_to_constant_usd <- function(deflators, usd_data, 
+                                unit_multiplier = "$ thoudands") {
   heading_row <- which(!is.na(deflators$numeric))[1]
   deflators_data <- tidy_data(deflators, heading_row)
   uk_deflators <- get_uk_values(deflators_data, deflator)
-  constant_usd_data <- apply_deflators(usd_data, uk_deflators)
+  constant_usd_data <- apply_deflators(usd_data, uk_deflators, 
+                                       unit_multiplier)
 }
 
 #' Tidy exchange rate and deflators data
@@ -125,22 +133,24 @@ get_uk_values <- function(dat, value_name) {
 }
 
 #' @describeIn gbp_to_constant_usd apply US exchange rate to GBP
-apply_exchange_rate <- function(gbp_data, uk_exchange_data) {
+apply_exchange_rate <- function(gbp_data, uk_exchange_data, 
+                                unit_multiplier = "($ thousands)") {
   names(gbp_data) <- tolower(names(gbp_data))
   names(uk_exchange_data) <- tolower(names(uk_exchange_data))
   
   gbp_data %>% 
     dplyr::left_join(uk_exchange_data, by = "year" ) %>% 
     dplyr::mutate(value = value/exchange_rate,
-                  units = "USD ($ thousands)") %>% 
+                  units = trimws(paste("USD", unit_multiplier))) %>% 
     dplyr::select(-exchange_rate)
 }
 
 #' @describeIn gbp_to_constant_usd apply UK deflators to USD values
-apply_deflators <- function(usd_data, uk_deflators) {
+apply_deflators <- function(usd_data, uk_deflators, 
+                            unit_multiplier = "($ thousands)") {
   usd_data %>% 
     dplyr::left_join(uk_deflators, by = "year") %>% 
     dplyr::mutate(value = (value/deflator)*100,
-           units = "Constant USD ($ thousands)") %>% 
+           units = trimws(paste("Constant USD", unit_multiplier))) %>% 
     dplyr::select(-deflator)
 }

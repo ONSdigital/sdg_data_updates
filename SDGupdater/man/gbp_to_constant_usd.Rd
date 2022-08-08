@@ -10,19 +10,28 @@
 \alias{apply_deflators}
 \title{Convert GBP to constant USD}
 \usage{
-gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
+gbp_to_constant_usd(
+  rates_filepath,
+  deflators_filepath,
+  gbp_data,
+  unit_multiplier = "($ thousands)"
+)
 
 read_exchange_rates(rates_filepath)
 
 read_deflators(deflators_filepath)
 
-gbp_to_usd(exchange_rates, gbp_data)
+gbp_to_usd(exchange_rates, gbp_data, unit_multiplier = "($ thousands)")
 
-usd_to_constant_usd(deflators, usd_data)
+usd_to_constant_usd(deflators, usd_data, unit_multiplier = "$ thoudands")
 
-apply_exchange_rate(gbp_data, uk_exchange_data)
+apply_exchange_rate(
+  gbp_data,
+  uk_exchange_data,
+  unit_multiplier = "($ thousands)"
+)
 
-apply_deflators(usd_data, uk_deflators)
+apply_deflators(usd_data, uk_deflators, unit_multiplier = "($ thousands)")
 }
 \arguments{
 \item{rates_filepath}{Filepath of the exchange rates xlsx file - see link in
@@ -33,6 +42,9 @@ description.}
 
 \item{gbp_data}{Dataframe with year and value as columns
 (case is unimportant). Value should be GBP}
+
+\item{unit_multiplier}{String that follows "Constant USD" or "USD" in units.
+Defaults to "($ thousands)"}
 }
 \value{
 Dataframe - same as gbp_data but with constant USD instead of GBP
@@ -75,10 +87,12 @@ for the base year.
 
 \examples{
 {
-gbp_data <- read.csv(system.file("testdata", "test_data_8-a-1.csv",
+gbp_data <- read.csv(system.file("testdata", "year_value.csv",
 package = "SDGupdater"))
-rates_filepath <- paste0(system.file(package = "SDGupdater"), "/testdata/Exchange-rates.xlsx")
-deflators_filepath <- paste0(system.file(package = "SDGupdater"), "/testdata/Deflators-base-2020.xlsx")
+rates_filepath <- system.file("testdata", "Exchange-rates.xlsx", 
+package = "SDGupdater")
+deflators_filepath <- system.file("testdata", "Deflators-base-2020.xlsx", 
+package = "SDGupdater")
 gbp_to_constant_usd(rates_filepath, deflators_filepath, gbp_data)
 }
 

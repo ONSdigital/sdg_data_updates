@@ -16,29 +16,37 @@ aid_types <- oda_renamed %>%
 
 disaggregations <- aid_types %>% 
   group_by(year, aid_type, crs_code) %>% 
-  summarise(value = sum(oda)) 
+  summarise(gbp = sum(oda)) 
 
 headlines <- disaggregations %>% 
   group_by(year) %>% 
-  summarise(value = sum(value))
+  summarise(gbp = sum(gbp))
   
-gbp_data <- bind_rows(disaggregations, headlines) %>% 
+gbp_data <- bind_rows(disaggregations, headlines) 
+
+# calculate % of GNI -----------------------------------------------------------
+joined_tables <- gni_data %>% 
+  janitor::clean_names() %>% 
+  select(obs_time, obs_value) %>% 
+  mutate(obs_time = as.integer(obs_time)) %>% 
+  rename(year = obs_time) %>% 
+  right_join(gbp_data, by = "year")
+
+percent_gni <- joined_tables %>% 
+  mutate(value = gbp/obs_value)
+
+names(percent_gni) <- str_to_sentence(names(percent_gni))
+
+csv_1a1 <- percent_gni %>% 
   mutate(Units = "Percentage (%)",
          Series = "Official development assistance grants for poverty reduction (percentage of GNI)",
-         `Observation status` = "Normal value") 
-
-# calculate % of GDP  
-
-names(gbp_data) <- str_to_sentence(names(gbp_data))
-
-csv_1a1 <- gbp_data %>% 
-  # bind_rows(constant_usd_data) %>% 
+         `Observation status` = "Normal value")  %>% 
   select(Year, Series, Aid_type, Crs_code,  
          Units, `Observation status`, Value) %>% 
   replace(is.na(.), "") %>% 
   rename(`Aid type` = Aid_type,
          `CRS code` = Crs_code)
 
-rm(aid_types, disaggregations, headlines, gbp_data, constant_usd_data)
+rm(aid_types, disaggregations, headlines, gbp_data, joined_tables, percent_gni)
 
 scripts_run <- c(scripts_run, "1-a-1")

@@ -8,6 +8,7 @@ library('unpivotr')
 library('tidyxl')
 library('tidyr')
 library('dplyr')
+library('rsdmx')
 
 library(SDGupdater)
 
@@ -22,6 +23,16 @@ deflators_filepath <- paste0(input_folder, "/", deflators_filename)
 # function so don't need to do that here
 oda_data <- read.csv(paste0(input_folder, "/", filename))
 names(oda_data) <- tolower(names(oda_data))
+
+# could move to 1-a-1 file if this is the only indicator using GNI
+
+if ("1-a-1" %in% indicators) {
+  gni_end_year <- format(Sys.Date(), "%Y")
+  gni_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/TABLE1/12+12.1.1.1140+1160.N/all?startTime=",
+                    gni_start_year, "&endTime=", gni_end_year)
+  gni_sdmx <- readSDMX(gni_api)
+  gni_data <- as.data.frame(gni_sdmx)
+}
 
 # create stable column names based on elements of column names -----------------
 

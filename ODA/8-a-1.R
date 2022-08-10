@@ -1,7 +1,11 @@
 
 chosen_type_of_aid <-  oda_renamed %>% 
   filter(broad_sector_code == broad_sector_code_8a1) %>% 
-  mutate(value = as.numeric(as.character(value)))
+  mutate(value = as.numeric(as.character(value))) %>% 
+  mutate(country_income_classification = ifelse(
+    grepl("unallocated", country_income_classification)== TRUE |
+      country_income_classification == "0",
+    "Unspecified", country_income_classification))
 
 by_cic <- chosen_type_of_aid %>% 
   group_by(year, country_income_classification) %>% 

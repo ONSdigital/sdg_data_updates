@@ -34,7 +34,8 @@ names(percent_gni) <- str_to_sentence(names(percent_gni))
 csv_1a1 <- percent_gni %>% 
   mutate(Units = "Percentage (%)",
          Series = "Official development assistance grants for poverty reduction (percentage of GNI)",
-         `Observation status` = "Normal value")  %>% 
+         `Observation status` = "Normal value",
+         Aid_type = str_to_sentence(Aid_type))  %>% 
   select(Year, Series, Aid_type, 
          Units, `Observation status`, Value) %>% 
   replace(is.na(.), "") %>% 

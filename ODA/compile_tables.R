@@ -21,8 +21,12 @@ deflators_filepath <- paste0(input_folder, "/", deflators_filename)
 # import data -------------------------------------------------------------------
 # exchange rate and deflator data are imported using the gbp_to_constant_usd 
 # function so don't need to do that here
-oda_data <- read.csv(paste0(input_folder, "/", filename))
-names(oda_data) <- tolower(names(oda_data))
+new_oda_data <- read.csv(paste0(input_folder, "/", filename_newdat))
+names(new_oda_data) <- tolower(names(new_oda_data))
+
+old_oda_data <- read.csv(paste0(input_folder, "/", filename_2017)) %>% 
+  mutate(sectorpurposetext = "") # column not in older data. Required so 4-b-1 code runs on both old and new data.
+names(old_oda_data) <- tolower(names(old_oda_data))
 
 # could move to 1-a-1 file if this is the only indicator using GNI
 
@@ -43,31 +47,62 @@ if ("1-a-1" %in% indicators) {
 #   return(oda_data)
 # }
 
-oda_renamed <- oda_data %>% 
-  rename_column(primary = c("year"), new_name = "year") %>% 
-  rename_column(primary = c("extend", "amount"), new_name = "value") %>% 
-  rename_column(primary = c("income", "group"), new_name = "country_income_classification") %>% 
-  rename_column(primary = c("broad", "sector", "code"), new_name = "broad_sector_code") %>% 
-  rename_column(primary = c("sid", "sector"), new_name = "sector") %>% 
-  rename_column(primary = c("sector", "purpose", "code"), new_name = "sector_purpose_code") %>% 
-  rename_column(primary = c("sector", "purpose", "text"), new_name = "type_of_study") %>% 
-  rename_column(primary = c("type", "aid", "code"), new_name = "aid_code") %>% 
-  rename_column(primary = c("type", "aid", "text"), new_name = "aid_description") %>% 
-  rename_column(primary = c("headline", "oda", "thousands"), new_name = "oda")
+oda_datasets <- list(old_oda_data, new_oda_data)
+oda_renamed_list <- list()
+
+for (i in 1:2) {
+  
+  oda_renamed_list[[i]] <- oda_datasets[[i]] %>% 
+    rename_column(primary = c("year"), new_name = "year") %>% 
+    rename_column(primary = c("extend", "amount"), new_name = "value") %>% 
+    rename_column(primary = c("income", "group"), new_name = "country_income_classification") %>% 
+    rename_column(primary = c("broad", "sector", "code"), new_name = "broad_sector_code") %>% 
+    rename_column(primary = c("sid", "sector"), new_name = "sector") %>% 
+    rename_column(primary = c("sector", "purpose", "code"), new_name = "sector_purpose_code") %>% 
+    rename_column(primary = c("sector", "purpose", "text"), new_name = "type_of_study") %>% 
+    rename_column(primary = c("type", "aid", "code"), new_name = "aid_code") %>% 
+    rename_column(primary = c("type", "aid", "text"), new_name = "aid_description") %>% 
+    rename_column(primary = c("headline", "oda", "thousands"), 
+                  alternate = c("net", "oda", "thousands"), new_name = "oda")
+}
 
 # run code to create specific indicators ---------------------------------------
 scripts_run <- c()
 
 for (i in 1:length(indicators)) {
-  script_name <- paste0(indicators[i], ".R")
-  try(source(script_name))
+  
+  script_name <- paste0(indicators[i], ".R")  
+  
+  # because we need to run each indicator script twice (for pre and post 2017)
+  # and then bind the data together, we can't just name the dataframe with the
+  # indicator number in the indicator script as it will get overwritten when
+  # the second dataset is run.
+  csv_name <- paste0("csv_", 
+    str_remove(
+      str_replace_all(script_name, "-", ""),
+      ".R"))
+  
+  # initiate a dataframe to hold both pre and post 2017 data for indicator i
+  all_years <- NULL
+  
+  for (j in 1:2) {
+    
+    oda_renamed <- oda_renamed_list[[j]]
+    
+    try(
+      source(script_name)
+    )
+    
+    try(
+      all_years <- bind_rows(all_years, csv)
+    )
+    
+  }
+  
+  # so that we don't overwrite the data from the previous indicator script:
+  assign(csv_name, all_years)
+  
 }
-
-
-
-
-
-
 
 
 

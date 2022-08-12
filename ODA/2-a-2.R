@@ -20,7 +20,7 @@ constant_usd_data <-  gbp_to_constant_usd(rates_filepath, deflators_filepath, gb
 names(gbp_data) <- str_to_sentence(names(gbp_data))
 names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
-csv_2a2 <- gbp_data %>% 
+csv <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
   mutate(Series = "Total official flows (disbursements) for agriculture, by recipient countries",
          `Observation status` = "Definition differs") %>% 

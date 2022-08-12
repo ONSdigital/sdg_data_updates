@@ -31,7 +31,7 @@ percent_gni <- joined_tables %>%
 
 names(percent_gni) <- str_to_sentence(names(percent_gni))
 
-csv_1a1 <- percent_gni %>% 
+csv <- percent_gni %>% 
   mutate(Units = "Percentage (%)",
          Series = "Official development assistance grants for poverty reduction (percentage of GNI)",
          `Observation status` = "Normal value",

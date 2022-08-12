@@ -71,6 +71,10 @@ Please check the plots below for any differences between the live data (which
 is pulled in from Jemalex) and the new data.  
   
 New data will appear over the top of currently live data. 
+  
+Note that plots for constant USD show differences due to changes in the deflator
+values (where the base year has changed). In these cases **all years** must be 
+copied over to the indicator file.
 
 ### 1-a-1
 ```{r}

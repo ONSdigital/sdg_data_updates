@@ -44,6 +44,8 @@ The following indicators were included in the run:
   
 Indicator specific settings are:
 - 2-a-2 broad sector code: **`broad_sector_code_2a2`**
+- 3-b-2 broad sector code: **`broad_sector_code_3b2`*
+- 3-b-2 CRS code (sector purpose code): **`crs_code_3b2`**
 - 4-b-1 type of aid code: **`r type_of_aid_code_4b1`**  
 - 8-a-1 broad sector code: **`r broad_sector_code_8a1`**
  
@@ -76,36 +78,57 @@ Note that plots for constant USD show differences due to changes in the deflator
 values (where the base year has changed). In these cases **all years** must be 
 copied over to the indicator file.
 
-### 1-a-1
 ```{r}
-live_data_1a1 <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_1-a-1.csv') %>% 
-  janitor::clean_names()
-
-new_data_1a1 <- csv_1a1 %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new") %>% 
-  janitor::clean_names()
+# function to join live data to the newly created data
+join_plot_data <- function(indicator) {
   
-# join to the new data
-joined_data_1a1 <- live_data_1a1 %>% 
-  mutate(dataset = "live") %>% 
-  bind_rows(new_data_1a1) 
-#----
+  live_data_link <- paste0(
+    'https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_',
+    indicator, '.csv')
+  
+  new_csv <- get(
+    paste0('csv_', 
+           str_remove_all(indicator, '-'))
+  )
+  
+  live_data <- read.csv(live_data_link) %>% 
+    janitor::clean_names()
+  
+  new_data <- new_csv %>% 
+    mutate(Year = as.integer(Year),
+           dataset = "new") %>% 
+    janitor::clean_names()
+  
+  joined_data <- live_data %>% 
+    mutate(dataset = "live") %>%
+    bind_rows(new_data)
+  
+  return(joined_data)
+  
+}
 
-# by aid type
-plot_1a1 <- joined_data_1a1 %>% 
-  ggplot(.,
+basic_plot <- function(data) {
+  ggplot(data,
          aes(x = year,
              y = value,
              colour = dataset)) +
   geom_point() +
   geom_line(aes(linetype = dataset)) +
-  facet_wrap(vars(poverty_reduction_aid_type), nrow = 2) +
-  theme_bw() +
-  ggtitle("1-a-1 by poverty reduction aid type") +
-  ylab(unique(joined_data_1a1$units))
+  theme_bw() 
+}
 ```
 
+### 1-a-1
+```{r}
+joined_data_1a1 <- join_plot_data("1-a-1")
+
+#----
+plot_1a1 <- basic_plot(joined_data_1a1) +
+  facet_wrap(vars(poverty_reduction_aid_type), nrow = 2) +
+  ggtitle("1-a-1 by poverty reduction aid type") +
+  ylab(unique(joined_data_1a1$units))
+
+```
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(plot_1a1))
@@ -114,44 +137,20 @@ suppressMessages(print(plot_1a1))
 
 ### 2-a-2
 ```{r}
-live_data_2a2 <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_2-a-2.csv') %>% 
-  janitor::clean_names()
-
-new_data_2a2 <- csv_2a2 %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new") %>% 
-  janitor::clean_names()
-  
-# join to the new data
-joined_data_2a2 <- live_data_2a2 %>% 
-  mutate(dataset = "live") %>% 
-  bind_rows(new_data_2a2) 
-#----
+joined_data_2a2 <- join_plot_data("2-a-2")
 
 # by country_income_classification (GBP)
 gbp_plot_2a2 <- joined_data_2a2 %>% 
   filter(grepl("GBP", units)) %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(country_income_classification), nrow = 2) +
-  theme_bw() +
   ggtitle("2-a-2 by country income classification (GBP 000's)") 
 
 # by country_income_classification (USD)
 usd_plot_2a2 <- joined_data_2a2 %>% 
   filter(grepl("USD", units)) %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(country_income_classification), nrow = 2) +
-  theme_bw() +
   ggtitle("2-a-2 by country income classification (constant USD 000's)")
 ```
 
@@ -161,38 +160,45 @@ suppressMessages(print(gbp_plot_2a2))
 suppressMessages(print(usd_plot_2a2))
 
 ```
+### 3-b-2
+```{r}
 
+joined_data_3b2 <- join_plot_data("3-b-2")
+
+#----
+
+gbp_plot_3b2 <- joined_data_3b2 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_grid(aid_description_crs_code ~ country_income_classification) +
+  ggtitle("3-b-2 by country income classification and aid type (GBP)")
+
+usd_plot_3b2 <- joined_data_3b2 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_grid(aid_description_crs_code ~ country_income_classification) +
+  ggtitle("3-b-2 by country income classification and aid type (USD 000's)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_3b2))
+suppressMessages(print(usd_plot_3b2))
+
+```
 
 ### 4-b-1
 ```{r}
 
-live_data_4b1 <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_4-b-1.csv') %>% 
-  janitor::clean_names()
-
-new_data_4b1 <- csv_4b1 %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new") %>% 
-  janitor::clean_names()
-  
-# join to the new data
-joined_data_4b1 <- live_data_4b1 %>% 
-  mutate(dataset = "live") %>% 
-  bind_rows(new_data_4b1) 
-#----
+joined_data_4b1 <- join_plot_data("4-b-1")
 
 # by cic
 cic_plot_4b1 <- joined_data_4b1 %>% 
   filter((is.na(type_of_study) | type_of_study == "") & 
            (is.na(sector) | sector == "") & 
            substr(units, 1, 3) == "GBP") %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(country_income_classification), nrow = 3) +
-  theme_bw() +
   ggtitle("4-b-1 by country income classification")
 
 # by sector
@@ -200,14 +206,8 @@ sector_plot_4b1 <- joined_data_4b1 %>%
   filter((is.na(type_of_study) | type_of_study == "") & 
            (is.na(country_income_classification) | country_income_classification == "") & 
            substr(units, 1, 3) == "GBP") %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(sector), nrow = 3) +
-  theme_bw() +
   ggtitle("4-b-1 sector") 
 
 # by type of study
@@ -215,14 +215,8 @@ study_plot_4b1 <- joined_data_4b1 %>%
   filter((is.na(country_income_classification) | country_income_classification == "") & 
            sector == "Education" & 
            substr(units, 1, 3) == "GBP") %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(type_of_study), nrow = 3) +
-  theme_bw() +
   ggtitle("4-b-1 by type of study")
 
 
@@ -237,47 +231,23 @@ suppressMessages(print(study_plot_4b1))
 
 ### 8-a-1
 ```{r}
-live_data_8a1 <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_8-a-1.csv') %>% 
-  janitor::clean_names()
 
-new_data_8a1 <- csv_8a1 %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new") %>% 
-  janitor::clean_names()
-  
-# join to the new data
-joined_data_8a1 <- live_data_8a1 %>% 
-  mutate(dataset = "live") %>% 
-  bind_rows(new_data_8a1) 
-#----
+joined_data_8a1 <- join_plot_data("8-a-1") 
 
 # GBP
 gbp_plot_8a1 <- joined_data_8a1 %>% 
     filter(grepl("GBP", units)) %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(country_income_classification), nrow = 2) +
-  theme_bw() +
   ggtitle("8-a-1 by country income classification (GBP 000's)") 
 
 # USD
 usd_plot_8a1 <- joined_data_8a1 %>% 
     filter(grepl("USD", units)) %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
+  basic_plot(.) +
   facet_wrap(vars(country_income_classification), nrow = 2) +
-  theme_bw() +
   ggtitle("8-a-1 by country income classification (USD 000's)") 
 ```
-
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(gbp_plot_8a1))
@@ -292,61 +262,84 @@ The tables below show all instances where the old values do not match the new
 values. It is sorted so the largest absolute differences appear first, but can
 be sorted in other ways using the arrows at the top.
 
+```{r}
+# function to calculate difference between live and new data, and order the 
+# table so the largest absolute differences are at the top
+calculate_differences <- function(data) {
+  
+  data %>% 
+    pivot_wider(names_from = dataset,
+                values_from = value) %>% 
+    mutate(difference = new - live) %>% 
+    filter(difference != 0) %>%
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
+  
+}
+
+# and then to present it as a datatable
+create_datatable <- function (data) {
+  
+  datatable(data, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+}
+
+```
+
+
 ### 1-a-1
 ```{r, , echo = FALSE}
 
 comparison_data_1a1 <- joined_data_1a1 %>% 
   # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-  mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units))
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
 
-comparison_1a1 <- joined_data_1a1 %>% 
+comparison_1a1 <- comparison_data_1a1 %>% 
   select(year, poverty_reduction_aid_type,  
          units, dataset, value) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = value) %>% 
-  mutate(difference = new - live) %>% 
-  filter(difference != 0) %>%
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+  calculate_differences()
+
+create_datatable(comparison_1a1)
 
 ```
 
-```{r, echo = FALSE}
-datatable(comparison_1a1, 
-          rownames = FALSE, 
-          filter = "top",
-          options = list(dom = 'tp', 
-                         pageLength = 10,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
-```
 ### 2-a-2
 ```{r, , echo = FALSE}
 
 comparison_data_2a2 <- joined_data_2a2 %>% 
   # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-  mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units))
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
 
-comparison_2a2 <- joined_data_2a2 %>% 
+comparison_2a2 <- comparison_data_2a2 %>% 
   select(year, country_income_classification,  
          units, dataset, value) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = value) %>% 
-  mutate(difference = new - live) %>% 
-  filter(difference != 0) %>%
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+    calculate_differences()
+
+create_datatable(comparison_2a2)
 
 ```
+### 3-b-2
+```{r, , echo = FALSE}
 
-```{r, echo = FALSE}
-datatable(comparison_2a2, 
-          rownames = FALSE, 
-          filter = "top",
-          options = list(dom = 'tp', 
-                         pageLength = 10,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
+comparison_data_3b2 <- joined_data_3b2 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_3b2 <- comparison_data_3b2 %>% 
+  select(year, country_income_classification, aid_description_crs_code,
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_3b2)
+
 ```
 
 ### 4-b-1
@@ -363,58 +356,38 @@ if (USD_in_live_4b1 == FALSE) {
 } else {
   comparison_data_4b1 <- joined_data_4b1 %>% 
     # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-    mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units))
+    mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
 }
 
 comparison_4b1 <- comparison_data_4b1 %>% 
   select(year, sector, type_of_study, country_income_classification, 
          units, dataset, value) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = value) %>% 
-  mutate(difference = new - live) %>% 
-  filter(difference != 0) %>%
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+  calculate_differences()
+
+create_datatable(comparison_4b1)
+
 
 ```
 
-```{r, echo = FALSE}
-datatable(comparison_4b1, 
-          rownames = FALSE, 
-          filter = "top",
-          options = list(dom = 'tp', 
-                         pageLength = 10,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
-```
 
 ### 8-a-1
 ```{r, , echo = FALSE}
 
 comparison_data_8a1 <- joined_data_1a1 %>% 
   # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-  mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units))
+  mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
 
 comparison_8a1 <- joined_data_8a1 %>% 
   select(year, country_income_classification,  
          units, dataset, value) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = value) %>% 
-  mutate(difference = new - live) %>% 
-  filter(difference != 0) %>%
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+  calculate_differences()
 
-```
+create_datatable(comparison_8a1)
 
-```{r, echo = FALSE}
-datatable(comparison_8a1, 
-          rownames = FALSE, 
-          filter = "top",
-          options = list(dom = 'tp', 
-                         pageLength = 10,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
+
 ```
 
 ## Session Info

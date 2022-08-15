@@ -150,8 +150,11 @@ types_classified_by_source
 ```
 
 ## 5. Trends
-The plots below show the data plotted by year and country. Please check that 
-they look reasonable, and investigate anything that looks strange.
+The plots below show the data plotted by year and country. Points are 
+jittered (they are offset slightly on the horizontal axis) so that overlapping 
+points are visible.  
+  
+Please check that they look reasonable, and investigate anything that looks strange.
 ```{r, echo=FALSE}
 headline_plot <- output_data %>% 
   filter(grepl("all", tolower(source)) == TRUE) %>% 
@@ -159,7 +162,7 @@ headline_plot <- output_data %>%
          aes(x = year,
              y = median_count,
              colour = country)) +
-  geom_point() +
+  geom_jitter(width = 0.01, height = 0) +
   geom_line() +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45,
@@ -173,7 +176,7 @@ source_plot <- output_data %>%
          aes(x = year,
              y = median_count,
              colour = source)) +
-  geom_point() +
+  geom_jitter(width = 0.01, height = 0) +
   geom_line() +
   facet_wrap(vars(country), nrow = 3) +
   theme_bw() +

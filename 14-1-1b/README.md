@@ -3,7 +3,7 @@
 This code creates both the csv for the SDG data platform, and the publication tables. Tables are published either in the Natural Capital Habitat and Condition
 Accounts or (if these accounts are not published before June in the year following the GBBC) as an ad-hoc.  
   
-Input data are ingested from MCS through DAO and DAP.   
+Input data are ingested from the Marine Conservation Society (MCS) through DAO and DAP. See the contacts list, goal updates, and emails folder in Sharepoint for more information.
   
 ### Data in Example_input folder
 The example data are dummy data and are not a true reflection of data obtained from MCS. 
@@ -28,7 +28,7 @@ First type `getwd()` in the console to check that it points at the sdg_data_upda
 is looking for the SDGupdater package (folder) in the right place. Then use `install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)` to install it.
 9) csv, publication, and html (QA) files will be exported to the Output folder. Read through the QA file, and if there are no issues, copy the csv into the csv tab of the In progress/Indicator xlsx file.
 10) If an error occurs (see troubleshooting section below), you will need to run the following code in the console: `setwd('..')` before repeating step 7.
-11) Before publication, email MCS.
+11) Before publication, email MCS (see contacts list in Sharepoint).
 
 ### QA process (SDG Data team):
 Read the automatically generated QA report. Pay particular attention to the charts as this is where you are likely to spot any unexpected problems with the code. For

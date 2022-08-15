@@ -78,7 +78,7 @@ but with slightly different processing. Differences are summarised in Table 1 be
 |------------|----------|----------|
 |**Litter types**|- All litter types, including e.g. metal, wood, cloth </br>- Plastic pieces smaller than 2.5cm are not currently excluded. They will be reported separately in future publications.|- Only types with a plastic component (plastic, rubber, sanitary, medical, and bagged dog faeces).</br>- Plastic pieces smaller than 2.5cm excluded.|
 |**Surveys included**|All GBBC cleans|- First clean of the GBBC weekend for each beach.</br>- Surveys of 100m in length only|
-|**Measure**|Currently mean cout per metre, which results in higher estimates han the mean. May move to reporting the median in future|Median count, which results in lower estimates than the mean|
+|**Measure**|Currently mean count per metre, which results in higher estimates than the mean. May move to reporting the median in future|Median count, which results in lower estimates than the mean|
   
 In both datasets, there is a downward trend in litter recorded across the UK.  
   
@@ -278,7 +278,7 @@ We found no major differences across years in the number of days since the last 
 >*This figure includes interludes of up to 300 days*  
   
 #### Reporting of small items (and use of the median)
-As suggested by CEMAPS methodology, plastic poeces under 2.5cm have been excluded from litter counts as small items are less likely to be seen, collected, and reported. In addition they cannot be allocated to a source. Polypellets (also known as mermaid-s tears, or nurdles) are also not counted. However, some counts of small items remain in the dataset under ‘other’ categories. This is clear from the descriptions given by volunteers: despite guidance to not count items such as polypellets, these are included in several entries under 'other'. Removal of every such case would be difficult, so rather than excluding a subset, all such counts have been retained.   
+As suggested by CEMAPS methodology, plastic pioeces under 2.5cm have been excluded from litter counts as small items are less likely to be seen, collected, and reported. In addition they cannot be allocated to a source. Polypellets (also known as mermaid's tears, or nurdles) are also not counted. However, some counts of small items remain in the dataset under ‘other’ categories. This is clear from the descriptions given by volunteers: despite guidance to not count items such as polypellets, these are included in several entries under 'other'. Removal of every such case would be difficult, so rather than excluding a subset, all such counts have been retained.   
   
 It is apparent from the descriptions given that there may be differences in count precision depending on the volunteer or the state of items when found. For example, a pack of wet wipes may be counted as "1 pack of wet wipes" or as "100 wet wipes".   
   

@@ -1,0 +1,561 @@
+"Year","Country","Suspected source","Units","Observation status","Value"
+2008,"Northern Ireland","Fishing","Median count","Low reliability",14
+2008,"Northern Ireland","Fly-tipped","Median count","Low reliability",2
+2008,"Northern Ireland","Medical","Median count","Low reliability",2
+2008,"Northern Ireland","Non-sourced","Median count","Low reliability",73
+2008,"Northern Ireland","Public","Median count","Low reliability",257
+2008,"Northern Ireland","Sewage related debris","Median count","Low reliability",7
+2008,"Northern Ireland","Shipping","Median count","Low reliability",14
+2009,"Northern Ireland","Fishing","Median count","Low reliability",9
+2009,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2009,"Northern Ireland","Medical","Median count","Low reliability",0
+2009,"Northern Ireland","Non-sourced","Median count","Low reliability",26
+2009,"Northern Ireland","Public","Median count","Low reliability",206
+2009,"Northern Ireland","Sewage related debris","Median count","Low reliability",5
+2009,"Northern Ireland","Shipping","Median count","Low reliability",7
+2010,"Northern Ireland","Fishing","Median count","Low reliability",2
+2010,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2010,"Northern Ireland","Medical","Median count","Low reliability",0
+2010,"Northern Ireland","Non-sourced","Median count","Low reliability",10
+2010,"Northern Ireland","Public","Median count","Low reliability",21
+2010,"Northern Ireland","Sewage related debris","Median count","Low reliability",4
+2010,"Northern Ireland","Shipping","Median count","Low reliability",0
+2011,"Northern Ireland","Fishing","Median count","Low reliability",22.5
+2011,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2011,"Northern Ireland","Medical","Median count","Low reliability",0.5
+2011,"Northern Ireland","Non-sourced","Median count","Low reliability",65.5
+2011,"Northern Ireland","Public","Median count","Low reliability",191
+2011,"Northern Ireland","Sewage related debris","Median count","Low reliability",34.5
+2011,"Northern Ireland","Shipping","Median count","Low reliability",8
+2012,"Northern Ireland","Fishing","Median count","Low reliability",21
+2012,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2012,"Northern Ireland","Medical","Median count","Low reliability",0
+2012,"Northern Ireland","Non-sourced","Median count","Low reliability",32
+2012,"Northern Ireland","Public","Median count","Low reliability",227
+2012,"Northern Ireland","Sewage related debris","Median count","Low reliability",20
+2012,"Northern Ireland","Shipping","Median count","Low reliability",23
+2013,"Northern Ireland","Fishing","Median count","Low reliability",28.5
+2013,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2013,"Northern Ireland","Medical","Median count","Low reliability",0.5
+2013,"Northern Ireland","Non-sourced","Median count","Low reliability",39.5
+2013,"Northern Ireland","Public","Median count","Low reliability",139.5
+2013,"Northern Ireland","Sewage related debris","Median count","Low reliability",41
+2013,"Northern Ireland","Shipping","Median count","Low reliability",19.5
+2014,"Northern Ireland","Fishing","Median count","Low reliability",77.5
+2014,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2014,"Northern Ireland","Medical","Median count","Low reliability",0
+2014,"Northern Ireland","Non-sourced","Median count","Low reliability",46.5
+2014,"Northern Ireland","Public","Median count","Low reliability",163
+2014,"Northern Ireland","Sewage related debris","Median count","Low reliability",25.5
+2014,"Northern Ireland","Shipping","Median count","Low reliability",24.5
+2015,"Northern Ireland","Fishing","Median count","Low reliability",442
+2015,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2015,"Northern Ireland","Medical","Median count","Low reliability",1
+2015,"Northern Ireland","Non-sourced","Median count","Low reliability",92
+2015,"Northern Ireland","Public","Median count","Low reliability",130
+2015,"Northern Ireland","Sewage related debris","Median count","Low reliability",8
+2015,"Northern Ireland","Shipping","Median count","Low reliability",66
+2016,"Northern Ireland","Fishing","Median count","Low reliability",301
+2016,"Northern Ireland","Fly-tipped","Median count","Low reliability",1
+2016,"Northern Ireland","Medical","Median count","Low reliability",1
+2016,"Northern Ireland","Non-sourced","Median count","Low reliability",125
+2016,"Northern Ireland","Public","Median count","Low reliability",182
+2016,"Northern Ireland","Sewage related debris","Median count","Low reliability",2
+2016,"Northern Ireland","Shipping","Median count","Low reliability",122
+2017,"Northern Ireland","Fishing","Median count","Low reliability",42
+2017,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2017,"Northern Ireland","Medical","Median count","Low reliability",0
+2017,"Northern Ireland","Non-sourced","Median count","Low reliability",128
+2017,"Northern Ireland","Public","Median count","Low reliability",103
+2017,"Northern Ireland","Sewage related debris","Median count","Low reliability",21
+2017,"Northern Ireland","Shipping","Median count","Low reliability",15
+2018,"Northern Ireland","Fishing","Median count","Low reliability",18
+2018,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2018,"Northern Ireland","Medical","Median count","Low reliability",0
+2018,"Northern Ireland","Non-sourced","Median count","Low reliability",17
+2018,"Northern Ireland","Public","Median count","Low reliability",35
+2018,"Northern Ireland","Sewage related debris","Median count","Low reliability",6
+2018,"Northern Ireland","Shipping","Median count","Low reliability",4
+2019,"Northern Ireland","Fishing","Median count","Low reliability",52
+2019,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2019,"Northern Ireland","Medical","Median count","Low reliability",0
+2019,"Northern Ireland","Non-sourced","Median count","Low reliability",23
+2019,"Northern Ireland","Public","Median count","Low reliability",66
+2019,"Northern Ireland","Sewage related debris","Median count","Low reliability",4
+2019,"Northern Ireland","Shipping","Median count","Low reliability",13
+2020,"Northern Ireland","Fishing","Median count","Low reliability; Time series break",191
+2020,"Northern Ireland","Fly-tipped","Median count","Low reliability; Time series break",4
+2020,"Northern Ireland","Medical","Median count","Low reliability; Time series break",4.5
+2020,"Northern Ireland","Non-sourced","Median count","Low reliability; Time series break",240.5
+2020,"Northern Ireland","Public","Median count","Low reliability; Time series break",447.5
+2020,"Northern Ireland","Sewage related debris","Median count","Low reliability; Time series break",33
+2020,"Northern Ireland","Shipping","Median count","Low reliability; Time series break",33.5
+2021,"Northern Ireland","Fishing","Median count","Low reliability",36
+2021,"Northern Ireland","Fly-tipped","Median count","Low reliability",0
+2021,"Northern Ireland","Medical","Median count","Low reliability",3
+2021,"Northern Ireland","Non-sourced","Median count","Low reliability",51
+2021,"Northern Ireland","Public","Median count","Low reliability",352
+2021,"Northern Ireland","Sewage related debris","Median count","Low reliability",7
+2021,"Northern Ireland","Shipping","Median count","Low reliability",10
+2008,"Scotland","Fishing","Median count","Low reliability",30
+2008,"Scotland","Fly-tipped","Median count","Low reliability",0
+2008,"Scotland","Medical","Median count","Low reliability",0
+2008,"Scotland","Non-sourced","Median count","Low reliability",65
+2008,"Scotland","Public","Median count","Low reliability",79.5
+2008,"Scotland","Sewage related debris","Median count","Low reliability",15.5
+2008,"Scotland","Shipping","Median count","Low reliability",5.5
+2009,"Scotland","Fishing","Median count","Normal value",22.5
+2009,"Scotland","Fly-tipped","Median count","Normal value",0
+2009,"Scotland","Medical","Median count","Normal value",0
+2009,"Scotland","Non-sourced","Median count","Normal value",27.5
+2009,"Scotland","Public","Median count","Normal value",112.5
+2009,"Scotland","Sewage related debris","Median count","Normal value",4.5
+2009,"Scotland","Shipping","Median count","Normal value",4
+2010,"Scotland","Fishing","Median count","Low reliability",42.5
+2010,"Scotland","Fly-tipped","Median count","Low reliability",0
+2010,"Scotland","Medical","Median count","Low reliability",0
+2010,"Scotland","Non-sourced","Median count","Low reliability",74
+2010,"Scotland","Public","Median count","Low reliability",143
+2010,"Scotland","Sewage related debris","Median count","Low reliability",13.5
+2010,"Scotland","Shipping","Median count","Low reliability",11
+2011,"Scotland","Fishing","Median count","Low reliability",32.5
+2011,"Scotland","Fly-tipped","Median count","Low reliability",0
+2011,"Scotland","Medical","Median count","Low reliability",0
+2011,"Scotland","Non-sourced","Median count","Low reliability",68
+2011,"Scotland","Public","Median count","Low reliability",116.5
+2011,"Scotland","Sewage related debris","Median count","Low reliability",6
+2011,"Scotland","Shipping","Median count","Low reliability",6
+2012,"Scotland","Fishing","Median count","Low reliability",24
+2012,"Scotland","Fly-tipped","Median count","Low reliability",0
+2012,"Scotland","Medical","Median count","Low reliability",0
+2012,"Scotland","Non-sourced","Median count","Low reliability",33
+2012,"Scotland","Public","Median count","Low reliability",83
+2012,"Scotland","Sewage related debris","Median count","Low reliability",9
+2012,"Scotland","Shipping","Median count","Low reliability",8
+2013,"Scotland","Fishing","Median count","Low reliability",28
+2013,"Scotland","Fly-tipped","Median count","Low reliability",0
+2013,"Scotland","Medical","Median count","Low reliability",0.5
+2013,"Scotland","Non-sourced","Median count","Low reliability",56.5
+2013,"Scotland","Public","Median count","Low reliability",94
+2013,"Scotland","Sewage related debris","Median count","Low reliability",13.5
+2013,"Scotland","Shipping","Median count","Low reliability",9.5
+2014,"Scotland","Fishing","Median count","Low reliability",12
+2014,"Scotland","Fly-tipped","Median count","Low reliability",0
+2014,"Scotland","Medical","Median count","Low reliability",0
+2014,"Scotland","Non-sourced","Median count","Low reliability",66
+2014,"Scotland","Public","Median count","Low reliability",85
+2014,"Scotland","Sewage related debris","Median count","Low reliability",56
+2014,"Scotland","Shipping","Median count","Low reliability",10
+2015,"Scotland","Fishing","Median count","Normal value",12
+2015,"Scotland","Fly-tipped","Median count","Normal value",0
+2015,"Scotland","Medical","Median count","Normal value",0
+2015,"Scotland","Non-sourced","Median count","Normal value",40
+2015,"Scotland","Public","Median count","Normal value",71
+2015,"Scotland","Sewage related debris","Median count","Normal value",12
+2015,"Scotland","Shipping","Median count","Normal value",8
+2016,"Scotland","Fishing","Median count","Normal value",13
+2016,"Scotland","Fly-tipped","Median count","Normal value",0
+2016,"Scotland","Medical","Median count","Normal value",0
+2016,"Scotland","Non-sourced","Median count","Normal value",28
+2016,"Scotland","Public","Median count","Normal value",69
+2016,"Scotland","Sewage related debris","Median count","Normal value",7
+2016,"Scotland","Shipping","Median count","Normal value",8
+2017,"Scotland","Fishing","Median count","Normal value",12.5
+2017,"Scotland","Fly-tipped","Median count","Normal value",0
+2017,"Scotland","Medical","Median count","Normal value",0
+2017,"Scotland","Non-sourced","Median count","Normal value",27
+2017,"Scotland","Public","Median count","Normal value",58
+2017,"Scotland","Sewage related debris","Median count","Normal value",6
+2017,"Scotland","Shipping","Median count","Normal value",8
+2018,"Scotland","Fishing","Median count","Normal value",15
+2018,"Scotland","Fly-tipped","Median count","Normal value",0
+2018,"Scotland","Medical","Median count","Normal value",0
+2018,"Scotland","Non-sourced","Median count","Normal value",41
+2018,"Scotland","Public","Median count","Normal value",46
+2018,"Scotland","Sewage related debris","Median count","Normal value",9
+2018,"Scotland","Shipping","Median count","Normal value",6
+2019,"Scotland","Fishing","Median count","Normal value",8
+2019,"Scotland","Fly-tipped","Median count","Normal value",0
+2019,"Scotland","Medical","Median count","Normal value",0
+2019,"Scotland","Non-sourced","Median count","Normal value",21
+2019,"Scotland","Public","Median count","Normal value",32
+2019,"Scotland","Sewage related debris","Median count","Normal value",5.5
+2019,"Scotland","Shipping","Median count","Normal value",3
+2020,"Scotland","Fishing","Median count","Time series break",11
+2020,"Scotland","Fly-tipped","Median count","Time series break",0
+2020,"Scotland","Medical","Median count","Time series break",0
+2020,"Scotland","Non-sourced","Median count","Time series break",18
+2020,"Scotland","Public","Median count","Time series break",36
+2020,"Scotland","Sewage related debris","Median count","Time series break",9
+2020,"Scotland","Shipping","Median count","Time series break",4
+2021,"Scotland","Fishing","Median count","Normal value",15
+2021,"Scotland","Fly-tipped","Median count","Normal value",0
+2021,"Scotland","Medical","Median count","Normal value",1
+2021,"Scotland","Non-sourced","Median count","Normal value",22
+2021,"Scotland","Public","Median count","Normal value",32.5
+2021,"Scotland","Sewage related debris","Median count","Normal value",4
+2021,"Scotland","Shipping","Median count","Normal value",5
+2008,"Wales","Fishing","Median count","Low reliability",36
+2008,"Wales","Fly-tipped","Median count","Low reliability",0
+2008,"Wales","Medical","Median count","Low reliability",0
+2008,"Wales","Non-sourced","Median count","Low reliability",92
+2008,"Wales","Public","Median count","Low reliability",201
+2008,"Wales","Sewage related debris","Median count","Low reliability",9
+2008,"Wales","Shipping","Median count","Low reliability",12
+2009,"Wales","Fishing","Median count","Low reliability",115
+2009,"Wales","Fly-tipped","Median count","Low reliability",0
+2009,"Wales","Medical","Median count","Low reliability",0
+2009,"Wales","Non-sourced","Median count","Low reliability",72.5
+2009,"Wales","Public","Median count","Low reliability",177.5
+2009,"Wales","Sewage related debris","Median count","Low reliability",15
+2009,"Wales","Shipping","Median count","Low reliability",8.5
+2010,"Wales","Fishing","Median count","Low reliability",46
+2010,"Wales","Fly-tipped","Median count","Low reliability",0
+2010,"Wales","Medical","Median count","Low reliability",0
+2010,"Wales","Non-sourced","Median count","Low reliability",58
+2010,"Wales","Public","Median count","Low reliability",111
+2010,"Wales","Sewage related debris","Median count","Low reliability",6
+2010,"Wales","Shipping","Median count","Low reliability",5
+2011,"Wales","Fishing","Median count","Low reliability",45
+2011,"Wales","Fly-tipped","Median count","Low reliability",0
+2011,"Wales","Medical","Median count","Low reliability",0
+2011,"Wales","Non-sourced","Median count","Low reliability",50
+2011,"Wales","Public","Median count","Low reliability",118.5
+2011,"Wales","Sewage related debris","Median count","Low reliability",8
+2011,"Wales","Shipping","Median count","Low reliability",15.5
+2012,"Wales","Fishing","Median count","Low reliability",104
+2012,"Wales","Fly-tipped","Median count","Low reliability",0
+2012,"Wales","Medical","Median count","Low reliability",1
+2012,"Wales","Non-sourced","Median count","Low reliability",52
+2012,"Wales","Public","Median count","Low reliability",112
+2012,"Wales","Sewage related debris","Median count","Low reliability",14
+2012,"Wales","Shipping","Median count","Low reliability",15
+2013,"Wales","Fishing","Median count","Low reliability",58
+2013,"Wales","Fly-tipped","Median count","Low reliability",0
+2013,"Wales","Medical","Median count","Low reliability",0.5
+2013,"Wales","Non-sourced","Median count","Low reliability",110
+2013,"Wales","Public","Median count","Low reliability",215
+2013,"Wales","Sewage related debris","Median count","Low reliability",54
+2013,"Wales","Shipping","Median count","Low reliability",14.5
+2014,"Wales","Fishing","Median count","Low reliability",72
+2014,"Wales","Fly-tipped","Median count","Low reliability",0
+2014,"Wales","Medical","Median count","Low reliability",0
+2014,"Wales","Non-sourced","Median count","Low reliability",71
+2014,"Wales","Public","Median count","Low reliability",118
+2014,"Wales","Sewage related debris","Median count","Low reliability",26
+2014,"Wales","Shipping","Median count","Low reliability",16
+2015,"Wales","Fishing","Median count","Normal value",43.5
+2015,"Wales","Fly-tipped","Median count","Normal value",0
+2015,"Wales","Medical","Median count","Normal value",0
+2015,"Wales","Non-sourced","Median count","Normal value",41
+2015,"Wales","Public","Median count","Normal value",105
+2015,"Wales","Sewage related debris","Median count","Normal value",8.5
+2015,"Wales","Shipping","Median count","Normal value",10.5
+2016,"Wales","Fishing","Median count","Low reliability",60.5
+2016,"Wales","Fly-tipped","Median count","Low reliability",0
+2016,"Wales","Medical","Median count","Low reliability",0.5
+2016,"Wales","Non-sourced","Median count","Low reliability",74.5
+2016,"Wales","Public","Median count","Low reliability",106
+2016,"Wales","Sewage related debris","Median count","Low reliability",15
+2016,"Wales","Shipping","Median count","Low reliability",9
+2017,"Wales","Fishing","Median count","Low reliability",57
+2017,"Wales","Fly-tipped","Median count","Low reliability",0
+2017,"Wales","Medical","Median count","Low reliability",1
+2017,"Wales","Non-sourced","Median count","Low reliability",73
+2017,"Wales","Public","Median count","Low reliability",96
+2017,"Wales","Sewage related debris","Median count","Low reliability",12
+2017,"Wales","Shipping","Median count","Low reliability",11
+2018,"Wales","Fishing","Median count","Normal value",25
+2018,"Wales","Fly-tipped","Median count","Normal value",0
+2018,"Wales","Medical","Median count","Normal value",0
+2018,"Wales","Non-sourced","Median count","Normal value",26.5
+2018,"Wales","Public","Median count","Normal value",82.5
+2018,"Wales","Sewage related debris","Median count","Normal value",6
+2018,"Wales","Shipping","Median count","Normal value",6.5
+2019,"Wales","Fishing","Median count","Normal value",33
+2019,"Wales","Fly-tipped","Median count","Normal value",0
+2019,"Wales","Medical","Median count","Normal value",0
+2019,"Wales","Non-sourced","Median count","Normal value",35
+2019,"Wales","Public","Median count","Normal value",84
+2019,"Wales","Sewage related debris","Median count","Normal value",7
+2019,"Wales","Shipping","Median count","Normal value",9
+2020,"Wales","Fishing","Median count","Time series break",10
+2020,"Wales","Fly-tipped","Median count","Time series break",0
+2020,"Wales","Medical","Median count","Time series break",0
+2020,"Wales","Non-sourced","Median count","Time series break",18
+2020,"Wales","Public","Median count","Time series break",30
+2020,"Wales","Sewage related debris","Median count","Time series break",3
+2020,"Wales","Shipping","Median count","Time series break",1
+2021,"Wales","Fishing","Median count","Normal value",15.5
+2021,"Wales","Fly-tipped","Median count","Normal value",0
+2021,"Wales","Medical","Median count","Normal value",1
+2021,"Wales","Non-sourced","Median count","Normal value",48
+2021,"Wales","Public","Median count","Normal value",77.5
+2021,"Wales","Sewage related debris","Median count","Normal value",4
+2021,"Wales","Shipping","Median count","Normal value",4
+2008,"England","Fishing","Median count","Normal value",26.5
+2008,"England","Fly-tipped","Median count","Normal value",0
+2008,"England","Medical","Median count","Normal value",0
+2008,"England","Non-sourced","Median count","Normal value",71
+2008,"England","Public","Median count","Normal value",67
+2008,"England","Sewage related debris","Median count","Normal value",2.5
+2008,"England","Shipping","Median count","Normal value",6.5
+2009,"England","Fishing","Median count","Normal value",68
+2009,"England","Fly-tipped","Median count","Normal value",0
+2009,"England","Medical","Median count","Normal value",0
+2009,"England","Non-sourced","Median count","Normal value",62
+2009,"England","Public","Median count","Normal value",164
+2009,"England","Sewage related debris","Median count","Normal value",8
+2009,"England","Shipping","Median count","Normal value",11
+2010,"England","Fishing","Median count","Normal value",51
+2010,"England","Fly-tipped","Median count","Normal value",0
+2010,"England","Medical","Median count","Normal value",0
+2010,"England","Non-sourced","Median count","Normal value",73
+2010,"England","Public","Median count","Normal value",122
+2010,"England","Sewage related debris","Median count","Normal value",12
+2010,"England","Shipping","Median count","Normal value",7
+2011,"England","Fishing","Median count","Normal value",33
+2011,"England","Fly-tipped","Median count","Normal value",0
+2011,"England","Medical","Median count","Normal value",1
+2011,"England","Non-sourced","Median count","Normal value",51
+2011,"England","Public","Median count","Normal value",113
+2011,"England","Sewage related debris","Median count","Normal value",6
+2011,"England","Shipping","Median count","Normal value",13
+2012,"England","Fishing","Median count","Normal value",28
+2012,"England","Fly-tipped","Median count","Normal value",0
+2012,"England","Medical","Median count","Normal value",1
+2012,"England","Non-sourced","Median count","Normal value",70
+2012,"England","Public","Median count","Normal value",114
+2012,"England","Sewage related debris","Median count","Normal value",14
+2012,"England","Shipping","Median count","Normal value",13
+2013,"England","Fishing","Median count","Normal value",55.5
+2013,"England","Fly-tipped","Median count","Normal value",0
+2013,"England","Medical","Median count","Normal value",0.5
+2013,"England","Non-sourced","Median count","Normal value",82
+2013,"England","Public","Median count","Normal value",139.5
+2013,"England","Sewage related debris","Median count","Normal value",11
+2013,"England","Shipping","Median count","Normal value",19.5
+2014,"England","Fishing","Median count","Normal value",39
+2014,"England","Fly-tipped","Median count","Normal value",0
+2014,"England","Medical","Median count","Normal value",1
+2014,"England","Non-sourced","Median count","Normal value",73
+2014,"England","Public","Median count","Normal value",188
+2014,"England","Sewage related debris","Median count","Normal value",15
+2014,"England","Shipping","Median count","Normal value",17
+2015,"England","Fishing","Median count","Normal value",34
+2015,"England","Fly-tipped","Median count","Normal value",0
+2015,"England","Medical","Median count","Normal value",1
+2015,"England","Non-sourced","Median count","Normal value",74
+2015,"England","Public","Median count","Normal value",154
+2015,"England","Sewage related debris","Median count","Normal value",17
+2015,"England","Shipping","Median count","Normal value",13
+2016,"England","Fishing","Median count","Normal value",33
+2016,"England","Fly-tipped","Median count","Normal value",0
+2016,"England","Medical","Median count","Normal value",0
+2016,"England","Non-sourced","Median count","Normal value",63
+2016,"England","Public","Median count","Normal value",111
+2016,"England","Sewage related debris","Median count","Normal value",7
+2016,"England","Shipping","Median count","Normal value",9
+2017,"England","Fishing","Median count","Normal value",28
+2017,"England","Fly-tipped","Median count","Normal value",0
+2017,"England","Medical","Median count","Normal value",0
+2017,"England","Non-sourced","Median count","Normal value",65
+2017,"England","Public","Median count","Normal value",112
+2017,"England","Sewage related debris","Median count","Normal value",10
+2017,"England","Shipping","Median count","Normal value",10
+2018,"England","Fishing","Median count","Normal value",15
+2018,"England","Fly-tipped","Median count","Normal value",0
+2018,"England","Medical","Median count","Normal value",0
+2018,"England","Non-sourced","Median count","Normal value",28
+2018,"England","Public","Median count","Normal value",73
+2018,"England","Sewage related debris","Median count","Normal value",6
+2018,"England","Shipping","Median count","Normal value",5
+2019,"England","Fishing","Median count","Normal value",18
+2019,"England","Fly-tipped","Median count","Normal value",0
+2019,"England","Medical","Median count","Normal value",0
+2019,"England","Non-sourced","Median count","Normal value",30
+2019,"England","Public","Median count","Normal value",82
+2019,"England","Sewage related debris","Median count","Normal value",5
+2019,"England","Shipping","Median count","Normal value",5
+2020,"England","Fishing","Median count","Time series break",13.5
+2020,"England","Fly-tipped","Median count","Time series break",0
+2020,"England","Medical","Median count","Time series break",0
+2020,"England","Non-sourced","Median count","Time series break",28.5
+2020,"England","Public","Median count","Time series break",54
+2020,"England","Sewage related debris","Median count","Time series break",6.5
+2020,"England","Shipping","Median count","Time series break",3
+2021,"England","Fishing","Median count","Normal value",16
+2021,"England","Fly-tipped","Median count","Normal value",0
+2021,"England","Medical","Median count","Normal value",1
+2021,"England","Non-sourced","Median count","Normal value",30
+2021,"England","Public","Median count","Normal value",72
+2021,"England","Sewage related debris","Median count","Normal value",6
+2021,"England","Shipping","Median count","Normal value",4
+2008,"","Fishing","Median count","Normal value",28
+2008,"","Fly-tipped","Median count","Normal value",0
+2008,"","Medical","Median count","Normal value",0
+2008,"","Non-sourced","Median count","Normal value",73.5
+2008,"","Public","Median count","Normal value",92.5
+2008,"","Sewage related debris","Median count","Normal value",3.5
+2008,"","Shipping","Median count","Normal value",7
+2009,"","Fishing","Median count","Normal value",60.5
+2009,"","Fly-tipped","Median count","Normal value",0
+2009,"","Medical","Median count","Normal value",0
+2009,"","Non-sourced","Median count","Normal value",57.5
+2009,"","Public","Median count","Normal value",157.5
+2009,"","Sewage related debris","Median count","Normal value",8.5
+2009,"","Shipping","Median count","Normal value",9
+2010,"","Fishing","Median count","Normal value",47
+2010,"","Fly-tipped","Median count","Normal value",0
+2010,"","Medical","Median count","Normal value",0
+2010,"","Non-sourced","Median count","Normal value",67
+2010,"","Public","Median count","Normal value",129
+2010,"","Sewage related debris","Median count","Normal value",11
+2010,"","Shipping","Median count","Normal value",7
+2011,"","Fishing","Median count","Normal value",35
+2011,"","Fly-tipped","Median count","Normal value",0
+2011,"","Medical","Median count","Normal value",0
+2011,"","Non-sourced","Median count","Normal value",52
+2011,"","Public","Median count","Normal value",119
+2011,"","Sewage related debris","Median count","Normal value",8
+2011,"","Shipping","Median count","Normal value",12
+2012,"","Fishing","Median count","Normal value",28
+2012,"","Fly-tipped","Median count","Normal value",0
+2012,"","Medical","Median count","Normal value",0
+2012,"","Non-sourced","Median count","Normal value",54
+2012,"","Public","Median count","Normal value",111.5
+2012,"","Sewage related debris","Median count","Normal value",14
+2012,"","Shipping","Median count","Normal value",12
+2013,"","Fishing","Median count","Normal value",43.5
+2013,"","Fly-tipped","Median count","Normal value",0
+2013,"","Medical","Median count","Normal value",0.5
+2013,"","Non-sourced","Median count","Normal value",76.5
+2013,"","Public","Median count","Normal value",132
+2013,"","Sewage related debris","Median count","Normal value",12.5
+2013,"","Shipping","Median count","Normal value",18.5
+2014,"","Fishing","Median count","Normal value",36
+2014,"","Fly-tipped","Median count","Normal value",0
+2014,"","Medical","Median count","Normal value",1
+2014,"","Non-sourced","Median count","Normal value",71
+2014,"","Public","Median count","Normal value",158
+2014,"","Sewage related debris","Median count","Normal value",19
+2014,"","Shipping","Median count","Normal value",16
+2015,"","Fishing","Median count","Normal value",29
+2015,"","Fly-tipped","Median count","Normal value",0
+2015,"","Medical","Median count","Normal value",1
+2015,"","Non-sourced","Median count","Normal value",50
+2015,"","Public","Median count","Normal value",109
+2015,"","Sewage related debris","Median count","Normal value",15
+2015,"","Shipping","Median count","Normal value",12
+2016,"","Fishing","Median count","Normal value",22.5
+2016,"","Fly-tipped","Median count","Normal value",0
+2016,"","Medical","Median count","Normal value",0
+2016,"","Non-sourced","Median count","Normal value",44
+2016,"","Public","Median count","Normal value",91
+2016,"","Sewage related debris","Median count","Normal value",7.5
+2016,"","Shipping","Median count","Normal value",9
+2017,"","Fishing","Median count","Normal value",21
+2017,"","Fly-tipped","Median count","Normal value",0
+2017,"","Medical","Median count","Normal value",0
+2017,"","Non-sourced","Median count","Normal value",45
+2017,"","Public","Median count","Normal value",84
+2017,"","Sewage related debris","Median count","Normal value",10
+2017,"","Shipping","Median count","Normal value",10
+2018,"","Fishing","Median count","Normal value",16
+2018,"","Fly-tipped","Median count","Normal value",0
+2018,"","Medical","Median count","Normal value",0
+2018,"","Non-sourced","Median count","Normal value",33
+2018,"","Public","Median count","Normal value",61
+2018,"","Sewage related debris","Median count","Normal value",6
+2018,"","Shipping","Median count","Normal value",6
+2019,"","Fishing","Median count","Normal value",17
+2019,"","Fly-tipped","Median count","Normal value",0
+2019,"","Medical","Median count","Normal value",0
+2019,"","Non-sourced","Median count","Normal value",27
+2019,"","Public","Median count","Normal value",57
+2019,"","Sewage related debris","Median count","Normal value",6
+2019,"","Shipping","Median count","Normal value",5
+2020,"","Fishing","Median count","Time series break",12
+2020,"","Fly-tipped","Median count","Time series break",0
+2020,"","Medical","Median count","Time series break",0
+2020,"","Non-sourced","Median count","Time series break",24
+2020,"","Public","Median count","Time series break",49
+2020,"","Sewage related debris","Median count","Time series break",6
+2020,"","Shipping","Median count","Time series break",3
+2021,"","Fishing","Median count","Normal value",16
+2021,"","Fly-tipped","Median count","Normal value",0
+2021,"","Medical","Median count","Normal value",1
+2021,"","Non-sourced","Median count","Normal value",28
+2021,"","Public","Median count","Normal value",60.5
+2021,"","Sewage related debris","Median count","Normal value",5.5
+2021,"","Shipping","Median count","Normal value",4
+2008,"Northern Ireland","","Median count","Low reliability",378
+2009,"Northern Ireland","","Median count","Low reliability",320
+2010,"Northern Ireland","","Median count","Low reliability",37
+2011,"Northern Ireland","","Median count","Low reliability",346.5
+2012,"Northern Ireland","","Median count","Low reliability",374
+2013,"Northern Ireland","","Median count","Low reliability",332
+2014,"Northern Ireland","","Median count","Low reliability",337
+2015,"Northern Ireland","","Median count","Low reliability",760
+2016,"Northern Ireland","","Median count","Low reliability",922
+2017,"Northern Ireland","","Median count","Low reliability",242
+2018,"Northern Ireland","","Median count","Low reliability",98
+2019,"Northern Ireland","","Median count","Low reliability",140
+2020,"Northern Ireland","","Median count","Low reliability; Time series break",954
+2021,"Northern Ireland","","Median count","Low reliability",466
+2008,"Scotland","","Median count","Low reliability",302
+2009,"Scotland","","Median count","Normal value",208
+2010,"Scotland","","Median count","Low reliability",398
+2011,"Scotland","","Median count","Low reliability",273
+2012,"Scotland","","Median count","Low reliability",186
+2013,"Scotland","","Median count","Low reliability",241.5
+2014,"Scotland","","Median count","Low reliability",351
+2015,"Scotland","","Median count","Normal value",185
+2016,"Scotland","","Median count","Normal value",188.5
+2017,"Scotland","","Median count","Normal value",156
+2018,"Scotland","","Median count","Normal value",174
+2019,"Scotland","","Median count","Normal value",115.5
+2020,"Scotland","","Median count","Time series break",132
+2021,"Scotland","","Median count","Normal value",115.5
+2008,"Wales","","Median count","Low reliability",382
+2009,"Wales","","Median count","Low reliability",387
+2010,"Wales","","Median count","Low reliability",245
+2011,"Wales","","Median count","Low reliability",224
+2012,"Wales","","Median count","Low reliability",336
+2013,"Wales","","Median count","Low reliability",391
+2014,"Wales","","Median count","Low reliability",387
+2015,"Wales","","Median count","Normal value",244
+2016,"Wales","","Median count","Low reliability",416
+2017,"Wales","","Median count","Low reliability",266
+2018,"Wales","","Median count","Normal value",181.5
+2019,"Wales","","Median count","Normal value",184
+2020,"Wales","","Median count","Time series break",76
+2021,"Wales","","Median count","Normal value",231.5
+2008,"England","","Median count","Normal value",189.5
+2009,"England","","Median count","Normal value",382
+2010,"England","","Median count","Normal value",357
+2011,"England","","Median count","Normal value",260
+2012,"England","","Median count","Normal value",347
+2013,"England","","Median count","Normal value",380
+2014,"England","","Median count","Normal value",432
+2015,"England","","Median count","Normal value",370
+2016,"England","","Median count","Normal value",303
+2017,"England","","Median count","Normal value",291
+2018,"England","","Median count","Normal value",173
+2019,"England","","Median count","Normal value",186
+2020,"England","","Median count","Time series break",127.5
+2021,"England","","Median count","Normal value",150
+2008,"","","Median count","Normal value",265
+2009,"","","Median count","Normal value",322
+2010,"","","Median count","Normal value",330
+2011,"","","Median count","Normal value",260
+2012,"","","Median count","Normal value",340.5
+2013,"","","Median count","Normal value",333.5
+2014,"","","Median count","Normal value",399
+2015,"","","Median count","Normal value",271
+2016,"","","Median count","Normal value",235
+2017,"","","Median count","Normal value",225
+2018,"","","Median count","Normal value",174
+2019,"","","Median count","Normal value",167
+2020,"","","Median count","Time series break",122.5
+2021,"","","Median count","Normal value",139.5

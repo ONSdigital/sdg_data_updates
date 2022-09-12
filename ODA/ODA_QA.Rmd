@@ -47,6 +47,8 @@ Indicator specific settings are:
 - 3-b-2 broad sector code: **`broad_sector_code_3b2`*
 - 3-b-2 CRS code (sector purpose code): **`crs_code_3b2`**
 - 4-b-1 type of aid code: **`r type_of_aid_code_4b1`**  
+- 6-a-1 broad sector code: **`broad_sector_code_6a1`**
+- 6-a-1 CRS code (sector purpose code): **`crs_code_6a1`**
 - 8-a-1 broad sector code: **`r broad_sector_code_8a1`**
  
 The outputs are saved in: **`r  paste0(getwd(), "/",output_folder)`**  
@@ -229,6 +231,33 @@ suppressMessages(print(sector_plot_4b1))
 suppressMessages(print(study_plot_4b1))
 ```
 
+### 6-a-1
+```{r}
+
+joined_data_6a1 <- join_plot_data("6-a-1")
+
+#----
+
+gbp_plot_6a1 <- joined_data_6a1 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("6-a-1 by country income classification (GBP)")
+
+usd_plot_6a1 <- joined_data_6a1 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("6-a-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_6a1))
+suppressMessages(print(usd_plot_6a1))
+
+```
+
 ### 8-a-1
 ```{r}
 
@@ -371,6 +400,22 @@ create_datatable(comparison_4b1)
 
 ```
 
+### 6-a-1
+```{r, , echo = FALSE}
+
+comparison_data_6a1 <- joined_data_6a1 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_6a1 <- comparison_data_6a1 %>% 
+  select(year, country_income_classification, 
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_6a1)
+
+```
 
 ### 8-a-1
 ```{r, , echo = FALSE}

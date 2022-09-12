@@ -62,7 +62,7 @@ for (i in 1:2) {
     rename_column(primary = c("sector", "purpose", "text"), new_name = "type_of_study") %>% 
     rename_column(primary = c("type", "aid", "code"), new_name = "aid_code") %>% 
     rename_column(primary = c("type", "aid", "text"), new_name = "aid_description") %>% 
-    rename_column(primary = c("headline", "oda", "thousands"), 
+    rename_column(primary = c("headline", "oda", "thousands"), # some indicators may use net oda while others use amounts extended (value)
                   alternate = c("net", "oda", "thousands"), new_name = "oda")
 }
 

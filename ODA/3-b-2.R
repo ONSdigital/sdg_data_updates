@@ -57,4 +57,4 @@ rm(medical_research, basic_health, disaggregations,
    headline_income_type, headline,
    gbp_data, constant_usd_data)
 
-scripts_run <- c(scripts_run, "2-a-2")
+scripts_run <- c(scripts_run, "3-b-2")

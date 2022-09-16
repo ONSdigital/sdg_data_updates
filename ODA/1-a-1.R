@@ -10,7 +10,7 @@ aid_types <- oda_renamed %>%
 
 disaggregations <- aid_types %>% 
   group_by(year, aid_type) %>% 
-  summarise(gbp = sum(oda)) 
+  summarise(gbp = sum(net_oda)) 
 
 headlines <- disaggregations %>% 
   group_by(year) %>% 

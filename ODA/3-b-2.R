@@ -1,13 +1,13 @@
 medical_research <- oda_renamed %>% 
   filter(sector_purpose_code == crs_code_3b2) %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(oda)) %>% 
+  summarise(value = sum(net_oda)) %>% 
   mutate(crs_code = "Medical research")
 
 basic_health <- oda_renamed %>% 
   filter(broad_sector_code == broad_sector_code_3b2) %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(oda))  %>% 
+  summarise(value = sum(net_oda))  %>% 
   mutate(crs_code = "Basic health")
 
 disaggregations <- medical_research %>% 

@@ -1,5 +1,5 @@
 
-chosen_type_of_aid <-  oda_renamed %>% 
+chosen_type_of_aid <- oda_renamed %>% 
   filter(aid_code == type_of_aid_code_4b1) %>% 
   mutate(country_income_classification = ifelse(
     grepl("unallocated", country_income_classification)== TRUE |
@@ -8,21 +8,23 @@ chosen_type_of_aid <-  oda_renamed %>%
 
 by_sector <- chosen_type_of_aid %>% 
   group_by(year, sector) %>% 
-  summarise(value = sum(value))
+  summarise(value = sum(gross_oda))
 
 by_cic <- chosen_type_of_aid %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(value))
+  summarise(value = sum(gross_oda))
 
 by_education_type <- chosen_type_of_aid %>% 
   filter(sector == "Education") %>% # make this more robust
   group_by(year, type_of_study) %>% 
-  summarise(value = sum(value)) %>% 
-  mutate(sector = "Education")
+  summarise(value = sum(gross_oda)) %>% 
+  mutate(sector = "Education") %>% 
+  # education headline is already created in by_sector so prevent duplication:
+  filter(type_of_study != "")
 
 total <- chosen_type_of_aid %>% 
   group_by(year) %>% 
-  summarise(value = sum(value))
+  summarise(value = sum(gross_oda))
 
 gbp_data <- bind_rows(by_sector, by_cic, by_education_type, total) %>% 
   mutate(Units = "GBP (£ thousands)")
@@ -36,7 +38,15 @@ csv <- gbp_data %>%
   bind_rows(constant_usd_data) %>% 
   select(Year, Sector, Country_income_classification, Type_of_study, 
          Units, Value) %>% 
-  replace(is.na(.), "")
+  replace(is.na(.), "") %>% 
+  mutate(
+    Type_of_study = ifelse(
+      grepl("Upper Secondary Education", Type_of_study), 
+      "Upper Secondary Education", Type_of_study),
+    Sector = ifelse(
+      grepl("OTHER SOCIAL INFRASTRUCTURE AND SERVICES", Sector),
+      "Other social infrastructure and services", Sector
+    ))
 
 rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
 

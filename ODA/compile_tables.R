@@ -1,9 +1,7 @@
 # This file is directly called by update_indicator_main.R.
 # It is the control script that runs all the others.
 
-# library('openxlsx')
 library('stringr')
-# library('janitor')
 library('unpivotr')
 library('tidyxl')
 library('tidyr')
@@ -17,6 +15,21 @@ source("config.R") # pulls in all the configurations. Change to "config.R" for r
 # create filepaths for exchange rates and deflators files ----------------------
 rates_filepath <- paste0(input_folder, "/", exchange_filename)
 deflators_filepath <- paste0(input_folder, "/", deflators_filename)
+
+# create an output file if one does not already exist --------------------------
+existing_files <- list.files()
+output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
+
+if (output_folder_exists == FALSE) {
+  dir.create(output_folder)
+}
+
+# create elements we will use to name files ------------------------------------
+
+# we add the date to the output file so that old outputs are not automatically overwritten.
+# However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
+# We may want to review the decision to add date to the filename.
+date <- Sys.Date()
 
 # import data -------------------------------------------------------------------
 # exchange rate and deflator data are imported using the gbp_to_constant_usd 
@@ -54,7 +67,7 @@ for (i in 1:2) {
   
   oda_renamed_list[[i]] <- oda_datasets[[i]] %>% 
     rename_column(primary = c("year"), new_name = "year") %>% 
-    rename_column(primary = c("extend", "amount"), new_name = "value") %>% 
+    rename_column(primary = c("extend", "amount"), new_name = "gross_oda") %>% 
     rename_column(primary = c("income", "group"), new_name = "country_income_classification") %>% 
     rename_column(primary = c("broad", "sector", "code"), new_name = "broad_sector_code") %>% 
     rename_column(primary = c("sid", "sector"), new_name = "sector") %>% 
@@ -63,7 +76,7 @@ for (i in 1:2) {
     rename_column(primary = c("type", "aid", "code"), new_name = "aid_code") %>% 
     rename_column(primary = c("type", "aid", "text"), new_name = "aid_description") %>% 
     rename_column(primary = c("headline", "oda", "thousands"), # some indicators may use net oda while others use amounts extended (value)
-                  alternate = c("net", "oda", "thousands"), new_name = "oda")
+                  alternate = c("net", "oda", "thousands"), new_name = "net_oda")
 }
 
 # run code to create specific indicators ---------------------------------------
@@ -98,41 +111,48 @@ for (i in 1:length(indicators)) {
     )
     
   }
+  # to avoid duplication of indicators in the scripts run vector caused by
+  # running the script on both archived and recent data:
+  scripts_run <- unique(scripts_run)
   
   # so that we don't overwrite the data from the previous indicator script:
   assign(csv_name, all_years)
   
+  # in order to identify whether the current run was successful compare the current
+  # csv_name with the old one. If they are the same the current loop has not 
+  # produced anything new
+  if (i > 1) {
+    iteration_worked <- length(scripts_run) != previous_count
+  } else {
+    iteration_worked <- TRUE
+  }
+  
+  if (iteration_worked == TRUE) {
+    csv_filename <- paste0(date, "_update_", indicators[i], ".csv")
+    write.csv(all_years, paste0(output_folder, "/", csv_filename), 
+              row.names = FALSE)
+    
+  }
+  
+  previous_count <- length(scripts_run)
+  print(scripts_run)
+
 }
 
 
-
-# create an output file if one does not already exist --------------------------
-existing_files <- list.files()
-output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
-
-if (output_folder_exists == FALSE) {
-  dir.create(output_folder)
-}
-
-# create elements we will use to name files ------------------------------------
-
-date <- Sys.Date()
-
-# we add the date to the output file so that old outputs are not automatically overwritten.
-# However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
-# We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_type_1.csv")
-qa_filename <- paste0(date, "_update_type_1_checks.html") 
+qa_filename <- paste0(date, "_oda_update_checks.html") 
 
 # save files and print messages ------------------------------------------------
 
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('ODA_QA.Rmd', 
+                  output_file = paste0(output_folder, "/", qa_filename))
 
-message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
-               " as ", csv_filename, "and ", qa_filename, "'\n\n"))
+message(paste0("The csv and QA files have been created and saved in '", 
+               paste0(getwd(), "/", output_folder, "'"), 
+               ". It is possible that not all indicators ran successfully -
+               please check oda_update_checks.Rmd"))
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

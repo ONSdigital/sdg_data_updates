@@ -1,7 +1,7 @@
 disaggregations <- oda_renamed %>% 
   filter(broad_sector_code == broad_sector_code_2a2) %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(oda)) %>% 
+  summarise(value = sum(net_oda)) %>% 
   mutate(country_income_classification = ifelse(
     grepl("unallocated", country_income_classification)== TRUE |
       country_income_classification == "0",

@@ -1,26 +1,15 @@
-agri <- oda_renamed %>% 
-  filter(sector_purpose_code == crs_code_6a1) %>% 
-  group_by(year, country_income_classification) %>% 
-  summarise(value = sum(gross_oda, na.rm = TRUE)) %>% 
-  mutate(crs_code = "Agricultural water resources")
 
-water <- oda_renamed %>% 
-  filter(broad_sector_code == broad_sector_code_6a1) %>% 
+infrastructure <- oda_renamed %>% 
+  mutate(infrastructure = grepl(tolower(sid_sector_9a1), tolower(sector))) %>% 
+  filter(infrastructure == TRUE) %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(gross_oda, na.rm = TRUE))  %>% 
-  mutate(crs_code = "Water Supply and Sanitation")
+  summarise(value = sum(net_oda, na.rm = TRUE))
 
-# for this indicator we don't report the water/agri disaggregations
-disaggregations <- agri %>% 
-  bind_rows(water) %>%   
-  group_by(year, country_income_classification) %>% 
-  summarise(value = sum(value)) 
-
-headline <- disaggregations %>% 
+headline <- infrastructure %>% 
   group_by(year) %>% 
   summarise(value = sum(value))
 
-gbp_data <- bind_rows(disaggregations, 
+gbp_data <- bind_rows(infrastructure, 
                       headline) %>% 
   mutate(Units = "GBP (£ thousands)",
          country_income_classification = ifelse(
@@ -37,15 +26,15 @@ names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
 csv <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
-  mutate(Series = "Total official development assistance (gross disbursement) for water supply and sanitation, by recipient countries",
-         `Observation status` = "Normal value") %>% 
+  mutate(Series = "Net Official Development Assistance (ODA) to infrastructure",
+         `Observation status` = "Definition differs") %>% 
   select(Year, Series, Country_income_classification,
          `Observation status`, Units, Value) %>% 
   arrange(Year, Country_income_classification) %>% 
   replace(is.na(.), "") %>% 
   rename(`Country income classification` = Country_income_classification)
 
-rm(agri, water, disaggregations, headline,
+rm(infrastructure, headline,
    gbp_data, constant_usd_data)
 
-scripts_run <- c(scripts_run, "6-a-1")
+scripts_run <- c(scripts_run, "9-a-1")

@@ -1,7 +1,7 @@
 
 chosen_type_of_aid <-  oda_renamed %>% 
   filter(broad_sector_code == broad_sector_code_8a1) %>% 
-  mutate(value = as.numeric(as.character(value))) %>% 
+  mutate(gross_oda = as.numeric(as.character(gross_oda))) %>% 
   mutate(country_income_classification = ifelse(
     grepl("unallocated", country_income_classification)== TRUE |
       country_income_classification == "0",
@@ -9,11 +9,11 @@ chosen_type_of_aid <-  oda_renamed %>%
 
 by_cic <- chosen_type_of_aid %>% 
   group_by(year, country_income_classification) %>% 
-  summarise(value = sum(value, na.rm = TRUE))
+  summarise(value = sum(gross_oda, na.rm = TRUE))
 
 total <- chosen_type_of_aid %>% 
   group_by(year) %>% 
-  summarise(value = sum(value, na.rm = TRUE))
+  summarise(value = sum(gross_oda, na.rm = TRUE))
 
 gbp_data <- bind_rows(by_cic, total) %>% 
   mutate(units = "GBP (£ thousands)") 

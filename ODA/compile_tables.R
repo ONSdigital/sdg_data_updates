@@ -10,7 +10,7 @@ library('rsdmx')
 
 library(SDGupdater)
 
-source("config.R") # pulls in all the configurations. Change to "config.R" for real update
+source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
 
 # create filepaths for exchange rates and deflators files ----------------------
 rates_filepath <- paste0(input_folder, "/", exchange_filename)
@@ -52,13 +52,6 @@ if ("1-a-1" %in% indicators) {
 }
 
 # create stable column names based on elements of column names -----------------
-
-# rename_column <- function(oda_data, patterns, new_name){
-#   patterns <- patterns
-#   column <- which(apply(sapply(patterns, grepl, names(oda_data)), 1, all) == TRUE)
-#   names(oda_data)[column] <- new_name
-#   return(oda_data)
-# }
 
 oda_datasets <- list(old_oda_data, new_oda_data)
 oda_renamed_list <- list()

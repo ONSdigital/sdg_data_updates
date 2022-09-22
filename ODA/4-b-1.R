@@ -36,7 +36,8 @@ names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
 csv <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
-  select(Year, Sector, Country_income_classification, Type_of_study, 
+  mutate(Series = "Total official flows for scholarships, by recipient countries") %>% 
+  select(Year, Series, Sector, Country_income_classification, Type_of_study, 
          Units, Value) %>% 
   replace(is.na(.), "") %>% 
   mutate(

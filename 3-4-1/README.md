@@ -32,12 +32,12 @@ The current nomis links were generated as follows:
 From Nomis, select Query > Life Events > Mortality statistics - underlying cause, sex and age.
 
 female link selections:
-   Geography: Countries (all)
-   Date: All years
-   Age: All years (except for regions where currently 30 and over)
-   Rates: Age-standardised mortality rate only 
-   Sex: Females only 
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99,       J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47
+   Geography: Countries (all)  
+   Date: All years  
+   Age: All years (except for regions where currently 30 and over)  
+   Rates: Age-standardised mortality rate only  
+   Sex: Females only  
+   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99,       J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
   
   
 all but female link selections:  

@@ -23,7 +23,9 @@ on Nomis for [*mortality totals links*](nomis link used in the configs).
 
   
 ### Generation of nomis links ###
-The nomis links should not need to be regenerated unless we decide to change underlying cause selections or alter other dissagregations to e.g. change the selected 
+The nomis links should not need to be regenerated unless we decide to change underlying cause selections or alter other dissagregations.
+If nomis is being used without an account, the downloaded dataset is cropped at 25000 rows. Link generation will depend on whether you are using an account. It is suggested to ensure you are signed into a NOMIS, but the code is set up for where this is not the case. 
+
 The current nomis links were generated as follows:
 
 #### Mortality rate numbers ####

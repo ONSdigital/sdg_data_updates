@@ -31,30 +31,6 @@ The current nomis links were generated as follows:
 #### Mortality rate numbers ####
 From Nomis, select Query > Life Events > Mortality statistics - underlying cause, sex and age.
 
-Selections (if we have an account so only one link):  
-   Geography: Countries (all) > Regions (all)  
-   Date: All years  
-   Age: All years (except for regions where currently 30 and over)  
-   Rates: Age-standardised mortality rate only   
-   Sex: All   
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
-     
-totals links selections:  
-   Geography: Countries (all)  
-   Date: All years  
-   Age: All years (except for regions where currently 30 and over)  
-   Rates: Age-standardised mortality rate only   
-   Sex: Totals only   
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
-  
-male link selections:  
-   Geography: Countries (all)  
-   Date: All years  
-   Age: All years (except for regions where currently 30 and over)  
-   Rates: Age-standardised mortality rate only   
-   Sex: Males only   
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
-     
 female link selections:
    Geography: Countries (all)
    Date: All years
@@ -62,19 +38,21 @@ female link selections:
    Rates: Age-standardised mortality rate only 
    Sex: Females only 
    Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99,       J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47
-   
-regions link selections:  
-   Geography: Regions (all)  
+  
+  
+all but female link selections:  
+   Geography: Countries (all)  
    Date: All years  
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only   
-   Sex: All  
+   Sex: Males only   
    Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
-   
+     
+
+  
 To generate link go to format/layout and select API. Then in 'Download data' right click on the csv link and copy link
 Check last updated date [here](https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=168)
 
 
-### Code edits that may be needed: ###  
-*Note to QA: despite breaking up data link reigon data is still over 25000 lines so gets cut off, I think someone now has a NOMIS account to remove this issue however unsure so this would need fixing before fully complete. Also, when making this update  I followed how it was done on platform i.e starting region from 30 yrs and over however on reflection probably no need to do this now automated presume this method was taking for manual update as mostly NAs before this. Thus, if we do go from 0 this link would need be re-copied with updated age selections. Also  explained how to get data for each link and how to get all data at once(total), if have an account the total may be the only relevant one*
+
   

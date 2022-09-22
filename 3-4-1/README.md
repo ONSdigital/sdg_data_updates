@@ -29,7 +29,7 @@ If nomis is being used without an account, the downloaded dataset is cropped at 
 The current nomis links were generated as follows:
 
 #### Mortality rate numbers ####
-From Nomis, select Query > Mortality statistics - underlying cause, sex and age.
+From Nomis, select Query > Life Events > Mortality statistics - underlying cause, sex and age.
 
 Selections (if we have an account so only one link):  
    Geography: Countries (all) > Regions (all)  

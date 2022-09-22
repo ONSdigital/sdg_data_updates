@@ -5,6 +5,8 @@ library(tidyr)
 library(dplyr)
 library(stringr)
 library(tibble)
+library(stringr)
+library(dplyr)
 
 
 # download and read in data ----------------------------------------------------

@@ -15,13 +15,12 @@ The full list of indicators, and whether they are based on net ODA or amounts ex
 -  4-b-1  
 -  6-a-1  
 -  8-a-1  
-
-
-The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1, 15-a-1, and 15-b-1.  
   
-Additional source data are:  
+Additional source data used for these automations are:  
 - exchange rate and deflator data for converting GBP to constant USD (used in several indicators)  
 - GNI data for calculating ODP as a % of GNI (used for 1-a-1)  
+  
+The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1, 15-a-1, and 15-b-1.  
   
 ## Instructions  
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
@@ -32,16 +31,17 @@ For the UK data team, all files and folders mentioned below are in Jemalex > sdg
 If not, save `example_config.R` as `config.R` in ODA.  
 5. Check the configurations are correct for the files you have saved, and if not correct them and save `config.R`.  
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
-     2. `filename_2017` is the name of file containing area data on certified woodland area FOR EVERY YEAR. Check that 'AREALHECT' is one of the column headings (case is not important).
-     3. Check that areas are given in millions of hectares in the above two tabs. If not, the calculation will need to be changed
+     2. `filename_2017` is the name of file (including the .csv extension) containing archived data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. 
+     3. `deflators_filename` is the name of the most recent deflators data, including the .xls extension
+     4. `exchange_filename` is the name of the most recent exchange rates data, including the .xls extension
 6. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and click 'Source' button to run the script (top right corner of the script panel).  
-7. Outputs will be saved in the Outputs folder in 15-1-1 (which the script will create if it doesn't already exist).  
-8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. 
-**Please check this file before copying to the csv**
-9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.
-
-
-### Data sources
+7. Outputs will be saved in the Outputs folder in ODA (which the script will create if it doesn't already exist).  
+8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues.  
+  
+**Please check this file before copying to the csv tabs in the Indicator files**
+9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.  
+  
+## Data sources
 Data are imported into R in a variety of ways:  
 - the ODA dataset is manually downloaded and saved as a csv. It is then imported into R from the Input folder
 - the deflator and exchange rate data are manually downloaded and saved as xlsx files
@@ -51,6 +51,8 @@ Data are imported into R in a variety of ways:
 The main data required for all the indicators in the ODA folder are the same table 'Statistics on International Development: final UK aid spend'. This can be found on the [Overseas Aid Effectiveness page](https://www.gov.uk/international/overseas-aid-effectiveness) under 'Research and Statistics'.  
   
 Download the most recent 'final' table and save it in ODA > Input as a **csv**    
+  
+The most recent data file probably only goes back to 2017. Pre 2017 data are in data-underlying-sid-2017_110322.csv, which should already be in the Inputfolder. If not, the 'Data underlying the SID publication' should be downloaded from [Statistics on International Development 2017](https://www.gov.uk/government/statistics/statistics-on-international-development-2017) and saved as a csv.  
   
 #### Deflators and exchange rates
 Deflators and exchange rates are taken from the [OECD Development finance data page](https://www.oecd.org/dac/financing-sustainable-development/development-finance-data/). The required tables are in the data tables section e.g.:  

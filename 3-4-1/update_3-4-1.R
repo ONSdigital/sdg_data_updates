@@ -7,6 +7,7 @@ library(stringr)
 library(tibble)
 library(stringr)
 library(dplyr)
+library(tools)
 
 
 # download and read in data ----------------------------------------------------
@@ -52,7 +53,7 @@ clean_data <- all_data %>%
                                     "J95" = "Chronic respiratory disease",
                                     "J96" = "Chronic respiratory disease",
                                     "J98" = "Chronic respiratory disease",
-                                    "LC47" = "COVID-19")) %>%
+                                    "Lc47" = "COVID-19")) %>%
   
   
   #creating chronic respiratory (J30-98) sub-category 
@@ -60,7 +61,7 @@ clean_data <- all_data %>%
                                                          "C00-c97" = "",
                                                          "E10-e14" = "",
                                                          "I00-i99" = "",
-                                                         "LC47" = "",
+                                                         "Lc47" = "",
                                                          "J30-j39" = "Other diseases of upper respiratory tract",
                                                          "J40-j47" = "Chronic lower respiratory diseases",
                                                          "J60-j70" = "Lung diseases due to external agents",
@@ -74,7 +75,7 @@ clean_data <- all_data %>%
                                                          "C00-c97" = "",
                                                          "E10-e14" = "",
                                                          "I00-i99" = "",
-                                                         "LC47" = "",
+                                                         "Lc47" = "",
                                                          "J30-j39" = "Other diseases of upper respiratory tract",
                                                          "J40-j47" = "Chronic lower respiratory diseases",
                                                          "J60-j70" = "Lung diseases due to external agents",
@@ -111,21 +112,22 @@ csv_formatted <- clean_data %>%
   
   mutate("Sex" = ifelse(GENDER_NAME == "Total", "", GENDER_NAME))  %>%
   mutate("Observation status" = ifelse(OBS_STATUS_NAME == "These figures are missing.", "Missing value", OBS_STATUS_NAME)) %>%
-  
+  mutate(Country = toTitleCase(Country)) %>%
+  mutate(Region = toTitleCase(Region)) %>%
   rename( Year = DATE,
           Value = OBS_VALUE)  %>%
   
   select(c("Year", "Country", "Region", "Age", "Sex", "Type of disease", "Chronic respiratory disease subtype",
            "Unit measure", "Unit multiplier", "Observation status", "Value"))
 
-csv_formatted$Country <- gsub("Total mortality", "", csv_formatted$Country)
+csv_formatted$Country <- gsub("Total Mortality", "", csv_formatted$Country)
 
 
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
 csv_output <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
+  mutate(Value = ifelse(is.na(Value), "", Value)) 
 
 # This is a line that you can run to check that you have filtered and selected 
 # correctly - all rows in the clean_population dataframe should be unique

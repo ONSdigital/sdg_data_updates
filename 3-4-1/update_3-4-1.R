@@ -11,12 +11,7 @@ library(dplyr)
 
 # download and read in data ----------------------------------------------------
 # regions dataset is separate as filtered by a different age-range, but if now reporting blanks may not be needed
-total_data <- read.csv(total_link) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) 
-
-male_data <- read.csv(male_link) %>% 
+all_but_female_data <- read.csv(all_but_female_link) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
@@ -26,12 +21,9 @@ female_data <- read.csv(female_link) %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
-regions_data <- read.csv(regions_link) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) 
 
-all_data <- bind_rows(total_data, regions_data, female_data, male_data)
+
+all_data <- bind_rows(female_data, all_but_female_data)
 
 # ---------------------------clean up totals data-------------------------------
 clean_data <- all_data %>% 
@@ -59,7 +51,8 @@ clean_data <- all_data %>%
                                     "J90-j94" = "Chronic repiratory disease",
                                     "J95" = "Chronic respiratory disease",
                                     "J96" = "Chronic respiratory disease",
-                                    "J98" = "Chronic respiratory disease")) %>%
+                                    "J98" = "Chronic respiratory disease",
+                                    "LC47" = "COVID-19")) %>%
   
   
   #creating chronic respiratory (J30-98) sub-category 
@@ -67,6 +60,7 @@ clean_data <- all_data %>%
                                                          "C00-c97" = "",
                                                          "E10-e14" = "",
                                                          "I00-i99" = "",
+                                                         "LC47" = "",
                                                          "J30-j39" = "Other diseases of upper respiratory tract",
                                                          "J40-j47" = "Chronic lower respiratory diseases",
                                                          "J60-j70" = "Lung diseases due to external agents",
@@ -80,6 +74,7 @@ clean_data <- all_data %>%
                                                          "C00-c97" = "",
                                                          "E10-e14" = "",
                                                          "I00-i99" = "",
+                                                         "LC47" = "",
                                                          "J30-j39" = "Other diseases of upper respiratory tract",
                                                          "J40-j47" = "Chronic lower respiratory diseases",
                                                          "J60-j70" = "Lung diseases due to external agents",

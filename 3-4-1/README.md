@@ -8,7 +8,7 @@ This automation pulls together all relevant ICD-10 classification codes off NOMI
 2. Open sdg_data_updates.Rproj  
 3. Change indicator folder name (`indicator <- "3-4-1"`)  
 4. If config.R does not exist in the 3-4-1 folder, create it from the example_config.R file  
-5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove occupation codes. 
+5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes. 
 6. Check that the compile.tables.R script sources the correct config file (for an update it should call config.R. 
 To run the example data and get example output, it should be example_config.R).   
 7. Open update_indicator_main.R  
@@ -55,4 +55,8 @@ Check last updated date [here](https://www.nomisweb.co.uk/query/construct/summar
 
 
 
+<<<<<<< HEAD
   
+=======
+  
+>>>>>>> d6ec51797cdc87dde6db9cdc52ac8a1b26468b43

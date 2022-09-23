@@ -6,7 +6,7 @@
 #     It is the control script that runs all the others.
 
 
-source("example_config.R") # pulls in all the configurations for updating indicator 3.4.1.
+source("config.R") # pulls in all the configurations for updating indicator 3.4.1.
 source("update_3-4-1.R") # Makes the csv file for updating indicator 3.4.1 on the platform. 
 
 

@@ -5,6 +5,8 @@ library(tidyr)
 library(dplyr)
 library(stringr)
 library(tibble)
+library(stringr)
+library(dplyr)
 
 
 # download and read in data ----------------------------------------------------
@@ -45,10 +47,10 @@ clean_data <- all_data %>%
          OBS_VALUE)  %>%
   
   #Underlying causes data comes in ICD-10 classification codes, renaming into plain English
-mutate('Type of disease' = recode(CAUSE_OF_DEATH_CODE,
-                                  "C00-c97" = "Cancer",
-                                   "E10-e14" = "Diabetes",
-                                  "I00-i99" = "Cardiovascular disease",
+  mutate('Type of disease' = recode(CAUSE_OF_DEATH_CODE,
+                                    "C00-c97" = "Cancer",
+                                    "E10-e14" = "Diabetes",
+                                    "I00-i99" = "Cardiovascular disease",
                                     "J30-j39" = "Chronic repiratory disease",
                                     "J40-j47" = "Chronic repiratory disease",
                                     "J60-j70" = "Chronic repiratory disease",
@@ -95,16 +97,16 @@ mutate('Type of disease' = recode(CAUSE_OF_DEATH_CODE,
 csv_formatted <- clean_data %>%
   mutate("Unit measure" = "Age-standardised mortality rate per 100,000 population",
          "Unit multiplier" = "Units") %>%
-         
+  
   #regions need associated country name 
   # split the geographies so country and region are in separate columns
   mutate(
-        Country = case_when(
-          GEOGRAPHY_TYPE == "Countries" ~ GEOGRAPHY_NAME, 
-          GEOGRAPHY_TYPE == "Regions" ~ "England",
-          TRUE ~ ""),
-        Region = ifelse(GEOGRAPHY_TYPE == "Regions", GEOGRAPHY_NAME, "")) %>%
-    
+    Country = case_when(
+      GEOGRAPHY_TYPE == "Countries" ~ GEOGRAPHY_NAME, 
+      GEOGRAPHY_TYPE == "Regions" ~ "England",
+      TRUE ~ ""),
+    Region = ifelse(GEOGRAPHY_TYPE == "Regions", GEOGRAPHY_NAME, "")) %>%
+  
   
   mutate(Age = ifelse(grepl("otal", AGE_NAME), 
                       "",  
@@ -119,8 +121,8 @@ csv_formatted <- clean_data %>%
           Value = OBS_VALUE)  %>%
   
   select(c("Year", "Country", "Region", "Age", "Sex", "Type of disease", "Chronic respiratory disease subtype",
-  "Unit measure", "Unit multiplier", "Observation status", "Value"))
-  
+           "Unit measure", "Unit multiplier", "Observation status", "Value"))
+
 csv_formatted$Country <- gsub("Total mortality", "", csv_formatted$Country)
 
 
@@ -134,12 +136,3 @@ csv_output <- csv_formatted %>%
 # correctly - all rows in the clean_population dataframe should be unique
 # so this should be TRUE
 check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
-
-
-
-
-
-
-
-
-

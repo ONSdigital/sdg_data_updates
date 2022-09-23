@@ -5,16 +5,23 @@
 #     It has to be named compile_tables.R
 #     It is the control script that runs all the others.
 
-library('stringr')
-library("dplyr")
 
-setwd("3-4-1") # this line is to run the template only - 
-# do not copy into your code as this is usually found in update_indicator_main.R
+source("example_config.R") # pulls in all the configurations for updating indicator 3.4.1.
+source("update_3-4-1.R") # Makes the csv file for updating indicator 3.4.1 on the platform. 
 
-source("example_config.R") # pulls in all the configurations
-source("compile_tables.R") # does the donkey-work of making the csv
-# at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_type_1 script.
+
+# run one year of data at a time as the dataset is too big to download all years 
+# at once
+csv <- NULL
+
+for (i in 1:length(years)) {
+  all_but_female_link_temp <- paste0(all_but_female_link, "&date=", years[i])
+  female_link_temp <- paste0(female_link, "&date=", years[i])
+  
+  source("update_3-4-1.R") 
+  
+  csv <- bind_rows(csv, csv_output)
+}
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -41,4 +48,3 @@ message(paste0("The csv and QA file have been created and saved in '", paste0(ge
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")
-

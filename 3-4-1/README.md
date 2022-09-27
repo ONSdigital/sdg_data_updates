@@ -31,8 +31,8 @@ The current nomis links were generated as follows:
 #### Mortality rate numbers ####
 From Nomis, select Query > Life Events > Mortality statistics - underlying cause, sex and age.
 
-female link selections:
-   Geography: Countries (all)  
+female link selections:  
+   Geography: Countries (all)   
    Date: All years  
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only  
@@ -45,18 +45,14 @@ all but female link selections:
    Date: All years  
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only   
-   Sex: Males only   
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
+   Sex: Males only     
+   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47    
      
 
   
-To generate link go to format/layout and select API. Then in 'Download data' right click on the csv link and copy link
+To generate link go to format/layout and select API. Then in 'Download data' right click on the csv link and copy link.  
+  
 Check last updated date [here](https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=168)
 
 
 
-<<<<<<< HEAD
-  
-=======
-  
->>>>>>> d6ec51797cdc87dde6db9cdc52ac8a1b26468b43

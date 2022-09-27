@@ -35,6 +35,7 @@ For updates done in R, the following code structure should be used:
 
 ## General guidelines ##
 
+- **NEVER put unpublished data on this repo, even in your cloned local repository.** If you need to use unpublished data, save it elsewhere and use the full filepath to read it in.
 - Only edit code for one indicator on any branch
 - Commit *at least once a day* when you are writing code. However, it is better to commit more frequently.  
 - Use informative commit messages and pull request comments  

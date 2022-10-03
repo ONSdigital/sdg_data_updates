@@ -74,6 +74,7 @@ gbp_to_usd <- function(exchange_rates, gbp_data,
   heading_row <- which(!is.na(exchange_rates$numeric))[1]
   exchange_data <- tidy_data(exchange_rates, heading_row)
   uk_exchange_data <- get_uk_values(exchange_data, exchange_rate)
+  uk_exchange_data_check <- check_data(uk_exchange_data, 0, 2)
   usd_data <- apply_exchange_rate(gbp_data, uk_exchange_data, unit_multiplier)
   
   return(usd_data)
@@ -85,8 +86,35 @@ usd_to_constant_usd <- function(deflators, usd_data,
   heading_row <- which(!is.na(deflators$numeric))[1]
   deflators_data <- tidy_data(deflators, heading_row)
   uk_deflators <- get_uk_values(deflators_data, deflator)
+  uk_deflators_check <- check_data(uk_deflators, 9, 160)
   constant_usd_data <- apply_deflators(usd_data, uk_deflators, 
                                        unit_multiplier)
+}
+
+#' @describeIn gbp_to_constant_usd convert GBP to (non-constant) USD
+check_data <- function(dat, min_expected, max_expected) {
+  min_uk <- min(dat[2]) 
+  max_uk <- max(dat[2]) 
+  
+  if (deparse(substitute(dat)) == "uk_exchange_data") {
+    data_used <- "UK exchange rates"
+  } else if (deparse(substitute(dat)) == "uk_deflators") {
+    data_used <- "UK deflators"
+  } else {
+    data_used <- "data"
+  }
+  
+  if (min_uk < min_expected) {
+    warning(paste("Some", data_used, "were lower than ", min_expected, 
+                  ". Please check that the ", data_used, 
+                  "does not contain errors, and that values are formatted as values"))
+  }
+  
+  if (max_uk > max_expected) {
+    warning(paste("Some", data_used, "were hihger than ", max_expected, 
+                  ". Please check that the ", data_used, 
+                  "does not contain errors, and that values are formatted as values"))
+  }
 }
 
 #' Tidy exchange rate and deflators data

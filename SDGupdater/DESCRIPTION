@@ -13,8 +13,9 @@ Description: Functions used by the ONS UK SDG data team to transform data
 		to tidy the data, and for commonly used calculations such as calculating a
 		rate per 1000 population when the numerator is greater than x.
 Imports:
-	stringr,
-	dplyr
+    stringr,
+    dplyr,
+    magrittr
 License: `use_mit_license()`
 Encoding: UTF-8
 LazyData: true

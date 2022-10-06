@@ -10,6 +10,13 @@ library('rsdmx')
 
 library(SDGupdater)
 
+packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx",
+              # packages used in the Rmarkdown script (library called there):
+              "ggplot2", "DT", "pander")
+install.packages(setdiff(packages, rownames(installed.packages())),
+                 dependencies = TRUE, 
+                 type = "win.binary")
+
 source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
 
 # create filepaths for exchange rates and deflators files ----------------------
@@ -34,10 +41,12 @@ date <- Sys.Date()
 # import data -------------------------------------------------------------------
 # exchange rate and deflator data are imported using the gbp_to_constant_usd 
 # function so don't need to do that here
-new_oda_data <- read.csv(paste0(input_folder, "/", filename_newdat))
+new_oda_data <- read.csv(paste0(input_folder, "/", filename_newdat)) %>% 
+  mutate(across(where(is.factor), is.character))
 names(new_oda_data) <- tolower(names(new_oda_data))
 
 old_oda_data <- read.csv(paste0(input_folder, "/", filename_2017)) %>% 
+  mutate(across(where(is.factor), is.character)) %>% 
   mutate(sectorpurposetext = "") # column not in older data. Required so 4-b-1 code runs on both old and new data.
 names(old_oda_data) <- tolower(names(old_oda_data))
 

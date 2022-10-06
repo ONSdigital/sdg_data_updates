@@ -74,7 +74,7 @@ gbp_to_usd <- function(exchange_rates, gbp_data,
   heading_row <- which(!is.na(exchange_rates$numeric))[1]
   exchange_data <- tidy_data(exchange_rates, heading_row)
   uk_exchange_data <- get_uk_values(exchange_data, exchange_rate)
-  uk_exchange_data_check <- check_data(uk_exchange_data, 0, 2)
+  uk_exchange_data_check <- check_data(uk_exchange_data, 0.1, 2)
   usd_data <- apply_exchange_rate(gbp_data, uk_exchange_data, unit_multiplier)
   
   return(usd_data)
@@ -107,13 +107,13 @@ check_data <- function(dat, min_expected, max_expected) {
   if (min_uk < min_expected) {
     warning(paste("Some", data_used, "were lower than ", min_expected, 
                   ". Please check that the ", data_used, 
-                  "does not contain errors, and that values are formatted as values"))
+                  "does not contain errors"))
   }
   
   if (max_uk > max_expected) {
     warning(paste("Some", data_used, "were hihger than ", max_expected, 
                   ". Please check that the ", data_used, 
-                  "does not contain errors, and that values are formatted as values"))
+                  "does not contain errors"))
   }
 }
 

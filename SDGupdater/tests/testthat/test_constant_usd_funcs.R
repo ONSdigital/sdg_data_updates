@@ -86,3 +86,47 @@ test_that("gbp_to_constant_usd returns expected units", {
   )
 })
 
+test_that("gbp_to_constant_usd returns expected warnings", {
+  expect_warning(
+    gbp_to_constant_usd(
+      system.file("testdata", "Exchange-rates-too-low.xlsx", package = "SDGupdater"), 
+      system.file("testdata", "Deflators-base-2020.xlsx", package = "SDGupdater"),
+      read.csv(
+        system.file("testdata", "year_value.csv", package = "SDGupdater")
+      )
+    ), 
+    "Some UK exchange rates were lower than  0.1 . Please check that the  UK exchange rates does not contain errors"
+  )
+  expect_warning(
+    gbp_to_constant_usd(
+      system.file("testdata", "Exchange-rates-too-high.xlsx", package = "SDGupdater"), 
+      system.file("testdata", "Deflators-base-2020.xlsx", package = "SDGupdater"),
+      read.csv(
+        system.file("testdata", "year_value.csv", package = "SDGupdater")
+      )
+    ), 
+    "Some UK exchange rates were hihger than  2 . Please check that the  UK exchange rates does not contain errors"
+  )
+  
+  expect_warning(
+    gbp_to_constant_usd(
+      system.file("testdata", "Exchange-rates.xlsx", package = "SDGupdater"), 
+      system.file("testdata", "Deflators-too-low.xlsx", package = "SDGupdater"),
+      read.csv(
+        system.file("testdata", "year_value.csv", package = "SDGupdater")
+      )
+    ),
+    "Some UK deflators were lower than  9 . Please check that the  UK deflators does not contain errors"
+  )
+  expect_warning(
+    gbp_to_constant_usd(
+      system.file("testdata", "Exchange-rates.xlsx", package = "SDGupdater"), 
+      system.file("testdata", "Deflators-too-high.xlsx", package = "SDGupdater"),
+      read.csv(
+        system.file("testdata", "year_value.csv", package = "SDGupdater")
+      )
+    ),
+    "Some UK deflators were hihger than  160 . Please check that the  UK deflators does not contain errors"
+  )
+
+  })

@@ -102,10 +102,44 @@ pinpoint_indices <- function(dat, primary, alternate, not_pattern){
 
 get_indices <- function(dat, pattern) {
   
-  if (is.vector(dat) == FALSE) {
-    stop("dat must be a vector")
+  if (is.vector(dat) == FALSE |
+      length(dat) == 1) {
+    stop("dat must be a vector of more than one value")
   }
-  
+
   which(apply(sapply(pattern, grepl, dat), 1, all) == TRUE)
+  
+}
+
+#' Get index of column name where a pattern is matched
+#'
+#' Returns all indices of a vector of column names where a pattern is matched. 
+#' If multiple patterns are passed, only indices where all patterns are matched 
+#' will be  returned.
+#'
+#' @param dat vector.
+#' @param pattern vector of strings to look for
+#' @return indices of all columns matching the pattern(c)
+#'
+#' @examples
+#' test_data <- c("numbers_1_4", "numbers_10_14", "rates_1_4")
+#' indices <- get_indices(test_data, c("numbers", "1"))
+#'
+#' @name get_column_index-deprecated
+#' @usage get_column_index(dat, pattern)
+#' @seealso \code{\link{SDGupdater-deprecated}}
+#' @keywords internal
+NULL
+
+#' @rdname get_column_index-deprecated
+#' @section \code{get_column_index}:
+#' For \code{get_column_index}, use \code{\link{get_indices}}.
+#'
+#' @export
+
+get_column_index <- function(dat, pattern) {
+  
+  .Deprecated("get_indices")
+  which(apply(sapply(pattern, grepl, names(dat)), 1, all) == TRUE)
   
 }

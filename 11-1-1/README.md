@@ -1,0 +1,2 @@
+I wrote this code to QA data for 11-1-1 but also to practice not hard coding anything  
+It is thereofore not the most straightforward code, however, it should be relatively bullet-proof to changes to wording and variables in the future. 

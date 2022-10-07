@@ -1,0 +1,108 @@
+---
+title: "QA 11-1-1 csv"
+author: "Emma Wood"
+date: "23/02/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+```
+**Run date and time: `r Sys.time()`**  
+   
+## Introduction
+
+11-1-1 is a relatively straightforward indicator but the layout of the files 
+is a bit awkward for manipulation in Excel so it has been automated to speed up 
+the process.    
+    
+This file runs some basic checks and gives information about the update.
+
+    
+## Configurations
+
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Configurations for this run are as follows:       
+
+```{r include= FALSE}
+
+household_data_filepath <- paste0(getwd(), "/", input_folder, "/", households_filename)
+household_file_save_time <- file.info(household_data_filepath, full.names = TRUE)$ctime[1]
+time_since_woodland_data_saved <- round(difftime(Sys.time(), household_file_save_time, units = "days"), 2)
+
+areas_data_filepath <- paste0(getwd(), "/", input_folder, "/", areas_filename)
+areas_file_save_time <- file.info(areas_data_filepath, full.names = TRUE)$ctime[1]
+time_since_areas_data_saved <- round(difftime(Sys.time(), areas_file_save_time, units = "days"), 2)
+
+```
+
+- Household data are in the file `r household_data_filepath`. This file was saved
+at `r woodland_file_save_time`: It has been `r time_since_household_data_saved` 
+days since the file was saved in `r input_folder`  
+- Dwellings (area) data are in the file `r areas_data_filepath`. This file was saved
+at `r areas_file_save_time`: It has been `r time_since_areas_data_saved` 
+days since the file was saved in `r input_folder`   
+- Tabs used from both files: **`r tabnames`**     
+- The row number that contains headings for the decent homes criteria:    
+households: `r households_header_row`  
+dwellings (areas): `r areas_header_row`  
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r}
+basic_plot <- function(data) {
+  ggplot(data,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  theme_bw() 
+}
+```
+
+```{r, echo=FALSE, fig.width=7, fig.height=5}
+live_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv") %>% 
+    janitor::clean_names()
+
+new_data <- csv_data %>% 
+    mutate(Year = as.integer(Year),
+           Value = as.numeric(Value),
+           dataset = "new") %>% 
+    janitor::clean_names() 
+
+joined_data <- live_data %>% 
+    mutate(dataset = "live") %>%
+    bind_rows(new_data)
+
+# Dwellings plots---------------------------------------
+
+d_criteria_urbanisation_plot <- joined_data %>% 
+    mutate(urban_rural_headline = ifelse(
+        urban_or_rural != "" & urbanisation_sub_category == "", TRUE, FALSE)) %>% 
+  filter(grepl("wellings", series) &
+             (is.na(sub_national_area) | sub_national_area == "") &
+           (is.na(region) | region == "") &
+             urban_rural_headline != TRUE) %>% 
+  basic_plot(.) +
+  facet_grid(urbanisation_sub_category ~ decent_homes_criteria) +
+  ggtitle("2-a-2 by country income classification (constant USD 000's)")
+
+print(d_criteria_urbanisation_plot)
+
+```

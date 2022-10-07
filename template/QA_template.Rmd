@@ -201,3 +201,9 @@ datatable(comparison,
                            className = 'dt-center', targets = 0:3))))
 ```
 
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
+pander(sessionInfo())

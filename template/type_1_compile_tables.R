@@ -2,6 +2,16 @@
 # It has to be called compile_tables.R
 # It is the control script that runs all the others.
 
+# list the packages used in this automation - you may need to add some, 
+# depending on what you add to the code
+packages <- c("stringr", "openxlsx", "janitor", "tidyr", "dplyr", 
+              # packages used in the Rmarkdown script (library called there):
+              "ggplot2", "DT", "pander")
+# install any packages that are not already installed
+install.packages(setdiff(packages, rownames(installed.packages())),
+                 dependencies = TRUE, 
+                 type = "win.binary")
+
 library('openxlsx')
 library('stringr')
 library('janitor')

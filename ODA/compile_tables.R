@@ -1,6 +1,13 @@
 # This file is directly called by update_indicator_main.R.
 # It is the control script that runs all the others.
 
+packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx",
+              # packages used in the Rmarkdown script (library called there):
+              "ggplot2", "DT", "pander")
+install.packages(setdiff(packages, rownames(installed.packages())),
+                 dependencies = TRUE, 
+                 type = "win.binary")
+
 library('stringr')
 library('unpivotr')
 library('tidyxl')
@@ -9,13 +16,6 @@ library('dplyr')
 library('rsdmx')
 
 library(SDGupdater)
-
-packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx",
-              # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "DT", "pander")
-install.packages(setdiff(packages, rownames(installed.packages())),
-                 dependencies = TRUE, 
-                 type = "win.binary")
 
 source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
 

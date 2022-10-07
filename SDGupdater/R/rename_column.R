@@ -29,23 +29,12 @@
 
 rename_column <- function(dat, primary, alternate, not_pattern, new_name){
   
-  column_indices <- get_column_index(dat, primary)
-  
-  if(length(column_indices) == 0 & !missing(alternate)){
-    column_indices <- get_column_index(dat, alternate)
-  }
-  
-  if(missing(not_pattern)) {
-    column_index <- column_indices
-  } else {
-    not_indices <- get_column_index(dat, not_pattern)
-    column_index <- setdiff(column_indices, not_indices)
-  }
+  column_index <- pinpoint_indices(names(dat), primary, alternate, not_pattern)
   
   if(length(column_index) > 1 | length(column_index) == 0) {
     warning(paste(length(column_index), 
-               "columns identified for", new_name, 
-               ". Please refine 'primary', 'alternate', and 'not_pattern' arguments. Column name not replaced"))
+                  "columns identified for", new_name, 
+                  ". Please refine 'primary', 'alternate', and 'not_pattern' arguments. Column name not replaced"))
   } else {
     names(dat)[column_index] <- new_name
   }
@@ -54,30 +43,69 @@ rename_column <- function(dat, primary, alternate, not_pattern, new_name){
   
 }
 
-
-#' Get index of column names matching a pattern
+#' Get indices where a set of pattern conditions are met
 #'
-#' Use patterns that are expected to always appear in a column name to rename
-#' the column. This provides some future-proofing for changes to column names in 
-#' future input data. Columns will only be renamed if exactly one column is identified.
-#' If this is not the case a warning will be returned, and the column will remain 
-#' with it's original name
+#' Allows the user to specify a set of pattern conditions and returns all
+#' inidces of a vector where those conditions are met. 
+#' 
+#' If multiple patterns are given for an argument, the condition will only be
+#' met if ALL patterns in that argument are matched.
 #'
-#' @param dat dataframe or tibble.
-#' @param pattern vector of strings to look for
+#' @param dat vector.
+#' @param primary first pattern or patterns to look for. Alternate will be 
+#' ignored if this is found
+#' @param alternate pattern(s) to look for if nothing is returned for primary
+#' @param not_pattern exclude any indices where this pattern is matched
 #'
-#' @return index of columns matching the pattern
+#' @return vector of all indices where conditions are met
 #'
 #' @examples
-#' test_data <- data.frame("numbers_1_4" = c(10, 5),
-#'                         "numbers_10_14" = c(1, 3),
-#'                         "rates_1_4" = c(4, 7))
-#' indices <- get_column_index(test_data, c("numbers", "1"))
+#' test_data <- c("numbers_1_4", "numbers_10_14", "rates_1_4" = c(4, 7))
+#' indices <- get_indices(test_data, c("numbers", "1"))
 #' 
 #' @export
 
-get_column_index <- function(dat, pattern) {
+pinpoint_indices <- function(dat, primary, alternate, not_pattern){
   
-  which(apply(sapply(pattern, grepl, names(dat)), 1, all) == TRUE)
+  indices <- get_indices(dat, primary)
+  
+  if(length(indices) == 0 & !missing(alternate)){
+    indices <- get_indices(dat, alternate)
+  }
+  
+  if(!missing(not_pattern)) {
+    not_indices <- get_indices(dat, not_pattern)
+    indices <- setdiff(indices, not_indices)
+  }
+  
+  return(indices)
+  
+}
+
+
+#' Get indices of vector where a pattern is matched
+#'
+#' Returns all indices of a vector where a pattern is matched. If multiple
+#' patterns are passed, only indices where all patterns are matched will be 
+#' returned.
+#'
+#' @param dat vector.
+#' @param pattern vector of strings to look for
+#'
+#' @return indices of all columns matching the pattern(c)
+#'
+#' @examples
+#' test_data <- c("numbers_1_4", "numbers_10_14", "rates_1_4")
+#' indices <- get_indices(test_data, c("numbers", "1"))
+#' 
+#' @export
+
+get_indices <- function(dat, pattern) {
+  
+  if (is.vector(dat) == FALSE) {
+    stop("dat must be a vector")
+  }
+  
+  which(apply(sapply(pattern, grepl, dat), 1, all) == TRUE)
   
 }

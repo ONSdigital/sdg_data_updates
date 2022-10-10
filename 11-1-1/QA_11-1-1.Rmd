@@ -1,7 +1,6 @@
 ---
-title: "QA 11-1-1 csv"
+title: "template QA"
 author: "Emma Wood"
-date: "23/02/2022"
 output: html_document
 ---
 
@@ -14,95 +13,139 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 **Run date and time: `r Sys.time()`**  
-   
+  
 ## Introduction
 
-11-1-1 is a relatively straightforward indicator but the layout of the files 
-is a bit awkward for manipulation in Excel so it has been automated to speed up 
-the process.    
-    
-This file runs some basic checks and gives information about the update.
-
-    
+The source data for 11-1-1 are on two spreadsheets and each year is given on a 
+separate tab. Updating the indicator and making sure revisions are spotted 
+therefore takes quite a long time.  
+  
+In addition, not all possible disaggregations were included on the platform 
+before this automation. This may be partly due to the time consuming nature of
+including all variables.  
+  
+This file runs some basic checks on the csv output and highlights some specific 
+things that should manually be checked.  
+  
+Data in the csv are labelled as 'Normal data' in the Observation status column. 
+However, notes should be checked in the spreadsheet to ensure this is correct
+for new data.  
+   
 ## Configurations
 
-Please check that the information below is as you expect. In particular, pay 
-attention to the time since data were saved, to check that previously 
-downloaded data have not accidentally been used.
+There are two series for this indicator, which are stored in separate files:  
+- filepath for the 'dwellings' data: **`r paste0(getwd(), "/", input_folder, "/", areas_filename)`**  
+- filepath for the 'households' data: **`r paste0(getwd(), "/", input_folder, "/", households_filename)`**    
+  
+There are multiple headers, however all the information we need for column names
+is on the header just above the values. The row on which this header is found is
+set using the 'header_row' arguments in the config file:  
+- row number of the column names for dwellings data: **`r areas_header_row`**  
+- row number of the column names for households data: **`r households_header_row`**    
+  
+There is a tab for each year. Which years to run is set in the configs. For this 
+run the following tabs were set to run: **`r tabnames`**  
+   
+Location of the outputs: **`r paste0(getwd(), "/", output_folder`)**  
+
+
+## Plots
+Please check the plots below for any differences between the live data (which 
+is pulled in from Jemalex) and the new data.  
     
-These settings can all be adjusted in `config.R`
-    
-Configurations for this run are as follows:       
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
 
-```{r include= FALSE}
+```{r, echo = FALSE, fig.width=10}
 
-household_data_filepath <- paste0(getwd(), "/", input_folder, "/", households_filename)
-household_file_save_time <- file.info(household_data_filepath, full.names = TRUE)$ctime[1]
-time_since_woodland_data_saved <- round(difftime(Sys.time(), household_file_save_time, units = "days"), 2)
-
-areas_data_filepath <- paste0(getwd(), "/", input_folder, "/", areas_filename)
-areas_file_save_time <- file.info(areas_data_filepath, full.names = TRUE)$ctime[1]
-time_since_areas_data_saved <- round(difftime(Sys.time(), areas_file_save_time, units = "days"), 2)
-
-```
-
-- Household data are in the file `r household_data_filepath`. This file was saved
-at `r woodland_file_save_time`: It has been `r time_since_household_data_saved` 
-days since the file was saved in `r input_folder`  
-- Dwellings (area) data are in the file `r areas_data_filepath`. This file was saved
-at `r areas_file_save_time`: It has been `r time_since_areas_data_saved` 
-days since the file was saved in `r input_folder`   
-- Tabs used from both files: **`r tabnames`**     
-- The row number that contains headings for the decent homes criteria:    
-households: `r households_header_row`  
-dwellings (areas): `r areas_header_row`  
-
-### Check data
-The charts below show the new data (just created) plotted on top of the old data,
-which has been downloaded from the live site. If there are unexpected 
-discrepancies in the lines please investigate the reasons for these discrepancies.
-    
-```{r}
-basic_plot <- function(data) {
-  ggplot(data,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line(aes(linetype = dataset)) +
-  theme_bw() 
-}
-```
-
-```{r, echo=FALSE, fig.width=7, fig.height=5}
-live_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv") %>% 
-    janitor::clean_names()
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
+  janitor::clean_names()
 
 new_data <- csv_data %>% 
-    mutate(Year = as.integer(Year),
-           Value = as.numeric(Value),
-           dataset = "new") %>% 
-    janitor::clean_names() 
-
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
+  mutate(Year = as.integer(Year),
+         Value = as.numeric(Value),
+         dataset = "new") %>% 
+  janitor::clean_names()
+  
+# join to the new data
 joined_data <- live_data %>% 
-    mutate(dataset = "live") %>%
-    bind_rows(new_data)
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data)
 
-# Dwellings plots---------------------------------------
+unique(new_data$series) == unique(live_data$series)
+unique(new_data$decent_homes_criteria) == unique(live_data$decent_homes_criteria)
+# Don't exist:
+# live_data$region 
+# live_data$urban_or_rural
+# live_data$deprivation_decile
+# live_data$household_composition
+# live_data$length_of_residence
+# live_data$workless_households
+# live_data$poverty_status
 
-d_criteria_urbanisation_plot <- joined_data %>% 
-    mutate(urban_rural_headline = ifelse(
-        urban_or_rural != "" & urbanisation_sub_category == "", TRUE, FALSE)) %>% 
-  filter(grepl("wellings", series) &
-             (is.na(sub_national_area) | sub_national_area == "") &
-           (is.na(region) | region == "") &
-             urban_rural_headline != TRUE) %>% 
-  basic_plot(.) +
-  facet_grid(urbanisation_sub_category ~ decent_homes_criteria) +
-  ggtitle("2-a-2 by country income classification (constant USD 000's)")
 
-print(d_criteria_urbanisation_plot)
+# plot the data
+plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(Gas),
+             nrow = 2) +
+  theme_bw() 
 
 ```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+```
+
+Finally, it is sometimes hard to see where new numbers don't match live numbers
+especially if there are lots of disaggregations. In such cases a table of 
+differences is also useful. The following example is taken from 13-2-2:
+  
+  At the time of writing this code (June 2022), the following note is given in the
+  source notes tab: 'in these statistics the entire time series going back to 
+  1990 is revised each year to take account of methodological improvements'.  
+  
+  **If there are differences (see table below) please check that this still stands**
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Gas, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
+pander(sessionInfo())

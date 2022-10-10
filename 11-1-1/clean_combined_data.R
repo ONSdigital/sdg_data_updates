@@ -51,7 +51,7 @@ renamed_columns <- unwanted_columns_removed %>%
   rename_column(primary = "deprived local areas",
                 new_name = "Deprivation decile") %>% 
   rename_column(primary = "poverty",
-                new_name = "Poverty status")
+                new_name = "Poverty status") 
 
 # There are some breakdowns we know are not in every year. Wrap these in if 
 # statements so they don't throw a warning 
@@ -79,40 +79,33 @@ if (any(grepl("region", names(renamed_columns)))) {
 
 names(gors) <- str_to_sentence(names(gors))
 
-# annoyingly the urban/rural/suburban residential totals are hidden in with the urbanisation sub-category
-# so pull them into their own disaggregation here
-urban_rural <- gors %>% 
-  filter(grepl("all", tolower(`Urbanisation sub-category`)) == TRUE) %>% 
-  rename(`Urban or rural` = `Urbanisation sub-category`) %>% 
-  mutate(`Urban or rural` = case_when(
-    grepl("urban", tolower(`Urban or rural`)) ~ "Urban",
-    grepl("rural", tolower(`Urban or rural`)) ~ "Rural",
-    TRUE ~ as.character(`Urban or rural`)
-  ))
-# suburban residential is both a 'total' and a subcategory so is essentially a repetition
-# which is why distinct is used
-not_urban_rural <- gors %>% 
-  filter(grepl("all", tolower(`Urbanisation sub-category`)) == FALSE)%>% 
+# annoyingly the data aren't broken down by our standard urban/rural grouping.
+# Instead the 'totals' are 'all city and urban centres', 'suburban residential'
+# and 'all rural areas'. I think if you sum the first 2 you would get 'urban'
+# but I can't find anything to confirm that, so will stick to urbanisation sub-category.
+# The other not-quite-Urban/Rural disagg needs to be removed 
+urbanisation_cleaned <- gors %>% 
+  filter(grepl("all", tolower(`Urbanisation sub-category`)) == FALSE) %>% 
+  # suburban residential is both a 'total' and a subcategory so remove the repeat
   distinct()
 
-all_data <- bind_rows(urban_rural, not_urban_rural)
-
-totals_as_blanks <- all_data
-if ("Region" %in% names(all_data)) {
+totals_as_blanks <- urbanisation_cleaned
+if ("Region" %in% names(urbanisation_cleaned)) {
   totals_as_blanks <- totals_as_blanks %>% 
     mutate(Region = ifelse(grepl("all", Region) == TRUE, 
                            "", Region)
     )
 } 
-if ("Sub-national area" %in% names(all_data)) {
+if ("Sub-national area" %in% names(urbanisation_cleaned)) {
   totals_as_blanks <- totals_as_blanks %>% 
     mutate(`Sub-national area` = ifelse(grepl("all", `Sub-national area`) == TRUE, 
                                                "", `Sub-national area`)
     )
 } 
 totals_as_blanks <- totals_as_blanks %>% 
-  mutate(`Decent homes criteria` = ifelse(`Decent homes criteria` == "non_decent", 
-                                          "", `Decent homes criteria`)) 
+  mutate(`Decent homes criteria` = ifelse(
+    grepl("non", tolower(`Decent homes criteria`)), "", `Decent homes criteria`)
+  ) 
 
 levels_renamed <- totals_as_blanks %>% 
   mutate(
@@ -122,27 +115,26 @@ levels_renamed <- totals_as_blanks %>%
       `Age of oldest person` == "60 years or more" ~ "60 and over",
       `Age of oldest person` == "75 years or more" ~ "75 and over",
       TRUE ~ `Age of oldest person`),
+    
     `Age of youngest person` = case_when(
       `Age of youngest person` == "Under 5 years" ~ "4 and under",
       `Age of youngest person` == "Under 16 years" ~ "15 and under",
       `Age of youngest person` == "16 years or more" ~ "16 and over",
       TRUE ~ `Age of youngest person`),
+    
     `Disability status (household)` = case_when(
       `Disability status (household)` == "Yes" ~ "Disabled (GSS harmonised)",
       `Disability status (household)` == "No" ~ "Non-disabled (GSS harmonised)",
       TRUE ~ `Disability status (household)`),
-    `Urban or rural` = case_when(
-      grepl("urban", `Urban or rural`) ~ "Urban",
-      grepl("rural", `Urban or rural`) ~ "Rural",
-      `Urbanisation sub-category` %in% c("city centre", "other urban centre") ~ "Urban",
-      `Urbanisation sub-category` %in% c("rural residential", "village centre", "rural") ~ "Rural",
-      `Urbanisation sub-category` == "suburban residential" ~ "suburban residential",
-      TRUE ~ `Urban or rural`),
-    `Urbanisation sub-category` = ifelse(`Urbanisation sub-category` == "rural",
-                                         "Other rural area", `Urbanisation sub-category`),
+
+    `Urbanisation sub-category` = ifelse(`Urbanisation sub-category` == "Rural",
+                                         "Other rural area", 
+                                         `Urbanisation sub-category`),
+    
     `Poverty status` = ifelse(grepl("no", `Poverty status`),
                               "Not living in poverty", 
                               "Living in poverty"),
+    
     `Deprivation decile` = case_when(
       grepl("most", tolower(`Deprivation decile`)) ~ "Decile 10 (most deprived)",
       `Deprivation decile` == "2nd" ~ "Decile 9",
@@ -155,6 +147,7 @@ levels_renamed <- totals_as_blanks %>%
       `Deprivation decile` == "9th" ~ "Decile 2",
       grepl("least", tolower(`Deprivation decile`)) ~ "Decile 1 (least deprived)",
       TRUE ~ `Deprivation decile`),
+    
     `Sub-national area` = case_when(
       `Sub-national area` == "London and south east" ~"London and South East",
       `Sub-national area` == "Rest of england" ~ "Rest of England",
@@ -166,11 +159,11 @@ all_required_columns <- levels_renamed %>%
          `Observation status` = "Normal value")
 
 correct_case <- all_required_columns  %>% 
-  mutate(`decent homes criteria` = ifelse(
+  mutate(`Decent homes criteria` = ifelse(
     grepl("inimum", `Decent homes criteria`), "Minimum Standard (HHSRS)",
     `Decent homes criteria`))
 
-columns_order <- c("Urban or rural", "Urbanisation sub-category", 
+columns_order <- c("Urbanisation sub-category", 
                    "Age of oldest person", "Age of youngest person",
                    "Deprivation decile",
                    "Disability status (household)",

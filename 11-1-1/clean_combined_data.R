@@ -13,72 +13,95 @@
 # readme - note that if the order of disaggregations changes in the source file,
 # the totals will get picked up incorrectly
 
-#-------------------------------------------------------------------------------
-# put this function in SDGupdater
-name_columns <- function(dat, pattern, new_name){
-  
-  column_location <- which(apply(sapply(pattern, grepl, 
-                                        names(dat)), 1, all) == TRUE)
-  names(dat)[column_location] <- new_name
-  return(dat)
-  
-}
-
 #--------------------------------------------------------------------------------
 
-
-household_total_included <- combined_data %>% 
-  mutate(`length of residence` = ifelse(grepl("all", `length of residence`), 
-                                        "", `length of residence`))
-
-# we don't want to keep all disaggregations so remove them here using strings that will only appear in those names
-# as we don't know if the names might change slightly in the future
-unwanted_column_words <- paste(c("epriv", "omposition", "overty", "orkless", "ength"), collapse = "|")
-unwanted_column_locs <- grep(unwanted_column_words, names(household_total_included))
-unwanted_columns <- names(household_total_included)[unwanted_column_locs] 
+# If we decide not to keep all disaggregations we could remove them here using
+# strings that will only appear in those names ( as we don't know if the names
+# might change slightly in the future)
+unwanted_column_words <- paste(c("deprived districts"
+                                 #, "epriv", "omposition", "overty", "orkless", "ength"
+                                 ), collapse = "|")
+unwanted_column_locs <- grep(unwanted_column_words, names(combined_data))
+unwanted_columns <- names(combined_data)[unwanted_column_locs] 
 
 # I'm sure there is a better way that doesn't use a loop but I cant think of it..
-unwanted_columns_removed <- household_total_included
+unwanted_columns_removed <- combined_data
 for(i in 1:length(unwanted_columns)) {
-  unwanted_columns_removed <- unwanted_columns_removed %>% 
-    filter(is.na(!!sym(unwanted_columns[i])) | 
-             !!sym(unwanted_columns[i]) == "") %>% 
+  unwanted_columns_removed <- unwanted_columns_removed %>%
+    filter(is.na(!!sym(unwanted_columns[i])) |
+             !!sym(unwanted_columns[i]) == "") %>%
     select(-sym(unwanted_columns[i]))
 }
 
-renamed_columns <- name_columns(unwanted_columns_removed, 
-                                "area type", "Urbanisation sub-category")
-renamed_columns <- name_columns(renamed_columns, 
-                                "national area", "Sub-national area")
-renamed_columns <- name_columns(renamed_columns, 
-                                "age.*old|old.*age", "Age of oldest person")
-renamed_columns <- name_columns(renamed_columns, 
-                                "age.*young|young.*age", "Age of youngest person")
-renamed_columns <- name_columns(renamed_columns, 
-                                "income", "Income quintile (household)")
-renamed_columns <- name_columns(renamed_columns, 
-                                "disab", "Disability status (household)")
-renamed_columns <- name_columns(renamed_columns, 
-                                "ethnicity", "Ethnicity of household reference person (HRP)")
+renamed_columns <- unwanted_columns_removed %>% 
+  rename_column(primary = "area type", 
+                new_name = "Urbanisation sub-category") %>% 
+  # rename_column(primary = "national area",
+  #               new_name = "Sub-national area") %>% 
+  rename_column(primary = "age.*old|old.*age",
+                new_name = "Age of oldest person") %>% 
+  rename_column(primary =  "age.*young|young.*age",
+                new_name = "Age of youngest person") %>% 
+  rename_column(primary = "income",
+                new_name = "Income quintile (household)") %>% 
+  rename_column(primary = "disab",
+                new_name = "Disability status (household)") %>% 
+  rename_column(primary = "ethnicity",
+                new_name = "Ethnicity of household reference person (HRP)") %>% 
+  rename_column(primary = "deprived local areas",
+                new_name = "Deprivation decile") %>% 
+  rename_column(primary = "poverty",
+                new_name = "Poverty status")
+
+# There are some breakdowns we know are not in every year. Wrap these in if 
+# statements so they don't throw a warning 
+if ("Sub-national area" %in% names(renamed_columns)) {
+  sub_national <- renamed_columns %>% 
+    mutate(`Sub-national area` = str_to_title(`Sub-national area`)) %>% 
+    mutate(across(where(is.character), str_to_sentence)) 
+}else { 
+  sub_national <- renamed_columns %>% 
+    mutate(across(where(is.character), str_to_sentence)) 
+}
+
+if (any(grepl("region", names(renamed_columns)))) {
+  gors <- sub_national %>% 
+    rename_column(primary = "region",
+                  new_name = "Region") %>% 
+    mutate(
+      Region = case_when(
+        Region == "Yorkshire and the humber" ~ "Yorkshire and The Humber",
+        TRUE ~ as.character(str_to_title(Region)) 
+      ))
+} else { 
+  gors <- sub_national
+}
+
+names(gors) <- str_to_sentence(names(gors))
 
 # annoyingly the urban/rural/suburban residential totals are hidden in with the urbanisation sub-category
 # so pull them into their own disaggregation here
-urban_rural <- renamed_columns %>% 
-  filter(grepl("all", `Urbanisation sub-category`) == TRUE) %>% 
-  rename(`Urban or rural` = `Urbanisation sub-category`) 
+urban_rural <- gors %>% 
+  filter(grepl("all", tolower(`Urbanisation sub-category`)) == TRUE) %>% 
+  rename(`Urban or rural` = `Urbanisation sub-category`) %>% 
+  mutate(`Urban or rural` = case_when(
+    grepl("urban", tolower(`Urban or rural`)) ~ "Urban",
+    grepl("rural", tolower(`Urban or rural`)) ~ "Rural",
+    TRUE ~ as.character(`Urban or rural`)
+  ))
 # suburban residential is both a 'total' and a subcategory so is essentially a repetition
 # which is why distinct is used
-not_urban_rural <- renamed_columns %>% 
-  filter(grepl("all", `Urbanisation sub-category`) == FALSE)%>% 
+not_urban_rural <- gors %>% 
+  filter(grepl("all", tolower(`Urbanisation sub-category`)) == FALSE)%>% 
   distinct()
 
 all_data <- bind_rows(urban_rural, not_urban_rural)
 
 totals_as_blanks <- all_data
-if ("government office region" %in% names(all_data)) {
+if ("Region" %in% names(all_data)) {
   totals_as_blanks <- totals_as_blanks %>% 
-    mutate(`government office region` = ifelse(grepl("all", `government office region`) == TRUE, 
-                                               "", `government office region`)
+    mutate(Region = ifelse(grepl("all", Region) == TRUE, 
+                           "", Region)
     )
 } 
 if ("Sub-national area" %in% names(all_data)) {
@@ -88,27 +111,25 @@ if ("Sub-national area" %in% names(all_data)) {
     )
 } 
 totals_as_blanks <- totals_as_blanks %>% 
-  mutate(`decent homes criteria` = ifelse(`decent homes criteria` == "non_decent", 
-                                          "", `decent homes criteria`)) %>% 
-  mutate(across(everything(), ~ replace(., is.na(.), "")))
-
+  mutate(`Decent homes criteria` = ifelse(`Decent homes criteria` == "non_decent", 
+                                          "", `Decent homes criteria`)) 
 
 levels_renamed <- totals_as_blanks %>% 
   mutate(
-    `decent homes criteria` = str_replace_all(`decent homes criteria`,"_", " "),
+    `Decent homes criteria` = str_replace_all(`Decent homes criteria`,"_", " "),
     `Age of oldest person` = case_when(
-      `Age of oldest person` == "under 60 years" ~ "59 and under",
+      `Age of oldest person` == "Under 60 years" ~ "59 and under",
       `Age of oldest person` == "60 years or more" ~ "60 and over",
       `Age of oldest person` == "75 years or more" ~ "75 and over",
       TRUE ~ `Age of oldest person`),
     `Age of youngest person` = case_when(
-      `Age of youngest person` == "under 5 years" ~ "4 and under",
-      `Age of youngest person` == "under 16 years" ~ "15 and under",
+      `Age of youngest person` == "Under 5 years" ~ "4 and under",
+      `Age of youngest person` == "Under 16 years" ~ "15 and under",
       `Age of youngest person` == "16 years or more" ~ "16 and over",
       TRUE ~ `Age of youngest person`),
-    `Disability status` = case_when(
-      `Disability status (household)` == "yes" ~ "Disabled (GSS harmonised)",
-      `Disability status (household)` == "no" ~ "Non-disabled (GSS harmonised)",
+    `Disability status (household)` = case_when(
+      `Disability status (household)` == "Yes" ~ "Disabled (GSS harmonised)",
+      `Disability status (household)` == "No" ~ "Non-disabled (GSS harmonised)",
       TRUE ~ `Disability status (household)`),
     `Urban or rural` = case_when(
       grepl("urban", `Urban or rural`) ~ "Urban",
@@ -118,70 +139,72 @@ levels_renamed <- totals_as_blanks %>%
       `Urbanisation sub-category` == "suburban residential" ~ "suburban residential",
       TRUE ~ `Urban or rural`),
     `Urbanisation sub-category` = ifelse(`Urbanisation sub-category` == "rural",
-                                         "Other rural area", `Urbanisation sub-category`)
-    ) %>% 
-  mutate(across(where(is.character), str_to_sentence)) 
+                                         "Other rural area", `Urbanisation sub-category`),
+    `Poverty status` = ifelse(grepl("no", `Poverty status`),
+                              "Not living in poverty", 
+                              "Living in poverty"),
+    `Deprivation decile` = case_when(
+      grepl("most", tolower(`Deprivation decile`)) ~ "Decile 10 (most deprived)",
+      `Deprivation decile` == "2nd" ~ "Decile 9",
+      `Deprivation decile` == "3rd" ~ "Decile 8",
+      `Deprivation decile` == "4th" ~ "Decile 7",
+      `Deprivation decile` == "5th" ~ "Decile 6",
+      `Deprivation decile` == "6th" ~ "Decile 5",
+      `Deprivation decile` == "7th" ~ "Decile 4",
+      `Deprivation decile` == "8th" ~ "Decile 3",
+      `Deprivation decile` == "9th" ~ "Decile 2",
+      grepl("least", tolower(`Deprivation decile`)) ~ "Decile 1 (least deprived)",
+      TRUE ~ `Deprivation decile`),
+    `Sub-national area` = case_when(
+      `Sub-national area` == "London and south east" ~"London and South East",
+      `Sub-national area` == "Rest of england" ~ "Rest of England",
+      TRUE ~ `Sub-national area`)
+    )
 
-if ("government office region" %in% names(all_data)) {
-  gors <- levels_renamed %>% 
-    rename(Region = `government office region`) %>% 
-    mutate(
-      Region = case_when(
-        Region == "yorkshire and the humber" ~ "Yorkshire and The Humber",
-        TRUE ~ as.character(str_to_title(Region)) 
-                          ))
-} else { 
-  gors <- levels_renamed
-}
-if ("Sub-national area" %in% names(all_data)) {
-  sub_national <- gors %>% 
-    mutate(`Sub-national area` = str_to_title(`Sub-national area`))
-}else { 
-  sub_national <- gors
-}
+all_required_columns <- levels_renamed %>% 
+  mutate(Units = "Percentage (%)",
+         `Observation status` = "Normal value")
 
-correct_case <- sub_national  %>% 
+correct_case <- all_required_columns  %>% 
   mutate(`decent homes criteria` = ifelse(
-    grepl("inimum", `decent homes criteria`), "Minimum Standard (HHSRS)",
-    `decent homes criteria`))
+    grepl("inimum", `Decent homes criteria`), "Minimum Standard (HHSRS)",
+    `Decent homes criteria`))
 
-
-names(correct_case) <- str_to_sentence(names(correct_case))
+columns_order <- c("Urban or rural", "Urbanisation sub-category", 
+                   "Age of oldest person", "Age of youngest person",
+                   "Deprivation decile",
+                   "Disability status (household)",
+                   "Ethnicity of household reference person (hrp)",
+                   "Household composition",
+                   "Income quintile (household)", "Length of residence",
+                   "Poverty status", "Workless households",
+                   "Observation status")
 
 if ("Region" %in% names(correct_case) & 
     "Sub-national area" %in% names(correct_case)){
-  csv_data <- correct_case %>% 
+  ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, Region,
-           `Urban or rural`, `Urbanisation sub-category`, 
-           `Age of oldest person`, `Age of youngest person`,`Disability status (household)`,
-           `Ethnicity of household reference person (hrp)`, `Income quintile (household)`, 
-           Units, `Observation status`, Value)
+           all_of(columns_order), Value
+           )
 } else if ("Region" %in% names(correct_case)  & 
            "Sub-national area" %not_in% names(correct_case)) {
-  csv_data <- correct_case %>% 
+  ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, Region,
-           `Urban or rural`, `Urbanisation sub-category`, 
-           `Age of oldest person`, `Age of youngest person`,`Disability status (household)`,
-           `Ethnicity of household reference person (hrp)`, `Income quintile (household)`, 
-           Units, `Observation status`, Value)
+           all_of(columns_order), Value)
 } else if ("Region" %not_in% names(correct_case)  & 
            "Sub-national area" %in% names(correct_case)) {
-  csv_data <- correct_case %>% 
+  ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, 
-           `Urban or rural`, `Urbanisation sub-category`, 
-           `Age of oldest person`, `Age of youngest person`,`Disability status (household)`,
-           `Ethnicity of household reference person (hrp)`, `Income quintile (household)`, 
-           Units, `Observation status`, Value)
+           all_of(columns_order), Value)
 } else {
-  csv_data <- correct_case %>% 
+  ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, 
-           `Urban or rural`, `Urbanisation sub-category`, 
-           `Age of oldest person`, `Age of youngest person`,`Disability status (household)`,
-           `Ethnicity of household reference person (hrp)`, `Income quintile (household)`, 
-           Units, `Observation status`, Value)
+           all_of(columns_order), Value)
 }
 
+csv_data <- ordered_data %>% 
+  mutate(Value = round(Value, 2))

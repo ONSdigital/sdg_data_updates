@@ -41,7 +41,7 @@ for(i in 1:length(tabnames)) {
 
   source("get_data.R") 
   areas_with_new_columns <- csv_format %>% 
-    mutate(Series = "Percentage of dwellings (%)",
+    mutate(Series = "Dwellings (%)",
            Year = tabname)
 
   area_years_compiled <- area_years_compiled %>% 
@@ -54,7 +54,7 @@ for(i in 1:length(tabnames)) {
   
   source("get_data.R")
   households_with_new_columns <- csv_format %>% 
-    mutate(Series = "Percentage of households (%)",
+    mutate(Series = "Households (%)",
            Year = tabname)
   
   household_years_compiled <- household_years_compiled %>% 
@@ -76,7 +76,10 @@ date <- Sys.Date()
 csv_filename <- paste0(date, "_11-1-1.csv")
 # qa_filename <- paste0(date, "_x-x-x_checks.html") 
 
-write.csv(csv_data, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(csv_data, 
+          paste0(output_folder, "/", csv_filename), 
+          row.names = FALSE,
+          na = "")
 
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it

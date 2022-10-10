@@ -52,20 +52,29 @@ if(length(unwanted_columns) > 0){
   true_columns <- groups_defined
 }
 
+# In some tabs values are suppressed and instead the cell contains an asterisk.
+# This leads to a warning to say NAs have been introduced by coercion. 
+# The warning is suppressed because this is the behaviour we want,
 non_numerical_removed <- true_columns %>% 
-  mutate(across(c(where(is.character), 
-                  -c(group, heading)), as.numeric))
+  mutate(
+    suppressWarnings(
+      across(
+        c(where(is.character), -c(group, heading)), 
+        as.numeric)
+    )
+  )
 
-# FIX THIS BIT #################################################################
 # The headline figure is lumped in with whichever the last heading is.
 # Identify it as the heading while we only need to search one column. 
-# If we did this later in the code we would have to know which column to look in.
-headline_identified <- non_numerical_removed %>% 
-  mutate(heading = ifelse(grepl("all"),
-                        "headline", heading))
-################################################################################
+# If we did this later in the code we would have to know which disaggregation
+# came just before it and search in that column.
+headline_row <- pinpoint_indices(non_numerical_removed$group,
+                                 "all dwelling",
+                                 "all household")
 
-tidy <- headline_identified %>% 
+non_numerical_removed$group[headline_row] <- ""
+
+tidy <- non_numerical_removed %>% 
   pivot_longer(cols = -c(group, heading),
                names_to = "decent homes criteria",
                values_to = "value") %>% 

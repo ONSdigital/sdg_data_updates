@@ -66,16 +66,20 @@ live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/mas
   janitor::clean_names()
 
 new_data <- csv_data %>% 
-  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
   mutate(Year = as.integer(Year),
          Value = as.numeric(Value),
          dataset = "new") %>% 
   janitor::clean_names()
-  
+
 # join to the new data
 joined_data <- live_data %>% 
   mutate(dataset = "live") %>% 
-  bind_rows(new_data)
+  bind_rows(new_data) %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
+  mutate(year = as.integer(year),
+         value = as.numeric(value))
+         
 
 unique(new_data$series) == unique(live_data$series)
 unique(new_data$decent_homes_criteria) == unique(live_data$decent_homes_criteria)
@@ -87,19 +91,92 @@ unique(new_data$decent_homes_criteria) == unique(live_data$decent_homes_criteria
 # live_data$length_of_residence
 # live_data$workless_households
 # live_data$poverty_status
+```
+
+```{r}
+
+filter_unused_out <- function(series_value, var1, var2) {
+  
+  standard_cols <- c("year", "value", "units", "series",
+                     "observation_status", "unit_multiplier",
+                     "dataset", var1, var2)
+  
+  series_selection <- joined_data %>% 
+    filter(series == series_value)
+  
+  # get just the columns we want to filter to be blank
+  disaggs <- setdiff(names(joined_data), standard_cols)
+  
+  for (i in 1:length(disaggs)) {
+    series_selection <- series_selection %>% 
+      filter(!!(as.name(disaggs[i])) == "" | is.na(!!(as.name(disaggs[i]))))
+  }
+  
+  return(series_selection)
+} 
+
+make_plot <- function(dat, var1, var2) {
+  
+  ggplot(dat,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+    geom_point() +
+    geom_line() +
+    facet_grid(vars({{var1}}), vars({{var2}})) +
+    theme_bw() 
+}
+```
 
 
-# plot the data
-plot <- joined_data %>% 
+### Series: Dwellings 
+#### Decent homes criteria by urbanisation sub-category
+```{r, echo = FALSE, fig.width=10}
+
+dwell_criteria_ur_plot <- filter_unused_out("Dwellings (%)" , 
+                                            "decent_homes_criteria", 
+                                            "urbanisation_sub_category") %>% 
+  make_plot(.,
+            decent_homes_criteria, urbanisation_sub_category)
+
+print(dwell_criteria_ur_plot)
+
+```
+
+#### Decent homes criteria by sub-national area
+```{r, echo = FALSE, fig.width=10}
+
+dwell_criteria_subnat_plot <- joined_data %>%
+  filter(series == "Dwellings (%)" &
+           (urbanisation_sub_category == "" | is.na(urbanisation_sub_category)) &
+           (region == "" | is.na(region)) &
+           (deprivation_decile  == "" | is.na(deprivation_decile)) &
+           (poverty_status == "" | is.na(poverty_status))) %>% 
+  plot_disaggs(test) +
+  facet_grid(decent_homes_criteria ~ sub_national_area) 
+
+print(dwell_criteria_subnat_plot)
+
+```
+
+```{r, echo = FALSE, fig.width=10}
+
+dwell_criteria_region_plot <- joined_data %>%
+  filter(series == "Dwellings (%)" &
+           (urbanisation_sub_category == "" | is.na(urbanisation_sub_category)) &
+           (sub_national_area == "" | is.na(sub_national_area)) &
+           (deprivation_decile  == "" | is.na(deprivation_decile)) &
+           (poverty_status == "" | is.na(poverty_status))) %>% 
   ggplot(.,
-         aes(x = Year,
-             y = Value,
+         aes(x = year,
+             y = value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_wrap(vars(Gas),
-             nrow = 2) +
+  facet_grid(decent_homes_criteria ~ region) +
   theme_bw() 
+
+suppressMessages(print(dwell_criteria_region_plot))
 
 ```
 

@@ -173,32 +173,46 @@ columns_order <- c("Urbanisation sub-category",
                    "Household composition",
                    "Income quintile (household)", "Length of residence",
                    "Poverty status", "Workless households",
+                   "Decent homes target group",
                    "Observation status")
+
+# If a column unexpectedly gets added to the source data, they will get dropped
+# during the ordering of the columns unless we account for them. The values 
+# associated with those columns will then look like headline figures, and it will
+# be tricky to figure out the issue. Hence inclusion of `unexpected_columns`
+unexpected_columns <- setdiff(names(correct_case),
+                              c(columns_order, 
+                                "Decent homes criteria", "Sub-national area", "Region",
+                                "Year", "Series", "Units", "Value"))
 
 if ("Region" %in% names(correct_case) & 
     "Sub-national area" %in% names(correct_case)){
   ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, Region,
-           all_of(columns_order), Value
+           all_of(columns_order), all_of(unexpected_columns),
+           Value
            )
 } else if ("Region" %in% names(correct_case)  & 
            "Sub-national area" %not_in% names(correct_case)) {
   ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, Region,
-           all_of(columns_order), Value)
+           all_of(columns_order), all_of(unexpected_columns),
+           Value)
 } else if ("Region" %not_in% names(correct_case)  & 
            "Sub-national area" %in% names(correct_case)) {
   ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, 
-           all_of(columns_order), Value)
+           all_of(columns_order), all_of(unexpected_columns),
+           Value)
 } else {
   ordered_data <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, 
-           all_of(columns_order), Value)
+           all_of(columns_order), all_of(unexpected_columns),
+           Value)
 }
 
 csv_data <- ordered_data %>% 

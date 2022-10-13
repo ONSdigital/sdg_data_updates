@@ -153,7 +153,12 @@ levels_renamed <- totals_as_blanks %>%
     `Sub-national area` = case_when(
       `Sub-national area` == "London and south east" ~"London and South East",
       `Sub-national area` == "Rest of england" ~ "Rest of England",
-      TRUE ~ `Sub-national area`)
+      TRUE ~ `Sub-national area`),
+    
+    `Ethnicity of household reference person (hrp)` = case_when(
+      grepl("All", `Ethnicity of household reference person (hrp)`) &
+        grepl("minority", `Ethnicity of household reference person (hrp)`) ~ "All minority",
+      TRUE ~ `Ethnicity of household reference person (hrp)`)
     )
 
 all_required_columns <- levels_renamed %>% 

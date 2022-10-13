@@ -74,7 +74,7 @@ if (output_folder_exists == FALSE) {
 
 date <- Sys.Date()
 csv_filename <- paste0(date, "_11-1-1.csv")
-# qa_filename <- paste0(date, "_x-x-x_checks.html") 
+qa_filename <- paste0(date, "_11-1-1_checks.html") 
 
 write.csv(csv_data, 
           paste0(output_folder, "/", csv_filename), 
@@ -82,9 +82,10 @@ write.csv(csv_data,
           na = "")
 
 
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('x-x-x_checks.Rmd', output_file = paste0('Output/', qa_filename))
-# 
+# If you have a QA document written in Rmarkdown this is how you can run it and save it
+rmarkdown::render('QA_11-1-1.Rmd', 
+                  output_file = paste0(output_folder, '/', qa_filename))
+
 # message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder),
 #                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
 

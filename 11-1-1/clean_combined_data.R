@@ -220,4 +220,5 @@ if ("Region" %in% names(correct_case) &
 }
 
 csv_data <- ordered_data %>% 
-  mutate(Value = round(Value, 2))
+  mutate(Value = round(Value, 2)) %>% 
+  distinct()

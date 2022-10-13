@@ -63,7 +63,15 @@ in the years you are updating.
 ```{r, echo = FALSE, fig.width=10}
 
 live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
-  janitor::clean_names()
+  janitor::clean_names() %>% 
+  # just while testing this needs to be in here as there is an error in the live data
+  mutate(remove = ifelse(series == "Dwellings (%)" &
+                          decent_homes_criteria == "" &
+                           urbanisation_sub_category == "Other urban centre", 
+                         TRUE, FALSE)) %>% 
+  filter(remove == FALSE) %>% 
+  select(-remove)
+
 
 new_data <- csv_data %>% 
   mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
@@ -83,26 +91,26 @@ joined_data <- live_data %>%
 ```
 
 ```{r}
-# functions for plotting
-
+# functions for making tables & plots of differences between live and new data
+# plots:
 filter_for_plot <- function(series_value, var1, var2) {
   
   standard_cols <- c("year", "value", "units", "series",
                      "observation_status", "unit_multiplier",
                      "dataset", var1, var2)
   
-  series_selection <- joined_data %>% 
+  series_filter <- joined_data %>% 
     filter(series == series_value)
   
   # get just the columns we want to filter to be blank
   disaggs <- setdiff(names(joined_data), standard_cols)
   
   for (i in 1:length(disaggs)) {
-    series_selection <- series_selection %>% 
+    series_filter <- series_filter %>% 
       filter(!!(as.name(disaggs[i])) == "" | is.na(!!(as.name(disaggs[i]))))
   }
   
-  return(series_selection)
+  return(series_filter)
 } 
 
 make_plot <- function(dat, var1, var2) {
@@ -116,6 +124,35 @@ make_plot <- function(dat, var1, var2) {
     facet_grid(vars({{var1}}), vars({{var2}})) +
     theme_bw() 
 }
+
+# tables
+
+calculate_differences <- function(dat, var1, var2) {
+  
+  dat %>% 
+    mutate(disagg_combo = paste(!!as.name(var1), ",", !!as.name(var2))) %>% 
+    select(year, series, disagg_combo,
+           dataset, value)  %>% 
+    pivot_wider(names_from = dataset,
+                values_from = value) %>% 
+    mutate(difference = new - live) %>% 
+    filter(difference != 0) %>%
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
+  
+}
+# and then to present it as a datatable
+create_datatable <- function (data) {
+  
+  datatable(data, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+}
+
 ```
 
 
@@ -123,14 +160,21 @@ make_plot <- function(dat, var1, var2) {
 #### Decent homes criteria by urbanisation sub-category
 ```{r, echo = FALSE, fig.width=10}
 
-dwell_criteria_ur_plot <- filter_for_plot("Dwellings (%)" , 
-                                          "decent_homes_criteria", 
-                                          "urbanisation_sub_category") %>% 
-  make_plot(.,
-            decent_homes_criteria, urbanisation_sub_category)
+dwell_urbanisation <- filter_for_plot("Dwellings (%)" , 
+                                     "decent_homes_criteria", 
+                                     "urbanisation_sub_category") 
 
-print(dwell_criteria_ur_plot)
+dwell_urbanisation_plot <- make_plot(dwell_urbanisation,
+                           decent_homes_criteria, urbanisation_sub_category)
 
+print(dwell_urbanisation_plot)
+
+```
+  
+```{r}
+dwell_urbanisation_diffs <- dwell_urbanisation %>% 
+  calculate_differences("decent_homes_criteria", 
+                                     "urbanisation_sub_category")
 ```
 
 #### Decent homes criteria by sub-national area
@@ -176,15 +220,18 @@ suppressMessages(print(dwell_imd_plot))
 #### Decent homes criteria by age of oldest person
 ```{r, echo = FALSE, fig.width=10}
 
-hh_old_plot <- filter_for_plot("Households (%)" , 
-                               "decent_homes_criteria", 
-                               "age_of_oldest_person") %>% 
-  make_plot(.,
-            decent_homes_criteria, age_of_oldest_person)
+hh_old <- filter_for_plot("Households (%)" , 
+                          "decent_homes_criteria", 
+                          "age_of_oldest_person") 
+
+hh_old_plot <- make_plot(hh_old,
+                         decent_homes_criteria, age_of_oldest_person)
 
 print(hh_old_plot)
 
 ```
+
+
   
 #### Decent homes criteria by age of youngest person
 ```{r, echo = FALSE, fig.width=10}
@@ -289,27 +336,20 @@ hh_workless_plot <- filter_for_plot("Households (%)" ,
 print(hh_workless_plot)
 
 ```
-
-
-```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot))
-```
-
-Finally, it is sometimes hard to see where new numbers don't match live numbers
-especially if there are lots of disaggregations. In such cases a table of 
-differences is also useful. The following example is taken from 13-2-2:
   
-  At the time of writing this code (June 2022), the following note is given in the
-  source notes tab: 'in these statistics the entire time series going back to 
-  1990 is revised each year to take account of methodological improvements'.  
-  
-  **If there are differences (see table below) please check that this still stands**
+## Differences between live and new data
+Differences may be due to revisions, but could also indicate an error in the 
+code.  
+**If there are differences please check that new data match source**
 
 ```{r, , echo = FALSE}
+
+disaggs <- setdiff(names(joined_data),
+                   c("units", "unit_multiplier", "observation_status"))
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+  select(all_of(disaggs)) %>% 
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
+              values_from = value) %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top

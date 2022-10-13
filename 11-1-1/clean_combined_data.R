@@ -18,7 +18,7 @@
 # If we decide not to keep all disaggregations we could remove them here using
 # strings that will only appear in those names ( as we don't know if the names
 # might change slightly in the future)
-unwanted_column_words <- paste(c("deprived districts"
+unwanted_column_words <- paste(c("deprived districts", "arget"
                                  #, "epriv", "omposition", "overty", "orkless", "ength"
                                  ), collapse = "|")
 unwanted_column_locs <- grep(unwanted_column_words, names(combined_data))
@@ -178,7 +178,6 @@ columns_order <- c("Urbanisation sub-category",
                    "Household composition",
                    "Income quintile (household)", "Length of residence",
                    "Poverty status", "Workless households",
-                   "Decent homes target group",
                    "Observation status")
 
 # If a column unexpectedly gets added to the source data, they will get dropped

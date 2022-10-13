@@ -80,22 +80,12 @@ joined_data <- live_data %>%
   mutate(year = as.integer(year),
          value = as.numeric(value))
          
-
-unique(new_data$series) == unique(live_data$series)
-unique(new_data$decent_homes_criteria) == unique(live_data$decent_homes_criteria)
-# Don't exist:
-# live_data$region 
-# live_data$urban_or_rural
-# live_data$deprivation_decile
-# live_data$household_composition
-# live_data$length_of_residence
-# live_data$workless_households
-# live_data$poverty_status
 ```
 
 ```{r}
+# functions for plotting
 
-filter_unused_out <- function(series_value, var1, var2) {
+filter_for_plot <- function(series_value, var1, var2) {
   
   standard_cols <- c("year", "value", "units", "series",
                      "observation_status", "unit_multiplier",
@@ -133,9 +123,9 @@ make_plot <- function(dat, var1, var2) {
 #### Decent homes criteria by urbanisation sub-category
 ```{r, echo = FALSE, fig.width=10}
 
-dwell_criteria_ur_plot <- filter_unused_out("Dwellings (%)" , 
-                                            "decent_homes_criteria", 
-                                            "urbanisation_sub_category") %>% 
+dwell_criteria_ur_plot <- filter_for_plot("Dwellings (%)" , 
+                                          "decent_homes_criteria", 
+                                          "urbanisation_sub_category") %>% 
   make_plot(.,
             decent_homes_criteria, urbanisation_sub_category)
 
@@ -146,37 +136,157 @@ print(dwell_criteria_ur_plot)
 #### Decent homes criteria by sub-national area
 ```{r, echo = FALSE, fig.width=10}
 
-dwell_criteria_subnat_plot <- joined_data %>%
-  filter(series == "Dwellings (%)" &
-           (urbanisation_sub_category == "" | is.na(urbanisation_sub_category)) &
-           (region == "" | is.na(region)) &
-           (deprivation_decile  == "" | is.na(deprivation_decile)) &
-           (poverty_status == "" | is.na(poverty_status))) %>% 
-  plot_disaggs(test) +
-  facet_grid(decent_homes_criteria ~ sub_national_area) 
+dwell_subnat_plot <- filter_for_plot("Dwellings (%)" , 
+                                                "decent_homes_criteria", 
+                                                "sub_national_area") %>% 
+  make_plot(.,
+            decent_homes_criteria, sub_national_area)
 
-print(dwell_criteria_subnat_plot)
+print(dwell_subnat_plot)
 
 ```
 
+#### Decent homes criteria by region
 ```{r, echo = FALSE, fig.width=10}
 
-dwell_criteria_region_plot <- joined_data %>%
-  filter(series == "Dwellings (%)" &
-           (urbanisation_sub_category == "" | is.na(urbanisation_sub_category)) &
-           (sub_national_area == "" | is.na(sub_national_area)) &
-           (deprivation_decile  == "" | is.na(deprivation_decile)) &
-           (poverty_status == "" | is.na(poverty_status))) %>% 
-  ggplot(.,
-         aes(x = year,
-             y = value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(decent_homes_criteria ~ region) +
-  theme_bw() 
+dwell_region_plot <- filter_for_plot("Dwellings (%)" , 
+                                                "decent_homes_criteria", 
+                                                "region") %>% 
+  make_plot(.,
+            decent_homes_criteria, region)
 
-suppressMessages(print(dwell_criteria_region_plot))
+suppressMessages(print(dwell_region_plot))
+
+```
+
+#### Decent homes criteria by IMD
+```{r, echo = FALSE, fig.width=10}
+
+dwell_imd_plot <- filter_for_plot("Dwellings (%)" , 
+                                                "decent_homes_criteria", 
+                                                "deprivation_decile") %>% 
+  make_plot(.,
+            decent_homes_criteria, deprivation_decile)
+
+suppressMessages(print(dwell_imd_plot))
+
+```
+
+### Series: Households
+#### Decent homes criteria by age of oldest person
+```{r, echo = FALSE, fig.width=10}
+
+hh_old_plot <- filter_for_plot("Households (%)" , 
+                               "decent_homes_criteria", 
+                               "age_of_oldest_person") %>% 
+  make_plot(.,
+            decent_homes_criteria, age_of_oldest_person)
+
+print(hh_old_plot)
+
+```
+  
+#### Decent homes criteria by age of youngest person
+```{r, echo = FALSE, fig.width=10}
+
+hh_young_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "age_of_youngest_person") %>% 
+  make_plot(.,
+            decent_homes_criteria, age_of_youngest_person)
+
+print(hh_young_plot)
+
+```
+
+#### Decent homes criteria by disability status (HH)
+```{r, echo = FALSE, fig.width=10}
+
+hh_disability_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "disability_status_household") %>% 
+  make_plot(.,
+            decent_homes_criteria, disability_status_household)
+
+print(hh_disability_plot)
+
+```
+
+#### Decent homes criteria by ethnicity (HH)
+```{r, echo = FALSE, fig.width=10}
+
+hh_ethnicity_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "ethnicity_of_household_reference_person_hrp") %>% 
+  make_plot(.,
+            decent_homes_criteria, ethnicity_of_household_reference_person_hrp)
+
+print(hh_ethnicity_plot)
+
+```
+
+#### Decent homes criteria by income
+```{r, echo = FALSE, fig.width=10}
+
+hh_income_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "income_quintile_household") %>% 
+  make_plot(.,
+            decent_homes_criteria, income_quintile_household)
+
+print(hh_income_plot)
+
+```
+
+#### Decent homes criteria by HH composition
+```{r, echo = FALSE, fig.width=10}
+
+hh_compostion_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "household_composition") %>% 
+  make_plot(.,
+            decent_homes_criteria, household_composition)
+
+print(hh_compostion_plot)
+
+```
+
+#### Decent homes criteria by length of residence
+```{r, echo = FALSE, fig.width=10}
+
+hh_reslength_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "length_of_residence") %>% 
+  make_plot(.,
+            decent_homes_criteria, length_of_residence)
+
+print(hh_reslength_plot)
+
+```
+
+#### Decent homes criteria by poverty status
+```{r, echo = FALSE, fig.width=10}
+
+hh_poverty_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "poverty_status") %>% 
+  make_plot(.,
+            decent_homes_criteria, poverty_status)
+
+print(hh_poverty_plot)
+
+```
+
+#### Decent homes criteria by workless HH
+```{r, echo = FALSE, fig.width=10}
+
+hh_workless_plot <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "workless_households") %>% 
+  make_plot(.,
+            decent_homes_criteria, workless_households)
+
+print(hh_workless_plot)
 
 ```
 

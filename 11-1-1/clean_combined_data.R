@@ -132,9 +132,9 @@ levels_renamed <- totals_as_blanks %>%
                                          `Urbanisation sub-category`),
     
     `Poverty status` = case_when(
-      grepl("no", `Poverty status`) ~ "Not living in poverty", 
-      grepl("no", `Poverty status`) == FALSE & 
-        grepl("in", `Poverty status`) ~ "Living in poverty",
+      grepl("no", tolower(`Poverty status`)) ~ "Not living in poverty", 
+      grepl("no", tolower(`Poverty status`)) == FALSE & 
+        grepl("in", tolower(`Poverty status`)) ~ "Living in poverty",
       TRUE ~ `Poverty status`),
     
     `Deprivation decile` = case_when(

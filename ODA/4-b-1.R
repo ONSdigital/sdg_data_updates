@@ -37,8 +37,6 @@ names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 csv <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
   mutate(Series = "Total official flows for scholarships, by recipient countries") %>% 
-  select(Year, Series, Sector, Country_income_classification, Type_of_study, 
-         Units, Value) %>% 
   replace(is.na(.), "") %>% 
   mutate(
     Type_of_study = ifelse(
@@ -46,8 +44,12 @@ csv <- gbp_data %>%
       "Upper Secondary Education", Type_of_study),
     Sector = ifelse(
       grepl("OTHER SOCIAL INFRASTRUCTURE AND SERVICES", Sector),
-      "Other social infrastructure and services", Sector
-    ))
+      "Other social infrastructure and services", Sector),
+    `Observation status` = "Normal value") %>% 
+  rename(`Country income classification` = Country_income_classification,
+         `Type of study` = Type_of_study) %>% 
+  select(Year, Series, Sector, `Country income classification`, `Type of study`, 
+         Units, `Observation status`, Value)
 
 rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
 

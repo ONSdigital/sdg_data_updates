@@ -25,7 +25,9 @@ names(constant_usd_data) <- str_to_sentence(names(constant_usd_data))
 
 csv <- gbp_data %>% 
   bind_rows(constant_usd_data) %>% 
-  select(Year, Country_income_classification, Units, Value) %>% 
-  replace(is.na(.), "")
+  rename(`Country income classification` = Country_income_classification) %>% 
+  mutate(`Observation status` = "Normal value") %>% 
+  replace(is.na(.), "") %>% 
+  select(Year, `Country income classification`, Units, `Observation status`, Value)
 
 scripts_run <- c(scripts_run, "8-a-1")

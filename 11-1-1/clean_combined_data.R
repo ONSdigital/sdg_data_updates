@@ -194,7 +194,7 @@ unexpected_columns <- setdiff(names(correct_case),
 
 if ("Region" %in% names(correct_case) & 
     "Sub-national area" %in% names(correct_case)){
-  ordered_data <- correct_case %>% 
+  ordered_cols <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, Region,
            all_of(columns_order), all_of(unexpected_columns),
@@ -202,25 +202,30 @@ if ("Region" %in% names(correct_case) &
            )
 } else if ("Region" %in% names(correct_case)  & 
            "Sub-national area" %not_in% names(correct_case)) {
-  ordered_data <- correct_case %>% 
+  ordered_cols <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, Region,
            all_of(columns_order), all_of(unexpected_columns),
            Value)
 } else if ("Region" %not_in% names(correct_case)  & 
            "Sub-national area" %in% names(correct_case)) {
-  ordered_data <- correct_case %>% 
+  ordered_cols <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, `Sub-national area`, 
            all_of(columns_order), all_of(unexpected_columns),
            Value)
 } else {
-  ordered_data <- correct_case %>% 
+  ordered_cols <- correct_case %>% 
     select(Year, Series, Units, 
            `Decent homes criteria`, 
            all_of(columns_order), all_of(unexpected_columns),
            Value)
 }
+
+# put disaggregation levels in the right order, as this determines the order 
+# they show up on the platform dropdowns
+ordered_data <- ordered_cols %>% 
+  arrange(Region)
 
 csv_data <- ordered_data %>% 
   mutate(Value = round(Value, 2)) %>% 

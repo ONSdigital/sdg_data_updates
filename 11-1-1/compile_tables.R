@@ -17,7 +17,11 @@ library('stringr')
 
 library('SDGupdater')
 
-source("config.R") 
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R") 
+}
 
 if (SDGupdater::get_characters_after_dot(areas_filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", areas_filename, "as an xlsx and re-run script"))

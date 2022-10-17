@@ -81,14 +81,13 @@ the code.
 
 live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
   janitor::clean_names() %>% 
-  # just while testing this needs to be in here as there is an error in the live data
-  mutate(remove = ifelse(series == "Dwellings (%)" &
-                          decent_homes_criteria == "" &
-                           urbanisation_sub_category == "Other urban centre", 
-                         TRUE, FALSE)) %>% 
-  filter(remove == FALSE) %>% 
-  select(-remove)
-
+  # # just while testing this needs to be in here as there is an error in the live data
+  # mutate(remove = ifelse(series == "Dwellings (%)" &
+  #                         decent_homes_criteria == "" &
+  #                          urbanisation_sub_category == "Other urban centre", 
+  #                        TRUE, FALSE)) %>% 
+  # filter(remove == FALSE) %>% 
+  # select(-remove)
 
 new_data <- csv_data %>% 
   mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
@@ -186,7 +185,7 @@ dwell_urbanisation <- filter_for_plot("Dwellings (%)" ,
 dwell_urbanisation_plot <- make_plot(dwell_urbanisation,
                            decent_homes_criteria, urbanisation_sub_category)
 
-print(dwell_urbanisation_plot)
+suppressMessages(print(dwell_urbanisation_plot))
 
 ```
   
@@ -207,7 +206,7 @@ dwell_subnat <- filter_for_plot("Dwellings (%)",
 dwell_subnat_plot <-  make_plot(dwell_subnat, 
                                 decent_homes_criteria, sub_national_area)
 
-print(dwell_subnat_plot)
+suppressMessages(print(dwell_subnat_plot))
 
 ```
 
@@ -267,7 +266,7 @@ hh_old <- filter_for_plot("Households (%)" ,
 hh_old_plot <- make_plot(hh_old,
                          decent_homes_criteria, age_of_oldest_person)
 
-print(hh_old_plot)
+suppressMessages(print(hh_old_plot))
 
 ```
 ```{r}
@@ -288,7 +287,7 @@ hh_young <- filter_for_plot("Households (%)" ,
 hh_young_plot <-  make_plot(hh_young,
                             decent_homes_criteria, age_of_youngest_person)
 
-print(hh_young_plot)
+suppressMessages(print(hh_young_plot))
 
 ```
 ```{r}
@@ -308,7 +307,7 @@ hh_disability <- filter_for_plot("Households (%)" ,
 hh_disability_plot <-  make_plot(hh_disability,
             decent_homes_criteria, disability_status_household)
 
-print(hh_disability_plot)
+suppressMessages(print(hh_disability_plot))
 
 ```
 ```{r}
@@ -328,7 +327,7 @@ hh_ethnicity <- filter_for_plot("Households (%)" ,
 hh_ethnicity_plot <-  make_plot(hh_ethnicity,
             decent_homes_criteria, ethnicity_of_household_reference_person_hrp)
 
-print(hh_ethnicity_plot)
+suppressMessages(print(hh_ethnicity_plot))
 
 ```
 ```{r}
@@ -349,7 +348,7 @@ hh_income <- filter_for_plot("Households (%)" ,
 hh_income_plot <-  make_plot(hh_income,
             decent_homes_criteria, income_quintile_household)
 
-print(hh_income_plot)
+suppressMessages(print(hh_income_plot))
 
 ```
 ```{r}
@@ -369,7 +368,7 @@ hh_compostion <- filter_for_plot("Households (%)" ,
 hh_compostion_plot <-  make_plot(hh_compostion,
             decent_homes_criteria, household_composition)
 
-print(hh_compostion_plot)
+suppressMessages(print(hh_compostion_plot))
 
 ```
 ```{r}
@@ -390,7 +389,7 @@ hh_reslength <- filter_for_plot("Households (%)" ,
 hh_reslength_plot <-  make_plot(hh_reslength,
                                 decent_homes_criteria, length_of_residence)
 
-print(hh_reslength_plot)
+suppressMessages(print(hh_reslength_plot))
 
 ```
 ```{r}
@@ -409,7 +408,7 @@ hh_poverty <- filter_for_plot("Households (%)" ,
 hh_poverty_plot <- make_plot(hh_poverty,
             decent_homes_criteria, poverty_status)
 
-print(hh_poverty_plot)
+suppressMessages(print(hh_poverty_plot))
 
 ```
 ```{r}
@@ -429,7 +428,7 @@ hh_workless <- filter_for_plot("Households (%)" ,
 hh_workless_plot <-  make_plot(hh_workless,
                                decent_homes_criteria, workless_households)
 
-print(hh_workless_plot)
+suppressMessages(print(hh_workless_plot))
 
 ```
 ```{r}

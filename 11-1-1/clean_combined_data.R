@@ -26,11 +26,14 @@ unwanted_columns <- names(combined_data)[unwanted_column_locs]
 
 # I'm sure there is a better way that doesn't use a loop but I cant think of it..
 unwanted_columns_removed <- combined_data
-for(i in 1:length(unwanted_columns)) {
-  unwanted_columns_removed <- unwanted_columns_removed %>%
-    filter(is.na(!!sym(unwanted_columns[i])) |
-             !!sym(unwanted_columns[i]) == "") %>%
-    select(-sym(unwanted_columns[i]))
+
+if (length(unwanted_columns) > 0) {
+  for(i in 1:length(unwanted_columns)) {
+    unwanted_columns_removed <- unwanted_columns_removed %>%
+      filter(is.na(!!sym(unwanted_columns[i])) |
+               !!sym(unwanted_columns[i]) == "") %>%
+      select(-sym(unwanted_columns[i]))
+  }
 }
 
 renamed_columns <- unwanted_columns_removed %>% 
@@ -156,9 +159,9 @@ levels_renamed <- totals_as_blanks %>%
       TRUE ~ `Sub-national area`),
     
     `Ethnicity of household reference person (hrp)` = case_when(
-      grepl("All", `Ethnicity of household reference person (hrp)`) &
-        grepl("minority", `Ethnicity of household reference person (hrp)`) ~ "All minority",
-      TRUE ~ `Ethnicity of household reference person (hrp)`)
+      grepl("all", tolower(`Ethnicity of household reference person (hrp)`)) &
+        grepl("minority", tolower(`Ethnicity of household reference person (hrp)`)) ~ "All minority",
+      TRUE ~ str_to_sentence(`Ethnicity of household reference person (hrp)`))
     )
 
 all_required_columns <- levels_renamed %>% 

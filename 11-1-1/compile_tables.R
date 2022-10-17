@@ -82,7 +82,7 @@ write.csv(csv_data,
           na = "")
 
 
-# If you have a QA document written in Rmarkdown this is how you can run it and save it
+# Run the QA file
 rmarkdown::render('QA_11-1-1.Rmd', 
                   output_file = paste0(output_folder, '/', qa_filename))
 

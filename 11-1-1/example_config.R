@@ -1,7 +1,13 @@
-# configurations for x-x-x
+# configurations for 11-1-1
 
-filename <- "xxx.xlsx"
+areas_filename <- "Example_areas.xlsx"
+households_filename <- "Example_households.xlsx"
 
-tabname <- "xxxx"
+areas_header_row <- 5
+households_header_row <- 5
 
-input_folder  <- "Input"
+tabnames <- c("2019", 
+              "2020")
+
+input_folder  <- "Example_input"
+output_folder  <- "Example_output"

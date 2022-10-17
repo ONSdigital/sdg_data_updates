@@ -63,20 +63,7 @@ The folder name you have given for indicator does not exist. Check you are using
 There is a typo in one of the tables in the `config.R` file.
   
 ```
-  
-```diff
-- Error: Problem with `mutate()` column `number_late_neonatal_deaths`.
-- i `number_late_neonatal_deaths = neonatal_number - early_neonatal_number`.
-- x object 'neonatal_number' not found  
-  
-You may have entered an existing, but incorrect table number. OR    
-  
-The headings of the table may have changed, or, for example, been split over multiple cells. 
-Check the source table headings look like those in previous releases. 
-If not, either adapt the code and test it on old and new data tables, or edit the excel file (the former is recommended).  
-
-```
-  
+    
 ```diff
 - Error in setwd(indicator) : cannot change working directory
   

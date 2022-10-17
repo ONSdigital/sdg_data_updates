@@ -48,14 +48,6 @@ If you get an error on the QA file, run it block by block. Any errors at this st
 
 ### TROUBLESHOOTING:
 Some possible errors (may not be an exact match) and solutions:    
-    
-```diff
-- Error in setwd(paste0("H:/Coding_repos/sdg_data_updates/", indicator)): 
-- cannot change working directory
-
-The folder name you have given for indicator does not exist. Check you are using '-' not '.' between the numbers.  
-  
-```  
   
 ```diff
 - Error: Sheets not found: "2017"  

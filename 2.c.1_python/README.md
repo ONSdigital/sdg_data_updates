@@ -1,0 +1,27 @@
+## Update 2-c-1 food price anomalies data
+  
+`2_c_1.py` pulls UK [consumer price inflation time series data](https://www.ons.gov.uk/economy/inflationandpriceindices) for all the food groups from the ONS website, 
+e.g. [all food](https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7c8/mm23?referrer=search&searchTerm=d7c8), 
+[bread](https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l52i/mm23?referrer=search&searchTerm=l52i) etc.   
+  
+It performs calculations for the food price anomalies index as described in the methodology document 
+[Identifying food price anomalies to support the Sustainable Development Goals](https://www.ons.gov.uk/economy/inflationandpriceindices/methodologies/identifyingfoodpriceanomaliestosupportthesustainabledevelopmentgoals).  
+  
+Finally, the data are formatted to fit the csv requirements of the [UK SDG data website](https://sdgdata.gov.uk/).
+  
+This script is currenlty only tested on UK data, but can be adapted for use by other countries.  
+  
+Unlike many of the automations in this repo, this one is written in Python (though could be converted to R if desired).
+
+
+### Instructions for updating 2-c-1 data
+   
+The script should only take a minute or so to run, but it does perform automatic downloads of data so times will vary depending on internet speed.
+Whilst downloads are happening it is a good idea to not use any other programs.  
+     
+1) Save `example_config.py` as `config.py`. ONS user should not need to edit the configurations.   
+2) Open `2_c_1.py` in e.g. Spyder, and click Run. A message will be displayed in the console when the csv file has been completed and saved. 
+Please note that a message box may appear when data are being downloaded. This may appear behind other windows on your desktop, 
+so if the download process does not occur (your browser will open and you will see the downloads appearing), 
+or the script is taking longer than a couple of minutes to run, please check for this message box.
+3) **Data team:** The csv QA can be performed by the person doing the update for this indicator - to do this, check that the output values match the values already in the indicator file. If they do, the new values will also be correct, so copy the csv into the Indicator file and proceed with the update as usual. If numbers do not match, investigate why this is the case. 

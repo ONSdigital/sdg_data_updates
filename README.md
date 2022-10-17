@@ -7,12 +7,9 @@ SustainableDevelopment@ons.gov.uk
 Links to source data can be found in the relevant indicator page on the [SDG data platform](https://sdgdata.gov.uk/) in the Sources tab.
   
 Automated updates have been written in either R or Python. Historically, code that used an API or weblink to a csv were written in Python,
-however choice of language is down to the preference of the author.  
+however choice of language is down to the preference of the author. Template codes for R are available in the templates folder. 
   
-For R, renv has been used to manage packages used in the project. See [Introduction to renv](https://rstudio.github.io/renv/articles/renv.html) 
-and [Collaborating with renv](https://rstudio.github.io/renv/articles/collaborating.html) for information. Packages were initially downloaded 
-from cran using R 4.0.2.    
-    
+   
 ## Instructions ##
 UK SDG data team: updates are run from the Jemalex > sdg_data_updates folder
   
@@ -46,14 +43,5 @@ Indicators updated with Python scripts have folder names that are the indicator 
 
 Use `update_python_indicator.py` to run all indicator update scripts. *Varun - does it have to be run from a project or does it work without?*
 
-#### developer notes ####
-*to do:*
-- *note about the difference between using api and download link and why we switched*
-- *links to useful documents (e.g. Ben's docs). If these are on the shared drive move them to sharepoint data_team > projects_across_indicators > automation*
-- *Anything else useful you can think of*
-
-Template files for R automations can be found in the template folder (currently in template branch)
 
 
-### To do ### 
-Manage dependencies using renv (all required packages are stored locally). 

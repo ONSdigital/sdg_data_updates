@@ -163,34 +163,39 @@ create_datatable <- function (data) {
 
 ### 1-a-1
 ```{r}
-joined_data_1a1 <- join_plot_data("1-a-1")
+try(joined_data_1a1 <- join_plot_data("1-a-1"))
 
 #----
-plot_1a1 <- basic_plot(joined_data_1a1) +
-  facet_wrap(vars(poverty_reduction_aid_type), nrow = 2) +
-  ggtitle("1-a-1 by poverty reduction aid type") +
-  ylab(unique(joined_data_1a1$units))
+try(
+  plot_1a1 <- basic_plot(joined_data_1a1) +
+    facet_wrap(vars(poverty_reduction_aid_type), nrow = 2) +
+    ggtitle("1-a-1 by poverty reduction aid type") +
+    ylab(unique(joined_data_1a1$units))
+)
 
 ```
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot_1a1))
+try(suppressMessages(print(plot_1a1)))
 
 ```
 
 ```{r, , echo = FALSE}
-
-comparison_data_1a1 <- joined_data_1a1 %>% 
-  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
-  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
-
-comparison_1a1 <- comparison_data_1a1 %>% 
-  select(year, poverty_reduction_aid_type,  
-         units, dataset, value) %>% 
-  calculate_differences()
-
-create_datatable(comparison_1a1)
+try(
+  comparison_data_1a1 <- joined_data_1a1 %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+)
+try(
+  comparison_1a1 <- comparison_data_1a1 %>% 
+    select(year, poverty_reduction_aid_type,  
+           units, dataset, value) %>% 
+    calculate_differences()
+)
+try(
+  create_datatable(comparison_1a1)
+)
 
 ```
   
@@ -463,7 +468,7 @@ suppressMessages(print(usd_plot_8a1))
 
 ```{r, , echo = FALSE}
 
-comparison_data_8a1 <- joined_data_1a1 %>% 
+comparison_data_8a1 <- joined_data_8a1 %>% 
   # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
   mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units)) %>% 
   mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))

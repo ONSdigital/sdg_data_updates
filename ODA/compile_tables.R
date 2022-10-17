@@ -42,11 +42,11 @@ date <- Sys.Date()
 # exchange rate and deflator data are imported using the gbp_to_constant_usd 
 # function so don't need to do that here
 new_oda_data <- read.csv(paste0(input_folder, "/", filename_newdat)) %>% 
-  mutate(across(where(is.factor), is.character))
+  mutate(across(where(is.factor), as.character))
 names(new_oda_data) <- tolower(names(new_oda_data))
 
 old_oda_data <- read.csv(paste0(input_folder, "/", filename_2017)) %>% 
-  mutate(across(where(is.factor), is.character)) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
   mutate(sectorpurposetext = "") # column not in older data. Required so 4-b-1 code runs on both old and new data.
 names(old_oda_data) <- tolower(names(old_oda_data))
 
@@ -131,8 +131,7 @@ for (i in 1:length(indicators)) {
   
   if (iteration_worked == TRUE) {
     csv_filename <- paste0(date, "_update_", indicators[i], ".csv")
-    write.csv(all_years, paste0(output_folder, "/", csv_filename), 
-              row.names = FALSE)
+    write.csv(all_years, paste0(output_folder, "/", csv_filename), row.names = FALSE)
     
   }
   

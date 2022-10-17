@@ -56,8 +56,8 @@ if ("1-a-1" %in% indicators) {
   gni_end_year <- format(Sys.Date(), "%Y")
   gni_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/TABLE1/12+12.1.1.1140+1160.N/all?startTime=",
                     gni_start_year, "&endTime=", gni_end_year)
-  gni_sdmx <- readSDMX(gni_api)
-  gni_data <- as.data.frame(gni_sdmx)
+  try(gni_sdmx <- readSDMX(gni_api))
+  try(gni_data <- as.data.frame(gni_sdmx))
 }
 
 # create stable column names based on elements of column names -----------------
@@ -109,7 +109,8 @@ for (i in 1:length(indicators)) {
     )
     
     try(
-      all_years <- bind_rows(all_years, csv)
+      all_years <- bind_rows(all_years, csv) %>% 
+        mutate(Value = round(Value, 3))
     )
     
   }

@@ -228,5 +228,5 @@ ordered_data <- ordered_cols %>%
   arrange(Region)
 
 csv_data <- ordered_data %>% 
-  mutate(Value = round(Value, 2)) %>% 
+  mutate(Value = round(Value, 1)) %>% 
   distinct()

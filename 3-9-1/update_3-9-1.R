@@ -63,8 +63,9 @@ csv_formatted <- deprivation %>%
       `Observation status` == "" ~ "Normal value",
       TRUE ~ as.character(`Observation status`))
   ) %>%
-  mutate(Value = round(Value, 2)) %>% 
+  mutate(Value = round(Value, 2),
+         Units = "Percentage (%)") %>% 
   arrange(`Local Authority`, Region, `Deprivation decile`, Year) %>%
   select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
-         GeoCode, `Observation status`, Value)  
+         GeoCode, `Observation status`, Units, Value)  
 

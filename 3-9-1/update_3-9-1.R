@@ -1,7 +1,7 @@
 # date: 24/10/2022
 
 
-required_data <- janitor::clean_names(new_data) %>% 
+required_data <- janitor::clean_names(dat) %>% 
   select(time_period,
          indicator_name, 
          area_code, area_name, area_type, 
@@ -45,6 +45,8 @@ deprivation <- geographies %>%
     grepl("Least", category) ~ "Decile 1 (least deprived)",
     TRUE ~ as.character(category)
   )) %>% 
+  filter(!grepl("ethnic", tolower(category_type)) &
+           !grepl("sex", tolower(category))) %>% 
   rename(`Deprivation decile` = category) 
 
 # format data for csv file -----------------------------------------------------
@@ -53,16 +55,18 @@ csv_formatted <- deprivation %>%
          GeoCode = area_code,
          `Local Authority` = LA,
          Year = year,
-         Value = value) %>% 
+         Value = value,
+         Series = series) %>% 
   mutate(
     `Observation status` = case_when(
       `Observation status` == "Value missing in source data" ~ "Missing value",
       `Observation status` == "" ~ "Normal value",
       TRUE ~ as.character(`Observation status`))
   ) %>%
+  mutate(Value = round(Value, 2)) %>% 
   arrange(`Local Authority`, Region, `Deprivation decile`, Year) %>%
-  select(Year,  Region, `Local Authority`, `Deprivation decile`,
-         GeoCode, `Observation status`, Value) 
+  select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
+         GeoCode, `Observation status`, Value)  
 
 
 # 

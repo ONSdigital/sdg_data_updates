@@ -15,7 +15,6 @@ library("dplyr")
 library("tidyr")
 
 source("example_config.R") 
-source("update_3-9-1.R") 
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -24,15 +23,32 @@ if (output_folder_exists == FALSE) {
   dir.create(output_folder)
 }
 
+# download and read in data ----------------------------------------------------
+old_data <- read.csv(old_link) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_squish)) 
+
+new_data <- read.csv(new_link) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_squish)) 
+
+datasets <- list(old_data, new_data)
+
+csv_compiled <- NULL
+
+for (i in 1:length(datasets)) {
+  dat <- datasets[[i]]
+  source("update_3-9-1.R")
+  
+  csv_compiled <- bind_rows(csv_compiled, csv_formatted)
+}
+
 date <- Sys.Date()
 
-# we add the date to the output file so that old outputs are not automatically overwritten.
-# However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
-# We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_type_4.csv")
-qa_filename <- paste0(date, "_update_type_4_checks.html") 
+csv_filename <- paste0(date, "_update_3-9-1.csv")
+qa_filename <- paste0(date, "_3-9-1_checks.html") 
 
-write.csv(csv_output, 
+write.csv(csv_compiled, 
           paste0(output_folder, "/", csv_filename), 
           row.names = FALSE,
           na = "")

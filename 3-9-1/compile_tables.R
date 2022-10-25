@@ -35,12 +35,16 @@ new_data <- read.csv(new_link) %>%
 datasets <- list(old_data, new_data)
 
 csv_compiled <- NULL
+required_compiled <- NULL
+deprivation_note_compiled <- NULL
 
 for (i in 1:length(datasets)) {
   dat <- datasets[[i]]
   source("update_3-9-1.R")
   
   csv_compiled <- bind_rows(csv_compiled, csv_formatted)
+  required_compiled <- bind_rows(required_compiled, required_data)
+  deprivation_note_compiled <- bind_rows(deprivation_note_compiled, deprivation_note)
 }
 
 date <- Sys.Date()

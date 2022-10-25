@@ -58,108 +58,124 @@ An example of what you may put in this section -
   
   
 ## Basic checks
-Use this section to highlight anything you think may have gone wrong in the 
-code. You may want to use chunks of code within this file to perform some basic 
-checks, or you may just pull in variables that were created in the main scripts 
-(like with the configurations above). 
+Deprivation deciles are based on different IMDs depending on the year. This 
+information should be checked in the metadata tab of the indicator file. If it
+doesn't match what is shown in the table below, please correct it.
 
-For example, when pulling data from nomis, where there are multiple year
-types (e.g. Jan to Dec, Apr to March etc), it may not be clear just from the 
-output which data have been pulled from nomis. In such a case this section may read:
+```{r}
+print(deprivation_note_compiled)
 
-  We should only use data for the calendar year (Jan-Dec). The months contained in 
-  the data for this run are: `r unique_months_retained`.  If the given months are 
-  incorrect please check the nomis selections are correct, and regenerate the link 
-  (see the 3-c-1 README file).  
-
-You can create a statement that is printed in the file only if a certain 
-condition has been met. For example, in 2-c-1 two datasets feed into the csv, 
-and they are released at different times. You may want to therefor make the 
-person doing the update aware that one dataset is not yet released:
-
-```{r, include=FALSE}
-
-# # in this example from 2-c-1, not_all_data_available is a variable created in 
-# # the main code (copied and hashed out below for demonstration only).
-# # not_all_data_available is TRUE if the most recent year of one dataset was 
-# # different to the most recent year in the other dataset, and FALSE if they 
-# # both go up to the same year:
-#
-# if (length(unique(max_years$max_year)) > 1) {
-#   not_all_data_available <- TRUE
-#   dataset_behind <- max_years$dataset[max_years$max_year == full_data_max_year]
-# } else {
-#   not_all_data_available <- FALSE
-# }
-
-if (not_all_data_available == TRUE) {
-  print(paste("NOTE: Data for", dataset_behind, "data are only available up to", 
-              max_years$max_year[max_years$dataset == dataset_behind], 
-              ", though data for", max_years$dataset[max_years$dataset != dataset_behind],
-              "are available up to", max_years$max_year[max_years$dataset != dataset_behind]))
-}
 ```
-  
-In other updates, this section may be much more basic, for example just checking 
-that the geography given in the table title matches the geography in the output. 
-For example you may include something like:
-
-  The geography listed in the information at the top of 
-  `r paste0(filename, ", table ", tab_name)` is `r country`. Please check that 
-  this matches the geography given in the indicator file metadata.  
-     
-Sometimes, there may not be anything that needs to go in here, in which case 
-feel free to leave the section out.  
+   
+age is `r unique(required_compiled$age)`  
+sex is `r unique(required_compiled$sex)`  
 
 ## Plots
-The plots are one of the most important parts of the QA file. If anything has 
-gone wrong in the automation it will show up on the plots. Below is an example
-plots section:  
+Please check the plots below for any differences between the live data (which 
+is pulled in from the live site) and the new data.  
   
-  Please check the plots below for any differences between the live data (which 
-  is pulled in from Jemalex) and the new data.  
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
+
+```{r}
+# functions for making tables & plots of differences between live and new data
+# plots:
+filter_for_plot <- function(series_value, var1, var2) {
   
-  Live data will appear over the top of new data. You should therefore only 
-  see points for the live data for previous years and only points for the new data 
-  in the years you are updating. 
+  standard_cols <- c("year", "value", "units", "series",
+                     "observation_status", "unit_multiplier",
+                     "dataset", var1, var2)
+  
+  series_filter <- joined_data %>% 
+    filter(series == series_value)
+  
+  # get just the columns we want to filter to be blank
+  disaggs <- setdiff(names(joined_data), standard_cols)
+  
+  for (i in 1:length(disaggs)) {
+    series_filter <- series_filter %>% 
+      filter(!!(as.name(disaggs[i])) == "" | is.na(!!(as.name(disaggs[i]))))
+  }
+  
+  return(series_filter)
+} 
+make_plot <- function(dat, var1, var2) {
+  
+  ggplot(dat,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+    geom_point() +
+    geom_line() +
+    facet_grid(vars({{var1}}), vars({{var2}})) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45,
+                                     vjust = 1, hjust = 1))
+}
+# tables
+calculate_differences <- function(dat, var1, var2) {
+  
+  dat %>% 
+    mutate(disagg_combo = paste(!!as.name(var1), ",", !!as.name(var2))) %>% 
+    select(year, series, disagg_combo,
+           dataset, value)  %>% 
+    pivot_wider(names_from = dataset,
+                values_from = value) %>% 
+    mutate(difference = new - live) %>% 
+    filter(difference != 0) %>%
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
+  
+}
+# and then to present it as a datatable
+create_datatable <- function (data) {
+  
+  datatable(data, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 3,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+}
+```
 
 ```{r, echo = FALSE, fig.width=10}
 
-# This example is taken from the 13-2-2 update because it is a straightforward
-# one.
-#
-# Some will be more complex, for example when there are multiple disaggregations.
-# See the 3-c-1 QA.Rmd file for an example of more complex QA plots
-#
-# Note that you may have improved the indicator at the same time as updating it
-# when writing the automation. If this is the case, the plots code you write for 
-# the first round of checks may need to be slightly different to how it will 
-# need to be in future years. So you will need to check the Rmd file works
-# with 'live' data that looks like the new data (for testing you could pull the 
-# 'live' data from the in progress file once you have put the new csv in there).
+# do this properly once new data are live - at the moment the two are too
+# different to code easily. Figures that are calculated the same do match.
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv') %>%
-  janitor::clean_names()
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_3-9-1.csv') %>%
+  janitor::clean_names() %>% 
+  mutate(dataset = "live") %>% 
+  mutate(across(where(is.character), str_squish)) 
 
-new_data <- csv_formatted %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new") %>%
-  janitor::clean_names() 
-  
+# local authority is different in the new data
+
+new_data <- read.csv(paste0(output_folder, "/", csv_filename)) %>%
+  janitor::clean_names() %>% 
+  mutate(dataset = "new") %>% 
+  mutate(across(where(is.character), str_squish)) 
+
 # join to the new data
 joined_data <- live_data %>% 
-  mutate(dataset = "live") %>% 
-  bind_rows(new_data)
+  bind_rows(new_data) %>% 
+  mutate(region = ifelse(region == "England", "", region))
 
 # plot the data
-plot <- joined_data %>% 
+joined_data %>% 
+  filter(#(is.na(region) | region == "") & 
+           (is.na(local_authority) | local_authority == "") & 
+           (is.na(county) | county == "") &
+           (is.na(deprivation_decile) | deprivation_decile == "")) %>%  
   ggplot(.,
-         aes(x = Year,
-             y = Value,
+         aes(x = year,
+             y = value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_wrap(vars(Gas),
+  facet_wrap(vars(region),
              nrow = 2) +
   theme_bw() 
 

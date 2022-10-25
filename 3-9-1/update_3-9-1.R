@@ -68,7 +68,3 @@ csv_formatted <- deprivation %>%
   select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
          GeoCode, `Observation status`, Value)  
 
-
-# 
-# for QA - age is `r unique(required_data$age)`
-# for QA - sex is `r unique(required_data$sex)`

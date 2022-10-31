@@ -50,7 +50,21 @@ deprivation <- geographies %>%
   rename(`Deprivation decile` = category) 
 
 # format data for csv file -----------------------------------------------------
+
+deprivation_order <- tibble("order" = c(1:10),
+                            "Deprivation decile" = c("Decile 1 (least deprived)",
+                                                     "Decile 2",
+                                                     "Decile 3",
+                                                     "Decile 4",
+                                                     "Decile 5",
+                                                     "Decile 6",
+                                                     "Decile 7",
+                                                     "Decile 8",
+                                                     "Decile 9",
+                                                     "Decile 10 (most deprived)"))
+
 csv_formatted <- deprivation %>%
+  left_join(deprivation_order, by = "Deprivation decile") %>% 
   rename(`Observation status` = value_note,
          GeoCode = area_code,
          `Local Authority` = LA,
@@ -65,7 +79,7 @@ csv_formatted <- deprivation %>%
   ) %>%
   mutate(Value = round(Value, 2),
          Units = "Percentage (%)") %>% 
-  arrange(`Local Authority`, Region, `Deprivation decile`, Year) %>%
+  arrange(Year, order,`Local Authority`, Region) %>%
   select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
          GeoCode, `Observation status`, Units, Value)  
 

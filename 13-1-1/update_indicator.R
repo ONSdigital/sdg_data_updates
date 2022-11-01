@@ -16,6 +16,27 @@ nomis_mortality <- read.csv(nomis_mortality_link) %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
+ons_deaths1 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons1, colNames = FALSE) %>%
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish))  
+
+ons_deaths2 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons2, colNames = FALSE) %>%
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish))  
+
+ons_deaths3 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons3, colNames = FALSE) %>%
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish))  
+
+# In hindsight just this table is probably sufficient but I found it easier to use all four
+ons_deaths4 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons4, colNames = FALSE) %>%
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish))  
+
 # ons_disaster_deaths <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons_disaster_deaths_tab, colNames = FALSE) %>%
 #   mutate(across(where(is.factor), as.character)) %>% 
 #   mutate(across(where(is.character), str_to_sentence)) %>% 
@@ -99,29 +120,6 @@ get_cod_aggregates <- function(df){
   return(combinations)
 }
 
-# Load the 4 ONS tabs ------
-
-ons_deaths1 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons1, colNames = FALSE) %>%
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish))  
-
-ons_deaths2 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons2, colNames = FALSE) %>%
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish))  
-
-ons_deaths3 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons3, colNames = FALSE) %>%
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish))  
-
-ons_deaths4 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons4, colNames = FALSE) %>%
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish))  
-
-
 # Clean up the ons_deaths tables -----
 # ons_deaths1 is all COD all sex (no MALE AND FEMALE aggregate supplied)
 header_ons_1 <- which(ons_deaths1$X1 == "Country")
@@ -201,7 +199,7 @@ ons_deaths3 <- ons_deaths3 %>%
   mutate(Value = as.numeric(Value)) %>% 
   mutate(Series = "Number of deaths from exposure to forces of nature") %>%
   mutate(Sex = "") %>% 
-  mutate(`Cause of death` = lapply(`Cause of death`, recode_disaster)) %>% 
+  mutate(`Cause of death` = lapply(`Cause of death`, recode_disaster)) %>%
   mutate(`Unit multiplier` = "") %>%  # Blank column, multiplier is zero
   mutate(Units = "Number") %>% 
   mutate(`Observation status` = "Normal value") %>% 
@@ -385,106 +383,8 @@ combined_data <- combined_data %>%
   mutate(`Cause of death` = ifelse(Series=="Age-standardised mortality rates per 100,000 population", "", `Cause of death`))
 
 # Remove the duplicate rows
-
-#combined_data <- combined_data[!duplicated(combined_data),]
-
-# # In case there are examples where Country, Sex, etc are the same but diff Value
+# In case there are examples where Country, Sex, etc are the same but different Value
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
 combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
 
-# 
-# 
-# 
-# ### Perform some tests ###
-# # There should be a value for each series for each Year, Country, Sex and COD
-# 
-# # Take the deaths first
-# deaths <- combined_data %>% filter(Series=="Number of deaths from exposure to forces of nature")
-# 
-# for(y in unique(deaths$Year)){
-#   for(c in unique(deaths$`Cause of death`)){
-#     for(s in unique(deaths$Sex)){
-#       for(cty in unique(deaths$Country)){
-#         if(is.na(deaths %>% filter(Year==y, `Cause of death`==c, Sex==s, Country==cty) %>% select(Value)))
-#           {
-#             print(paste("Missing value at", y, c, s, cty, sep=" "))
-#         }
-#       }
-#     }
-#   }
-# }
-# 
-# 
-# 
-# 
-# # The above test doesn't seem to detect any missing values
-# 
-# morts <- combined_data %>% filter(Series=="Age-standardised mortality rates per 100,000 population")
-# 
-# for(y in unique(morts$Year)){
-#   for(s in unique(morts$Sex)){
-#     if(is.na(morts %>% filter(Year==y, Sex==s) %>% select(Value)))
-#     {
-#       print(paste("Missing value at", y, s, sep=" "))
-#     }
-#   }
-# }
-# 
-# # nrows of var_comb is 2106, matching the output
-# # This is the number of unique combinations of all variables but Value
-# # Are there any combinations we shouldn't have?
-# all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
-# var_comb <- unique(combined_data[all_cols_but_val])
-# 
-# # Let's remove GeoCode too since we don't want England with Wales GeoCode e.g.
-# 
-
 save.image("img.RData")
-
-# # Check the output mattches the online data----
-# 
-# original <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/13-1-1.csv", check.names = FALSE)
-# 
-# # Remove the mortality for 2001-2012 for original
-# 
-# original <- original %>%
-#   mutate(Year=as.integer(Year)) %>% 
-#   rename(Units=`Unit measure`) %>% 
-#   mutate(Value = as.integer(Value)) %>% 
-#   mutate(Series = as.character(Series)) %>% 
-#   mutate(Country = as.character(Country)) %>% 
-#   mutate(Sex = as.character(Sex)) %>% 
-#   mutate(`Cause of death` = as.character(`Cause of death`)) %>% 
-#   mutate(Units = as.character(Units)) %>% 
-#   mutate(GeoCode = as.character(GeoCode))
-#   select(Year, Series, `Cause of death`, Country, Sex, `Observation status`, `Unit multiplier`, `Units`, GeoCode, Value)
-# 
-# new <- combined_data
-# 
-# combinations <- unique(new[c("Country", "Year", "Series", "Sex", "Cause of death")])
-# combinations <- combinations %>% 
-#   filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
-#   filter(Year<=2020)
-# 
-# matches <- c()
-# misses <- c()
-# 
-# for(i in 1:nrow(combinations)){
-#   cty = combinations[i,]$Country
-#   yr = combinations[i,]$Year
-#   ser = combinations[i,]$Series
-#   sx = combinations[i,]$Sex
-#   cod = combinations[i,]$`Cause of death`
-#   
-#   # if(original %>% filter(Country==cty, Year==yr, Series==ser, Sex==sx, `Cause of death`==cod) == new %>% filter(Country==cty, Year==yr, Series==ser, Sex==sx, `Cause of death`==cod)){
-#   #   matches <- matches + 1
-#   # }
-#   # else{
-#   #   misses <- misses + 1
-#   # }
-#   
-#   
-# }
-# 
-# print(matches)
-# print(misses)

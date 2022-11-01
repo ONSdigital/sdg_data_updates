@@ -75,7 +75,7 @@ update_indicator has removed all rows which are duplicated on everything but Val
 nrow(combined_data) == nrow(combined_data[c("Country", "Year", "Sex", "Cause of death", "Series")])
 ```
 
-Now let's fetch the original data and compare it to our updated set. Unless values for previous years have been amended, the two datasets should differ only in the adding of extra rows for the newly included years. Below is a table of the 
+Now let's fetch the original data and compare it to our updated set. Unless values for previous years have been amended, the two datasets should differ only in the adding of extra rows for the newly included years.  
 
 ```{r echo=FALSE}
 original_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-1-1.csv", check.names = FALSE)
@@ -101,7 +101,7 @@ print(paste("The number of rows in the older data is: ", nrow(original_data)))
 print(paste("The number of rows in the updated data is: ", nrow(combined_data)))
 
 diff <- anti_join(combined_data, original_data, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
-print(nrow(diff))
+print("If there are no inconsistencies then the table below should be empty")
 knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
 
 # For future updates use the code below ----

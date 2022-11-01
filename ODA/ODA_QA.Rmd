@@ -1,0 +1,629 @@
+---
+title: "QA of ODA indicator data"
+author: "Emma Wood"
+date: "25/07/2022"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(pander)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+
+Most of the ODA indicators use the same source: 
+[Statistics on International Development (SID) Final UK Aid Spend](https://www.gov.uk/government/statistics/statistics-on-international-development-final-uk-aid-spend-2020).
+This code has not been tested on the provisional data set, only the final spend.
+   
+It therefore makes sense to use automation to update these all at the same time,
+even though most of them are very straightforward.   
+  
+This file records which indicators were run, shows which indicators failed (if 
+any), and shows how the new data compare to the live data on charts.    
+  
+Please check the source data for any footnotes.
+  
+## Configurations
+
+The input filepaths used for this output are:  
+
+- ODA new data: **`r paste0(getwd(), "/", input_folder, "/", filename_newdat)`**
+- ODA archived data: **`r paste0(getwd(), "/", input_folder, "/", filename_2017)`**
+- Exchange rates: **`r paste0(getwd(), "/", input_folder, "/", exchange_filename)`**
+- Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**
+- GNI url (for 1-a-1) **`r gni_api`**
+  
+The following indicators were included in the run:  
+**`r indicators`**. See the next section to see if they all ran successfully.  
+  
+Indicator specific settings are:
+- 2-a-2 broad sector code: **`r as.character(broad_sector_code_2a2)`**  
+- 3-b-2 broad sector code: **`r as.character(broad_sector_code_3b2)`**  
+- 3-b-2 CRS code (sector purpose code): **`r as.character(crs_code_3b2)`**  
+- 4-b-1 type of aid code: **`r as.character(type_of_aid_code_4b1)`**    
+- 6-a-1 broad sector code: **`r as.character(broad_sector_code_6a1)`**  
+- 6-a-1 CRS code (sector purpose code): **`r as.character(crs_code_6a1)`**  
+- 7-a-1 CRS codes: **`r as.character(crs_codes_7a1)`**  
+- 8-a-1 broad sector code: **`r as.character(broad_sector_code_8a1)`**  
+- 9-a-1 SID sector: **` r as.character(sid_sector_9a1)`**     
+  
+The outputs are saved in: **`r  paste0(getwd(), "/",output_folder)`**  
+  
+  
+## Basic checks
+
+```{r}
+failed_scripts <- setdiff(indicators, scripts_run)
+
+if (length(failed_scripts) > 0) {
+  print("The following indicators were not produced because they encountered an error:")
+  failed_scripts
+} else {
+  print("All scripts ran successfully")
+}
+
+
+```
+
+## Differences between live data and new data
+
+Please check the plots below for any differences between the live data (which 
+is pulled in from the master branch of the sdg-data github repo) and the new data.  
+  
+New data will appear over the top of currently live data. 
+  
+Note that plots for constant USD show differences due to changes in the deflator
+values (where the base year has changed). Because of this, data for 
+**all years** must be copied over to the indicator file.
+
+It is sometimes hard to see where new numbers don't match live numbers
+especially if there are lots of disaggregations.
+The tables below the plots show all instances where the old values do not match 
+the new values. Each table is sorted so the largest absolute differences appear 
+first, but can be sorted and filtered in other ways using the arrows at the top. 
+As we expect changes in USD but not GBP, it is worth filtering for GBP.
+
+```{r}
+# function to join live data to the newly created data
+join_plot_data <- function(indicator) {
+  
+  live_data_link <- paste0(
+    'https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_',
+    indicator, '.csv')
+  
+  new_csv <- get(
+    paste0('csv_', 
+           str_remove_all(indicator, '-'))
+  )
+  
+  live_data <- read.csv(live_data_link) %>% 
+    janitor::clean_names()
+  
+  new_data <- new_csv %>% 
+    mutate(Year = as.integer(Year),
+           dataset = "new") %>% 
+    janitor::clean_names()
+  
+  joined_data <- live_data %>% 
+    mutate(dataset = "live") %>%
+    bind_rows(new_data)
+  
+  return(joined_data)
+  
+}
+
+basic_plot <- function(data) {
+  ggplot(data,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  theme_bw() 
+}
+```
+
+```{r}
+# function to calculate difference between live and new data, and order the 
+# table so the largest absolute differences are at the top
+calculate_differences <- function(data) {
+  
+  data %>% 
+    pivot_wider(names_from = dataset,
+                values_from = value) %>% 
+    mutate(difference = new - live) %>% 
+    filter(difference != 0) %>%
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
+  
+}
+
+# and then to present it as a datatable
+create_datatable <- function (data) {
+  
+  datatable(data, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+}
+
+```
+
+
+### 1-a-1
+```{r}
+try(joined_data_1a1 <- join_plot_data("1-a-1"))
+
+#----
+try(
+  plot_1a1 <- basic_plot(joined_data_1a1) +
+    facet_wrap(vars(poverty_reduction_aid_type), nrow = 2) +
+    ggtitle("1-a-1 by poverty reduction aid type") +
+    ylab(unique(joined_data_1a1$units))
+)
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+try(suppressMessages(print(plot_1a1)))
+
+```
+
+```{r, , echo = FALSE}
+try(
+  comparison_data_1a1 <- joined_data_1a1 %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+)
+try(
+  comparison_1a1 <- comparison_data_1a1 %>% 
+    select(year, poverty_reduction_aid_type,  
+           units, dataset, value) %>% 
+    calculate_differences()
+)
+try(
+  create_datatable(comparison_1a1)
+)
+
+```
+  
+### 2-a-2
+```{r}
+joined_data_2a2 <- join_plot_data("2-a-2")
+
+# by country_income_classification (GBP)
+gbp_plot_2a2 <- joined_data_2a2 %>% 
+  filter(grepl("GBP", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 2) +
+  ggtitle("2-a-2 by country income classification (GBP 000's)") 
+
+# by country_income_classification (USD)
+usd_plot_2a2 <- joined_data_2a2 %>% 
+  filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 2) +
+  ggtitle("2-a-2 by country income classification (constant USD 000's)")
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_2a2))
+suppressMessages(print(usd_plot_2a2))
+
+```
+
+```{r, , echo = FALSE}
+
+comparison_data_2a2 <- joined_data_2a2 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_2a2 <- comparison_data_2a2 %>% 
+  select(year, country_income_classification,  
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_2a2)
+
+```
+  
+### 3-b-2
+```{r}
+
+joined_data_3b2 <- join_plot_data("3-b-2")
+
+#----
+
+gbp_plot_3b2 <- joined_data_3b2 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_grid(aid_description_crs_code ~ country_income_classification) +
+  ggtitle("3-b-2 by country income classification and aid type (GBP)")
+
+usd_plot_3b2 <- joined_data_3b2 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_grid(aid_description_crs_code ~ country_income_classification) +
+  ggtitle("3-b-2 by country income classification and aid type (USD 000's)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_3b2))
+suppressMessages(print(usd_plot_3b2))
+
+```
+
+```{r, , echo = FALSE}
+
+comparison_data_3b2 <- joined_data_3b2 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_3b2 <- comparison_data_3b2 %>% 
+  select(year, country_income_classification, aid_description_crs_code,
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_3b2)
+
+```
+  
+
+### 4-b-1
+```{r}
+
+joined_data_4b1 <- join_plot_data("4-b-1")
+
+# by cic
+cic_plot_4b1 <- joined_data_4b1 %>% 
+  filter((is.na(type_of_study) | type_of_study == "") & 
+           (is.na(sector) | sector == "") & 
+           substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("4-b-1 by country income classification (GBP 000s)")
+
+# by sector
+sector_plot_4b1 <- joined_data_4b1 %>% 
+  filter((is.na(type_of_study) | type_of_study == "") & 
+           (is.na(country_income_classification) | country_income_classification == "") & 
+           substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(sector), nrow = 3) +
+  ggtitle("4-b-1 by sector (GBP 000s)") 
+
+# by type of study
+study_plot_4b1 <- joined_data_4b1 %>% 
+  filter((is.na(country_income_classification) | country_income_classification == "") & 
+           sector == "Education" & 
+           substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(type_of_study), nrow = 3) +
+  ggtitle("4-b-1 by type of study (GBP 000s)")
+
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(cic_plot_4b1))
+suppressMessages(print(sector_plot_4b1))
+suppressMessages(print(study_plot_4b1))
+```
+
+```{r, , echo = FALSE}
+
+# at time of writing, the live data didn't include USD, so the pivot wider below
+# didn't work correctly, so need to make sure the live and new datasets contain the same info
+USD_in_live_4b1 <- TRUE %in% grepl("USD", unique(joined_data_4b1$units[joined_data_4b1$dataset == "live"]))
+if (USD_in_live_4b1 == FALSE) {
+  comparison_data_4b1 <- joined_data_4b1 %>% 
+    filter(grepl("USD", units) == FALSE) %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units))
+} else {
+  comparison_data_4b1 <- joined_data_4b1 %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+}
+
+comparison_4b1 <- comparison_data_4b1 %>% 
+  select(year, sector, type_of_study, country_income_classification, 
+         units, dataset, value) %>% 
+  calculate_differences()
+
+create_datatable(comparison_4b1)
+
+
+```
+  
+
+### 6-a-1
+```{r}
+
+joined_data_6a1 <- join_plot_data("6-a-1")
+
+#----
+
+gbp_plot_6a1 <- joined_data_6a1 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("6-a-1 by country income classification (GBP)")
+
+usd_plot_6a1 <- joined_data_6a1 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("6-a-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_6a1))
+suppressMessages(print(usd_plot_6a1))
+
+```
+  
+```{r, , echo = FALSE}
+
+comparison_data_6a1 <- joined_data_6a1 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_6a1 <- comparison_data_6a1 %>% 
+  select(year, country_income_classification, 
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_6a1)
+
+```
+  
+### 7-a-1
+```{r}
+
+joined_data_7a1 <- join_plot_data("7-a-1")
+
+#----
+
+gbp_plot_7a1 <- joined_data_7a1 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("7-a-1 by country income classification (GBP)")
+
+usd_plot_7a1 <- joined_data_7a1 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("7-a-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_7a1))
+suppressMessages(print(usd_plot_7a1))
+
+```
+```{r, , echo = FALSE}
+
+comparison_data_7a1 <- joined_data_7a1 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_7a1 <- comparison_data_7a1 %>% 
+  select(year, country_income_classification, 
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_7a1)
+
+```
+  
+### 8-a-1
+```{r}
+
+joined_data_8a1 <- join_plot_data("8-a-1") 
+
+# GBP
+gbp_plot_8a1 <- joined_data_8a1 %>% 
+    filter(grepl("GBP", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 2) +
+  ggtitle("8-a-1 by country income classification (GBP 000's)") 
+
+# USD
+usd_plot_8a1 <- joined_data_8a1 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 2) +
+  ggtitle("8-a-1 by country income classification (USD 000's)") 
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_8a1))
+suppressMessages(print(usd_plot_8a1))
+
+```
+
+```{r, , echo = FALSE}
+
+comparison_data_8a1 <- joined_data_8a1 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GPB", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_8a1 <- joined_data_8a1 %>% 
+  select(year, country_income_classification,  
+         units, dataset, value) %>% 
+  calculate_differences()
+
+create_datatable(comparison_8a1)
+
+
+```
+  
+### 9-a-1
+```{r}
+
+joined_data_9a1 <- join_plot_data("9-a-1") %>% 
+  mutate(units = ifelse(is.na(units), unit_measure, units))
+
+#----
+
+gbp_plot_9a1 <- joined_data_9a1 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("9-a-1 by country income classification (GBP)")
+
+usd_plot_9a1 <- joined_data_9a1 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("9-a-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_9a1))
+suppressMessages(print(usd_plot_9a1))
+
+```
+```{r, , echo = FALSE}
+
+comparison_data_9a1 <- joined_data_9a1 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_9a1 <- comparison_data_9a1 %>% 
+  select(year, country_income_classification, 
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_9a1)
+
+```
+
+### 17-9-1
+```{r}
+
+joined_data_1791 <- join_plot_data("17-9-1") %>% 
+  mutate(units = ifelse(is.na(units), unit_measure, units))
+
+#----
+
+gbp_plot_1791 <- joined_data_1791 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("17-9-1 by country income classification (GBP)")
+
+usd_plot_1791 <- joined_data_1791 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("17-9-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_1791))
+suppressMessages(print(usd_plot_1791))
+
+```
+  
+```{r, , echo = FALSE}
+
+comparison_data_1791 <- joined_data_1791 %>% 
+  # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+  mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+  mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+
+comparison_1791 <- comparison_data_1791 %>% 
+  select(year, country_income_classification, 
+         units, dataset, value) %>% 
+    calculate_differences()
+
+create_datatable(comparison_1791)
+
+```
+### 17-19-1
+```{r}
+
+joined_data_17191 <- join_plot_data("17-19-1") %>% 
+  mutate(units = ifelse(is.na(units), unit_measure, units))
+
+#----
+
+gbp_plot_17191 <- joined_data_17191 %>% 
+  filter(substr(units, 1, 3) == "GBP") %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("17-9-1 by country income classification (GBP)")
+
+usd_plot_17191 <- joined_data_17191 %>% 
+    filter(grepl("USD", units)) %>% 
+  basic_plot(.) +
+  facet_wrap(vars(country_income_classification), nrow = 3) +
+  ggtitle("17-19-1 by country income classification (Constant USD)") 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(gbp_plot_17191))
+suppressMessages(print(usd_plot_17191))
+
+```
+  
+```{r, , echo = FALSE}
+try(
+  
+  comparison_data_17191 <- joined_data_17191 %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = 
+             ifelse(
+               grepl("USD", units) == TRUE, 
+               "Constant USD, thousands", units)) 
+)
+
+try(
+  comparison_17191 <- comparison_data_17191 %>% 
+    select(year, country_income_classification, 
+           units, dataset, value) %>% 
+    calculate_differences()
+)
+try(
+  create_datatable(comparison_17191)
+)
+```
+  
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
+pander(sessionInfo())
+

@@ -88,8 +88,8 @@ original_data <- original_data %>%
 original_data <- original_data %>%
   mutate(Year = as.integer(Year)) %>%
   filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
-  mutate(Year = as.character(Year)) %>% 
-  mutate(Value = as.integer(Value))
+  mutate(Year = as.character(Year)) %>%
+  mutate(Value = as.integer(Value)) 
 
 combined_data <- combined_data %>% 
   mutate(Year = as.integer(Year)) %>%

@@ -383,4 +383,4 @@ combined_data <- combined_data %>%
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
 combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
 
-save.image("img.RData")
+save.image("img.RData") 

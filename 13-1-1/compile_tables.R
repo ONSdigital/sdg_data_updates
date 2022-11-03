@@ -39,7 +39,7 @@ date <- Sys.Date()
 # we add the date to the output file so that old outputs are not automatically overwritten.
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, indicator, ".csv")
+csv_filename <- paste0(date, indicator, ".csv") 
 #csv_filename <- paste0(date, "_update_type_4.csv")
 qa_filename <- paste0(date, indicator, "-QA.html") 
 

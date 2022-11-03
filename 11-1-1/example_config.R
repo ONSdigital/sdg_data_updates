@@ -9,5 +9,5 @@ households_header_row <- 5
 tabnames <- c("2019", 
               "2020")
 
-input_folder  <- "Example_input"
-output_folder  <- "Example_output"
+input_folder  <- "Input"
+output_folder  <- "Output"

@@ -119,6 +119,8 @@ levels_renamed <- totals_as_blanks %>%
       `Age of oldest person` == "75 years or more" ~ "75 and over",
       TRUE ~ `Age of oldest person`),
     
+    `Length of residence` = str_replace(`Length of residence`, "-", " to "),
+    
     `Age of youngest person` = case_when(
       `Age of youngest person` == "Under 5 years" ~ "4 and under",
       `Age of youngest person` == "Under 16 years" ~ "15 and under",
@@ -170,7 +172,7 @@ all_required_columns <- levels_renamed %>%
 
 correct_case <- all_required_columns  %>% 
   mutate(`Decent homes criteria` = ifelse(
-    grepl("inimum", `Decent homes criteria`), "Minimum Standard (HHSRS)",
+    grepl("inimum", `Decent homes criteria`), "Minimum standard (HHSRS)",
     `Decent homes criteria`))
 
 columns_order <- c("Urbanisation sub-category", 

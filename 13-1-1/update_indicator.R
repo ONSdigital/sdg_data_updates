@@ -66,6 +66,7 @@ recode_disaster <- function(codeValue){
 get_GeoCode <- function(countryName){
   if(countryName=="England") {return("E92000001")}
   else if(countryName=="Wales") {return("W92000004")}
+  else if(countryName=="") {return("K04000001")}
   else {return("")}
 }
 
@@ -219,7 +220,7 @@ ons_deaths4 <- ons_deaths4 %>%
   tail(-header_ons_4)
 
 # Find the columns with COD codes e.g. X32
-cause_of_death_bool <- grepl("^[X][0-9][0-9]$", names(ons_deaths4))
+cause_of_death_bool <- grepl("^[X][0-9][0-9]$", names(ons_deaths4)) 
 cause_of_death_names <- names(ons_deaths4)[cause_of_death_bool]
 
 ons_deaths4 <- ons_deaths4 %>% 

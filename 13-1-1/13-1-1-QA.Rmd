@@ -106,6 +106,8 @@ knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Val
 
 # For future updates use the code below ----
 
+print("Below is a table of the non-matching rows for the original and updated data, it should only be populated for years which are later than are covered in the original data")
+
 # diff <- anti_join(combined_data, original_data, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
 # print(nrow(diff))
 # knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")

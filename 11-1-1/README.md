@@ -24,13 +24,15 @@ Example data can be run by setting `test_run` in update_inidcator_main.R to `TRU
         
 ### USER INSTRUCTIONS (SDG Data team):  
 
-1) Save household and dwelling spreadsheets as **xlsx** files in Jemalex/code for updates/11-1-1/Input. You may need to create the Input folder if one does not already exist.  
+1) Download the source data from the [Statistical data set on English Housing Survey data on dwelling condition and safety](https://www.gov.uk/government/statistical-data-sets/dwelling-condition-and-safety).
+'DA3202 Decent homes - areas' is for dwellings, and 'DA3203 Decent homes - households is for households'. 
+Save household and dwelling spreadsheets as **xlsx** files in Jemalex/code for updates/11-1-1/Input. You may need to create the Input folder if one does not already exist.  
 2) Open RStudio.  
 3) Go to File > Open Project, and open sdg_data_updates.Rproj.  
 4) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.  
 5) Change `indicator` to '11-1-1' (Dashes NOT dots).  
 6) Set `test_run` to 'FALSE'.  
-7) Open config.R in the 11-1-1 folder and check that all configurations are correct. For example, `input_folder` must be `'Input'`, not `'example_input'`.    
+7) If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Ensure `areas_filename` and `households_filename` in config.R match the filenames of your downloads in step 1. `input_folder` must be 'Input', not 'example_input'.    
 > The `header_row` settings refer to the row number of the main column names (the row number on which the headings 'non-decent', 'repair' etc are found).  
 8) Go back to update_indicator_main.R and click the 'source' button (in the top right of the top left window). This will run the code.  
 9) csv and html (QA) files will be exported to the output folder in 11-1-1.  

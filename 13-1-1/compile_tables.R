@@ -7,7 +7,7 @@
 
 # list the packages used in this automation - you may need to add some, 
 # depending on what you add to the code
-packages <- c("stringr", "dplyr", "tidyr", 'mgsub',# added fill.r
+packages <- c("stringr", "dplyr", "tidyr",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
 # install any packages that are not already installed

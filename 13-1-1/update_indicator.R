@@ -6,8 +6,8 @@
 
 
 # download and read in data ----------------------------------------------------
-nomis_deaths <- read.csv(nomis_disaster_deaths_link) %>% # RENAME THESE
-  mutate(across(where(is.factor), as.character)) %>% # are these needed?
+nomis_deaths <- read.csv(nomis_disaster_deaths_link) %>%
+  mutate(across(where(is.factor), as.character)) %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
@@ -36,11 +36,6 @@ ons_deaths4 <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons4, colNam
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish))  
-
-# ons_disaster_deaths <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons_disaster_deaths_tab, colNames = FALSE) %>%
-#   mutate(across(where(is.factor), as.character)) %>% 
-#   mutate(across(where(is.character), str_to_sentence)) %>% 
-#   mutate(across(where(is.character), str_squish))  
 
 # Clean up ons_disaster_deaths
 

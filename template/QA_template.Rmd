@@ -136,11 +136,13 @@ plots section:
 # with 'live' data that looks like the new data (for testing you could pull the 
 # 'live' data from the in progress file once you have put the new csv in there).
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv')
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv') %>%
+  janitor::clean_names()
 
 new_data <- csv_formatted %>% 
   mutate(Year = as.integer(Year),
-         dataset = "new") 
+         dataset = "new") %>%
+  janitor::clean_names() 
   
 # join to the new data
 joined_data <- live_data %>% 

@@ -1,9 +1,10 @@
-# Author: Emma Wood
-# Initial date: 16/12/2021
-# purpose: set up for 3-c-1 indicator update, and save output files
-#     This file is directly called by update_indicator_main.R.
-#     It has to be named compile_tables.R
-#     It is the control script that runs all the others.
+# Author: Steven Jones
+# Initial date: 04/11/2022
+# purpose: Setup for 13-1-1 indicator update and save output files
+#          This file is directly called by update_indicator_main.R.
+#          It has to be named compile_tables.R
+#          It is the control script that runs all the others.
+
 
 # list the packages used in this automation - you may need to add some, 
 # depending on what you add to the code
@@ -19,13 +20,8 @@ library('stringr')
 library("dplyr")
 library('openxlsx')
 
-#setwd("template") # this line is to run the template only - 
-# do not copy into your code as this is usually found in update_indicator_main.R
-
 source("config.R") # pulls in all the configurations
-source("update_indicator.R") # does the donkey-work of making the csv
-# at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_type_1 script.
+source("update_indicator.R")
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)

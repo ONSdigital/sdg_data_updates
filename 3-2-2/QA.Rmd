@@ -260,17 +260,20 @@ please manually check the data are correct, and edit the code if necessary.
 ```{r, echo = FALSE, fig.width=10}
 old_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_3-2-2.csv') %>% 
   janitor::clean_names() %>% 
-  mutate(dataset = "live")
+  mutate(dataset = "live",
+         year = as.integer(year),
+         value = as.numeric(value))
 
 csv_data <- csv_data %>% 
   janitor::clean_names() %>% 
-  mutate(dataset = "new")  
+  mutate(dataset = "new",
+         year = as.integer(year),
+         value = as.numeric(value))  
 
 all_data <- old_data %>% 
   bind_rows(csv_data) %>% 
   mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
   mutate(`period and dataset` = paste(dataset, neonatal_period),
-         year = as.integer(year),
          value = as.numeric(value))
 
 if ("ethnic_group" %not_in% names(all_data)) {

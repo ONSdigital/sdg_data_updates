@@ -58,11 +58,19 @@ names(old_oda_data) <- tolower(names(old_oda_data))
 # could move to 1-a-1 file if this is the only indicator using GNI
 
 if ("1-a-1" %in% indicators) {
-  gni_end_year <- format(Sys.Date(), "%Y")
+  gni_end_year <- format(Sys.Date(), "%Y") # it doesn't matter if the end year is later than the latest data, the link will still work
   gni_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/TABLE1/12+12.1.1.1140+1160.N/all?startTime=",
-                    gni_start_year, "&endTime=", gni_end_year)
+                    oecd_start_year, "&endTime=", gni_end_year)
   try(gni_sdmx <- readSDMX(gni_api))
   try(gni_data <- as.data.frame(gni_sdmx))
+}
+
+if("15-a-1_15-b-1" %in% indicators) {
+  biodiversity_end_year <- format(Sys.Date(), "%Y") # it doesn't matter if the end year is later than the latest data, the link will still work
+  biodiversity_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/ERTR/GBR.BASE_NC+BASE_REV+BASE_GDP+BASE_USD.TOT.BIOD/all?startTime=",
+                             oecd_start_year, "&endTime=", biodiversity_end_year)
+  try(biodiversity_sdmx <- readSDMX(biodiversity_api))
+  try(biodiversity_data <- as.data.frame(biodiversity_sdmx))
 }
 
 # create stable column names based on elements of column names -----------------

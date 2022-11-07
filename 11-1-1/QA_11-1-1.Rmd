@@ -80,15 +80,7 @@ the code.
 ```{r, fig.width=10}
 
 live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
-  janitor::clean_names() %>% 
-  # just while testing this needs to be in here as there is an error in the live data
-  mutate(remove = ifelse(series == "Dwellings (%)" &
-                          decent_homes_criteria == "" &
-                           year == 2017 &
-                           urbanisation_sub_category == "Other urban centre",
-                         TRUE, FALSE)) %>%
-  filter(remove == FALSE) %>%
-  select(-remove)
+  janitor::clean_names() 
 
 new_data <- csv_data %>% 
   mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%

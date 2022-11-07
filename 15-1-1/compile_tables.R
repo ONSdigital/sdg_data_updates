@@ -1,5 +1,11 @@
 # compile tables for 15.1.1
+library('SDGupdater')
 
+packages <- c('openxlsx', 'stringr', 'janitor',
+              'tidyr', 'dplyr', 
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
 
 source("config.R")
 source("update_15-1-1.R")

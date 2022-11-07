@@ -13,6 +13,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 
 ```
 **Run date and time: `r Sys.time()`**  
@@ -113,5 +114,10 @@ datatable(comparison,
                          pageLength = 10,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
 ```
 

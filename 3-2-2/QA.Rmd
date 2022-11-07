@@ -14,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 **Run date and time: `r Sys.time()`**  
    
@@ -395,7 +396,10 @@ if(pre_2020_data == FALSE) {
 
 ```
 
-
+## Session Info
+```{r}
+pander(sessionInfo())
+```
 
 
 

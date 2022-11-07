@@ -1,10 +1,16 @@
+library('SDGupdater')
+
+packages <- c('openxlsx', 'stringr', 'janitor',
+              'tidyr', 'dplyr', 
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
 library('openxlsx')
 library('stringr')
 library('janitor')
 library('tidyr')
 library('dplyr')
-
-library('SDGupdater')
 
 #-------------------------------------------------------------------------------
 remove_symbols <- function(column) {

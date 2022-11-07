@@ -2,15 +2,16 @@
 # It has to be called compile_tables.R
 # It is the control script that runs all the others.
 
-# list the packages used in this automation - you may need to add some, 
+library('SDGupdater') # this needs to come before install absent_packages as that is from the SDGupdater package
+
+# list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("stringr", "openxlsx", "janitor", "tidyr", "dplyr", 
+packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
-# install any packages that are not already installed
-install.packages(setdiff(packages, rownames(installed.packages())),
-                 dependencies = TRUE, 
-                 type = "win.binary")
+
+# this function installs any packages that are not already installed
+install_absent_packages(packages)
 
 library('openxlsx')
 library('stringr')
@@ -18,12 +19,18 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 
-library(SDGupdater)
-
 setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R
 
-source("type_1_config.R") # pulls in all the configurations. Change to "config.R" for real update
+source("type_1_config.R") # pulls in all the configurations. Un-comment out code below for real update
+# if (test_run == TRUE) {
+#   source("example_config.R")
+# } else if (test_run == FALSE) {
+#   source("config.R")
+# } else {
+#   stop("test_run must be either TRUE or FALSE")
+# }
+
 source("update_type_1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 
 

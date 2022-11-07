@@ -20,9 +20,9 @@ remove_symbols <- function(column) {
 }
 #-------------------------------------------------------------------------------
 
-if (test_run == FALSE) {
+if (test_run == TRUE) {
   source("example_config.R")
-} else if (test_run == TRUE) {
+} else if (test_run == FALSE) {
   source("config.R")
 } else {
   stop("test_run must be either TRUE or FALSE")

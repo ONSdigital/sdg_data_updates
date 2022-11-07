@@ -12,16 +12,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-packages, include=FALSE}
 library(tidyr)
 library(dplyr)
-# library(stringr)
 library(ggplot2)
 library(kableExtra)
 ```
 
 ```{r include= FALSE}
 run_date <- Sys.Date()
-csv <- read.csv(paste0("Output/output_", run_date, ".csv")) %>% 
+csv <- csv %>% 
   mutate(Year_num = as.numeric(as.character(substr(Year, 1, 4))))
-source('config.R')
 
 ```
 
@@ -92,4 +90,10 @@ data_for_plots %>%
   
 
 ```
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
 

@@ -11,7 +11,14 @@ library('unpivotr')
 library('stringr')
 library('tidyxl')
 
-source("config.R")
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
+
 source("functions.R")
 
 run_date <- Sys.Date()

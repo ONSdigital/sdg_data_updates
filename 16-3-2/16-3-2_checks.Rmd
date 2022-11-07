@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-packages, include=FALSE}
 library(tidyr)
 library(dplyr)
-# library(stringr)
 library(ggplot2)
 library(kableExtra)
 ```

@@ -13,7 +13,14 @@ library(stringr)
 library(unpivotr)
 
 #--- get input from user ---
-source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
+# pull in all the configurations based on whether it is a test run or not
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
 
 if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))

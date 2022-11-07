@@ -1,3 +1,11 @@
+library('SDGupdater')
+
+packages <- c('tidyr', 'dplyr', 'stringr',
+              'openxlsx', 'janitor', 
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
 library(tidyr)
 library(dplyr)
 library(stringr)

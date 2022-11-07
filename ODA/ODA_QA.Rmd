@@ -625,5 +625,3 @@ try(
 pander(sessionInfo())
 ```
 
-pander(sessionInfo())
-

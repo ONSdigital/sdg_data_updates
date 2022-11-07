@@ -119,16 +119,16 @@ check whether the value is present in the original data.
   
 ```{r, echo = FALSE}
 no_value_rows_filtered <- no_value_rows %>% 
-  filter(Birthweight != "Unlinked deaths" &
-           Birthweight != "Not stated" & 
+  filter(`Birthweight (grams)` != "Unlinked deaths" &
+           `Birthweight (grams)` != "Not stated" & 
            Age != "Not stated" &
            `Country of birth` != "Other/Not stated" &
            `Country of birth` != "Born in Antarctica or Oceania") %>% 
   mutate(unexpected = case_when(
-    Sex != "" & Birthweight == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
-    Birthweight != "" & Sex == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
-    Age != "" & Birthweight == "" & Sex == "" & `Neonatal period` == "" ~ TRUE,
-    `Neonatal period` != "" & Birthweight == "" & Age == "" & Sex == "" ~ TRUE,
+    Sex != "" & `Birthweight (grams)` == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
+    `Birthweight (grams)` != "" & Sex == "" & Age == "" & `Neonatal period` == "" ~ TRUE,
+    Age != "" & `Birthweight (grams)` == "" & Sex == "" & `Neonatal period` == "" ~ TRUE,
+    `Neonatal period` != "" & `Birthweight (grams)` == "" & Age == "" & Sex == "" ~ TRUE,
     TRUE ~ FALSE)) %>% 
   filter(unexpected == TRUE) %>% 
   select(-unexpected)
@@ -327,7 +327,7 @@ birthweight_plot <- all_data %>%
   facet_grid(. ~ birthweight_grams) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=1)) +
-  ggtitle("Birthweight")
+  ggtitle("Birthweight (grams)")
 
 region_plot <- all_data %>% 
   filter(birthweight_grams == "" &

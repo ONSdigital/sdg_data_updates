@@ -208,4 +208,3 @@ datatable(comparison,
 pander(sessionInfo())
 ```
 
-pander(sessionInfo())

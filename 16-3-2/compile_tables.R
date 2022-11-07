@@ -40,14 +40,15 @@ csv <- bind_rows(csv_sex_age, csv_nationality) %>%
   distinct()
 
 existing_files <- list.files()
-if("Output" %not_in% existing_files) {
-  dir.create("Output")
+if(output_folder %not_in% existing_files) {
+  dir.create(output_folder)
 }
 
 
-write.csv(csv, paste0("Output/output_", run_date, ".csv"), row.names = FALSE)
+write.csv(csv, paste0(output_folder, "/output_", run_date, ".csv"), row.names = FALSE)
 
-rmarkdown::render('16-3-2_checks.Rmd', output_file = 'Output/16-3-2_checks.html')
+rmarkdown::render('16-3-2_checks.Rmd', 
+                  output_file = paste0(output_folder, '/16-3-2_checks.html'))
 
 
 setwd('..')

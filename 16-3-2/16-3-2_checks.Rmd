@@ -18,9 +18,8 @@ library(kableExtra)
 
 ```{r include= FALSE}
 run_date <- Sys.Date()
-csv <- read.csv(paste0("Output/output_", run_date, ".csv")) %>% 
+csv <- csv %>% 
   mutate(Year_num = as.numeric(as.character(substr(Year, 1, 4))))
-source('config.R')
 
 ```
 

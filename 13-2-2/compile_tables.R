@@ -1,12 +1,16 @@
 # Author: Emma Wood 
 # compile tables for indicator 13-2-2
+library(SDGupdater)
+
+packages <- c('tidyxl', 'dplyr', 'stringr', 'unpivotr',
+              'tidyr', 'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
 
 library(tidyxl)
 library(dplyr)
 library(stringr)
 library(unpivotr)
-
-library(SDGupdater)
 
 #--- get input from user ---
 source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update

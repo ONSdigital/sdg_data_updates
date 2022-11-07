@@ -5,15 +5,16 @@
 #     It has to be named compile_tables.R
 #     It is the control script that runs all the others.
 
-# list the packages used in this automation - you may need to add some, 
+library('SDGupdater') # this needs to come before install absent_packages as that is from the SDGupdater package
+
+# list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
 packages <- c("stringr", "dplyr", 
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
-# install any packages that are not already installed
-install.packages(setdiff(packages, rownames(installed.packages())),
-                 dependencies = TRUE, 
-                 type = "win.binary")
+
+# this function installs any packages that are not already installed
+install_absent_packages(packages)
 
 library('stringr')
 library("dplyr")

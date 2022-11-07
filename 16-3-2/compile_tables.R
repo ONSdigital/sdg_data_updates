@@ -1,3 +1,16 @@
+library('SDGupdater')
+
+packages <- c('tidyr', 'dplyr', 'unpivotr', 'tidyxl', 'stringr',
+              'ggplot2', 'kableExtra', 'pander')
+
+install_absent_packages(packages)
+
+library('dplyr')
+library('tidyr')
+library('unpivotr')
+library('stringr')
+library('tidyxl')
+
 source("config.R")
 source("functions.R")
 

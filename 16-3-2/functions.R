@@ -3,7 +3,7 @@
 # Purpose: Functions for tidying 16.3.2 data.
 # Notes: Functions are written in the order they appear in the script. 
 #   They are arranged to be read in order: A function higher up the code may call a function lower down the code 
-#   (like a newspaper - broad paragraph, follwed by more detailed paragraph)
+#   (like a newspaper - broad paragraph, followed by more detailed paragraph)
 
 # I haven't updated SDGupdater::remove_superscripts with this as it is also a special case where there is a superscript to a number
 # and that function requires that the character string starts with letters

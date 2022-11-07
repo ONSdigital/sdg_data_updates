@@ -22,7 +22,15 @@ library("dplyr")
 setwd("template") # this line is to run the template only - 
 # do not copy into your code as this is usually found in update_indicator_main.R
 
-source("type_4_config.R") # pulls in all the configurations
+source("type_4_config.R")  # pulls in all the configurations. Un-comment out code below for real update
+# if (test_run == TRUE) {
+#   source("example_config.R")
+# } else if (test_run == FALSE) {
+#   source("config.R")
+# } else {
+#   stop("test_run must be either TRUE or FALSE")
+# }
+
 source("update_type_4.R") # does the donkey-work of making the csv
 # at this point you should see lots of variables appear in the global environment 
 # pane (top right). These have been created by the update_type_1 script.

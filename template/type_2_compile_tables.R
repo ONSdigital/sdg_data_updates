@@ -22,8 +22,14 @@ library('dplyr')
 setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R
 
-source("type_2_config.R") # pulls in all the configurations. Change to "config.R" for real update
-
+source("type_2_config.R")  # pulls in all the configurations. Un-comment out code below for real update
+# if (test_run == TRUE) {
+#   source("example_config.R")
+# } else if (test_run == FALSE) {
+#   source("config.R")
+# } else {
+#   stop("test_run must be either TRUE or FALSE")
+# }
 
 if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
   stop(paste("File must be an xlsx file. Save", filename, "as an xlsx and re-run script"))

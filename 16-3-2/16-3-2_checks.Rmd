@@ -92,3 +92,9 @@ data_for_plots %>%
 
 ```
 
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
+

@@ -16,7 +16,13 @@ library('tidyr')
 library('dplyr')
 library('rsdmx')
 
-source("example_config.R") # pulls in all the configurations. Change to "config.R" for real update
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
 
 # create filepaths for exchange rates and deflators files ----------------------
 rates_filepath <- paste0(input_folder, "/", exchange_filename)

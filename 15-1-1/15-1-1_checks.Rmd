@@ -14,11 +14,10 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
+library(pander)
 ```
 
 ```{r include= FALSE}
-# source('config.R')
-
 old_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_15-1-1.csv") %>% 
   janitor::clean_names()
 
@@ -156,3 +155,9 @@ new_data %>%
 
 Further analysis could be reported (and added to this file), but just sticking 
 with what we already had for now.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

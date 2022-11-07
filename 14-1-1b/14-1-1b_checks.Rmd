@@ -14,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 
 ## Introduction
@@ -192,3 +193,7 @@ print(source_plot)
 
 ## Add section to show new data plotted against old data
 
+## Session Info
+```{r}
+pander(sessionInfo())
+```

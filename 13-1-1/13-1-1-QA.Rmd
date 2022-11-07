@@ -85,22 +85,24 @@ original_data <- original_data %>%
   select(Year, Series, `Cause of death`, Country, Sex, `Observation status`, `Unit multiplier`, `Units`, GeoCode, Value)
 
 # For this first time check where we have removed the 2001-2012 mortality data use the code below ----
-original_data <- original_data %>%
+original_data_cleaned <- original_data %>%
   mutate(Year = as.integer(Year)) %>%
   filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
   mutate(Year = as.character(Year)) %>%
-  mutate(Value = as.integer(Value)) 
+  mutate(Value = as.numeric(Value)) 
 
-combined_data <- combined_data %>% 
+combined_data_cleaned <- combined_data %>% 
   mutate(Year = as.integer(Year)) %>%
   filter(Year<=2020) %>% 
   mutate(Year = as.character(Year)) %>% 
-  mutate(Value = as.integer(Value))
+  mutate(Value = as.numeric(Value))
 
 print(paste("The number of rows in the older data is: ", nrow(original_data)))
 print(paste("The number of rows in the updated data is: ", nrow(combined_data)))
 
-diff <- anti_join(combined_data, original_data, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
+print(paste("Checking for NA in combined_data. Total number of NA is: ", sum(is.na(combined_data))))
+
+diff <- anti_join(combined_data_cleaned, original_data_cleaned, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
 print("If there are no inconsistencies then the table below should be empty")
 knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
 
@@ -111,5 +113,48 @@ print("Below is a table of the non-matching rows for the original and updated da
 # diff <- anti_join(combined_data, original_data, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
 # print(nrow(diff))
 # knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
+
+```
+
+# Plots
+There are too many possible time series to plot here (99) but below are a few examples you can amend if there seems to be a discrepancy shown in the table above. If for all plots below you see only one shape of point marker, the original and updated datasets can be assumed identical in value for the selection shown in the plot.
+```{r echo=FALSE}
+# Load the original data again
+original_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-1-1.csv", check.names = FALSE)
+original_data <- original_data %>% 
+  rename(Units = `Unit measure`) %>% 
+  mutate(Country = ifelse(Country=="England and Wales", "", Country)) %>% # Some rows were labelled "England and Wales" not ""
+  select(Year, Series, `Cause of death`, Country, Sex, `Observation status`, `Unit multiplier`, `Units`, GeoCode, Value)
+
+# For this first time check where we have removed the 2001-2012 mortality data use the code below ----
+original_data <- original_data %>%
+  mutate(Year = as.integer(Year)) %>%
+  filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
+  mutate(Year = as.character(Year)) %>%
+  mutate(Value = as.integer(Value))
+
+# Add marker variables to the original_data and combined_data so we can know which set a point is from
+original_data_cleaned_marked <- original_data_cleaned %>% 
+  mutate(dataset = "original")
+
+combined_data_cleaned_marked <- combined_data_cleaned %>% 
+  mutate(dataset = "updated")
+
+joined_data <- original_data_cleaned_marked %>% rbind(combined_data_cleaned_marked)
+
+
+ggplot(data = joined_data %>% filter(Series == "Number of deaths from exposure to forces of nature", `Cause of death` == "", Country == ""),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "All deaths for EW by sex")
+
+ggplot(data = joined_data %>% filter(Series == "Number of deaths from exposure to forces of nature", `Cause of death` == "Exposure to excessive natural cold", Country == "England"),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "Deaths by Exposure to excessive natural cold in England by sex")
+
+
+ggplot(data = joined_data %>% filter(Series == "Age-standardised mortality rates per 100,000 population", `Cause of death` == "", Country == ""),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "Age-standardised mortality rate in England and Wales")
+
 
 ```

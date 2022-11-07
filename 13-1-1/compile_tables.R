@@ -8,7 +8,7 @@
 
 # list the packages used in this automation - you may need to add some, 
 # depending on what you add to the code
-packages <- c("stringr", "dplyr", "tidyr",
+packages <- c("stringr", "dplyr", "openxlsx", "tidyr",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
 # install any packages that are not already installed
@@ -20,8 +20,23 @@ library('stringr')
 library("dplyr")
 library('openxlsx')
 
+
+
 source("config.R") # pulls in all the configurations
-source("update_indicator.R")
+source("recent_data.R")
+
+if (run_historic_data == TRUE){
+  source("historical_data.R")
+  combined_data <- recent_data %>% rbind(historic_data)
+} else {
+  combined_data <- recent_data
+}
+
+# Remove any rows which might be duplicates
+all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
+combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
+
+#source("update_indicator.R")
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -32,16 +47,12 @@ if (output_folder_exists == FALSE) {
 
 date <- Sys.Date()
 
-# we add the date to the output file so that old outputs are not automatically overwritten.
-# However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
-# We may want to review the decision to add date to the filename.
 csv_filename <- paste0(date, indicator, ".csv") 
-#csv_filename <- paste0(date, "_update_type_4.csv")
 qa_filename <- paste0(date, indicator, "-QA.html") 
 
 write.csv(combined_data, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
+
 rmarkdown::render('13-1-1-QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 
@@ -51,3 +62,14 @@ message(paste0("The csv and QA file have been created and saved in '", paste0(ge
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")
 
+# for(col in names(historic_data)){
+#   if(is.list(historic_data$col)==TRUE){
+#     print("!")
+#   }
+# }
+# 
+# for(col in names(recent_data)){
+#   if(is.list(historic_data$col)==TRUE){
+#     print("!")
+#   }
+# }

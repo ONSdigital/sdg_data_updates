@@ -17,21 +17,21 @@ library(kableExtra)
 ```
 
 ```{r include= FALSE}
-source('config.R')
+# source('config.R')
 
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/15-1-1.csv")
+old_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_15-1-1.csv") %>% 
+  janitor::clean_names()
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_15-1-1", ".csv")) 
-pre_calcs_data <- read.csv(paste0("Output/", date, "_before_calcs_15-1-1.csv")) 
-
-latest_year <- max(new_data$Year)
+new_data <- janitor::clean_names(csv_formatted) 
+pre_calcs_data <- janitor::clean_names(all_data)
+latest_year <- max(new_data$year)
 
 ```
 
 ## 15-1-1 update summary
 
-Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+Data for `r min(new_data$year)` to `r latest_year` have been created and 
 saved as `r paste0(date, "_15-1-1", ".csv")` in the 15-1-1 Output folder.  
     
 ### Check configurations
@@ -84,17 +84,20 @@ discrepancies in the lines please investigate the reasons for these discrepancie
 new_data_to_plot <- mutate(new_data, dataset = "2 new")
 old_data_to_plot <- mutate(old_data, dataset = "1 old") 
 
-status_list <- unique(new_data_to_plot$Sustainably.managed.status)
+status_list <- unique(new_data_to_plot$sustainably_managed_status)
+
+test<- new_data_to_plot %>%
+    bind_rows(old_data_to_plot)
 
 new_data_to_plot %>%
     bind_rows(old_data_to_plot) %>% 
     ggplot(data = .,
-           aes(x = Year,
-               y = Value,
+           aes(x = year,
+               y = value,
                colour = dataset)) +
     geom_point() +
     geom_line() +
-    facet_grid(Country ~ Sustainably.managed.status) +
+    facet_grid(country ~ sustainably_managed_status) +
     theme_bw() 
 
 ```
@@ -119,17 +122,17 @@ These are as follows:
 ```{r include = FALSE}
 woodland_certified_in_UK <- pre_calcs_data %>% 
   mutate(percent_of_woodland = (certified_area / woodland_area) * 100) %>% 
-  filter(YEAR == latest_year, Country == "UK") %>% 
+  filter(year == latest_year, country == "UK") %>% 
   pull(round(percent_of_woodland, 1))
 
 percent_increase_since_2015 <- new_data %>% 
-  filter(Country == "", Year %in% c(2015, latest_year), 
-         Sustainably.managed.status == "") %>%
-  mutate(Year = ifelse(Year == latest_year, "latest", "start")) %>% 
-  pivot_wider(names_from = Year,
-              values_from = Value) %>% 
-  mutate(Value = (latest - start) / start * 100) %>% 
-  pull(round(Value, 1))
+  filter(country == "", year %in% c(2015, latest_year), 
+         sustainably_managed_status == "") %>%
+  mutate(year = ifelse(year == latest_year, "latest", "start")) %>% 
+  pivot_wider(names_from = year,
+              values_from = value) %>% 
+  mutate(value = (latest - start) / start * 100) %>% 
+  pull(round(value, 1))
 ```
 
 - `r round(woodland_certified_in_UK, 1)`% of woodland area in the UK is certified as 
@@ -141,11 +144,10 @@ which represents the following percent of land area in each country:
 
 ```{r echo = FALSE}
 new_data %>% 
-  filter(Sustainably.managed.status == "",
-         Year == 2021) %>% 
-  select(Year, Country, Value) %>% 
-  mutate(Country = ifelse(Country == "", "UK", as.character(Country)),
-         Value = round(Value, 1)) %>% 
+  filter(sustainably_managed_status == "",
+         year == 2021) %>% 
+  select(year, country, value) %>% 
+  mutate(value = round(value, 1)) %>% 
     kbl() %>%
     kable_styling()
 ```

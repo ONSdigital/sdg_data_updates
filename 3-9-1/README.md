@@ -1,7 +1,7 @@
 Author(s): Emma Wood
 ## 3-9-1 update  
 ### Introduction
-Create csv data for 3-9-1 (Fraction of all-cause adult mortality attributable to ambient particulate air pollution (measured as fine particulate matter, PM2.5)) with the following disaggregations:  
+Create csv data for 3-9-1 'Fraction of all-cause adult mortality attributable to ambient particulate air pollution (measured as fine particulate matter, PM2.5)' with the following disaggregations:  
 - Region
 - Local Authority (Districts and Unitary Authorities combined)
 - IMD decile
@@ -36,6 +36,16 @@ examaple if a line or point is missing, or looks strange, this may indicate a ch
 The QA report does not negate checking the source data for notes, but if everythig looks fine in the report, the numbers should not need to be checked.  
   
 If you get an error on the QA file, run it block by block. Any errors at this stage are usually because there is something unexpected in the data that needs to be addressed.  
+
+### Generating Fingertips links  
+The links in the example_config file should work every year. However, if they fail they will need to be regenerated: 
+The current links were generated as following in **Google Chrome**:  
+1) Go to the [source link](https://fingertips.phe.org.uk/profile/public-health-outcomes-framework/data#page/9/gid/1000043/pat/159/par/K02000001/ati/15/are/E92000001/iid/93861/age/230/sex/4/cat/-1/ctp/-1/yrr/1/cid/4/tbm/1)
+2) Select Data view > Download   
+3) Scroll down and select 'data for all area types'. This will automatically download a csv to your downloads folder, which you can ignore.    
+4) Go to the three dots in the top right of the browser and select Downloads (or just use Ctrl+J).   
+5) Right click on the link and 'copy link' - this is the link used in the config file.  
+
 
 ### TROUBLESHOOTING:
 Some possible errors (may not be an exact match) and solutions:    

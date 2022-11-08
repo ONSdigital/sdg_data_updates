@@ -142,34 +142,27 @@ male_proportion_data <- NOMIS_male %>%
 proportion_data <- rbind(female_proportion_data, male_proportion_data) 
 
 
+#### Format data for csv output file ####
 
-
-  
-# format data for csv file -----------------------------------------------------
 csv_formatted <- proportion_data %>% 
-  mutate(
-    Country = case_when(
-      Country == "United kingdom" ~ "", 
-      Country == "Northern ireland" ~ "Northern Ireland",
-      TRUE ~ as.character(Country)),
-    # I have mapped the observation status for these data, however please
-    # check that this is correct for your indicator as wording and options 
-    # may be different in other data sets
-    `Observation status` = case_when(
-      `Observation status` == "Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)" ~ 
-        "Missing value; suppressed",
-      `Observation status` == "Estimate is less than 500" ~ 
-        "Missing value; data exist but were not collected",
-      TRUE ~ as.character(`Observation status`))
-  ) %>% 
-  arrange(Year, Country, Region, `Occupation unit group`, `Occupation minor group`) %>% 
-  rename(GeoCode = GEOGRAPHY_CODE) %>% 
-  select(Year, `Occupation minor group`, `Occupation unit group`,
-         Country, Region, GeoCode, `Observation status`, Value) 
+  # Format countries and regions to title case
+  mutate(Country = toTitleCase(Country),
+         Region = toTitleCase(Region)) %>%
+  # Include correct wording in observation status for when data is not collected
+  mutate(`Observation status` = case_when(
+    `Observation status` == "Estimate is less than 500" ~ 
+      "Missing value; data exist but were not collected",
+    TRUE ~ as.character(`Observation status`))) %>% 
+  # Put columns in order required for csv file.
+  select(Year, Country, Region, Sex, `Observation status`, Value) %>%
+  # Arrange data by Year, Country, region, Sex 
+  arrange(Year, Country, Region, Sex)
 
-# remove NAs from the csv that will be saved in Outputs
+
+#### Remove NAs from the csv that will be saved in Outputs ####
+
 # this changes Value to a character so will still use csv_formatted in the 
-# R markdown QA file
+  # R markdown QA file
 csv_output <- csv_formatted %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
 

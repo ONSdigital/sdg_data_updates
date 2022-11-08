@@ -155,7 +155,7 @@ create_datatable <- function (data) {
           rownames = FALSE, 
           filter = "top",
           options = list(dom = 'tp', 
-                         pageLength = 10,
+                         pageLength = 5,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
 }

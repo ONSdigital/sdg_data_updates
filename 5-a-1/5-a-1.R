@@ -74,24 +74,75 @@ NOMIS_clean <- NOMIS_data %>%
              `Observation status` = OBS_STATUS_NAME)
 
 
-
-
-
 # This is a line that you can run to check that you have filtered and selected 
-# correctly - all rows in the clean_population dataframe should be unique
+# correctly - all rows in the NOMIS_clean dataframe should be unique
 # so this should be TRUE
-nrow(distinct(clean_population)) == nrow(clean_population)
+nrow(distinct(NOMIS_clean)) == nrow(NOMIS_clean)
 
-# join numerator and denominator data frames and do calculations ---------------
 
-proportion_data <- occupations_filled %>% 
-  # In this example, we are using annual data only, but multiple end points are 
-  # available in the download (e.g year ending December, year ending march etc).
-  # Because all the date_codes have the same month we can remove this information
-  # (this would be different if, for example the data were quarterly)
-  mutate(Year = substr(DATE_CODE, 1, 4)) %>% 
-  left_join(clean_population, by = c("Year" = "DATE_CODE", "Country", "Region")) %>% 
-  mutate(Value = (numerator/population) * 10000)
+
+#### Need to split out male, female, and population data ####
+
+# This will allow us to calculate percentages.
+
+NOMIS_female <- filter(NOMIS_clean, Sex == "Females")
+
+NOMIS_male <- filter(NOMIS_clean, Sex == "Males")
+
+NOMIS_population <- filter(NOMIS_clean, Sex == "All persons")
+
+
+
+#### Join female or male and population data frames and do calculations ####
+
+female_proportion_data <- NOMIS_female %>% 
+  # join total population to female dataframe
+  left_join(NOMIS_population, by = c("DATE_CODE", "Country", "Region")) %>%
+  # do calculation of percentage female of total 
+  mutate(Value = 100*(OBS_VALUE.x/OBS_VALUE.y)) %>% 
+  # Extract the year, without month, from DATE_CODE
+  mutate(Year = substr(DATE_CODE, 1, 4)) %>%
+  # select relevant columns, 
+    # no need for total population information, post calculation.
+  select(Year,
+         Country,
+         Region,
+         Sex.x,
+         Value,
+         `Observation status.x`) %>%
+  # rename observation status and sex
+  rename(`Observation status` = `Observation status.x`,
+         Sex = Sex.x)
+
+
+
+male_proportion_data <- NOMIS_male %>% 
+  # join total population to male dataframe
+  left_join(NOMIS_population, by = c("DATE_CODE", "Country", "Region")) %>%
+  # do calculation of percentage male of total 
+  mutate(Value = 100*(OBS_VALUE.x/OBS_VALUE.y)) %>% 
+  # Extract the year, without month, from DATE_CODE
+  mutate(Year = substr(DATE_CODE, 1, 4)) %>%
+  # select relevant columns, 
+  # no need for total population information, post calculation.
+  select(Year,
+         Country,
+         Region,
+         Sex.x,
+         Value,
+         `Observation status.x`) %>%
+  # rename observation status and sex
+  rename(`Observation status` = `Observation status.x`,
+         Sex = Sex.x)
+
+
+
+#### Bind female and male proportion dataframes together ####
+
+proportion_data <- rbind(female_proportion_data, male_proportion_data) 
+
+
+
 
   
 # format data for csv file -----------------------------------------------------

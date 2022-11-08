@@ -17,9 +17,10 @@
 ### Generation of Nomis link ###
 The nomis link should not need to be regenerated unless we decide to e.g. change from count to rate  
 or use a different population estimate (e.g. when the new estimates from census 2021 are out).  
+
+
 The current nomis link was generated as follows:
 
-#### health worker numbers (for example) ####
 From Nomis, select Query, then Annual Population Survey/Labour Force Survey >  annual population survey - regional - employment by occupation   
   
 Selections:

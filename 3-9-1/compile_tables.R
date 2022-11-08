@@ -2,19 +2,24 @@
 # Initial date: 24/10/2022
 # purpose: 3-9-1 - data using the new method
 
+library("SDGupdater")
+
 packages <- c("stringr", "dplyr", "tidyr",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
-# install any packages that are not already installed
-install.packages(setdiff(packages, rownames(installed.packages())),
-                 dependencies = TRUE, 
-                 type = "win.binary")
+install_absent_packages(packages)
 
 library("stringr")
 library("dplyr")
 library("tidyr")
 
-source("example_config.R") 
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)

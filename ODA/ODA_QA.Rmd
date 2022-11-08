@@ -566,6 +566,139 @@ if ("csv_9a1" %in% objects()) {
 }
 ```
 
+### 15-a-1 and 15-b-1
+```{r}
+if ("csv_15a1_15b1" %in% objects()) {
+  
+  # for join_plot_data() to work correctly the df needs to be the name of a single indicator
+  csv_15a1 <- csv_15a1_15b1 
+  
+  joined_data_15a1 <- join_plot_data("15-a-1") %>% 
+    mutate(units = ifelse(is.na(units), unit_measure, units))
+  
+  num_new_series <- length(unique(csv_15a1_15b1$Series))
+
+  #----
+  
+  plot_15a1_series_a <- joined_data_15a1 %>% 
+    filter(series == "Total official development assistance for biodiversity, by recipient countries") %>% 
+    basic_plot(.) +
+    facet_wrap(vars(country_income_classification), nrow = 3) +
+    ggtitle("15-a-1a and 15-b-1a by country income classification (GBP Millions)")
+
+  if (num_new_series > 1){
+    
+  plot_15a1_pc_of_gdp <- joined_data_15a1 %>% 
+    filter(series == "Tax revenue from biodiversity-relevant taxes" &
+             units == "Percent of GDP (%)") %>% 
+    basic_plot(.) +
+    ggtitle("15-a-1b Tax revenue from biodiversity-relevant taxes (% of GDP)")
+  
+  plot_15a1_revenue_gbp <- joined_data_15a1 %>% 
+    filter(series == "Tax revenue from biodiversity-relevant taxes" &
+             substr(units, 1, 3) == "GBP") %>% 
+    basic_plot(.) +
+    ggtitle("15-a-1b Tax revenue from biodiversity-relevant taxes (GBP Millions)")
+  
+  plot_15a1_revenue_usd <- joined_data_15a1 %>% 
+    filter(series == "Tax revenue from biodiversity-relevant taxes" &
+             substr(units, 1, 3) == "USD") %>% 
+    basic_plot(.) +
+    ggtitle("15-a-1b Tax revenue from biodiversity-relevant taxes (USD Millions)")
+  
+  plot_15a1_pc_of_revenue <- joined_data_15a1 %>% 
+    filter(series == "Tax revenue from biodiversity-relevant taxes out of total tax revenue") %>% 
+    basic_plot(.) +
+    ggtitle("15-a-1b Tax revenue from biodiversity-relevant taxes out of total tax revenue (%)")
+  } else {
+    print("No new data produced for 15-a-1b and 15-b-1b. Try running script on a different internet network.")
+  }
+  
+} else {
+  print("15-a-1/15-b-1 data not produced")
+}
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+if ("csv_1791" %in% objects()) {
+  suppressMessages(print(gbp_plot_1791))
+  suppressMessages(print(usd_plot_1791))
+}
+```
+  
+```{r, , echo = FALSE}
+if ("csv_1791" %in% objects()) {
+  comparison_data_1791 <- joined_data_1791 %>% 
+    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+  
+  comparison_1791 <- comparison_data_1791 %>% 
+    select(year, country_income_classification, 
+           units, dataset, value) %>% 
+    calculate_differences()
+  
+  create_datatable(comparison_1791)
+}
+```
+### 17-19-1
+```{r}
+if ("csv_17191" %in% objects()) {
+  
+  joined_data_17191 <- join_plot_data("17-19-1") %>% 
+    mutate(units = ifelse(is.na(units), unit_measure, units))
+  
+  #----
+  
+  gbp_plot_17191 <- joined_data_17191 %>% 
+    filter(substr(units, 1, 3) == "GBP") %>% 
+    basic_plot(.) +
+    facet_wrap(vars(country_income_classification), nrow = 3) +
+    ggtitle("17-9-1 by country income classification (GBP)")
+  
+  usd_plot_17191 <- joined_data_17191 %>% 
+    filter(grepl("USD", units)) %>% 
+    basic_plot(.) +
+    facet_wrap(vars(country_income_classification), nrow = 3) +
+    ggtitle("17-19-1 by country income classification (Constant USD)") 
+} else {
+  print("17-19-1 data not produced")
+}  
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+if ("csv_17191" %in% objects()) {
+  suppressMessages(print(gbp_plot_17191))
+  suppressMessages(print(usd_plot_17191))
+}
+```
+  
+```{r, , echo = FALSE}
+if ("csv_17191" %in% objects()) {
+  
+  try(
+    
+    comparison_data_17191 <- joined_data_17191 %>% 
+      # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
+      mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
+      mutate(units = 
+               ifelse(
+                 grepl("USD", units) == TRUE, 
+                 "Constant USD, thousands", units)) 
+  )
+  
+  try(
+    comparison_17191 <- comparison_data_17191 %>% 
+      select(year, country_income_classification, 
+             units, dataset, value) %>% 
+      calculate_differences()
+  )
+  try(
+    create_datatable(comparison_17191)
+  )
+}
+```
+
 ### 17-9-1
 ```{r}
 if ("csv_1791" %in% objects()) {

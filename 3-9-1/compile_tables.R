@@ -29,11 +29,11 @@ if (output_folder_exists == FALSE) {
 }
 
 # download and read in data ----------------------------------------------------
-old_data <- read.csv(old_link) %>% 
+old_data <- read.csv(paste0(input_folder, "/", old_method_filename)) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
-new_data <- read.csv(new_link) %>% 
+new_data <- read.csv(paste0(input_folder, "/", new_method_filename)) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_squish)) 
 

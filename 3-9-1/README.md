@@ -16,6 +16,14 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
           
 ### USER INSTRUCTIONS (SDG Data team):  
 
+### Generating Fingertips links  
+The links in the example_config file should work every year. However, if they fail they will need to be regenerated: 
+The current links were generated as following in **Google Chrome**:  
+1) Go to the [source link](https://fingertips.phe.org.uk/profile/public-health-outcomes-framework/data#page/9/gid/1000043/pat/159/par/K02000001/ati/15/are/E92000001/iid/93861/age/230/sex/4/cat/-1/ctp/-1/yrr/1/cid/4/tbm/1)
+2) Select Data view > Download   
+3) Scroll down and select 'data for all area types'. This will automatically download a csv to your downloads folder, which you can ignore.    
+4) Go to the three dots in the top right of the browser and select Downloads (or just use Ctrl+J).   
+5) Right click on the link and 'copy link' - this is the link used in the config file. 
 1) Open RStudio.  
 2) Go to File > Open Project, and open sdg_data_updates.Rproj.  
 3) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.  
@@ -37,14 +45,7 @@ The QA report does not negate checking the source data for notes, but if everyth
   
 If you get an error on the QA file, run it block by block. Any errors at this stage are usually because there is something unexpected in the data that needs to be addressed.  
 
-### Generating Fingertips links  
-The links in the example_config file should work every year. However, if they fail they will need to be regenerated: 
-The current links were generated as following in **Google Chrome**:  
-1) Go to the [source link](https://fingertips.phe.org.uk/profile/public-health-outcomes-framework/data#page/9/gid/1000043/pat/159/par/K02000001/ati/15/are/E92000001/iid/93861/age/230/sex/4/cat/-1/ctp/-1/yrr/1/cid/4/tbm/1)
-2) Select Data view > Download   
-3) Scroll down and select 'data for all area types'. This will automatically download a csv to your downloads folder, which you can ignore.    
-4) Go to the three dots in the top right of the browser and select Downloads (or just use Ctrl+J).   
-5) Right click on the link and 'copy link' - this is the link used in the config file.  
+ 
 
 
 ### TROUBLESHOOTING:

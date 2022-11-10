@@ -73,14 +73,6 @@ if("15-a-1_15-b-1" %in% indicators) {
   try(biodiversity_data <- as.data.frame(biodiversity_sdmx))
 }
 
-if ("gni_sdmx" %not_in% objects()) {
-  warning("GNI data for 1-a-1 not downloaded")
-}
-
-if ("biodiversity_sdmx" %not_in% objects()) {
-  warning("OECD biodiversity taxes data for 15-a-1b/15-b-1-b not downloaded")
-}
-
 # create stable column names based on elements of column names -----------------
 
 oda_datasets <- list(old_oda_data, new_oda_data)
@@ -121,9 +113,9 @@ for (i in 1:length(indicators)) {
   # initiate a dataframe to hold both pre and post 2017 data for indicator i
   all_years <- NULL
   
-  for (j in 1:2) {
+  for (pre_or_post_2017_counter in 1:2) {
     
-    oda_renamed <- oda_renamed_list[[j]]
+    oda_renamed <- oda_renamed_list[[pre_or_post_2017_counter]]
     
     try(
       source(script_name)
@@ -177,5 +169,12 @@ message(paste0("The csv and QA files have been created and saved in '",
                ". It is possible that not all indicators ran successfully -
                please check oda_update_checks.Rmd"))
 
+if ("gni_sdmx" %not_in% objects()) {
+  warning("GNI data for 1-a-1 not downloaded, so if you want this indicator, please rerun. If it still doesn't work, try using a different interet connection")
+}
+
+if ("biodiversity_sdmx" %not_in% objects()) {
+  warning("OECD biodiversity taxes data for 15-a-1b/15-b-1-b not downloaded, so if you want this series, please rerun. If it still doesn't work, try using a different interet connection")
+}
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

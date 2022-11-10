@@ -642,11 +642,11 @@ if ("csv_15a1" %in% objects()) {
       mutate(units = ifelse(grepl("USD", units) == TRUE, "USD, millions", units))
     
     comparison_15a1 <- comparison_data_15a1 %>% 
-      select(year, country_income_classification, 
+      select(year, series, country_income_classification, 
              units, dataset, value) %>% 
       calculate_differences()
     
-    create_datatable(comparison_1791)
+    create_datatable(comparison_15a1)
   }
 }
 ```

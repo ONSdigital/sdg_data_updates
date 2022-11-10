@@ -620,85 +620,37 @@ if ("csv_15a1_15b1" %in% objects()) {
 ```
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-if ("csv_1791" %in% objects()) {
-  suppressMessages(print(gbp_plot_1791))
-  suppressMessages(print(usd_plot_1791))
+if ("csv_15a1" %in% objects()) {
+  if(num_new_series > 1){
+  suppressMessages(print(plot_15a1_series_a))
+  suppressMessages(print(plot_15a1_pc_of_gdp))
+  suppressMessages(print(plot_15a1_revenue_gbp))
+  suppressMessages(print(plot_15a1_revenue_usd))
+  suppressMessages(print(plot_15a1_pc_of_revenue))
+  }
 }
 ```
   
 ```{r, , echo = FALSE}
-if ("csv_1791" %in% objects()) {
-  comparison_data_1791 <- joined_data_1791 %>% 
-    # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-    mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
-    mutate(units = ifelse(grepl("USD", units) == TRUE, "Constant USD, thousands", units))
+if ("csv_15a1" %in% objects()) {
   
-  comparison_1791 <- comparison_data_1791 %>% 
-    select(year, country_income_classification, 
-           units, dataset, value) %>% 
-    calculate_differences()
-  
-  create_datatable(comparison_1791)
-}
-```
-### 17-19-1
-```{r}
-if ("csv_17191" %in% objects()) {
-  
-  joined_data_17191 <- join_plot_data("17-19-1") %>% 
-    mutate(units = ifelse(is.na(units), unit_measure, units))
-  
-  #----
-  
-  gbp_plot_17191 <- joined_data_17191 %>% 
-    filter(substr(units, 1, 3) == "GBP") %>% 
-    basic_plot(.) +
-    facet_wrap(vars(country_income_classification), nrow = 3) +
-    ggtitle("17-9-1 by country income classification (GBP)")
-  
-  usd_plot_17191 <- joined_data_17191 %>% 
-    filter(grepl("USD", units)) %>% 
-    basic_plot(.) +
-    facet_wrap(vars(country_income_classification), nrow = 3) +
-    ggtitle("17-19-1 by country income classification (Constant USD)") 
-} else {
-  print("17-19-1 data not produced")
-}  
-```
-
-```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-if ("csv_17191" %in% objects()) {
-  suppressMessages(print(gbp_plot_17191))
-  suppressMessages(print(usd_plot_17191))
-}
-```
-  
-```{r, , echo = FALSE}
-if ("csv_17191" %in% objects()) {
-  
-  try(
+  if (num_new_series > 1){
     
-    comparison_data_17191 <- joined_data_17191 %>% 
+    comparison_data_15a1 <- joined_data_15a1 %>% 
       # because the £ is sometimes imported weirdly from a csv, make sure it is always the same for the new and live datasets
-      mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, thousands", units)) %>% 
-      mutate(units = 
-               ifelse(
-                 grepl("USD", units) == TRUE, 
-                 "Constant USD, thousands", units)) 
-  )
-  
-  try(
-    comparison_17191 <- comparison_data_17191 %>% 
+      mutate(units = ifelse(grepl("GBP", units) == TRUE, "GBP, millions", units)) %>% 
+      mutate(units = ifelse(grepl("USD", units) == TRUE, "USD, millions", units))
+    
+    comparison_15a1 <- comparison_data_15a1 %>% 
       select(year, country_income_classification, 
              units, dataset, value) %>% 
       calculate_differences()
-  )
-  try(
-    create_datatable(comparison_17191)
-  )
+    
+    create_datatable(comparison_1791)
+  }
 }
 ```
-
+  
 ### 17-9-1
 ```{r}
 if ("csv_1791" %in% objects()) {

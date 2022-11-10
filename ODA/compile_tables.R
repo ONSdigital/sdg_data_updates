@@ -73,6 +73,14 @@ if("15-a-1_15-b-1" %in% indicators) {
   try(biodiversity_data <- as.data.frame(biodiversity_sdmx))
 }
 
+if ("gni_sdmx" %not_in% objects()) {
+  warning("GNI data for 1-a-1 not downloaded")
+}
+
+if ("biodiversity_sdmx" %not_in% objects()) {
+  warning("OECD biodiversity taxes data for 15-a-1b/15-b-1-b not downloaded")
+}
+
 # create stable column names based on elements of column names -----------------
 
 oda_datasets <- list(old_oda_data, new_oda_data)

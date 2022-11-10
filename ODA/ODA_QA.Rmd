@@ -54,7 +54,7 @@ Indicator specific settings are:
 - 6-a-1 CRS code (sector purpose code): **`r as.character(crs_code_6a1)`**  
 - 7-a-1 CRS codes: **`r as.character(crs_codes_7a1)`**  
 - 8-a-1 broad sector code: **`r as.character(broad_sector_code_8a1)`**  
-- 9-a-1 SID sector: **` r as.character(sid_sector_9a1)`**   
+- 9-a-1 SID sector: **`r as.character(sid_sector_9a1)`**   
 - 15-a-1/15-b-1 CRS code: **`r as.character(crs_code_15a1_15b1)`**  
   
 The outputs are saved in: **`r  paste0(getwd(), "/",output_folder)`**  

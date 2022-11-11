@@ -157,7 +157,10 @@ saveWorkbook(publication,
 # ----------------- csv and QA -----------------
 
 
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(csv_output, 
+          paste0(output_folder, "/", csv_filename), 
+          row.names = FALSE,
+          na = "")
 
 rmarkdown::render('14-1-1b_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 

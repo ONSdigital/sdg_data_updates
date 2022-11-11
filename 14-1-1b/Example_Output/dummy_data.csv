@@ -1,32 +1,32 @@
 "Year","Country","Suspected source","Units","Observation status","Value"
-2009,"Wales","Fishing","Median count","Low reliability",255
-2009,"Wales","Fly-tipped","Median count","Low reliability",0
-2009,"Wales","Medical","Median count","Low reliability",1
-2009,"Wales","Non-sourced","Median count","Low reliability",5
-2009,"Wales","Public","Median count","Low reliability",258
-2009,"Wales","Sewage related debris","Median count","Low reliability",43
-2009,"Wales","Shipping","Median count","Low reliability",30
-2008,"England","Fishing","Median count","Low reliability",62.5
-2008,"England","Fly-tipped","Median count","Low reliability",1
-2008,"England","Medical","Median count","Low reliability",3
-2008,"England","Non-sourced","Median count","Low reliability",184
-2008,"England","Public","Median count","Low reliability",1279.5
-2008,"England","Sewage related debris","Median count","Low reliability",140.5
-2008,"England","Shipping","Median count","Low reliability",7.5
-2009,"England","Fishing","Median count","Low reliability",45
-2009,"England","Fly-tipped","Median count","Low reliability",1
-2009,"England","Medical","Median count","Low reliability",0
-2009,"England","Non-sourced","Median count","Low reliability",77
-2009,"England","Public","Median count","Low reliability",50
-2009,"England","Sewage related debris","Median count","Low reliability",0
-2009,"England","Shipping","Median count","Low reliability",3
-2008,"","Fishing","Median count","Low reliability",62.5
-2008,"","Fly-tipped","Median count","Low reliability",1
-2008,"","Medical","Median count","Low reliability",3
-2008,"","Non-sourced","Median count","Low reliability",184
-2008,"","Public","Median count","Low reliability",1279.5
-2008,"","Sewage related debris","Median count","Low reliability",140.5
-2008,"","Shipping","Median count","Low reliability",7.5
+2009,"Wales","Fishing","Median count","Missing value; suppressed",
+2009,"Wales","Fly-tipped","Median count","Missing value; suppressed",
+2009,"Wales","Medical","Median count","Missing value; suppressed",
+2009,"Wales","Non-sourced","Median count","Missing value; suppressed",
+2009,"Wales","Public","Median count","Missing value; suppressed",
+2009,"Wales","Sewage related debris","Median count","Missing value; suppressed",
+2009,"Wales","Shipping","Median count","Missing value; suppressed",
+2008,"England","Fishing","Median count","Missing value; suppressed",
+2008,"England","Fly-tipped","Median count","Missing value; suppressed",
+2008,"England","Medical","Median count","Missing value; suppressed",
+2008,"England","Non-sourced","Median count","Missing value; suppressed",
+2008,"England","Public","Median count","Missing value; suppressed",
+2008,"England","Sewage related debris","Median count","Missing value; suppressed",
+2008,"England","Shipping","Median count","Missing value; suppressed",
+2009,"England","Fishing","Median count","Missing value; suppressed",
+2009,"England","Fly-tipped","Median count","Missing value; suppressed",
+2009,"England","Medical","Median count","Missing value; suppressed",
+2009,"England","Non-sourced","Median count","Missing value; suppressed",
+2009,"England","Public","Median count","Missing value; suppressed",
+2009,"England","Sewage related debris","Median count","Missing value; suppressed",
+2009,"England","Shipping","Median count","Missing value; suppressed",
+2008,"","Fishing","Median count","Missing value; suppressed",
+2008,"","Fly-tipped","Median count","Missing value; suppressed",
+2008,"","Medical","Median count","Missing value; suppressed",
+2008,"","Non-sourced","Median count","Missing value; suppressed",
+2008,"","Public","Median count","Missing value; suppressed",
+2008,"","Sewage related debris","Median count","Missing value; suppressed",
+2008,"","Shipping","Median count","Missing value; suppressed",
 2009,"","Fishing","Median count","Low reliability",110.5
 2009,"","Fly-tipped","Median count","Low reliability",0.5
 2009,"","Medical","Median count","Low reliability",0.5
@@ -34,8 +34,8 @@
 2009,"","Public","Median count","Low reliability",154
 2009,"","Sewage related debris","Median count","Low reliability",21.5
 2009,"","Shipping","Median count","Low reliability",16.5
-2009,"Wales","","Median count","Low reliability",592
-2008,"England","","Median count","Low reliability",1678
-2009,"England","","Median count","Low reliability",354
-2008,"","","Median count","Low reliability",1678
+2009,"Wales","","Median count","Missing value; suppressed",
+2008,"England","","Median count","Missing value; suppressed",
+2009,"England","","Median count","Missing value; suppressed",
+2008,"","","Median count","Missing value; suppressed",
 2009,"","","Median count","Low reliability",473

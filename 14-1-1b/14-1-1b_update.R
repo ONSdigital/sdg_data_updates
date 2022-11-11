@@ -301,7 +301,7 @@ wales <- all_tables %>%
 # # To err on the side of caution I have therefore marked samples of less than
 # # 35 beaches as having a 'small sample size'
 
-csv_output <- output_data %>% 
+csv_output_all <- output_data %>% 
   mutate(
     `Observation status` = case_when(
       `Number of beaches` < 35 & year != 2020 ~ "Low reliability",
@@ -316,9 +316,21 @@ csv_output <- output_data %>%
     country = ifelse(
       country == "UK", "", country),
     Units = "Median count") %>% 
-  select(year, country, source, Units, `Observation status`, median_count) %>% 
+  select(year, country, source, Units, `Observation status`, median_count, `Number of beaches`) %>% 
   rename(Value = median_count,
          `Suspected source` = source) 
+
+if (remove_unreliable_values == TRUE) {
+  csv_output <- csv_output_all %>% 
+    mutate(Value = ifelse(`Number of beaches` < 4, NA, Value),
+           `Observation status` = ifelse(`Number of beaches` < 4, 
+                                         "Missing value; suppressed", 
+                                         `Observation status`)) %>% 
+    select(-`Number of beaches`)
+} else {
+  csv_output <- csv_output_all %>% 
+    select(-`Number of beaches`)
+}
 
 names(csv_output) <- str_to_sentence(names(csv_output))
 

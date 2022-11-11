@@ -18,3 +18,5 @@ plastic_keywords <- c("plastic_polystyrene", "rubber", "sanitary", "medical")
 # if further surveys are identifies, that need to be combined they can just be 
 # added to this list
 surveys_to_sum <- c(52625, 53140)
+
+remove_unreliable_values <- TRUE

@@ -16,3 +16,5 @@ plastic_keywords <- c("plastic_polystyrene", "rubber", "sanitary", "medical")
 # if further surveys are identified that need to be combined they can just be 
 # added to this list as they will be summed based on date and location.
 surveys_to_sum <- c(52625, 53140)
+
+remove_unreliable_values <- TRUE # this suppresses any values based on 3 or fewer beaches for the csv only. the values are still given in the publication

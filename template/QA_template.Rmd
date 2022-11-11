@@ -115,7 +115,7 @@ gone wrong in the automation it will show up on the plots. Below is an example
 plots section:  
   
   Please check the plots below for any differences between the live data (which 
-  is pulled in from Jemalex) and the new data.  
+  is pulled in from the sdg-data (platform) github repo) and the new data.  
   
   Live data will appear over the top of new data. You should therefore only 
   see points for the live data for previous years and only points for the new data 
@@ -139,7 +139,7 @@ plots section:
 live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv') %>%
   janitor::clean_names()
 
-new_data <- csv_formatted %>% 
+new_data <- csv_formatted %>% # replace csv_formatted with whatever your final csv was called
   mutate(Year = as.integer(Year),
          dataset = "new") %>%
   janitor::clean_names() 
@@ -152,12 +152,12 @@ joined_data <- live_data %>%
 # plot the data
 plot <- joined_data %>% 
   ggplot(.,
-         aes(x = Year,
-             y = Value,
+         aes(x = year,
+             y = value,
              colour = dataset)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(vars(Gas),
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(gas),
              nrow = 2) +
   theme_bw() 
 
@@ -180,9 +180,9 @@ differences is also useful. The following example is taken from 13-2-2:
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+  select(year, gas, value, dataset) %>% # edit to be relevant for your columns
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
+              values_from = value) %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top

@@ -1,7 +1,7 @@
 # Make sure that all number columns in the beachwatch data are formatted as numbers 
 # WITHOUT the thousands separator (',') 
 
-filename_main_data <- "Beachwatch_GBBC_1994-2021.csv"
+filename_main_data <- "dummy_data.csv"
 filename_sources <- "beachwatch_sources_2021_1.0.csv"
 cover_sheet_filename <- "cover_sheet.xlsx" 
 

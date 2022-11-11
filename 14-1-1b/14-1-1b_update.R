@@ -6,7 +6,7 @@
 # Other info: This script is called by compile_tables.R
 
 # read in and clean data -------------------------------------------------------
-original_data <- read.csv(filepath_main_data)
+original_data <- read.csv(paste0(input_folder, "/", filename_main_data))
 
 main_clean <- original_data %>% 
   mutate(across(where(is.factor), as.character)) %>% 
@@ -21,7 +21,7 @@ main_clean <- original_data %>%
          length_surveyed = as.numeric(length_surveyed))
 
 # Retain the original format of the sources data for use in the table output
-sources_data_original <- read.csv(filepath_sources) 
+sources_data_original <- read.csv(paste0(input_folder, "/", filename_sources)) 
 
 sources_data <- sources_data_original %>% 
   mutate(across(where(is.factor), as.character)) %>% 

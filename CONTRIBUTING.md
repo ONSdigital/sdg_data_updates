@@ -216,10 +216,12 @@ Once your code has passed [review](#reviewing-indicator-automations) it can be m
 > Check that you can see the expected changes in Jemalex/sdg_data_updates folder
 
 ## Adding functions to SDGupdater 
-This section is stil in progress...  
-  
+ 
 If a function is likely to be useful for other updates, please add it to the SDGupdater package.  
 Functions **must** be fully documented (using roxygen2) and have comprehensive unit tests.  
+  
+Before you request a review of changes/additions to the SDGupdater, please check that all unit tests
+pass.  
   
 The code below can be used to create the documentation files from the information in the function file, 
 install the package and run all unit tests:  

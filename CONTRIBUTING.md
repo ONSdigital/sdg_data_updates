@@ -214,6 +214,15 @@ Once your code has passed [review](#reviewing-indicator-automations) it can be m
 > `git pull origin main` to merge the changes from the remote "main" to the local "main"
 > 
 > Check that you can see the expected changes in Jemalex/sdg_data_updates folder
+  
+When you try to pull you may get "error: cannot pull with rebase: You have unstaged changes. error: please commit or stash them." If this happens, using Git Bash:  
+  
+>
+> `git status` to see what the unstaged changes are. The ONLY thing that we expect to have changed on the Jemalex repo clone is update_indicator_main.R. If anything else is listed please check with the team to see if any changes they made need to be saved elsewhere. Once any necessary saves are done you can continue
+> 
+> `git restore update_indicator_main.R` if this is the only thing listed
+> 
+> `git restore .` if there is more and you dont want to type them all out.
 
 ## Adding functions to SDGupdater 
  

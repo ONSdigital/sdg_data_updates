@@ -9,7 +9,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("stringr", "dplyr", 
+packages <- c("stringr", "dplyr", "tools",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
 
@@ -18,6 +18,7 @@ install_absent_packages(packages)
 
 library('stringr')
 library("dplyr")
+library("tools")
 
 
 source("config.R")  # pulls in all the configurations. Un-comment out code below for real update

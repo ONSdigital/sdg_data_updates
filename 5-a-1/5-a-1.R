@@ -40,7 +40,7 @@ multiple_quarters <- ifelse(length(unique_months) > 1, TRUE, FALSE)
 # we need to filter for the data made up to (usually) the end of the calendar year.
 # required_month is specified in the config file.
 if(multiple_quarters == TRUE) {
-  numerator_annual <- numerator_data %>% 
+  NOMIS_annual <- NOMIS_data %>% 
     mutate(keep_quarter = ifelse(substr(DATE_CODE, 6, 7) == required_month, TRUE, FALSE)) %>% 
     filter(keep_quarter == TRUE) %>% 
     select(-keep_quarter)
@@ -50,7 +50,7 @@ if(multiple_quarters == TRUE) {
 
 #### Clean up data ####
 
-NOMIS_clean <- NOMIS_data %>% 
+NOMIS_clean <- NOMIS_annual %>% 
   # we don't need confidence intervals or rates - though this may change in future
   filter(MEASURES_NAME == "Value" & MEASURE_NAME == "Count") %>% 
   # split the geographies so country and region are in separate columns
@@ -147,16 +147,24 @@ proportion_data <- rbind(female_proportion_data, male_proportion_data)
 csv_formatted <- proportion_data %>% 
   # Format countries and regions to title case
   mutate(Country = toTitleCase(Country),
-         Region = toTitleCase(Region)) %>%
+         Region = toTitleCase(Region)) %>% 
   # Include correct wording in observation status for when data is not collected
   mutate(`Observation status` = case_when(
     `Observation status` == "Estimate is less than 500" ~ 
-      "Missing value; data exist but were not collected",
+      "Missing value; suppressed",
+    TRUE ~ as.character(`Observation status`))) %>% 
+  mutate(`Observation status` = case_when(
+    `Observation status` == "Estimate and confidence interval not available since the group sample size is zero or disclosive (0-2)" ~ 
+      "Missing value; suppressed",
     TRUE ~ as.character(`Observation status`))) %>% 
   # Put columns in order required for csv file.
   select(Year, Country, Region, Sex, `Observation status`, Value) %>%
   # Arrange data by Year, Country, region, Sex 
   arrange(Year, Country, Region, Sex)
+
+# Correct spelling of Yorkshire and The Humber
+csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber"
+csv_formatted$Country[csv_formatted$Country == "United Kingdom"] <- ""
 
 
 #### Remove NAs from the csv that will be saved in Outputs ####

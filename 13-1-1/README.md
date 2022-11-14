@@ -12,8 +12,6 @@ Output includes the data in csv format, and an html QA report. Users should stil
 In particular, please check in the source data whether the most recent figures are provisional. If they 
 are, in the csv tab of the In progress/Indicator xlsx file change the observation status to 'Provisional'.  
   
-### Examples
-Example_Input, Example_output and example_config.R still need to be added.
         
 ### USER INSTRUCTIONS (SDG Data team): 
 
@@ -65,13 +63,16 @@ If it does not end with 'sdg_data_updates' type `setwd('./..')`, this will make 
 config.R: called by compile_tables.R
 
   The Nomis links shouldn't need to be updated. The ONS dataset is unlikely to be updated (beyond 2018) and the script only uses data up to 2012.
-	These configurations are used by 'update_indicator.R'.  
+	These configurations are used by recent_data.R and historical_data.R to load the source data and by compile_tables.R decide whether to run historical_data.R.
 	
 compile_tables.R: called by update_indicator_main.R.
   
-	Reads in the data from the input folder, runs the script that puts the data in the csv format (update_indicator.R), and the Rmarkdown file that creates the QA html
-	which it then saves in the Output folder.  If the Output folder does not already exist, it creates one.  
+	Combines the output from recent_data.R and historical_data.R if appropriate. Writes the output dataframe to csv and renders the QA document.  
 	
-update_indicator.R: called by compile_tables.R
-  This is where the bulk of the work is done. It combines data from the 3 data sources and aggregates by sex and cause of death where necessary.
- 
+recent_data.R: called by compile_tables.R
+	
+	Produces the dataframe for the number of deaths caused by natural disasters and age-standardised mortality rate for 2013 onward.
+
+historical_data.R: called by compile_tables.R if in config.R: run_historic_data <- TRUE
+
+	Produces the dataframe for the number of deaths caused by natural disasters for 2001 to 2012.

@@ -1,3 +1,8 @@
+# This file is called by compile_tables.R.
+# It processes the data about number of deaths caused by natural disasters in England
+# and Wales 2013-present along with the Age-Standardised mortality rate for those killed
+# by natural disasters.
+
 
 # Load in the datasets----
 
@@ -30,7 +35,7 @@ all_deaths_cleaned <- all_deaths_cleaned %>%
          Value = OBS_VALUE, 
          Country = GEOGRAPHY_NAME, 
          Year = DATE) %>% 
-  mutate(`Observation status` = "Normal value") %>%
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>%
   mutate(GeoCode = "") %>% 
   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
   mutate(`Unit multiplier` = "") %>%
@@ -76,8 +81,8 @@ all_deaths_cleaned_agg_by_cause <- all_deaths_cleaned %>%
   summarise(Value = sum(Value)) %>% 
   # Add the columns the disaggregate df has
   mutate(`Cause of death` = "") %>% 
-  mutate(`Observation status` = "Normal value") %>% 
-  mutate(Units = "Number") %>% 
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% # Time of coding: "Normal Value"
+  mutate(Units = "Number") %>% # Has to be hard-coded as "Number" not in the dataframe
   mutate(`Unit multiplier` = "") %>% 
   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
   mutate(GeoCode = as.character(GeoCode)) %>% 
@@ -104,7 +109,7 @@ all_mortality_cleaned <- all_mortality_cleaned %>%
          Value = OBS_VALUE,
          Country = GEOGRAPHY_NAME,
          Year = DATE) %>%
-  mutate(`Observation status` = "Normal value") %>%
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>%
   mutate(GeoCode = "") %>% 
   mutate(Series = "Age-standardised mortality rates per 100,000 population") %>% 
   mutate(`Unit multiplier` = "") %>%

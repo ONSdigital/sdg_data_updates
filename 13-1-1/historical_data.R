@@ -1,3 +1,6 @@
+# This file is called by compile_tables.R if in config.R: run_historic_data <- TRUE.
+# This processes the data processes the data on deaths by natural disaster 
+# released by the ONS for the years 2001-2018, but outputs for 2001-2012 only.
 
 # Load in the datasets----
 headline_df <- openxlsx::read.xlsx(ons_disaster_death_link, sheet = ons1, colNames = FALSE) %>%
@@ -65,8 +68,8 @@ headline_df_cleaned <- headline_df_cleaned %>%
   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
   mutate(Sex = "") %>% 
   mutate(Country = ifelse(Country=="England and wales", "", Country)) %>% 
-  mutate(`Observation status` = "Normal value") %>% # Change this to its value in the Nomis data, don't hard code
-  mutate(Units = "Number") %>% # same as above
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% # Change this to its value in the Nomis data, don't hard code
+  mutate(Units = "Number") %>% # same as above. 
   mutate(`Unit multiplier` = "") %>% # as above?
   mutate(`Cause of death` = "") %>% 
   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
@@ -97,7 +100,7 @@ sex_df_cleaned <- sex_df_cleaned %>%
   mutate(Value = as.numeric(Value)) %>% 
   mutate(Country = ifelse(Country=="England and wales", "", Country)) %>% 
   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
-  mutate(`Observation status` = "Normal value") %>% 
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% 
   mutate(Units = "Number") %>% 
   mutate(`Unit multiplier` = "") %>% 
   mutate(`Cause of death` = "") %>% 
@@ -121,7 +124,7 @@ sex_df_cleaned_agg_by_sex <- sex_df_cleaned %>%
   mutate(`Cause of death` = "") %>% 
   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
   mutate(Sex = "") %>% 
-  mutate(`Observation status` = "Normal value") %>% 
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% 
   mutate(Units = "Number") %>% 
   mutate(`Unit multiplier` = "") %>% 
   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
@@ -145,7 +148,7 @@ cause_df_cleaned <- cause_df_cleaned %>%
   select('Country',
          'Year', 
          cause_of_death_names) %>% 
-  tidyr::fill(c('Country')) %>% 
+  tidyr::fill(c('Country')) %>% # Seems to break if you take out tidyr::
   tidyr::pivot_longer(cols=cause_of_death_names, names_to="Cause of death", values_to = "Value") %>% 
   mutate(Value = as.numeric(Value)) %>% 
   mutate(Series = "Number of deaths from exposure to forces of nature") %>%
@@ -153,7 +156,7 @@ cause_df_cleaned <- cause_df_cleaned %>%
   mutate(`Cause of death` = lapply(`Cause of death`, recode_disaster)) %>%
   mutate(`Unit multiplier` = "") %>%  # Blank column, multiplier is zero
   mutate(Units = "Number") %>% 
-  mutate(`Observation status` = "Normal value") %>% 
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% 
   mutate(Country = ifelse(Country=="England and wales", "", Country)) %>% 
   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
   mutate(GeoCode = as.character(GeoCode)) %>% 
@@ -193,7 +196,7 @@ cause_by_sex_df_cleaned <- cause_by_sex_df_cleaned %>%
   mutate(`Cause of death` = lapply(`Cause of death`, recode_disaster)) %>% 
   mutate(`Unit multiplier` = "") %>%  # Blank column, multiplier is zero
   mutate(Units = "Number") %>% 
-  mutate(`Observation status` = "Normal value") %>% 
+  mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% 
   mutate(Country = ifelse(Country=="England and wales", "", Country)) %>% 
   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
   mutate(GeoCode = as.character(GeoCode)) %>% 
@@ -207,15 +210,10 @@ cause_by_sex_df_cleaned <- cause_by_sex_df_cleaned %>%
          Units, 
          GeoCode, 
          Value) %>% 
-  mutate(Year = as.numeric(Year)) %>%  #%>% # so we can keep only <2013
+  mutate(Year = as.numeric(Year)) %>% # so we can keep only <2013
   mutate(Value = as.numeric(Value)) %>% 
   mutate(`Cause of death` = unlist(`Cause of death`)) 
 
-# We now need to aggregate by Sex
-# Actually we shouldn't need this as this is just Table 3
-#cause_by_sex_df_cleaned_agg_by_sex <- cause_by_sex_df_cleaned %>% 
-  #group_by(Year, Country) %>% 
-  #summarise(Value = sum(Value))
 
 # Combine all the dataframes----
 
@@ -223,12 +221,11 @@ historic_data <- headline_df_cleaned %>%
   rbind(sex_df_cleaned) %>% 
   rbind(sex_df_cleaned_agg_by_sex) %>% 
   rbind(cause_df_cleaned) %>% 
-  rbind(cause_by_sex_df_cleaned) #%>% 
-  #rbind(cause_by_sex_df_cleaned_agg_by_sex)
+  rbind(cause_by_sex_df_cleaned)
 
 # Keep only data for 2001 to 2012
 
-historic_data <- historic_data %>% 
+historic_data_up_to_2012 <- historic_data %>% 
   filter(Year<2013) %>% 
   select(Year, 
          Series, 

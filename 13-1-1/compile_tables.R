@@ -27,7 +27,7 @@ source("recent_data.R")
 
 if (run_historic_data == TRUE){
   source("historical_data.R")
-  combined_data <- recent_data %>% rbind(historic_data)
+  combined_data <- recent_data %>% rbind(historic_data_up_to_2012)
 } else {
   combined_data <- recent_data
 }
@@ -36,7 +36,6 @@ if (run_historic_data == TRUE){
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
 combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
 
-#source("update_indicator.R")
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -61,15 +60,3 @@ message(paste0("The csv and QA file have been created and saved in '", paste0(ge
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")
-
-# for(col in names(historic_data)){
-#   if(is.list(historic_data$col)==TRUE){
-#     print("!")
-#   }
-# }
-# 
-# for(col in names(recent_data)){
-#   if(is.list(historic_data$col)==TRUE){
-#     print("!")
-#   }
-# }

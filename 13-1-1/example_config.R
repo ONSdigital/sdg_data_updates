@@ -1,3 +1,6 @@
+# If you want to include the ONS data, set run_historic_data to TRUE
+run_historic_data <- TRUE
+
 # 2013 onwards
 nomis_disaster_deaths_link <- "https://www.nomisweb.co.uk/api/v01/dataset/NM_161_1.data.csv?geography=2092957715,2092957699,2092957700,2092957703,2092957716&cause_of_death=0,12430...12439&gender=0...2&age=0&measure=1&measures=20100"
 

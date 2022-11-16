@@ -6,7 +6,7 @@ It also contains code that aid in future-proofing against changes in the initial
   
 There are four main files that should be relatively consistent in what they do across all indicators (where it is just a standard update):
 1. `update_indicator_main.R` This file is the control script for ALL standard R updates. 
-You should not need to change anything on it, other than the indicator number when you are testing your automation
+You should not need to change anything on it, other than the indicator number and whether or not you are doing a test run (using example_config) or a real run (using config).
 2. `compile_tables.R` Every standard R update needs a script with this exact name. It is the script called by `update_indicator_main.R`, 
 and which calls the scripts that do the donkey-work. The csv may be saved from here. The Rmarkdown html file is run and saved from here.
 3. `config.R` This could be written as a yaml file, but usually the configs are straightforward enough that an R config file is fine. This is where

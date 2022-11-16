@@ -18,7 +18,7 @@ It/they can be called anything, but try to keep it informative.
   
 There are a number of different input layouts that impact the way an automation is written. There are, therefore, separate template scripts for each of these types. Each file layout type has it's own input, config, compile_tables, and workhorse files.  
   
-Currently, only the templates for type_1, type_2 and type_4 are ready to use, though they do not yet include markdown templates.  
+Currently, only the templates for type_1, type_2 and type_4 are ready to use. The markdown template can be used for any type of input data, as it uses data produced by the other scripts, not the raw input (source) data.  
   
 ### Input types
 #### Type 1: Simple excel or csv file 

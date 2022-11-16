@@ -34,7 +34,8 @@ Currently, only the templates for type_1, type_2 and type_4 are ready to use. Th
 #### Type 3: Excel file with headers hidden in a data column
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
 - There isn't a template script for this yet, but see the code for indicator 11-1-1
-  
+  ![example](https://user-images.githubusercontent.com/52452377/202205376-7aed5f59-a1e0-4dd4-a896-40ac8df43d7b.png)
+
 #### Type 4: Nomis
 - Data that are on Nomis do not need to be manually downloaded as they have stable weblinks
 - Headers are simple and stable (I think the latter is true)

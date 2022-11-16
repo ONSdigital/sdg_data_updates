@@ -14,7 +14,7 @@ user configurations are set - these are aspects of the code that may need to be 
 It should have this name to save any confusion, and because this is a standard name for this kind of file. It is called by `compile_tables.R`
 4. A .R script or scripts that do the bulk of the work called by `compile_tables.R` (I refer to this as the 'workhorse' file). 
 It/they can be called anything, but try to keep it informative.
-5. A .Rmd script that creates an html for QA purposes (not yet in templates) called by `compile_tables.R`.
+5. A .Rmd script that creates an html for QA purposes called by `compile_tables.R`.
   
 There are a number of different input layouts that impact the way an automation is written. There are, therefore, separate template scripts for each of these types. Each file layout type has it's own input, config, compile_tables, and workhorse files.  
   

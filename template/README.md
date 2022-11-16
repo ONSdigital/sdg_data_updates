@@ -33,6 +33,7 @@ Currently, only the templates for type_1, type_2 and type_4 are ready to use. Th
   
 #### Type 3: Excel file with headers hidden in a data column
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
+- There isn't a template script for this yet, but see the code for indicator 11-1-1
   
 #### Type 4: Nomis
 - Data that are on Nomis do not need to be manually downloaded as they have stable weblinks
@@ -43,7 +44,7 @@ Currently, only the templates for type_1, type_2 and type_4 are ready to use. Th
 ### Instructions
 1. Identify which type is closest to the data you want to write an automation for.
 2. Open RStudio
-3. Open the sdg_data+updates R.proj project
+3. Open the sdg_data_updates R.proj project
 4. Open the relevant config, compile_tables and workhorse files. E.g. If you have type 1 data, open type_1_config.R, type_1_compile_tables.R, and update_type_1.R
 5. Run the template code bit by bit on the example data (in template > Example_input) so you can see what it does
 6. Create a folder for your indicator in the main folder (**not in the template folder**)

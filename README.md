@@ -1,5 +1,5 @@
 ## General info ##
-Open source code for updating SDG data files. For each indicator, data are either manually stored in the Input folder, or automatically taken from a predictable weblink to a csv. Scripts read in the data, reshape it and join dataframes where necessary. Required calculations are performed, and data are reshaped to fit the tidy format required to upload data to the SDG data platform. QA html files are created to help users identify issues with the code and store run information (e.g. what configurations are used). The csv output is then uploaded to the [sdg-data repo](https://github.com/ONSdigital/sdg-data/).
+Code for updating SDG data files, and template code for creating automated updates. For each indicator, data are either manually stored in the Input folder, or automatically taken from a predictable weblink to a csv. Scripts read in the data, reshape it and join dataframes where necessary. Required calculations are performed, and data are reshaped to fit the tidy format required to upload data to the SDG data platform. QA html files are created to help users identify issues with the code and store run information (e.g. what configurations are used). The csv output is then uploaded to the [sdg-data repo](https://github.com/ONSdigital/sdg-data/).
 
 Contact: SDG team
 SustainableDevelopment@ons.gov.uk

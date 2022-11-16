@@ -14,6 +14,7 @@ I am going to assume that the only people who will be contributing will be membe
 
 ## Useful resources ##
     
+[Template codes](https://github.com/ONSdigital/sdg_data_updates/tree/main/template#template-r-code) - use these to start writing new automations (see also [Setting up a new indicator automation](#setting-up-a-new-indicator-automation))       
 [Quality Assurance of Code for Research Analysis](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) - this is where you will find a template for peer review    
 [renv](https://rstudio.github.io/renv/articles/renv.html)  - package dependency management.      
 [making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  

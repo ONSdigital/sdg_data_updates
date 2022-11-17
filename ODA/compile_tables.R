@@ -60,7 +60,7 @@ names(old_oda_data) <- tolower(names(old_oda_data))
 if ("1-a-1" %in% indicators) {
   gni_end_year <- format(Sys.Date(), "%Y") # it doesn't matter if the end year is later than the latest data, the link will still work
   gni_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/TABLE1/12+12.1.1.1140+1160.N/all?startTime=",
-                    gni_start_year, "&endTime=", gni_end_year)
+                    oecd_start_year, "&endTime=", gni_end_year)
   try(gni_sdmx <- readSDMX(gni_api))
   try(gni_data <- as.data.frame(gni_sdmx))
 }

@@ -58,11 +58,19 @@ names(old_oda_data) <- tolower(names(old_oda_data))
 # could move to 1-a-1 file if this is the only indicator using GNI
 
 if ("1-a-1" %in% indicators) {
-  gni_end_year <- format(Sys.Date(), "%Y")
+  gni_end_year <- format(Sys.Date(), "%Y") # it doesn't matter if the end year is later than the latest data, the link will still work
   gni_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/TABLE1/12+12.1.1.1140+1160.N/all?startTime=",
-                    gni_start_year, "&endTime=", gni_end_year)
+                    oecd_start_year, "&endTime=", gni_end_year)
   try(gni_sdmx <- readSDMX(gni_api))
   try(gni_data <- as.data.frame(gni_sdmx))
+}
+
+if("15-a-1_15-b-1" %in% indicators) {
+  biodiversity_end_year <- format(Sys.Date(), "%Y") # it doesn't matter if the end year is later than the latest data, the link will still work
+  biodiversity_api <- paste0("https://stats.oecd.org/restsdmx/sdmx.ashx/GetData/ERTR/GBR.BASE_NC+BASE_REV+BASE_GDP+BASE_USD.TOT.BIOD/all?startTime=",
+                             oecd_start_year, "&endTime=", biodiversity_end_year)
+  try(biodiversity_sdmx <- readSDMX(biodiversity_api))
+  try(biodiversity_data <- as.data.frame(biodiversity_sdmx))
 }
 
 # create stable column names based on elements of column names -----------------
@@ -105,9 +113,9 @@ for (i in 1:length(indicators)) {
   # initiate a dataframe to hold both pre and post 2017 data for indicator i
   all_years <- NULL
   
-  for (j in 1:2) {
+  for (pre_or_post_2017_counter in 1:2) {
     
-    oda_renamed <- oda_renamed_list[[j]]
+    oda_renamed <- oda_renamed_list[[pre_or_post_2017_counter]]
     
     try(
       source(script_name)
@@ -161,5 +169,12 @@ message(paste0("The csv and QA files have been created and saved in '",
                ". It is possible that not all indicators ran successfully -
                please check oda_update_checks.Rmd"))
 
+if ("gni_sdmx" %not_in% objects()) {
+  warning("GNI data for 1-a-1 not downloaded, so if you want this indicator, please rerun. If it still doesn't work, try using a different interet connection")
+}
+
+if ("biodiversity_sdmx" %not_in% objects()) {
+  warning("OECD biodiversity taxes data for 15-a-1b/15-b-1-b not downloaded, so if you want this series, please rerun. If it still doesn't work, try using a different interet connection")
+}
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

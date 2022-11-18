@@ -11,25 +11,28 @@ The full list of indicators, and whether they are based on net ODA or amounts ex
 -  9-a-1  
 -  17-9-1  
 -  17-19-1  
-#### Amounts extended
+#### Gross ODA (Amounts extended)
 -  4-b-1  
 -  6-a-1  
 -  8-a-1  
+-  15-a-1  
   
 Additional source data used for these automations are:  
 - exchange rate and deflator data for converting GBP to constant USD (used in several indicators)  
-- GNI data for calculating ODP as a % of GNI (used for 1-a-1)  
+- GNI data from OECD for calculating ODP as a % of GNI (used for 1-a-1)   
+- Biodiversity taxes data from OECD for 15-a-1b (duplicate of 15-b-1b)  
   
-The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1, 15-a-1, and 15-b-1.  
+The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1.  
   
 ## Instructions  
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
   
+**IF YOU ARE RUNNING 1-a-1, OR 15-a-1b/15-b-1b USE A NON-ONS INTERNET NETWORK** as the OECD APIs won't work on the ONS network.  
 1. Download and save the ODA, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
 2. Open the `sdg_data_updates.Rproj` from inside RStudio. 
 3. If it exists, open the `config.R` file in ODA (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 If not, save `example_config.R` as `config.R` in ODA.  
-4. Check that the compile_tables script calls config.R rather than example_config.R  
+4. Check that test_run in update_indicator_main is FALSE.
 5. Check the configurations are correct for the files you have saved, and if not correct them and save `config.R`.  
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
      2. `filename_2017` is the name of file (including the .csv extension) containing archived data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. 
@@ -40,7 +43,7 @@ If not, save `example_config.R` as `config.R` in ODA.
 8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv tabs in the Indicator files**  
 9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.  
   
-**See troubleshooting[#troubleshooting] for common errors and how to fix them**
+**See [troubleshooting](#troubleshooting) for common errors and how to fix them**
   
 ## Data sources
 Data are imported into R in a variety of ways:  
@@ -71,9 +74,7 @@ Some possible errors (may not be an exact match) and solutions:
     
 
 ```diff
-- Error in setwd(indicator) : cannot change working directory
-  
-  
+- Error in setwd(indicator) : cannot change working directory  
 
 The folder name you have given for `indicator` in update_indicator_main.R may be incorrectly typed. Check you are using 'ODA'.  
 OR     
@@ -90,4 +91,14 @@ This will result in indicator 1-a-1 not being updated. It occurs when internet s
 with a faster connection to try, or try later. It may also be caused in future by issues with Firewalls. This is
 not currently an issue. If it becomes an issue with ONS, this part of the code may need to be rewritten to use a
 manual download
+```
+
+```diff
+- Error in curl::curl_fetch_memory(url, handle = handle) : Timeout was reached: [stats.oecd.org] Send failure: Connection was reset. 
+- Error in as.data.frame(gni_sdmx) : object 'gni_sdmx' not found
+
+The API connection to OECD is not working. In tests it did not work on the ONS internet network so try using your home network.  
+If necessary this *could* be changed to a manual download (see the instructions for downloading the data in cource 2 of 15-a-1),
+and the data read in as a csv from the Input folder. 
+
 ```

@@ -3,7 +3,7 @@
 # Control script to QA 11-1-1 (there is a different code already written by Max)
 # Also used to test template code
 
-
+library('SDGupdater')
 packages <- c("stringr", "openxlsx", "tidyr", "dplyr", #"janitor", 
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
@@ -14,8 +14,6 @@ library('dplyr')
 library('tidyr')
 library('openxlsx')
 library('stringr')
-
-library('SDGupdater')
 
 if (test_run == TRUE) {
   source("example_config.R")

@@ -11,7 +11,7 @@ library(SDGupdater)
 packages <- c('tidyr', 'dplyr', 'stringr', 'tibble',
               'tools', 'ggplot2', 'DT', 'pander')
 
-install_absent_packages(packages)
+# install_absent_packages(packages)
 
 
 #load packages

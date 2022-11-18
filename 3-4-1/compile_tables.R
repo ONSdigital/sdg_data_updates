@@ -6,8 +6,26 @@
 #     It is the control script that runs all the others.
 
 
+library(SDGupdater)
+
+packages <- c('tidyr', 'dplyr', 'stringr', 'tibble',
+              'tools', 'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
+
+#load packages
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(tibble)
+library(stringr)
+library(dplyr)
+library(tools)
+
+
+
 source("config.R") # pulls in all the configurations for updating indicator 3.4.1.
-source("update_3-4-1.R") # Makes the csv file for updating indicator 3.4.1 on the platform. 
 
 
 # run one year of data at a time as the dataset is too big to download all years 

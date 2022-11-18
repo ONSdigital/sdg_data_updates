@@ -1,23 +1,14 @@
 # date: 12/04/2022
 
-#load packages
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(tibble)
-library(stringr)
-library(dplyr)
-library(tools)
-
 
 # download and read in data ----------------------------------------------------
 # regions dataset is separate as filtered by a different age-range, but if now reporting blanks may not be needed
-all_but_female_data <- read.csv(all_but_female_link) %>% 
+all_but_female_data <- read.csv(all_but_female_link_temp) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
-female_data <- read.csv(female_link) %>% 
+female_data <- read.csv(female_link_temp) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 

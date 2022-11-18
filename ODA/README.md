@@ -32,7 +32,7 @@ For the UK data team, all files and folders mentioned below are in Jemalex > sdg
 2. Open the `sdg_data_updates.Rproj` from inside RStudio. 
 3. If it exists, open the `config.R` file in ODA (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 If not, save `example_config.R` as `config.R` in ODA.  
-4. Check that the compile_tables script calls config.R rather than example_config.R  
+4. Check that test_run in update_indicator_main is FALSE.
 5. Check the configurations are correct for the files you have saved, and if not correct them and save `config.R`.  
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
      2. `filename_2017` is the name of file (including the .csv extension) containing archived data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. 

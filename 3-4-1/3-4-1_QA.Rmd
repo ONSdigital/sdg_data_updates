@@ -39,6 +39,12 @@ The configurations for this run are:
   
   
 ## Basic checks
+
+We should only use data for the calendar year (Jan-Dec). The months contained in 
+the data for this run are: `r unique_months_retained`.  If the given months are 
+incorrect please check the nomis selections are correct, and regenerate the link 
+(see the README file).  
+
 The dates listed in the information above `r tab_name`, should match the dates 
 produced in the output csv. It is 
 `r earliest_year == min(as.numeric(csv_formatted$Year))` 

@@ -27,9 +27,9 @@ source("recent_data.R")
 
 if (run_historic_data == TRUE){
   source("historical_data.R")
-  combined_data <- recent_data %>% rbind(historic_data_up_to_2012)
+  combined_data <- recent_data_cleaned %>% bind_rows(historic_data_up_to_2012)
 } else {
-  combined_data <- recent_data
+  combined_data <- recent_data_cleaned
 }
 
 # Remove any rows which might be duplicates
@@ -51,8 +51,9 @@ qa_filename <- paste0(date, indicator, "-QA.html")
 
 write.csv(combined_data, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
+save.image(file = 'img.RData')
 
-rmarkdown::render('13-1-1-QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+#rmarkdown::render('13-1-1-QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),

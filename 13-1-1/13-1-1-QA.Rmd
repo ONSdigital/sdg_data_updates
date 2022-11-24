@@ -97,6 +97,11 @@ combined_data_cleaned <- combined_data %>%
   mutate(Year = as.character(Year)) %>% 
   mutate(Value = as.numeric(Value))
 
+# RE THE NA ISSUE IN UNIT MULTIPLIER, DROP THE COLUMN
+
+#original_data_cleaned <- subset(original_data_cleaned, select = -c(`Unit multiplier`))
+#combined_data_cleaned <- subset(combined_data_cleaned, select = -c(`Unit multiplier`))
+
 print(paste("The number of rows in the older data is: ", nrow(original_data)))
 print(paste("The number of rows in the updated data is: ", nrow(combined_data)))
 
@@ -104,6 +109,7 @@ print(paste("Checking for NA in combined_data. Total number of NA is: ", sum(is.
 
 diff <- anti_join(combined_data_cleaned, original_data_cleaned, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
 print("If there are no inconsistencies then the table below should be empty")
+print(paste("There are number of inconsistent rows: ", nrow(diff)))
 knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
 
 # For future updates use the code below ----

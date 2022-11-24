@@ -27,7 +27,7 @@ source("recent_data.R")
 
 if (run_historic_data == TRUE){
   source("historical_data.R")
-  combined_data <- recent_data_cleaned %>% bind_rows(historic_data_up_to_2012)
+  combined_data <- recent_data_cleaned %>% bind_rows(historic_data_up_to_2012_cleaned)
 } else {
   combined_data <- recent_data_cleaned
 }
@@ -35,6 +35,12 @@ if (run_historic_data == TRUE){
 # Remove any rows which might be duplicates
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
 combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
+
+# Replace any NA with ""
+
+#combined_data$`Observation status` <- combined_data$`Observation status` %>% 
+  #replace_na("") %>% 
+ # replace(combined_data$`Observation status` == "NA", "")
 
 
 existing_files <- list.files()
@@ -53,7 +59,7 @@ write.csv(combined_data, paste0(output_folder, "/", csv_filename), row.names = F
 
 save.image(file = 'img.RData')
 
-#rmarkdown::render('13-1-1-QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('13-1-1-QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),

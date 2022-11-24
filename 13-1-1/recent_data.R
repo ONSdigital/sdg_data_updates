@@ -106,7 +106,8 @@ all_disaster_deaths <- all_deaths %>%
 
 all_disaster_deaths_any_cause <- all_disaster_deaths %>% # Any disaster cause of death
    group_by(DATE, GEOGRAPHY_NAME, GENDER_NAME) %>% 
-   summarise(OBS_VALUE = sum(OBS_VALUE))
+   summarise(OBS_VALUE = sum(OBS_VALUE)) %>% 
+   mutate(CAUSE_OF_DEATH_NAME = "")
 
 all_disaster_deaths_with_totals <- all_disaster_deaths %>% bind_rows(all_disaster_deaths_any_cause)
 
@@ -149,8 +150,11 @@ all_disaster_deaths_with_totals_cleaned <- all_disaster_deaths_with_totals %>%
 # Clean up all_mortality----
 
 all_mortality_cleaned <- all_mortality %>% 
+  filter(grepl("^[X][0-9][0-9]", CAUSE_OF_DEATH_NAME)) %>% 
   mutate(Series = "Age-standardised mortality rates per 100,000 population",
-         Units = "Rate per 100,000 population")  
+         Units = "Rate per 100,000 population",
+         CAUSE_OF_DEATH_NAME = "")
+  
 
 
 recent_data <- all_disaster_deaths_with_totals_cleaned %>% bind_rows(all_mortality_cleaned)
@@ -179,6 +183,10 @@ recent_data_cleaned <- recent_data %>%
          `Units`, 
          GeoCode, 
          Value)
+
+recent_data_cleaned <- recent_data_cleaned %>% 
+  mutate(Year = as.numeric(Year),
+         Value = as.numeric(Value))
 
 # all_mortality_cleaned <- all_mortality
 # all_mortality_cleaned <- all_mortality_cleaned %>% 
@@ -215,8 +223,8 @@ recent_data_cleaned <- recent_data %>%
 # Combined the number of death data with the mortality data----
 
 # recent_data <- all_deaths_cleaned %>% 
-#   rbind(all_deaths_cleaned_agg_by_cause) %>% 
-#   rbind(all_mortality_cleaned) %>% 
+#   bind_rows(all_deaths_cleaned_agg_by_cause) %>% 
+#   bind_rows(all_mortality_cleaned) %>% 
 #   select(Year, 
 #          Series, 
 #          Country, 

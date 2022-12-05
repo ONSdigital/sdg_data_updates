@@ -36,12 +36,11 @@ if (run_historic_data == TRUE){
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
 combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
 
-# Replace any NA with ""
+# Add columns for GeoCode and replace cause of death code with a description
 
-#combined_data$`Observation status` <- combined_data$`Observation status` %>% 
-  #replace_na("") %>% 
- # replace(combined_data$`Observation status` == "NA", "")
-
+#combined_data <- combined_data %>% 
+#mutate(GeoCode = lapply(Country, get_GeoCode) %>% as.character(),
+#         `Cause of death` = lapply(`Cause of death`, recode_disaster) %>% as.character())
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)

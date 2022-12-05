@@ -26,78 +26,6 @@ get_GeoCode <- function(countryName){
   else {return("")}
 }
 
-# Clean up all_deaths----
-
-# all_deaths_cleaned <- all_deaths 
-# all_deaths_cleaned <- all_deaths_cleaned %>% 
-#   rename(Sex = GENDER_NAME, 
-#          `Cause of death` = CAUSE_OF_DEATH_NAME, 
-#          Value = OBS_VALUE, 
-#          Country = GEOGRAPHY_NAME, 
-#          Year = DATE) %>% 
-#   mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>%
-#   mutate(GeoCode = "") %>% 
-#   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
-#   mutate(`Unit multiplier` = "") %>%
-#   mutate(Units = "Number") %>% 
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`, 
-#          GeoCode, 
-#          Value) %>% 
-#   # Keep only the rows for natural disaster deaths
-#   filter(grepl("^[X][0-9][0-9]", `Cause of death`)) %>% # Note: we only match to beginning
-#   # Exclude any rows corresponding to data about non EW residents
-#   filter(Country %in% c("England", "Wales", "England and wales")) %>% 
-#   mutate(Sex = ifelse(Sex == "Total", "", Sex)) %>%
-#   # Replace "England and wales" with ""
-#   mutate(Country = ifelse(Country == "England and wales", "", Country)) %>%
-#   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
-#   mutate(GeoCode = as.character(GeoCode)) %>% 
-#   # Remove the leading code in Cause of death to make match the ons data
-#   mutate(`Cause of death` = substring(`Cause of death`, 5, nchar(`Cause of death`))) %>% 
-#   mutate(`Cause of death` = str_to_sentence(`Cause of death`)) %>% 
-#   # Reorder columns to match the form given by historical_data
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`, 
-#          GeoCode, 
-#          Value)
-  
-# Now we need to aggregate for Cause of death
-
-# all_deaths_cleaned_agg_by_cause <- all_deaths_cleaned %>% 
-#   group_by(Year, Country, Sex) %>% 
-#   summarise(Value = sum(Value)) %>% 
-#   # Add the columns the disaggregate df has
-#   mutate(`Cause of death` = "") %>% 
-#   mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>% # Time of coding: "Normal Value"
-#   mutate(Units = "Number") %>% # Has to be hard-coded as "Number" not in the dataframe
-#   mutate(`Unit multiplier` = "") %>% 
-#   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
-#   mutate(GeoCode = as.character(GeoCode)) %>% 
-#   mutate(Series = "Number of deaths from exposure to forces of nature") %>% 
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`, 
-#          GeoCode, 
-#          Value)
-
 
 # Aggregate before cleaning----
 
@@ -118,33 +46,9 @@ all_disaster_deaths_with_totals <- all_disaster_deaths %>% bind_rows(all_disaste
 
 all_disaster_deaths_with_totals_cleaned <- all_disaster_deaths_with_totals %>%
   mutate(Series = "Number of deaths from exposure to forces of nature",
-         Units = "Number")
+         Units = "Number",
+         `Observation status` = all_deaths$OBS_STATUS_NAME %>% unique())
   
-
-# all_disaster_deaths_with_totals_cleaned <- all_disaster_deaths_with_totals %>%
-#   rename(Sex = GENDER_NAME, 
-#          `Cause of death` = CAUSE_OF_DEATH_NAME, 
-#          Value = OBS_VALUE, 
-#          Country = GEOGRAPHY_NAME, 
-#          Year = DATE) %>% 
-#   mutate(`Unit multiplier` = "",
-#          `Observation status` = OBS_STATUS_NAME) %>% 
-#   # Exclude any rows corresponding to data about non EW residents
-#   filter(Country %in% c("England", "Wales", "England and wales")) %>% 
-#   mutate(Sex = ifelse(Sex == "Total", "", Sex),
-#          Country = ifelse(Country == "England and wales", "", Country),
-#          GeoCode = get_GeoCode(Country),
-#          `Cause of death` = substring(`Cause of death`, 5, nchar(`Cause of death`)) %>% str_to_sentence()) %>% 
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`, 
-#          GeoCode, 
-#          Value)
 
 
 # Clean up all_mortality----
@@ -186,54 +90,9 @@ recent_data_cleaned <- recent_data %>%
 
 recent_data_cleaned <- recent_data_cleaned %>% 
   mutate(Year = as.numeric(Year),
-         Value = as.numeric(Value))
+         Value = as.numeric(Value)) #%>%
+  # Sometimes Nomis will include an entry for a year but have NA for observed valued, like for 2021 currently, you may wish to exclude
+          #filter(!is.na(Value))
 
-# all_mortality_cleaned <- all_mortality
-# all_mortality_cleaned <- all_mortality_cleaned %>% 
-#   rename(Sex = GENDER_NAME,
-#          `Cause of death` = CAUSE_OF_DEATH_NAME,
-#          Value = OBS_VALUE,
-#          Country = GEOGRAPHY_NAME,
-#          Year = DATE) %>%
-#   mutate(`Observation status` = all_deaths$OBS_STATUS_NAME %>% unique()) %>%
-#   mutate(GeoCode = "") %>% 
-#   mutate(Series = "Age-standardised mortality rates per 100,000 population") %>% 
-#   mutate(`Unit multiplier` = "") %>%
-#   mutate(Units = "Rate per 100,000 population") %>% 
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`,
-#          GeoCode, 
-#          Value) %>% 
-#   # Keep only the rows for natural disaster deaths
-#   filter(grepl("^[X][0-9][0-9]", `Cause of death`)) %>% 
-#   # Exclude any rows corresponding to data about non EW residents
-#   filter(Country %in% c("England", "Wales", "England and wales")) %>% 
-#   mutate(Sex = ifelse(Sex == "Total", "", Sex)) %>%
-#   mutate(`Cause of death` = "") %>% 
-#   mutate(GeoCode = lapply(Country, get_GeoCode)) %>% 
-#   mutate(GeoCode = as.character(GeoCode)) %>% 
-#   mutate(Country = ifelse(Country=="England and wales", "", Country))
-
-# Combined the number of death data with the mortality data----
-
-# recent_data <- all_deaths_cleaned %>% 
-#   bind_rows(all_deaths_cleaned_agg_by_cause) %>% 
-#   bind_rows(all_mortality_cleaned) %>% 
-#   select(Year, 
-#          Series, 
-#          Country, 
-#          Sex, 
-#          `Cause of death`, 
-#          `Observation status`, 
-#          `Unit multiplier`, 
-#          `Units`,
-#          GeoCode, 
-#          Value)
 
   

@@ -34,13 +34,16 @@ if (run_historic_data == TRUE){
 
 # Remove any rows which might be duplicates
 all_cols_but_val <- names(combined_data)[1:(ncol(combined_data)-1)]
-combined_data <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
+combined_data_no_duplicates <- combined_data[!duplicated(combined_data[all_cols_but_val]),]
 
-# Add columns for GeoCode and replace cause of death code with a description
+# Using bind_rows introduces "NA" so replace "NA" with the empty string
+combined_data_no_duplicates[is.na(combined_data_no_duplicates)] <- ""
 
-#combined_data <- combined_data %>% 
-#mutate(GeoCode = lapply(Country, get_GeoCode) %>% as.character(),
-#         `Cause of death` = lapply(`Cause of death`, recode_disaster) %>% as.character())
+# Sort the data so it looks nice if a user downloads from SDG website
+
+combined_data_no_duplicates_sorted <- combined_data_no_duplicates %>% 
+  arrange(Series, `Cause of death`, Country, Sex, Year)
+
 
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -54,7 +57,7 @@ date <- Sys.Date()
 csv_filename <- paste0(date, indicator, ".csv") 
 qa_filename <- paste0(date, indicator, "-QA.html") 
 
-write.csv(combined_data, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(combined_data_no_duplicates_sorted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 save.image(file = 'img.RData')
 

@@ -65,14 +65,14 @@ There are 1 * 3 * (*y* - 12) rows for Age-Standardised mortality rate by sex and
 The code below will check this: 
 
 ```{r}
-y = max(combined_data$Year) - min(combined_data$Year) + 1
-nrow(combined_data) == 99*y + 3*(y - 12)
+y = max(combined_data_no_duplicates_sorted$Year) - min(combined_data_no_duplicates_sorted$Year) + 1
+nrow(combined_data_no_duplicates_sorted) == 99*y + 3*(y - 12)
 ```
 
 update_indicator has removed all rows which are duplicated on everything but Value (in case we had two rows denoting the same quantity but with different values). As a further check we check the number of unique combinations of Year, Series, Country, Sex and Cause of death found in the output is equal to the number of rows in the output.
 
 ```{r}
-nrow(combined_data) == nrow(combined_data[c("Country", "Year", "Sex", "Cause of death", "Series")])
+nrow(combined_data_no_duplicates_sorted) == nrow(combined_data_no_duplicates_sorted[c("Country", "Year", "Sex", "Cause of death", "Series")])
 ```
 
 Now let's fetch the original data and compare it to our updated set. Unless values for previous years have been amended, the two datasets should differ only in the adding of extra rows for the newly included years.  
@@ -91,7 +91,7 @@ original_data_cleaned <- original_data %>%
   mutate(Year = as.character(Year)) %>%
   mutate(Value = as.numeric(Value)) 
 
-combined_data_cleaned <- combined_data %>% 
+combined_data_cleaned <- combined_data_no_duplicates_sorted %>% 
   mutate(Year = as.integer(Year)) %>%
   filter(Year<=2020) %>% 
   mutate(Year = as.character(Year)) %>% 
@@ -103,9 +103,9 @@ combined_data_cleaned <- combined_data %>%
 #combined_data_cleaned <- subset(combined_data_cleaned, select = -c(`Unit multiplier`))
 
 print(paste("The number of rows in the older data is: ", nrow(original_data)))
-print(paste("The number of rows in the updated data is: ", nrow(combined_data)))
+print(paste("The number of rows in the updated data is: ", nrow(combined_data_no_duplicates_sorted)))
 
-print(paste("Checking for NA in combined_data. Total number of NA is: ", sum(is.na(combined_data))))
+print(paste("Checking for NA in combined_data. Total number of NA is: ", sum(is.na(combined_data_no_duplicates_sorted))))
 
 diff <- anti_join(combined_data_cleaned, original_data_cleaned, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
 print("If there are no inconsistencies then the table below should be empty")

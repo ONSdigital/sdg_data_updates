@@ -150,7 +150,7 @@ historic_data_added_cols <- historic_data %>%
   mutate(Series = "Number of deaths from exposure to forces of nature",
          `Unit multiplier` = "", 
           Units = "Number",
-         `Observation status` = all_deaths$OBS_STATUS_NAME %>% unique(), # I.e. whatever Nomis says
+         `Observation status` = recent_deaths$OBS_STATUS_NAME %>% unique(), # I.e. whatever Nomis says
          Country = ifelse(Country == "England and wales", "", Country),
          GeoCode = lapply(Country, get_GeoCode) %>% as.character(),
          `Cause of death` = lapply(`Cause of death`, recode_disaster) %>% as.character())

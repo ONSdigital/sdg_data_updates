@@ -7,15 +7,18 @@
 # Load in the datasets----
 
 # Includes data for all causes of death (non-disaster related)
-all_deaths <- read.csv(nomis_disaster_deaths_link) %>%
+recent_deaths <- read.csv(nomis_disaster_deaths_link) %>%
   mutate(across(where(is.factor), as.character)) %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) 
+  mutate(across(where(is.character), str_squish)) %>% 
+  # Drop any rows if OBS_VALUE is missing
+  filter(!is.na(OBS_VALUE))
 
-all_mortality <- read.csv(nomis_mortality_link) %>% 
+recent_mortality <- read.csv(nomis_mortality_link) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) 
+  mutate(across(where(is.character), str_squish)) %>% 
+  filter(!is.na(OBS_VALUE))
 
 # Define some functions----
 
@@ -26,34 +29,39 @@ get_GeoCode <- function(countryName){
   else {return("")}
 }
 
+# Drop any rows if OBS_VALUE is missing----
+
+
+
 
 # Aggregate before cleaning----
 
-all_disaster_deaths <- all_deaths %>% 
+recent_disaster_deaths <- recent_deaths %>% 
   filter(grepl("^[X][3][0-9]", CAUSE_OF_DEATH_NAME))
 
-all_disaster_deaths_any_cause <- all_disaster_deaths %>% # Any disaster cause of death
+recent_disaster_deaths_any_cause <- recent_disaster_deaths %>% # Any disaster cause of death
    group_by(DATE, GEOGRAPHY_NAME, GENDER_NAME) %>% 
    summarise(OBS_VALUE = sum(OBS_VALUE)) %>% 
-   mutate(CAUSE_OF_DEATH_NAME = "")
+   mutate(CAUSE_OF_DEATH_NAME = "",
+          OBS_STATUS_NAME = recent_disaster_deaths$OBS_STATUS_NAME %>% unique()) # Tried without 
 
-all_disaster_deaths_with_totals <- all_disaster_deaths %>% bind_rows(all_disaster_deaths_any_cause)
+recent_disaster_deaths_with_totals <- recent_disaster_deaths %>% bind_rows(recent_disaster_deaths_any_cause)
 
 
   
 
 # Clean up
 
-all_disaster_deaths_with_totals_cleaned <- all_disaster_deaths_with_totals %>%
+recent_disaster_deaths_with_totals_cleaned <- recent_disaster_deaths_with_totals %>%
   mutate(Series = "Number of deaths from exposure to forces of nature",
          Units = "Number",
-         `Observation status` = all_deaths$OBS_STATUS_NAME %>% unique())
+         `Observation status` = recent_deaths$OBS_STATUS_NAME %>% unique())
   
 
 
 # Clean up all_mortality----
 
-all_mortality_cleaned <- all_mortality %>% 
+recent_mortality_cleaned <- recent_mortality %>% 
   filter(grepl("^[X][0-9][0-9]", CAUSE_OF_DEATH_NAME)) %>% 
   mutate(Series = "Age-standardised mortality rates per 100,000 population",
          Units = "Rate per 100,000 population",
@@ -61,7 +69,7 @@ all_mortality_cleaned <- all_mortality %>%
   
 
 
-recent_data <- all_disaster_deaths_with_totals_cleaned %>% bind_rows(all_mortality_cleaned)
+recent_data <- recent_disaster_deaths_with_totals_cleaned %>% bind_rows(recent_mortality_cleaned)
 
 recent_data_cleaned <- recent_data %>% 
   rename(Sex = GENDER_NAME, 

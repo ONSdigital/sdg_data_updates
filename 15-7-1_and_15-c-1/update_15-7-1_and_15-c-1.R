@@ -15,35 +15,12 @@ seizures_main_data <- extract_data(seizures_source_data, header_row)
 # DO NOT use if there are column names containing words that end 
 #   in a number: It won't usually remove a number from the end of an alphanumeric code, 
 #   but will do so if the ONLY number is at the end)
-#names(seizures_main_data) <- SDGupdater::remove_superscripts(names(seizures_main_data)) 
+names(seizures_main_data) <- SDGupdater::remove_superscripts(names(seizures_main_data)) 
 
 # clean up the column names (snake case, lowercase, no trailing dots etc.)
-#seizures_main_data <- clean_names(seizures_main_data)
+seizures_main_data <- clean_names(seizures_main_data)
 
-# remove footnotes -------------------------------------------------------------
-# this assumes that:
-# footnotes are in the first 2 (or whatever number you use as the 
-#   check_columns argument) columns of the datafame.
-#   If there is text in the same row as the footnotes in 
-#   columns beyond check_columns, these rows will not be dropped (see ?remove_footnotes)
-# if the data are likely to have non-footnote data in the first column(s) but NAs
-#   in all other columns DO NOT use this function as it will likely remove more 
-#   than just footnotes
-
-# seizures_main_data <- remove_footnotes(seizures_main_data)
-
-# make column names consistent across years ------------------------------------
-
-# If you know a column name may change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# You can use the rename_column function to rename them based on patterns that 
-# are always present in the column name. See below for some examples of usage.
-#
-# You can then use the new name to refer to the columns through the 
-# rest of the code.
-
-# If there aren't too many columns that you are going to use you could do this 
-# step for all columns but be careful you don't introduce errors!
+seizures_main_data <- janitor::remove_empty(seizures_main_data, which = "cols")
 
 renamed_seizures_main_data <- seizures_main_data %>% 
   rename_column(primary = "Number of Times seized: Caviar & Caviar extract", new_name = "Caviar & Caviar extract") %>% 
@@ -57,6 +34,9 @@ renamed_seizures_main_data <- seizures_main_data %>%
   rename_column(primary = "Number of Times seized: Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species", new_name = "Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species") %>%
   rename_column(primary = "Number of Times seized: Butterflies", new_name = "Butterflies") 
   
+
+renamed_seizures_main_data[c('Year', 'Quarter')] <- str_split_fixed(renamed_seizures_main_data$Quarter, ' ', 2)
+
 
 # # the following isn't something we want to do here, but to show how you
 # # match multiple potential patterns using the OR operator:

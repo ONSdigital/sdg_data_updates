@@ -14,7 +14,7 @@
 rm(list = ls())
 
 
-indicator <- "3-2-2" # name of folder for indicator
+indicator <- "15-7-1_and_15-c-1" # name of folder for indicator
 
 
 setwd(indicator)

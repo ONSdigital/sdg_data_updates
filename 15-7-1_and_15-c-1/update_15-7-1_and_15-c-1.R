@@ -90,6 +90,7 @@ csv_formatted <- seizures_main_data_totals %>%
 csv_formatted <- csv_formatted %>%            
 select("Year", "Import type", "Unit measure", "Unit multiplier", "Observation status", "Value")
 
-csv_output <- csv_formatted[order(csv_formatted$"Import type"),]
+csv_formatted <- csv_formatted[order(csv_formatted$"Import type"),]
 
-
+csv_output <- csv_formatted %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value))

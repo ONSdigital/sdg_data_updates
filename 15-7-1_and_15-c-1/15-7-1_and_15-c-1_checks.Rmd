@@ -82,7 +82,7 @@ new_data_to_plot %>%
                colour = dataset)) +
     geom_point() +
     geom_line() +
-    #facet_grid(Country ~ Sustainably.managed.status) +
+    facet_grid(Import.type ~ .) +
     theme_bw() 
 
 ```

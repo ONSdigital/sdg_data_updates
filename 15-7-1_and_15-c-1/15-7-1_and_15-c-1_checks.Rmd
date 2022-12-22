@@ -1,0 +1,102 @@
+---
+title: "15-7-1 and 15-c-1 checks"
+author: "Katie Uzzell"
+date: "22/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+```{r include= FALSE}
+source('config.R')
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/15-7-1.csv")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_15-7-1_and_15-c-1", ".csv")) 
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 15-7-1 and 15-c-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_15-7-1_and_15-c-1", ".csv")` in the 15-1-1 Output folder.  
+    
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+15-7-1_and_15-c-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/Input/", filename), full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+<br>
+
+**Woodland data from Forest Research**  
+Woodland area data are in the file `r filename`.   
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`  
+
+The tab used for 'all woodland' areas is called
+`r tabname`. 
+    
+<br>
+
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r, echo=FALSE, fig.width=7, fig.height=5}
+new_data_to_plot <- mutate(new_data, dataset = "2 new")
+old_data_to_plot <- mutate(old_data, dataset = "1 old") 
+
+status_list <- unique(new_data_to_plot$Sustainably.managed.status)
+
+new_data_to_plot %>%
+    bind_rows(old_data_to_plot) %>% 
+    ggplot(data = .,
+           aes(x = Year,
+               y = Value,
+               colour = dataset)) +
+    geom_point() +
+    geom_line() +
+    facet_grid(Country ~ Sustainably.managed.status) +
+    theme_bw() 
+
+```
+
+### Calculations
+
+Q1, Q2, Q3, and Q4 were summed to give a total for each year. 
+
+The calculations used to create these figures was:
+```
+seizures_main_data_totals <- aggregate(x = seizures_main_data_totals[ , colnames(seizures_main_data_totals) != "Year"],
+            by = list(seizures_main_data_totals$Year),
+            FUN = sum) 
+```
+Warning: This is copied from `update_15-7-1_and15-c-1.R` and will not dynamically update 
+if that code is changed.
+

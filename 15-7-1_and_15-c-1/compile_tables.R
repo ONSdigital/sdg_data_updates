@@ -32,15 +32,15 @@ date <- Sys.Date()
 # we add the date to the output file so that old outputs are not automatically overwritten.
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_15-7-1_15.c.1.csv")
-qa_filename <- paste0(date, "_update_15-7-1_15.c.1_checks.html") 
+csv_filename <- paste0(date, "_update_15-7-1_15-c-1.csv")
+qa_filename <- paste0(date, "_15-7-1_15-c-1_checks.html") 
 
 # save files and print messages ------------------------------------------------
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('15-7-1_and_15-c-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

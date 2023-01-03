@@ -1,197 +1,112 @@
-# date: 24/03/2022
-# THIS IS A TEMPLATE. It may be that not everything is relevant for your data.
-# This script runs on test data so you can look at what everything does line by line
+# author: Emma Wood
+# date: 27/07/2021
 
-# Type 1 data is simple - one row of column headings and no row names
-# There may or may not be metadata above the column headings - this code allows for both scenarios
-
-# Most comments can (should) be deleted in your file 
-
-# read in data -----------------------------------------------------------------
-
-source_data <- get_type1_data(header_row, filename, tabname)
-
-# clean the data and get yer and country info from above the headers -----------
-
-# clean_strings() has remove_ss (stands for remove_superscripts) as an argument. 
-# The default is TRUE. IMPORTANT: Set to FALSE if there strings of letters that 
-# end in a number that you want to keep. Where a number falls at the end of an 
-# alphanumeric code, it will  not be interpreted as a superscript and will not 
-# be removed. However, if the ONLY number in an alphanumeric code is at the end, 
-# the number will be seen as a superscript. 
-
-clean_data <- clean_strings(source_data, remove_ss = TRUE)
-
-metadata <- extract_metadata(clean_data, header_row)
-
-main_data <- extract_data(clean_data, header_row)
-
-# if you import a csv, numbers will now be read as characters - you can rectify this here
-# NOTE: check that data types are what you expect after running th
-if (header_row > 1){
-  main_data <-  main_data %>% 
-    type.convert(as.is = TRUE) 
-}
-
-# remove superscripts from column names
-# DO NOT use if there are column names containing words that end 
-#   in a number: It won't usually remove a number from the end of an alphanumeric code, 
-#   but will do so if the ONLY number is at the end)
-names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-
-# clean up the column names (snake case, lowercase, no trailing dots etc.)
-main_data <- clean_names(main_data)
-
-# remove footnotes -------------------------------------------------------------
-# this assumes that:
-# footnotes are in the first 2 (or whatever number you use as the 
-#   check_columns argument) columns of the datafame.
-#   If there is text in the same row as the footnotes in 
-#   columns beyond check_columns, these rows will not be dropped (see ?remove_footnotes)
-# if the data are likely to have non-footnote data in the first column(s) but NAs
-#   in all other columns DO NOT use this function as it will likely remove more 
-#   than just footnotes
-
-main_data <- remove_footnotes(main_data)
-
-# make column names consistent across years ------------------------------------
-
-# If you know a column name may change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# You can use the rename_column function to rename them based on patterns that 
-# are always present in the column name. See below for some examples of usage.
-#
-# You can then use the new name to refer to the columns through the 
-# rest of the code.
-
-# If there aren't too many columns that you are going to use you could do this 
-# step for all columns but be careful you don't introduce errors!
-
-renamed_main <- main_data %>% 
-  rename_column(primary = "year", new_name = "year") %>% 
-  rename_column(primary = "sex", new_name = "sex") %>% 
-  rename_column(primary = "age", new_name = "age") %>% 
-  rename_column(primary = "all_households", 
-                not_pattern = "sample",
-                new_name = "all_households_000s") %>% 
-  rename_column(primary = c("sample", "size"), alternate = "count", 
-                new_name = "sample_size") #%>%
-  # # the following isn't something we want to do here, but to show how you
-  # # match multiple potential patterns using the OR operator:
-  # rename_column(primary = "type", not_pattern = "a|b|c|other",
-  #               new_name = "d")
-  
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# Join dataframes, do relevant calculations etc
-
-# some useful dplyr functions:
-# left_join(), right_join, 
-# add_row(), filter(), select(), group_by(), summarise()
-# pivot_longer(), pivot_wider()
-
-# If, like in type_1_data, you have multiple columns with values, e.g. where each
-# holds the values for a level of a disaggregation, pivot_longer is your friend
-
-tidy_data <- renamed_main %>% 
-  pivot_longer(
-    cols = c(contains("type"), all_households_000s),
-    names_to = "type",
-    values_to = "value"
-  )
-
-# # for doing calculations, you may rather want values in separate columns, but the same row.
-# # The reverse of pivot_longer is pivot wider. e.g. if I wanted to add types a and b
-# # and the data were already tidy (one value per row)
-# calculation_example <- tidy_data %>% 
-#   pivot_wider(names_from = "type",
-#               values_from = "value") %>% 
-#   mutate(type_a_plus_b = as.numeric(type_a) + as.numeric(type_b))
-# 
-# # then back to tidy:
-# example_tidied <- calculation_example %>% 
-#   pivot_longer(
-#     cols = c(contains("type"), all_households_000s),
-#     names_to = "type",
-#     values_to = "value"
-#   )
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# finalise csv -----------------------------------------------------------------
-
-# make column names sentence case
-
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
-
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
-
-csv_formatted <- tidy_data %>% 
-  # rename columns that need renaming
-  rename(`housing type` = type) %>%
-  # you might want to use the country and year we got from extract_metadata above.
-  # These are in a list called metadata. Make sure there is only ONE country / ONE 
-  # year given. If so, they can be accessed like this:
-  mutate(country = metadata$country) %>% 
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "All", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         country = ifelse(country == "UK", "", country),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-         ) %>% 
-  # you can also use pattern matching to change level names, e.g. removing the 
-  # word 'type' fromthe housing types column
-  mutate(`housing type` = stringr::str_replace(`housing type`,"type_|_types",  "")) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # ... or remove it using filter() as the commented line below
-  # filter(!is.na(Value)) %>%
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
-
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
-
-# put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
-
-# remove NAs from the csv that will be saved in Outputs
-# this changes Value to a character so will still use csv_formatted in the 
-# R markdown QA file
-csv_output <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
+source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", filename),
+                                     sheet = tabname_age, colNames = FALSE) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), toupper))
 
 
+#---- get relevant area data (of all land) ----#
+# The name of the columns containing country names and codes will change depending on the year. 
+# We therefore need to identify these columns and give them a standard name that 
+#  we can refer to in the code, without having to change it every year:
+country_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
+                          substr(names(area_source_data), 7, 8) == "NM")
+country_code_column <- which(substr(names(area_source_data), 1, 4) == "CTRY" &
+                          substr(names(area_source_data), 7, 8) == "CD")
+area_data <- area_source_data 
+names(area_data)[country_column] <- "Country"
+names(area_data)[country_code_column] <- "Geocode"
+
+country_and_UK_areas <- area_data %>% 
+  select(Geocode, Country, AREALHECT) %>% 
+  add_row(Geocode = "", Country = "UK", AREALHECT = sum(area_data$AREALHECT)) 
+
+#---- get woodland area data (of all woodland)----#
+# The column names (headers) for the woodland data are not in the first row,
+#  as there is metadata above the data.
+# The row the headers are in may differ for different years, so we identify
+#  which row they are in, using a column name we know will always exist
+header_row_woodland <- which(woodland_source_data$X1 == "YEAR")
+
+woodland_data_with_headers <- woodland_source_data
+names(woodland_data_with_headers) <- woodland_data_with_headers[header_row_woodland, ]
+
+woodland_metadata_removed <- woodland_data_with_headers %>% 
+  # Identify metadata rows by using the year column. 
+  # We know year should have 4 numbers as the first 4 characters, 
+  # so if it doesn't it isn't a data entry.
+  mutate(keep = grepl('[0-9][0-9][0-9][0-9]',
+                            substr(YEAR, 1, 4)))%>% 
+  filter(keep == TRUE) %>% 
+  select(-keep) 
+
+woodland_data_tidy <- woodland_metadata_removed %>% 
+  pivot_longer(-YEAR,
+               names_to = "Country",
+               values_to = "woodland_area") 
 
 
+#---- get certified woodland area data ----#
+header_row_certified <- which(certified_source_data$X1 == "YEAR")
+
+certified_data_with_headers <- certified_source_data
+names(certified_data_with_headers) <- certified_data_with_headers[header_row_certified, ]
+
+certified_metadata_removed <- certified_data_with_headers %>% 
+  mutate(keep = grepl('[0-9][0-9][0-9][0-9]',
+                            substr(YEAR, 5, 9))) %>% 
+  mutate(YEAR = substr(YEAR, 5, 9)) %>% 
+  filter(keep == TRUE) %>% 
+  select(-keep)  
+
+certified_data_tidy <- certified_metadata_removed %>% 
+  pivot_longer(-YEAR,
+               names_to = "Country",
+               values_to = "certified_area") 
+
+#--- combine data and create csv ----#
+all_data <- woodland_data_tidy %>% 
+  left_join(certified_data_tidy, by = c("YEAR", "Country")) %>% 
+  left_join(country_and_UK_areas, by = "Country") %>% 
+  mutate(YEAR = as.numeric(YEAR),
+         AREALHECT = as.numeric(AREALHECT),
+         woodland_area = as.numeric(woodland_area),
+         certified_area = as.numeric(certified_area))
+
+# this block below is copied into the markdown, so if it changes please update
+# that script too
+indicator_data <- all_data %>% 
+  mutate(woodland_proportion = (woodland_area * 1000000) / AREALHECT * 100,
+         certified_proportion = (certified_area * 1000000) / AREALHECT * 100,
+         non_certified_proportion = ((woodland_area - certified_area) * 1000000) / AREALHECT * 100) %>% 
+  select(-c(woodland_area, certified_area, AREALHECT))
+
+# add required columns, rename disaggregation levels, and filter out values we don't want to display
+csv_formatted <- indicator_data %>% 
+  pivot_longer(-c(YEAR, Country, Geocode),
+               names_to = "Sustainably managed status",
+               values_to = "Value") %>% 
+  mutate(`Sustainably managed status` = case_when(
+    `Sustainably managed status` == "woodland_proportion" ~ "",
+    `Sustainably managed status` == "certified_proportion" ~ "Certified",
+    `Sustainably managed status` == "non_certified_proportion" ~ "Non-certified"),
+    Country = ifelse(Country == "UK", "", Country)) %>% 
+  mutate(Country = str_to_title(Country)) %>% 
+  # NI had a different method for calculating the area of non-certified woodland area before 2013, 
+  #  so we need to get rid of rows that are impacted by that different methodology
+  mutate(different_method = ifelse((Country == "Northern Ireland" | Country == "") & 
+                                     YEAR < 2013 & 
+                                     `Sustainably managed status` %in% c("", "Non-certified"),
+                                   TRUE, FALSE)) %>% 
+  filter(!is.na(Value) & 
+           different_method == FALSE &
+           YEAR >= 2004) %>% 
+  mutate(`Observation status` = "Undefined",
+         `Unit multiplier` = "Units",
+         `Unit measure` = "percentage (%)") %>% 
+  rename(Year = YEAR) %>% 
+  select(Year, Country, `Sustainably managed status`, 
+         `Observation status`, `Unit measure`, `Unit multiplier`,
+         Value)

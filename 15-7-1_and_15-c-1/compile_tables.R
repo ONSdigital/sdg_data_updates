@@ -10,7 +10,7 @@ library('dplyr')
 
 library(SDGupdater)
 
-source("15-7-1_15-c-1_example_config.R") # pulls in all the configurations. Change to "config.R" for real update
+source("15-7-1_15-c-1_config.R") # pulls in all the configurations. Change to "config.R" for real update
 source("update_15-7-1_and_15-c-1.R") # does the donkey-work of making the csv - 
 # for real update this might be called e.g. 'update_1-2-1.R' 
 

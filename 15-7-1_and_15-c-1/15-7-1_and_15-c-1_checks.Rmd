@@ -87,6 +87,7 @@ plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
   facet_wrap(vars(Import.type),

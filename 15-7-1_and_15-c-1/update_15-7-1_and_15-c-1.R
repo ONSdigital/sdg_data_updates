@@ -45,7 +45,7 @@ renamed_seizures_main_data <- na.omit(renamed_seizures_main_data)
 
 # change ":" to zeros
 
-renamed_seizures_main_data[renamed_seizures_main_data == ":"] <- 0
+renamed_seizures_main_data[renamed_seizures_main_data == ":"] <- "NA" 
 
 # calculate total seizures for each import type for each year
 

@@ -8,11 +8,10 @@ all_but_female_data <- read.csv(all_but_female_link_temp) %>%
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
-female_data <- read.csv(female_link_temp) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) 
-
+female_data <- read.csv(female_link_temp) %>%
+  mutate(across(where(is.factor), as.character)) %>%
+  mutate(across(where(is.character), str_to_sentence)) %>%
+  mutate(across(where(is.character), str_squish))
 
 
 all_data <- bind_rows(female_data, all_but_female_data)

@@ -1,0 +1,142 @@
+title: "3-4-1 QA"
+author: "Michael Nairn"
+date: "21/11/2022"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 3-4-1 update summary
+
+3-4-1 is an indicator that uses a NOMIS API link to provide data. Unless the 
+format of NOMIS API downloads changes, the update_3-4-1 script should not need 
+changing. However, always check before running the update script. 
+
+This file runs some basic checks and gives information about the update.
+  
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_3-4-1", ".csv")` in the 3-4-1 Output folder.  
+
+
+
+```{r include= FALSE}
+source('config.R')
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-4-1.csv") %>%
+  rename("Type of disease" = "Type.of.disease",
+         "Chronic respiratory disease subtype" = "Chronic.respiratory.disease.subtype")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("3-4-1_output/", date, "_3-4-1", ".csv")) %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") %>%
+  rename("Type of disease" = "Type.of.disease",
+         "Chronic respiratory disease subtype" = "Chronic.respiratory.disease.subtype") 
+
+latest_year <- max(new_data$Year)
+
+# join to the new data
+joined_data <- old_data %>% 
+  mutate(dataset = "old") %>% 
+  bind_rows(new_data) 
+```
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing.  
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Country by type of disease
+country_headline_plot <- joined_data %>% 
+  filter(Region == "" & `Chronic respiratory disease subtype` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Type of disease` ~ Country) +
+  theme_bw() +
+  ggtitle("Country by Type of disease")
+
+
+# Age by type of disease
+age_headline_plot <- joined_data %>% 
+  filter(`Chronic respiratory disease subtype` == "" & Region == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Type of disease` ~ Age) +
+  theme_bw() +
+  ggtitle("Age by Type of disease")
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(country_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_headline_plot))
+```
+
+  
+**If there are differences (see table below) please check that this still stands**
+
+{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Gas, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+
+  
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

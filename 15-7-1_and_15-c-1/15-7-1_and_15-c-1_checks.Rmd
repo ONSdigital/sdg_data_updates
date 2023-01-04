@@ -68,25 +68,36 @@ The charts below show the new data (just created) plotted on top of the old data
 which has been downloaded from the live site. If there are unexpected 
 discrepancies in the lines please investigate the reasons for these discrepancies.
     
-```{r, echo=FALSE, fig.width=7, fig.height=5}
-new_data_to_plot <- mutate(new_data, dataset = "2 new")
-old_data_to_plot <- mutate(old_data, dataset = "1 old") 
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+new_data <- new_data %>% 
+mutate(Year = as.integer(Year),
+         dataset = "new") 
 
-status_list <- unique(new_data_to_plot$Sustainably.managed.status)
+old_data$Import.type = str_to_sentence(old_data$Import.type)
 
-new_data_to_plot %>%
-    bind_rows(old_data_to_plot) %>% 
-    ggplot(data = .,
-           aes(x = Year,
-               y = Value,
-               colour = dataset)) +
-    geom_point() +
-    geom_line() +
-    facet_grid(Import.type ~ .) +
-    theme_bw() 
+old_data$Import.type[old_data$Import.type == ""] <- "Total number of seizures"
+
+joined_data <- old_data %>% 
+  mutate(dataset = "old") %>% 
+  bind_rows(new_data)
+
+plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(vars(Import.type),
+             nrow = 11) +
+  theme_bw()  
 
 ```
 
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+```
 ### Calculations
 
 Q1, Q2, Q3, and Q4 were summed to give a total for each year. 

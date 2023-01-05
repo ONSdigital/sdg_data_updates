@@ -45,11 +45,20 @@ source('config.R')
 
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-a-1.csv") %>% 
   mutate(Sex = "Female") %>% 
-  mutate(dataset = "old")
+  mutate(Country = "") %>%
+  mutate(Region = "") %>%
+  select(Year, `Occupation.unit.group`, Country, Region, Sex, `Observation.status`, `Unit.measure`, Value) %>%
+  mutate(dataset = "old") 
+  
+
+old_data$`Occupation.unit.group` <- sub("^$", "Managers and proprietors in agriculture related services", old_data$`Occupation.unit.group`)
+old_data$`Occupation.unit.group` <- sub("Managers and proprietors in forestry fishing and related services", "Managers and proprietors in forestry, fishing and related services", old_data$`Occupation.unit.group`)
+
+
          
 date <- Sys.Date()
 
-new_data <- read.csv(paste0("Output/", date, "_5-a-1", ".csv")) %>% 
+new_data <- read.csv(paste0("5-a-1/Output/", date, "_5-a-1", ".csv")) %>% 
   mutate(Year = as.integer(Year),
          dataset = "new") 
           
@@ -57,70 +66,191 @@ latest_year <- max(new_data$Year)
 
 # join to the new data
 joined_data <- old_data %>% 
-  bind_rows(new_data) 
+  bind_rows(new_data) %>%
+  rename(`Observation status` = `Observation.status`,
+         `Occupation unit group` = `Occupation.unit.group`,
+         `Unit measure` = `Unit.measure`)
+
 ```
 
 
 ## Plots
 Please check the plots below for any differences between the live and new data.
 Live data will appear over the top of new data, so if you don't see points for
-the new data on dates where there is also live data this is a good thing.  
+the new data on dates where there is also live data this is a good thing. 
+
+Please note that prior to January 2023 update we used an alternative data source,
+and therefore, for this update, the old and new data will not be identical.
+The new data, from NOMIS, has further disaggregations, by country and region.
+
 
 
 ```{r, echo = FALSE, fig.width=10}
-# Country by type of disease
-country_headline_plot <- joined_data %>% 
-  filter(Region == "" & `Chronic respiratory disease subtype` == "") %>% 
+
+# Headline plot
+headline_plot <- joined_data %>% 
+  filter(Country == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Country) +
+  facet_grid(`Occupation unit group` ~ Sex) +
   theme_bw() +
-  ggtitle("Country by Type of disease")
-# Age by type of disease
-age_headline_plot <- joined_data %>% 
-  filter(`Chronic respiratory disease subtype` == "" & Region == "" & Sex == "") %>% 
+  ggtitle("Occupation Group by Sex")
+
+
+# Country plot - all agricultural services
+country_plot_services <- joined_data %>% 
+  filter(Region == "" & `Occupation unit group` == "Managers and proprietors in agriculture related services") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Age) +
+  facet_grid(Country ~ Sex) +
   theme_bw() +
-  ggtitle("Age by Type of disease")
+  ggtitle("Managers and proprietors in agriculture related services by country")
+
+# Country plot - agriculture & horticulture
+country_plot_agr_and_hort <- joined_data %>% 
+  filter(Region == "" & `Occupation unit group` == "Managers and proprietors in agriculture and horticulture") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Sex) +
+  theme_bw() +
+  ggtitle("Managers and proprietors in agriculture and horticulture by country")
+
+
+# Country plot - forestry and fishing
+country_plot_for_and_fish <- joined_data %>% 
+  filter(Region == "" & `Occupation unit group` == "Managers and proprietors in forestry, fishing and related services") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Sex) +
+  theme_bw() +
+  ggtitle("Managers and proprietors in forestry, fishing and related services by country")
+
+
+
+# Regional plot - all agricultural services
+region_plot_services <- joined_data %>% 
+  filter(Region != "" & `Occupation unit group` == "Managers and proprietors in agriculture related services") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Sex) +
+  theme_bw() +
+  ggtitle("Managers and proprietors in agriculture related services by region")
+
+# Regional plot - agriculture & horticulture
+region_plot_agr_and_hort <- joined_data %>% 
+  filter(Region != "" & `Occupation unit group` == "Managers and proprietors in agriculture and horticulture") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Sex) +
+  theme_bw() +
+  ggtitle("Managers and proprietors in agriculture and horticulture by region")
+
+
+# Regional plot - forestry and fishing
+region_plot_for_and_fish <- joined_data %>% 
+  filter(Region != "" & `Occupation unit group` == "Managers and proprietors in forestry, fishing and related services") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Sex) +
+  theme_bw() +
+  ggtitle("Managers and proprietors in forestry, fishing and related services by region")
+
+
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(country_headline_plot))
+suppressMessages(print(headline_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(age_headline_plot))
+suppressMessages(print(country_plot_services))
 ```
 
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(country_plot_agr_and_hort))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(country_plot_for_and_fish))
+```
+
+ 
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_plot_services))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_plot_agr_and_hort))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_plot_for_and_fish))
+``` 
   
+    
 **If there are differences (see table below) please check that this still stands**
 
-{r, , echo = FALSE}
+
+Please note that prior to January 2023 update we used an alternative data source,
+and therefore, for this update, the old and new data will not be identical.
+The new data, from NOMIS, has further disaggregations, by country and region,
+hence why it is being used.
+
+However, for all future updates (post January 2023) 
+all differences need to be addressed.
+
+```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+  select(Year, `Occupation unit group`, Country, Region, Sex, Value, dataset) %>% 
   pivot_wider(names_from = dataset,
               values_from = Value) %>% 
-  mutate(difference = new - live) %>% 
+  mutate(difference = new - old) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
-
+```
 
   
 The table below shows all instances where the old value does not match the new 
 value. It is sorted so the largest absolute differences appear first, but can
 be sorted in other ways using the arrows at the top.
-{r, echo = FALSE}
+
+```{r, echo = FALSE}
 datatable(comparison, 
           rownames = FALSE, 
           filter = "top",
@@ -128,7 +258,7 @@ datatable(comparison,
                          pageLength = 10,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
-
+```
 
 ## Session Info
 ```{r}

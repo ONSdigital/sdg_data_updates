@@ -50,9 +50,9 @@ if(multiple_quarters == TRUE) {
 
 #### Clean up data ####
 
-NOMIS_clean <- NOMIS_annual %>% 
+NOMIS_clean <- NOMIS_data %>% 
   # we don't need confidence intervals or rates - though this may change in future
-  filter(MEASURES_NAME == "Value" & MEASURE_NAME == "Count" & C_OCCPUK11H_0_NAME == "121 managers and proprietors in agriculture related services") %>% 
+  filter(MEASURES_NAME == "Value" & MEASURE_NAME == "Count" & C_OCCPUK11H_0_NAME != "Total") %>% 
   # split the geographies so country and region are in separate columns
   mutate(
     Country = case_when(
@@ -65,12 +65,14 @@ NOMIS_clean <- NOMIS_annual %>%
              Country,
              Region,
              C_SEX_NAME,
+         C_OCCPUK11H_0_NAME,
              MEASURE_NAME,
              MEASURES_NAME,
              OBS_VALUE,
              OBS_STATUS_NAME) %>% 
       # rename columns for output
       rename(Sex = C_SEX_NAME,
+             `Occupation unit group` = C_OCCPUK11H_0_NAME,
              `Observation status` = OBS_STATUS_NAME)
 
 
@@ -97,7 +99,7 @@ NOMIS_population <- filter(NOMIS_clean, Sex == "All persons")
 
 female_proportion_data <- NOMIS_female %>% 
   # join total population to female dataframe
-  left_join(NOMIS_population, by = c("DATE_CODE", "Country", "Region")) %>%
+  left_join(NOMIS_population, by = c("DATE_CODE", "Occupation unit group", "Country", "Region")) %>%
   # do calculation of percentage female of total 
   mutate(Value = 100*(OBS_VALUE.x/OBS_VALUE.y)) %>% 
   # Extract the year, without month, from DATE_CODE
@@ -106,6 +108,7 @@ female_proportion_data <- NOMIS_female %>%
   # select relevant columns, 
     # no need for total population information, post calculation.
   select(Year,
+         `Occupation unit group`,
          Country,
          Region,
          Sex.x,
@@ -120,7 +123,7 @@ female_proportion_data <- NOMIS_female %>%
 
 male_proportion_data <- NOMIS_male %>% 
   # join total population to male dataframe
-  left_join(NOMIS_population, by = c("DATE_CODE", "Country", "Region")) %>%
+  left_join(NOMIS_population, by = c("DATE_CODE", "Occupation unit group", "Country", "Region")) %>%
   # do calculation of percentage male of total 
   mutate(Value = 100*(OBS_VALUE.x/OBS_VALUE.y)) %>% 
   # Extract the year, without month, from DATE_CODE
@@ -129,6 +132,7 @@ male_proportion_data <- NOMIS_male %>%
   # select relevant columns, 
   # no need for total population information, post calculation.
   select(Year,
+         `Occupation unit group`,
          Country,
          Region,
          Sex.x,
@@ -162,9 +166,28 @@ csv_formatted <- proportion_data %>%
       "Missing value; suppressed",
     TRUE ~ as.character(`Observation status`))) %>% 
   # Put columns in order required for csv file.
-  select(Year, Country, Region, Sex, `Observation status`, `Unit measure`, Value) %>%
+  select(Year, `Occupation unit group`,  Country, Region, Sex, `Observation status`, `Unit measure`, Value) %>%
   # Arrange data by Year, Country, region, Sex 
-  arrange(Year, Country, Region, Sex)
+  arrange(Year, `Occupation unit group`, Country, Region, Sex)
+
+
+# Remove countries from region column
+  # Wales, Northern Ireland, and Scotland are listed as regions of England as well 
+  # as countries
+
+csv_formatted<-csv_formatted[!(csv_formatted$Region == "Wales" | 
+                                 csv_formatted$Region == "Northern Ireland" |
+                                 csv_formatted$Region == "Scotland"),]  
+
+# Correct Occupational unit group to remove codes
+csv_formatted$`Occupation unit group` <- gsub("1211 m", "M", csv_formatted$`Occupation unit group`)
+csv_formatted$`Occupation unit group` <- gsub("1213 m", "M", csv_formatted$`Occupation unit group`)
+csv_formatted$`Occupation unit group` <- gsub("121 m", "M", csv_formatted$`Occupation unit group`)
+
+
+# Correct males to male and females to female
+csv_formatted$Sex <- gsub("Females", "Female", csv_formatted$Sex)
+csv_formatted$Sex <- gsub("Males", "Male", csv_formatted$Sex)
 
 # Correct spelling of Yorkshire and The Humber
 csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber"

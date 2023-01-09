@@ -1,5 +1,7 @@
-input_folder <- "Input"
+input_folder <- "Example_Input"
 input_filename <- "Population_30June2020_Annual.xlsx"
+
+output_folder <- "Example_Output"
 
 age_sex_tabname <- "A1_7"
 nationality_tabname <- "A1_11"

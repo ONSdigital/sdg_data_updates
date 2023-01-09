@@ -6,7 +6,7 @@ It also contains code that aid in future-proofing against changes in the initial
   
 There are four main files that should be relatively consistent in what they do across all indicators (where it is just a standard update):
 1. `update_indicator_main.R` This file is the control script for ALL standard R updates. 
-You should not need to change anything on it, other than the indicator number when you are testing your automation
+You should not need to change anything on it, other than the indicator number and whether or not you are doing a test run (using example_config) or a real run (using config).
 2. `compile_tables.R` Every standard R update needs a script with this exact name. It is the script called by `update_indicator_main.R`, 
 and which calls the scripts that do the donkey-work. The csv may be saved from here. The Rmarkdown html file is run and saved from here.
 3. `config.R` This could be written as a yaml file, but usually the configs are straightforward enough that an R config file is fine. This is where
@@ -14,11 +14,11 @@ user configurations are set - these are aspects of the code that may need to be 
 It should have this name to save any confusion, and because this is a standard name for this kind of file. It is called by `compile_tables.R`
 4. A .R script or scripts that do the bulk of the work called by `compile_tables.R` (I refer to this as the 'workhorse' file). 
 It/they can be called anything, but try to keep it informative.
-5. A .Rmd script that creates an html for QA purposes (not yet in templates) called by `compile_tables.R`.
+5. A .Rmd script that creates an html for QA purposes called by `compile_tables.R`.
   
 There are a number of different input layouts that impact the way an automation is written. There are, therefore, separate template scripts for each of these types. Each file layout type has it's own input, config, compile_tables, and workhorse files.  
   
-Currently, only the templates for type_1, type_2 and type_4 are ready to use, though they do not yet include markdown templates.  
+Currently, only the templates for type_1, type_2 and type_4 are ready to use. The markdown template can be used for any type of input data, as it uses data produced by the other scripts, not the raw input (source) data.  
   
 ### Input types
 #### Type 1: Simple excel or csv file 
@@ -33,7 +33,9 @@ Currently, only the templates for type_1, type_2 and type_4 are ready to use, th
   
 #### Type 3: Excel file with headers hidden in a data column
 - Complex headers where what would usually be a header is in a normal column and only identified as a header by formatting (e.g. text in bold)
-  
+- There isn't a template script for this yet, but see the code for indicator 11-1-1
+  ![example](https://user-images.githubusercontent.com/52452377/202205376-7aed5f59-a1e0-4dd4-a896-40ac8df43d7b.png)
+
 #### Type 4: Nomis
 - Data that are on Nomis do not need to be manually downloaded as they have stable weblinks
 - Headers are simple and stable (I think the latter is true)
@@ -43,7 +45,7 @@ Currently, only the templates for type_1, type_2 and type_4 are ready to use, th
 ### Instructions
 1. Identify which type is closest to the data you want to write an automation for.
 2. Open RStudio
-3. Open the sdg_data+updates R.proj project
+3. Open the sdg_data_updates R.proj project
 4. Open the relevant config, compile_tables and workhorse files. E.g. If you have type 1 data, open type_1_config.R, type_1_compile_tables.R, and update_type_1.R
 5. Run the template code bit by bit on the example data (in template > Example_input) so you can see what it does
 6. Create a folder for your indicator in the main folder (**not in the template folder**)

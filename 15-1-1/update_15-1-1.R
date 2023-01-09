@@ -1,8 +1,6 @@
 # author: Emma Wood
 # date: 27/07/2021
 
-library('openxlsx')
-
 woodland_source_data <- openxlsx::read.xlsx(paste0(input_folder, "/", woodland_filename),
                                      sheet = woodland_area_tabname, colNames = FALSE) %>% 
   mutate(across(where(is.factor), as.character)) %>% 

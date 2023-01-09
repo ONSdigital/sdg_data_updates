@@ -12,16 +12,14 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load-packages, include=FALSE}
 library(tidyr)
 library(dplyr)
-# library(stringr)
 library(ggplot2)
 library(kableExtra)
 ```
 
 ```{r include= FALSE}
 run_date <- Sys.Date()
-csv <- read.csv(paste0("Output/output_", run_date, ".csv")) %>% 
+csv <- csv %>% 
   mutate(Year_num = as.numeric(as.character(substr(Year, 1, 4))))
-source('config.R')
 
 ```
 
@@ -58,38 +56,165 @@ if(nrow(duplicated_disaggs) > 0){
 
 ```
 
-## Plots
-Please check the plots below for any unusual looking datapoints.  
-As there are two 2009s (due to change in methodology), these are shown here as separate series (methodology 1 and 2).
+## New data compared to live data
+Please check the plots and tables below for any differences between the live 
+data (which is pulled in from Github) and the new data.  
+     
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
+
+If there are zig-zag lines or plots look unusual there may be something 
+different in the source data that is causing an issue. This will need to 
+be investigated.  
+  
+The table below each plot shows all instances where the old (live) value does 
+not match the new value. It is sorted so the largest absolute differences appear 
+first, but can be sorted in other ways using the arrows at the top.
+
+## Differences between live and new data
+tiny differences may just be due to differences in rounding, which is not an 
+issue.  
+Larger differences may be due to revisions, but could also indicate an error in 
+the code.    
+
+
 
 ```{r, echo=FALSE, fig.width=10,fig.height=18}
+
 data_for_plots <- csv %>% 
   mutate(Year = ifelse(Year == "2009 see note in original data", 2009.1, Year_num)) %>% 
   mutate(methodology = ifelse(Year <= 2009, "1","2")) 
 
-data_for_plots %>% 
-  filter(Nationality == "") %>% 
-  ggplot(data = .,
-       aes(x = Year,
-           y = Value)) +
-  geom_line(aes(lty = methodology)) +
-  facet_grid(Age ~ Sex) +
-  ggtitle('By sex and age') +
-  theme(axis.text.x = element_text(angle = 45)) +
-  theme_bw()
+# how the plots were done before we decided to just present new methodology data
+# (post 2008)
 
-data_for_plots %>% 
-  filter(Age == "" &
-           Sex == "") %>% 
-  ggplot(data = .,
-       aes(x = Year,
-           y = Value)) +
-  geom_line(aes(lty = methodology)) +
-  facet_grid(Nationality ~ .) +
-  ggtitle('By nationality') +
-  theme(axis.text.x = element_text(angle = 45)) +
-  theme_bw()
-  
+# Please check the plots below for any unusual looking datapoints.  
+# As there are two 2009s (due to change in methodology), these are shown here as separate series (methodology 1 and 2).
+
+# data_for_plots %>% 
+#   filter(Nationality == "") %>% 
+#   ggplot(data = .,
+#        aes(x = Year,
+#            y = Value)) +
+#   geom_line(aes(lty = methodology)) +
+#   facet_grid(Age ~ Sex) +
+#   ggtitle('By sex and age') +
+#   theme(axis.text.x = element_text(angle = 45)) +
+#   theme_bw()
+# 
+# data_for_plots %>% 
+#   filter(Age == "" &
+#            Sex == "") %>% 
+#   ggplot(data = .,
+#        aes(x = Year,
+#            y = Value)) +
+#   geom_line(aes(lty = methodology)) +
+#   facet_grid(Nationality ~ .) +
+#   ggtitle('By nationality') +
+#   theme(axis.text.x = element_text(angle = 45)) +
+#   theme_bw()
+#   
 
 ```
+
+
+
+```{r, include = FALSE}
+
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_16-3-2.csv') %>% 
+  janitor::clean_names() 
+
+new_data <- csv %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
+  mutate(Year = as.integer(Year),
+         Value = as.numeric(Value),
+         dataset = "new") %>% 
+  janitor::clean_names()
+
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data) %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
+  mutate(year = as.integer(year),
+         value = as.numeric(value))
+
+# plot data
+# sex by age
+sex_age_plot <- joined_data %>% 
+  filter(nationality == "" | is.na(nationality)) %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_grid(sex ~ age) +
+  theme_bw() +
+  ggtitle("Sex by age")
+
+nationality_plot <- joined_data %>% 
+  filter((sex == "" | is.na(nationality)) &
+          (age == "" | is.na(age)) ) %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(nationality), nrow = 2) +
+  theme_bw() +
+  ggtitle("Nationality")
+         
+```
+
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_age_plot))
+suppressMessages(print(nationality_plot))
+
+```
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  distinct(year, age, sex, nationality, value, dataset) %>% 
+  # first get rid of the duplicate of 2009 (if we only present new method data on the site you can get rid of these 5 lines)
+  group_by(year, age, sex, nationality, dataset) %>% 
+  mutate(row = n()) %>% 
+  mutate(keep = ifelse(year == 2009 & row == 1, FALSE, TRUE)) %>% 
+  filter(keep == TRUE) %>% 
+  ungroup() %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, sex, age, nationality, value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+
 

@@ -1,10 +1,16 @@
+library('SDGupdater')
+
+packages <- c('openxlsx', 'stringr', 'janitor',
+              'tidyr', 'dplyr', 
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
 library('openxlsx')
 library('stringr')
 library('janitor')
 library('tidyr')
 library('dplyr')
-
-library('SDGupdater')
 
 #-------------------------------------------------------------------------------
 remove_symbols <- function(column) {
@@ -14,7 +20,13 @@ remove_symbols <- function(column) {
 }
 #-------------------------------------------------------------------------------
 
-source("example_config.R")
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
 
 if (pre_2020_data == TRUE) {  
   # datasets after 2018 use an extra tab for England and Wales headline figure
@@ -124,18 +136,19 @@ csv_data <- bound_tables %>%
   dplyr::mutate(`Units` = "Rate per 1,000 live births",
                 `Unit multiplier` = "Units",
                 GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode))) %>% 
+  dplyr::rename(`Birthweight (grams)` = Birthweight) %>% 
   dplyr::arrange(`Neonatal period`, age_order, weight_order, country_order, 
                  Region, Sex) 
 
 if (pre_2020_data == FALSE) {
   csv_data <- csv_data %>% 
-    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+    dplyr::select(Year, `Neonatal period`, Age, `Birthweight (grams)`, Country, Region, 
                 `Country of birth`, `Ethnic group`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 } else {
   # doesn't contain ethnic group
   csv_data <- csv_data %>% 
-    dplyr::select(Year, `Neonatal period`, Age, Birthweight, Country, Region, 
+    dplyr::select(Year, `Neonatal period`, Age, `Birthweight (grams)`, Country, Region, 
                 `Country of birth`, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
   }
@@ -147,7 +160,7 @@ if (pre_2020_data == FALSE) {
 
 csv_data <- csv_data %>% 
   mutate(remove = case_when(
-    Age != "" & Birthweight != "" ~ TRUE,
+    Age != "" & `Birthweight (grams)` != "" ~ TRUE,
     Sex != "" & `Neonatal period` == "Late neonatal" & 
       Country %in% c("Northern Ireland", "Scotland", "Wales") ~ TRUE,
     TRUE ~ FALSE # this line makes all other cases FALSE
@@ -178,7 +191,7 @@ filename_date_time <- SDGupdater::create_datetime_for_filename(date_time)
 csv_data_filename <- paste0(output_folder, '/', filename_date_time, "_3-2-2_data_for_", year, ".csv")
 markdown_filename <- paste0(output_folder, '/',filename_date_time, "_3-2-2_QA_for_", year, ".html")
 
-write.csv(csv_data, csv_data_filename, row.names = FALSE, na = "")
+write.csv(csv_data, csv_data_filename, row.names = FALSE,na = "")
 rmarkdown::render('QA.Rmd', output_file = markdown_filename)
 
 message(paste0("csv for ", year, " has been created and saved in '", current_directory,

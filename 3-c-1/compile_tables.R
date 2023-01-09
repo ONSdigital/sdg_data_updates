@@ -5,15 +5,30 @@
 #     It has to be named compile_tables.R
 #     It is the control script that runs all the others.
 
+library('SDGupdater')
+
+packages <- c('openxlsx', 'stringr', 'tidyxl',
+              'tidyr', 'dplyr', 'unpivotr',
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
 library('openxlsx')
 library('stringr')
 library('tidyr')
 library('dplyr')
 library('tidyxl')
 library('unpivotr')
-library('SDGupdater')
 
-source("example_config.R") # pulls in all the configurations
+# pull in all the configurations
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
+
 source("update_3-c-1.R") # does the donkey-work of making the csv
 
 existing_files <- list.files()

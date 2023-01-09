@@ -14,6 +14,7 @@ I am going to assume that the only people who will be contributing will be membe
 
 ## Useful resources ##
     
+[Template codes](https://github.com/ONSdigital/sdg_data_updates/tree/main/template#template-r-code) - use these to start writing new automations (see also [Setting up a new indicator automation](#setting-up-a-new-indicator-automation))       
 [Quality Assurance of Code for Research Analysis](https://best-practice-and-impact.github.io/qa-of-code-guidance/peer_review.html) - this is where you will find a template for peer review    
 [renv](https://rstudio.github.io/renv/articles/renv.html)  - package dependency management.      
 [making a package](https://hilaryparker.com/2014/04/29/writing-an-r-package-from-scratch/) - if you are unfamiliar with packages, I suggest following this walkthrough (or similar, this is just the one I used) before adding functions to SDGupdater.  
@@ -35,6 +36,7 @@ For updates done in R, the following code structure should be used:
 
 ## General guidelines ##
 
+- **NEVER put unpublished data on this repo, even in your cloned local repository.** If you need to use unpublished data, save it elsewhere and use the full filepath to read it in.
 - Only edit code for one indicator on any branch
 - Commit *at least once a day* when you are writing code. However, it is better to commit more frequently.  
 - Use informative commit messages and pull request comments  
@@ -213,12 +215,23 @@ Once your code has passed [review](#reviewing-indicator-automations) it can be m
 > `git pull origin main` to merge the changes from the remote "main" to the local "main"
 > 
 > Check that you can see the expected changes in Jemalex/sdg_data_updates folder
+  
+When you try to pull you may get "error: cannot pull with rebase: You have unstaged changes. error: please commit or stash them." If this happens, using Git Bash:  
+  
+>
+> `git status` to see what the unstaged changes are. The ONLY thing that we expect to have changed on the Jemalex repo clone is update_indicator_main.R. If anything else is listed please check with the team to see if any changes they made need to be saved elsewhere. Once any necessary saves are done you can continue
+> 
+> `git restore update_indicator_main.R` if this is the only thing listed
+> 
+> `git restore .` if there is more and you dont want to type them all out.
 
 ## Adding functions to SDGupdater 
-This section is stil in progress...  
-  
+ 
 If a function is likely to be useful for other updates, please add it to the SDGupdater package.  
 Functions **must** be fully documented (using roxygen2) and have comprehensive unit tests.  
+  
+Before you request a review of changes/additions to the SDGupdater, please check that all unit tests
+pass.  
   
 The code below can be used to create the documentation files from the information in the function file, 
 install the package and run all unit tests:  

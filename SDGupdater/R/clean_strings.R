@@ -21,7 +21,7 @@
 #' @examples
 #' test_data <- data.frame(
 #' "factor" = c("thEse      are ", "  alphaNumeric2", 
-#'              "  factors  wITh too many spaces   ", "that ought to be character strings),
+#'              "  factors  wITh too many spaces   ", "that ought to be character strings",
 #'              stringsAsFactors = TRUE)
 #'
 #' clean_strings(test_data) 

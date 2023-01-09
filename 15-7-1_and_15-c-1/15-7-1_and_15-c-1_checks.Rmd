@@ -17,12 +17,12 @@ library(kableExtra)
 ```
 
 ```{r include= FALSE}
-source('15-7-1_15-c-1_config.R')
+source('15-7-1_15-c-1_example_config.R')
 
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/15-7-1.csv")
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_update_15-7-1_15-c-1", ".csv")) 
+new_data <- read.csv(paste0("Example_Output/", date, "_update_15-7-1_15-c-1", ".csv")) 
 
 latest_year <- max(new_data$Year)
 
@@ -44,7 +44,7 @@ Files used to create the new data were downloaded and saved in
 15-7-1_and_15-c-1/`r input_folder`.  
   
 ```{r include= FALSE}
-filename_save_time <- file.info(paste0(getwd(),"/Input/", filename), full.names = TRUE)$ctime[1]
+filename_save_time <- file.info(paste0(getwd(),"/Example_Input/", filename), full.names = TRUE)$ctime[1]
 time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
 
 ```

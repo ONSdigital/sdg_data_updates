@@ -43,7 +43,7 @@ renamed_seizures_main_data <- renamed_seizures_main_data %>%
 
 renamed_seizures_main_data <- na.omit(renamed_seizures_main_data)
 
-# change ":" to zeros
+# change ":" to NAs
 
 renamed_seizures_main_data[renamed_seizures_main_data == ":"] <- "NA" 
 
@@ -51,27 +51,6 @@ renamed_seizures_main_data[renamed_seizures_main_data == ":"] <- "NA"
 
 seizures_main_data_totals <-  renamed_seizures_main_data %>% 
   select(c("Year", "Total Number of Seizures", "Caviar and Caviar extract", "Live Coral and Coral Derivatives", "Ivory and Items Containing Ivory", "Live Animals and Birds", "Live Plants", "Parts or Derivatives of Animals or Birds", "Parts or Derivatives of Plants", "Timber or Wood Products", "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species", "Butterflies"))
-
-seizures_main_data_totals$`Year` <- as.numeric(seizures_main_data_totals$`Year`)
-seizures_main_data_totals$`Total Number of Seizures` <- as.numeric(seizures_main_data_totals$`Total Number of Seizures`)
-seizures_main_data_totals$`Caviar and Caviar extract` <- as.numeric(seizures_main_data_totals$`Caviar and Caviar extract`)
-seizures_main_data_totals$`Live Coral and Coral Derivatives` <- as.numeric(seizures_main_data_totals$`Live Coral and Coral Derivatives`)
-seizures_main_data_totals$`Ivory and Items Containing Ivory` <- as.numeric(seizures_main_data_totals$`Ivory and Items Containing Ivory`)
-seizures_main_data_totals$`Live Animals and Birds` <- as.numeric(seizures_main_data_totals$`Live Animals and Birds`)
-seizures_main_data_totals$`Live Plants` <- as.numeric(seizures_main_data_totals$`Live Plants`)
-seizures_main_data_totals$`Parts or Derivatives of Animals or Birds` <- as.numeric(seizures_main_data_totals$`Parts or Derivatives of Animals or Birds`)
-seizures_main_data_totals$`Parts or Derivatives of Plants` <- as.numeric(seizures_main_data_totals$`Parts or Derivatives of Plants`)
-seizures_main_data_totals$`Timber or Wood Products` <- as.numeric(seizures_main_data_totals$`Timber or Wood Products`)
-seizures_main_data_totals$`Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species` <- as.numeric(seizures_main_data_totals$`Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species`)
-seizures_main_data_totals$`Butterflies` <- as.numeric(seizures_main_data_totals$`Butterflies`)
-
-seizures_main_data_totals <- aggregate(x = seizures_main_data_totals[ , colnames(seizures_main_data_totals) != "Year"],
-            by = list(seizures_main_data_totals$Year),
-            FUN = sum)
-
-# rename year column
-
-seizures_main_data_totals <- rename(seizures_main_data_totals, "Year" = "Group.1")
 
 # change column names to sentence case
 
@@ -82,6 +61,16 @@ seizures_main_data_totals <- seizures_main_data_totals %>%
 
 seizures_main_data_totals <- seizures_main_data_totals %>%
   pivot_longer(-c("Year"), names_to = "Import type", values_to = "Value")
+
+seizures_main_data_totals <- seizures_main_data_totals %>%
+  filter(Value != "NA")
+
+seizures_main_data_totals$`Value` <- as.numeric(seizures_main_data_totals$`Value`)
+
+seizures_main_data_totals <- seizures_main_data_totals %>%
+  group_by(Year, `Import type`) %>%
+  summarise_at(vars(Value),
+  list(Value = sum))
 
 csv_formatted <- seizures_main_data_totals %>% 
          mutate("Unit measure" = "Number of times seized",

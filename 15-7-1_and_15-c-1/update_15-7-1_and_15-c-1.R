@@ -57,7 +57,7 @@ seizures_main_data_totals <-  renamed_seizures_main_data %>%
 seizures_main_data_totals <- seizures_main_data_totals %>%
   rename_with(str_to_sentence)
 
-# format into csv
+# format into csv and remove NAs
 
 seizures_main_data_totals <- seizures_main_data_totals %>%
   pivot_longer(-c("Year"), names_to = "Import type", values_to = "Value")
@@ -65,12 +65,16 @@ seizures_main_data_totals <- seizures_main_data_totals %>%
 seizures_main_data_totals <- seizures_main_data_totals %>%
   filter(Value != "NA")
 
+# Aggregate values for each import type by year
+
 seizures_main_data_totals$`Value` <- as.numeric(seizures_main_data_totals$`Value`)
 
 seizures_main_data_totals <- seizures_main_data_totals %>%
   group_by(Year, `Import type`) %>%
   summarise_at(vars(Value),
   list(Value = sum))
+
+# Format csv 
 
 csv_formatted <- seizures_main_data_totals %>% 
          mutate("Unit measure" = "Number of times seized",

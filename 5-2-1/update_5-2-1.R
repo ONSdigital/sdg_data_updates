@@ -6,8 +6,7 @@
   # https://www.ons.gov.uk/peoplepopulationandcommunity/crimeandjustice/datasets/domesticabuseprevalenceandvictimcharacteristicsappendixtables
 
 
-# These will need processing separately and then bound.
-  # Note that only data for women is needed.
+# Note that only data for women is needed.
 
 
 #### Read in data and select relevant columns ####

@@ -107,7 +107,11 @@ values in the indicator's metadata. For example, when some quarters were suppres
 but an annual value is still calculated, it should be interpreted with caution.
 
 ```{r, echo = FALSE}
+if (dim(select_NAs)[1] > 0) {
 kable(select_NAs, caption = "Missing values")
+} else {
+print("No missing values detected")
+}
 ```
 
 ### Calculations

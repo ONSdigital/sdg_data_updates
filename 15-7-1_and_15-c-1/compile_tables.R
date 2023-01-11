@@ -10,7 +10,9 @@ library('dplyr')
 
 library(SDGupdater)
 
-if (test_run == TRUE) { source("15-7-1_15-c-1_example_config.R") } else if (test_run == FALSE) { source("15-7-1_15-c-1_config.R") } else { stop("test_run must be either TRUE or FALSE") }
+if (test_run == TRUE) { source("15-7-1_15-c-1_example_config.R") } else if (test_run == FALSE) { 
+  source("15-7-1_15-c-1_config.R") } else { 
+    stop("test_run must be either TRUE or FALSE") }
 
 source("update_15-7-1_and_15-c-1.R") # does the donkey-work of making the csv - 
 # for real update this might be called e.g. 'update_1-2-1.R' 
@@ -41,9 +43,11 @@ qa_filename <- paste0(date, "_15-7-1_15-c-1_checks.html")
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
-rmarkdown::render('15-7-1_and_15-c-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('15-7-1_and_15-c-1_checks.Rmd',
+                  output_file = paste0(output_folder, "/", qa_filename))
 
-message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
+message(paste0("The csv and QA file have been created and saved in '", 
+               paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
 
 # so we end on the same directory as we started before update_indicator_main.R was run:

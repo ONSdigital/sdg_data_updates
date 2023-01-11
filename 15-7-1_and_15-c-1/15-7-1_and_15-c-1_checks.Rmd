@@ -43,7 +43,8 @@ Files used to create the new data were downloaded and saved in
 15-7-1_and_15-c-1/`r input_folder`.  
   
 ```{r include= FALSE}
-filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), full.names = TRUE)$ctime[1]
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
+                                full.names = TRUE)$ctime[1]
 time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
 
 ```
@@ -100,7 +101,10 @@ suppressMessages(print(plot))
 
 ### Missing/suppressed values
 
-If any values in the original data were suppressed, these are given in the table below. Consider adding a footnote or other explanation for partially suppressed values in the indicator's metadata. For example, when some quarters were suppressed, but an annual value is still calculated, it should be interpreted with caution.
+If any values in the original data were suppressed, these are given in the table 
+below. Consider adding a footnote or other explanation for partially suppressed 
+values in the indicator's metadata. For example, when some quarters were suppressed, 
+but an annual value is still calculated, it should be interpreted with caution.
 
 ```{r, echo = FALSE}
 kable(select_NAs, caption = "Missing values")

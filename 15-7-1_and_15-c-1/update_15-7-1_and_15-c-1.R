@@ -18,17 +18,28 @@ names(seizures_main_data) <- SDGupdater::remove_superscripts(names(seizures_main
 # rename columns
 
 renamed_seizures_main_data <- seizures_main_data %>% 
-  rename_column(primary = "Total Number of Seizures", new_name = "Total Number of Seizures") %>% 
-  rename_column(primary = "Number of Times seized: Caviar & Caviar extract", new_name = "Caviar and Caviar extract") %>% 
-  rename_column(primary = "Number of Times seized: Live Coral & Coral Derivatives", new_name = "Live Coral and Coral Derivatives") %>% 
-  rename_column(primary = "Number of Times seized: Ivory and Items Containing Ivory", new_name = "Ivory and Items Containing Ivory") %>% 
-  rename_column(primary = "Number of Times seized: Live Animals and Birds", new_name = "Live Animals and Birds") %>%
-  rename_column(primary = "Number of Times seized: Live Plants", new_name = "Live Plants") %>%
-  rename_column(primary = "Number of Times seized: Parts or Derivatives of Animals/Birds", new_name = "Parts or Derivatives of Animals or Birds") %>%
-  rename_column(primary = "Number of Times seized: Parts or Derivatives of Plants", new_name = "Parts or Derivatives of Plants") %>%
-  rename_column(primary = "Number of Times seized: Timber or Wood Products", new_name = "Timber or Wood Products") %>%
-  rename_column(primary = "Number of Times seized: Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species", new_name = "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species") %>%
-  rename_column(primary = "Number of Times seized: Butterflies", new_name = "Butterflies") 
+  rename_column(primary = "Total Number of Seizures", 
+                new_name = "Total Number of Seizures") %>% 
+  rename_column(primary = "Number of Times seized: Caviar & Caviar extract", 
+                new_name = "Caviar and Caviar extract") %>% 
+  rename_column(primary = "Number of Times seized: Live Coral & Coral Derivatives", 
+                new_name = "Live Coral and Coral Derivatives") %>% 
+  rename_column(primary = "Number of Times seized: Ivory and Items Containing Ivory", 
+                new_name = "Ivory and Items Containing Ivory") %>% 
+  rename_column(primary = "Number of Times seized: Live Animals and Birds", 
+                new_name = "Live Animals and Birds") %>%
+  rename_column(primary = "Number of Times seized: Live Plants", 
+                new_name = "Live Plants") %>%
+  rename_column(primary = "Number of Times seized: Parts or Derivatives of Animals/Birds", 
+                new_name = "Parts or Derivatives of Animals or Birds") %>%
+  rename_column(primary = "Number of Times seized: Parts or Derivatives of Plants", 
+                new_name = "Parts or Derivatives of Plants") %>%
+  rename_column(primary = "Number of Times seized: Timber or Wood Products", 
+                new_name = "Timber or Wood Products") %>%
+  rename_column(primary = "Number of Times seized: Preparations Of Oriental Medicine Which Include Parts & Derivatives Of Endangered Species", 
+                new_name = "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species") %>%
+  rename_column(primary = "Number of Times seized: Butterflies", 
+                new_name = "Butterflies") 
 
 # split year and quarter column into two
 
@@ -37,7 +48,19 @@ renamed_seizures_main_data[c('Year', 'Quarter')] <- str_split_fixed(renamed_seiz
 # select wanted columns
 
 renamed_seizures_main_data <- renamed_seizures_main_data %>% 
-  select(c("Year", "Quarter", "Total Number of Seizures", "Caviar and Caviar extract", "Live Coral and Coral Derivatives", "Ivory and Items Containing Ivory", "Live Animals and Birds", "Live Plants", "Parts or Derivatives of Animals or Birds", "Parts or Derivatives of Plants", "Timber or Wood Products", "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species", "Butterflies"))
+  select(c("Year", 
+           "Quarter", 
+           "Total Number of Seizures", 
+           "Caviar and Caviar extract", 
+           "Live Coral and Coral Derivatives", 
+           "Ivory and Items Containing Ivory", 
+           "Live Animals and Birds", 
+           "Live Plants", 
+           "Parts or Derivatives of Animals or Birds", 
+           "Parts or Derivatives of Plants", 
+           "Timber or Wood Products", 
+           "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species", 
+           "Butterflies"))
 
 # remove rows containing only NAs
 

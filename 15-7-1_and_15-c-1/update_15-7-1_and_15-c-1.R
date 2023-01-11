@@ -49,8 +49,7 @@ renamed_seizures_main_data[renamed_seizures_main_data == ":"] <- "NA"
 
 # calculate total seizures for each import type for each year
 
-seizures_main_data_totals <-  renamed_seizures_main_data %>% 
-  select(c("Year", "Total Number of Seizures", "Caviar and Caviar extract", "Live Coral and Coral Derivatives", "Ivory and Items Containing Ivory", "Live Animals and Birds", "Live Plants", "Parts or Derivatives of Animals or Birds", "Parts or Derivatives of Plants", "Timber or Wood Products", "Preparations Of Oriental Medicine Which Include Parts and Derivatives Of Endangered Species", "Butterflies"))
+seizures_main_data_totals <- subset(renamed_seizures_main_data, select = -Quarter)
 
 # change column names to sentence case
 
@@ -61,6 +60,8 @@ seizures_main_data_totals <- seizures_main_data_totals %>%
 
 seizures_main_data_totals <- seizures_main_data_totals %>%
   pivot_longer(-c("Year"), names_to = "Import type", values_to = "Value")
+
+select_NAs <- seizures_main_data_totals %>% filter(Value == "NA")
 
 seizures_main_data_totals <- seizures_main_data_totals %>%
   filter(Value != "NA")

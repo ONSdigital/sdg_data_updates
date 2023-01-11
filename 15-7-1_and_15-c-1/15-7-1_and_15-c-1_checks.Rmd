@@ -17,12 +17,11 @@ library(kableExtra)
 ```
 
 ```{r include= FALSE}
-source('15-7-1_15-c-1_example_config.R')
 
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/15-7-1.csv")
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Example_Output/", date, "_update_15-7-1_15-c-1", ".csv")) 
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_15-7-1_15-c-1", ".csv"))
 
 latest_year <- max(new_data$Year)
 
@@ -44,11 +43,10 @@ Files used to create the new data were downloaded and saved in
 15-7-1_and_15-c-1/`r input_folder`.  
   
 ```{r include= FALSE}
-filename_save_time <- file.info(paste0(getwd(),"/Example_Input/", filename), full.names = TRUE)$ctime[1]
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), full.names = TRUE)$ctime[1]
 time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
 
 ```
-<br>
 
 **Seizure data from Border Force**  
 
@@ -60,8 +58,6 @@ This file was saved at `r filename_save_time`: It has been
 
 The tab used is called
 `r tabname`. 
-    
-<br>
 
 
 ### Check data
@@ -102,11 +98,20 @@ plot <- joined_data %>%
 suppressMessages(print(plot))
 ```
 
+### Missing/suppressed values
+
+If any values in the original data were suppressed, these are given in the table below. Consider adding a footnote or other explanation for partially suppressed values in the indicator's metadata. For example, when some quarters were suppressed, but an annual value is still calculated, it should be interpreted with caution.
+
+```{r, echo = FALSE}
+kable(select_NAs, caption = "Missing values")
+```
+
 ### Calculations
 
 Q1, Q2, Q3, and Q4 were summed to give a total for each year. 
 
 The calculations used to create these figures was:
+
 ```
 seizures_main_data_totals <- aggregate(x = seizures_main_data_totals[ , colnames(seizures_main_data_totals) != "Year"],
             by = list(seizures_main_data_totals$Year),

@@ -19,6 +19,7 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 
+library('readxl')
 
 
 source("config.R") # pulls in all the configurations. Un-comment out code below for real update
@@ -29,6 +30,18 @@ if (test_run == TRUE) {
 } else {
  stop("test_run must be either TRUE or FALSE")
 }
+
+
+csv <- NULL
+
+for (i in 1:length(years)) {
+  age_source_data <- paste0(filename, tabname_age, years[i])
+  la_source_data <- paste0(filename, tabname_la, years[i])
+  
+  
+  csv <- bind_rows(csv, csv_output)
+}
+
 
 source("update_5-6-1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 

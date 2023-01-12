@@ -4,11 +4,9 @@
 
 # AGE
 # Reads in age tab of spreadsheet and formats across columns
-age_source_data <- read_xlsx(filename, sheet = tabname_age, skip = header_row_age - 1) %>% 
-  mutate(across(where(is.factor), as.character)) %>%  # converts categorical data to string values
-  mutate(across(where(is.character), str_to_sentence)) %>%  # capitalises only first letter of sentence
-  mutate(across(where(is.character), str_squish)) # removes whitespace from start/end of string
-
+age_source_data <- read_excel(paste0(input_folder, "/", filename),
+                              sheet = tabname_age, skip = header_row_age -1) %>% 
+  mutate(across(where(is.factor), as.character))
 
 # Trim source data into a smaller dataframe
 age_source_data_sml <- age_source_data %>% 
@@ -143,11 +141,10 @@ check_all_age <- nrow(distinct(age_csv_output)) == nrow(age_csv_output)
 
 # LOCAL AUTHORITY
 # Reads in local authority tab of spreadsheet and formats across columns
-la_source_data <- read_xlsx(filename, sheet = tabname_la, skip = header_row_la - 1) %>%
-  mutate(across(where(is.double), as.character)) %>%  # converts doubles to characters
-  mutate(across(where(is.factor), as.character)) %>%  # converts categorical data to string values
-  mutate(across(where(is.character), str_to_sentence)) %>%  # capitalises only first letter of sentence
-  mutate(across(where(is.character), str_squish)) # removes whitespace from start/end of string
+la_source_data <- read_excel(paste0(input_folder, "/", filename),
+                              sheet = tabname_la, skip = header_row_la -1) %>% 
+  mutate(across(where(is.factor), as.character)) %>%
+  mutate(across(where(is.double), as.character))
 
 # Trim source data into a smaller dataframe
 la_source_data_sml <- la_source_data %>% 

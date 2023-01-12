@@ -1,0 +1,105 @@
+---
+title: "7-3-1 checks"
+author: "Katie Uzzell"
+date: "12/01/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+```{r include= FALSE}
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/7-3-1.csv")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_7-3-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 15-7-1 and 15-c-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_7-3-1", ".csv")` in the 7-3-1 Output folder.  
+    
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+15-7-1_and_15-c-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+
+**Energy intensity data from Environmental accounts (ONS)**  
+
+Energy intensity data are in the file `r filename`.   
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`  
+
+The tab used is called
+`r tabname`. 
+
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+# new_data <- new_data %>% 
+# mutate(Year = as.integer(Year),
+#          dataset = "new") 
+# 
+# old_data$Import.type = str_to_sentence(old_data$Import.type)
+# 
+# old_data$Import.type[old_data$Import.type == ""] <- "Total number of seizures"
+# 
+# joined_data <- old_data %>% 
+#   mutate(dataset = "old") %>% 
+#   bind_rows(new_data)
+# 
+# plot <- joined_data %>% 
+#   ggplot(.,
+#          aes(x = Year,
+#              y = Value,
+#              colour = dataset)) +
+#   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+#   geom_point() +
+#   geom_line() +
+#   facet_wrap(vars(Import.type),
+#              nrow = 6,
+#              ncol = 2) +
+#   theme_bw()  
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+```
+
+### Calculations
+
+No calculations were performed on this data.
+

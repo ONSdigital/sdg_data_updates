@@ -52,7 +52,13 @@ qa_filename <- paste0(date, "_5-a-1.html")
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
+
+# If you have a QA document written in Rmarkdown this is how you can run it and save it
+
+setwd("D:/Coding_Repos/sdg_data_updates")
+
+setwd(indicator)
+
 rmarkdown::render('5-a-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 

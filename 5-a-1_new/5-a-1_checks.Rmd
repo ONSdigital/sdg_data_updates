@@ -36,13 +36,11 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
-saved as `r paste0(date, "_5-a-1", ".csv")` in the 3-4-1 Output folder.  
+saved as `r paste0(date, "_5-a-1", ".csv")` in the 5-a-1 Output folder.  
 
 
 
 ```{r include= FALSE}
-source('config.R')
-
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-a-1.csv") %>% 
   mutate(Sex = "Female") %>% 
   mutate(Country = "") %>%
@@ -54,11 +52,9 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-a-1.csv") %>%
 old_data$`Occupation.unit.group` <- sub("^$", "Managers and proprietors in agriculture related services", old_data$`Occupation.unit.group`)
 old_data$`Occupation.unit.group` <- sub("Managers and proprietors in forestry fishing and related services", "Managers and proprietors in forestry, fishing and related services", old_data$`Occupation.unit.group`)
 
-
-         
 date <- Sys.Date()
 
-new_data <- read.csv(paste0("5-a-1/Output/", date, "_5-a-1", ".csv")) %>% 
+new_data <- read.csv(paste0("Output/", date, "_5-a-1", ".csv")) %>% 
   mutate(Year = as.integer(Year),
          dataset = "new") 
           

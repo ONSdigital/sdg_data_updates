@@ -9,21 +9,37 @@ energy_source_data <- get_type1_data(header_row, filename, tabname)
 
 # remove cells above column names
 
-energy_main_data <- extract_data(seizures_source_data, header_row)
+energy_main_data <- extract_data(energy_source_data, header_row)
 
-# remove superscripts from column names
+# rename column 3
 
-# names(energy_main_data) <- SDGupdater::remove_superscripts(names(energy_main_data)) 
+colnames(energy_main_data) [1] <- "Sector code"
+colnames(energy_main_data) [2] <- "Section code"
+colnames(energy_main_data) [3] <- "Industry sector"
 
-# format into csv and remove NAs
+# remove unwanted columns
 
-#seizures_main_data_totals <- seizures_main_data_totals %>%
-#  pivot_longer(-c("Year"), names_to = "Import type", values_to = "Value")
+energy_main_data <- within(energy_main_data, rm("Sector code","Section code"))
 
+# remove unneeded data
+
+selected_rows <- c(1:22)
+
+energy_main_data <- energy_main_data %>%
+  slice(selected_rows)
+
+energy_main_data <- energy_main_data[-c(21),]
+
+# format
+
+energy_csv <- energy_main_data %>% 
+  pivot_longer(-c("Industry sector"), names_to = "Year", values_to = "Value")
+
+energy_csv$`Industry sector` <- sub("Total", "", energy_csv$`Industry sector`)
 
 # Format csv 
 
-csv_formatted <- XXXXXXXX %>% 
+csv_formatted <- energy_csv %>% 
          mutate("Series" = "Energy intensity level of primary energy",
            "Unit measure" = "Terajoules per million pounds (TJ/£ million)",
             "Unit multiplier" =  "Units",
@@ -32,7 +48,9 @@ csv_formatted <- XXXXXXXX %>%
 csv_formatted <- csv_formatted %>%            
 select("Year", "Series", "Industry sector", "Unit measure", "Unit multiplier", "Observation status", "Value")
 
-# csv_formatted <- csv_formatted[order(csv_formatted$"Import type"),]
+csv_formatted <- csv_formatted[order(csv_formatted$`Industry sector`), ]
 
-# <- csv_formatted %>% 
-#  mutate(Value = ifelse(is.na(Value), "", Value))
+
+
+
+

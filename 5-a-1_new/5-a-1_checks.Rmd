@@ -52,9 +52,10 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-a-1.csv") %>%
 old_data$`Occupation.unit.group` <- sub("^$", "Managers and proprietors in agriculture related services", old_data$`Occupation.unit.group`)
 old_data$`Occupation.unit.group` <- sub("Managers and proprietors in forestry fishing and related services", "Managers and proprietors in forestry, fishing and related services", old_data$`Occupation.unit.group`)
 
+
 date <- Sys.Date()
 
-new_data <- read.csv(paste0("Output/", date, "_5-a-1", ".csv")) %>% 
+new_data <- read.csv(paste0(output_folder, "/", date, "_5-a-1", ".csv")) %>% 
   mutate(Year = as.integer(Year),
          dataset = "new") 
           

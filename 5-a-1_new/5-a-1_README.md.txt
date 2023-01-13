@@ -11,7 +11,7 @@ This automation pulls together all relevant occupation codes off NOMIS to displa
 4. If config.R does not exist in the 5-a-1 folder, create it from the example_config.R file  
 5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove occupation codes. 
 6. Open update_indicator_main.R  
-7. Ensure test_run == FALSE
+7. Ensure test_run <- FALSE
 8. Click Source (by default this is in top right of the script window)  
 9. Check for messages in the console. When the script is run a file titled '5-a-1.csv' will be saved in 5-a-1 > Output 
    Use this file for the Indicator csv.  

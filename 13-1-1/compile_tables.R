@@ -54,7 +54,7 @@ if (output_folder_exists == FALSE) {
 
 date <- Sys.Date()
 
-csv_filename <- paste0(date, indicator, ".csv") 
+csv_filename <- paste0(date, "", indicator, ".csv") 
 qa_filename <- paste0(date, indicator, "-QA.html") 
 
 write.csv(combined_data_no_duplicates_sorted, paste0(output_folder, "/", csv_filename), row.names = FALSE)

@@ -254,3 +254,6 @@ for (i in 1:length(years)) {
   csv_output <- rbind(csv_output, csv_final)
 }
 
+# Check for duplicates in output
+check_output <- nrow(distinct(csv_output)) == nrow(csv_output)
+

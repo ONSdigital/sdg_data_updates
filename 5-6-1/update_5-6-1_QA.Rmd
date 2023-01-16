@@ -20,6 +20,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 **Run date and time: `r Sys.time()`**  
   
@@ -46,14 +47,14 @@ Short explanation that can include details such as:
 in this section list the settings (configurations) and use snippets of code to 
 print the user input. The double asterisks make the text bold, while `r` tells 
 markdown to read the text inside the back-ticks as code. 
-
-An example of what you may put in this section -
   
   The configurations are:  
   
-  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
-  - name of the tab the data are in: **`r tabname_age & tabname_la`** (Note: tabname is slightly different from 21/22 onwards compared to earlier years, this will display the tabname for the most recent year read) 
-  - row number of the column names: **`r header_row`** 
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`** (place .xlsx files here)
+  - years that are being read in: **`r years`**
+  - filenames being read in: **`r filename_list`**
+  - name of the tabs the data are in: **`r tabname_age & tabname_la`** (Note: tabname_la is slightly different from 21/22 onwards compared to earlier years, this will display the tabname for the most recent year read) 
+  - row number of the column names; age: **`r header_row_age`**; local authority: **`r header_row_la`** 
   - location of the outputs: **`r output_folder`**  
   
   
@@ -63,47 +64,8 @@ code. You may want to use chunks of code within this file to perform some basic
 checks, or you may just pull in variables that were created in the main scripts 
 (like with the configurations above). 
 
-## Duplication checks
-- No duplicates in output data: **`r `
+- No duplicates in output data: **`r check_output`**
 
-You can create a statement that is printed in the file only if a certain 
-condition has been met. For example, in 2-c-1 two datasets feed into the csv, 
-and they are released at different times. You may want to therefor make the 
-person doing the update aware that one dataset is not yet released:
-
-```{r, include=FALSE}
-
-# # in this example from 2-c-1, not_all_data_available is a variable created in 
-# # the main code (copied and hashed out below for demonstration only).
-# # not_all_data_available is TRUE if the most recent year of one dataset was 
-# # different to the most recent year in the other dataset, and FALSE if they 
-# # both go up to the same year:
-#
-# if (length(unique(max_years$max_year)) > 1) {
-#   not_all_data_available <- TRUE
-#   dataset_behind <- max_years$dataset[max_years$max_year == full_data_max_year]
-# } else {
-#   not_all_data_available <- FALSE
-# }
-
-if (not_all_data_available == TRUE) {
-  print(paste("NOTE: Data for", dataset_behind, "data are only available up to", 
-              max_years$max_year[max_years$dataset == dataset_behind], 
-              ", though data for", max_years$dataset[max_years$dataset != dataset_behind],
-              "are available up to", max_years$max_year[max_years$dataset != dataset_behind]))
-}
-```
-  
-In other updates, this section may be much more basic, for example just checking 
-that the geography given in the table title matches the geography in the output. 
-For example you may include something like:
-
-  The geography listed in the information at the top of 
-  `r paste0(filename, ", table ", tab_name)` is `r country`. Please check that 
-  this matches the geography given in the indicator file metadata.  
-     
-Sometimes, there may not be anything that needs to go in here, in which case 
-feel free to leave the section out.  
 
 ## Plots
 The plots are one of the most important parts of the QA file. If anything has 
@@ -132,10 +94,10 @@ plots section:
 # with 'live' data that looks like the new data (for testing you could pull the 
 # 'live' data from the in progress file once you have put the new csv in there).
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv') %>%
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_5-6-1.csv') %>%
   janitor::clean_names()
 
-new_data <- csv_formatted %>% # replace csv_formatted with whatever your final csv was called
+new_data <- csv_output %>% # replace csv_formatted with whatever your final csv was called
   mutate(Year = as.integer(Year),
          dataset = "new") %>%
   janitor::clean_names() 

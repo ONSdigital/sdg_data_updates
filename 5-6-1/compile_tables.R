@@ -57,7 +57,7 @@ qa_filename <- paste0(date, "_update_5-6-1_checks.html")
 
 # save files and print messages ------------------------------------------------
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-rmarkdown::render('update_5-6-1_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+#rmarkdown::render('update_5-6-1_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it

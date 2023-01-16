@@ -1,0 +1,145 @@
+---
+title: "5-2-1"
+author: "Michael Nairn"
+date: "16/01/2023"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r echo=FALSE}
+load('img.RData')
+```
+
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+```
+
+**Run date and time: `r Sys.time()`**
+
+## Introduction
+
+Motivation for automation: 
+Producing the numbers of deaths involves combining a portion of the ONS data to the entirety of the Nomis death by cause of death data. There is a risk of copying the data incorrectly. 
+
+The data from the ONS spreadsheet is unlikely to be updated as it only includes data up to 2018, so there is little concern about a change in its format. Data from 2013 onward is provided by Nomis  and it is not expected that its format should change. Therefore, it is believed that the automation should be stable in this regard. 
+
+Things to check:
+At the time of production the Nomis mortality data included rows for the most recent year 2021, but has NA for its value. Update_indicator replaces NA in Value with "".
+
+## Configurations
+
+There are 3 data sources which are fetched by links:
+
+* ONS Number of deaths caused by disasters in England and Wales
+* Nomis Number of deaths caused by disasters with number of deaths by all causes. This is broken down by residents of England, Wales, England and Wales, outside England and Wales, and total.
+* Nomis Age-Standardised mortality rates for deaths caused by disaster and for all causes of death. This is broken down by residents of England, Wales, England and Wales, outside England and Wales, and total.
+
+The ONS data contains 4 tabs:
+
+* `r ons1` - Number of deaths aggregated for all disasters for all sexes by country by year
+* `r ons2` - Number of deaths aggregated for all disasters by sex by country by year
+* `r ons3` - Number of deaths aggregated for all sexes by disaster type by country by year
+* `r ons4` - Number of death by disaster type by sex by country by year 
+
+In hindsight the analysis could have been completed using `r ons4` only but I felt more confident writing the scripts using all four tables. 
+
+# Basic checks
+
+The number of rows in the output should be checked against the expected number.
+The number of rows expected for the number of deaths from 2001 onward, where *y* is the number of years included in the data:  
+99*y* + 3(*y* - 12)  
+
+This is because:  
+There are 10 * 3 * 3 * *y* rows for the number killed by each disaster type by sex, country and year.  
+There are 1 * 3 * 3 * *y* rows for the number killed by any disaster type by sex, country and year.  
+There are 1 * 3 * (*y* - 12) rows for Age-Standardised mortality rate by sex and year, but that the earliest available year for this is 2013.  
+
+The code below will check this: 
+
+```{r}
+y = max(combined_data_no_duplicates_sorted$Year) - min(combined_data_no_duplicates_sorted$Year) + 1
+nrow(combined_data_no_duplicates_sorted) == 99*y + 3*(y - 12)
+```
+
+update_indicator has removed all rows which are duplicated on everything but Value (in case we had two rows denoting the same quantity but with different values). As a further check we check the number of unique combinations of Year, Series, Country, Sex and Cause of death found in the output is equal to the number of rows in the output.
+
+```{r}
+nrow(combined_data_no_duplicates_sorted) == nrow(combined_data_no_duplicates_sorted[c("Country", "Year", "Sex", "Cause of death", "Series")])
+```
+
+Now let's fetch the original data and compare it to our updated set. Unless values for previous years have been amended, the two datasets should differ only in the adding of extra rows for the newly included years.  
+
+```{r echo=FALSE}
+original_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-1-1.csv", check.names = FALSE)
+original_data <- original_data %>% 
+  rename(Units = `Unit measure`) %>% 
+  mutate(Country = ifelse(Country=="England and Wales", "", Country)) %>% # Some rows were labelled "England and Wales" not ""
+  select(Year, Series, `Cause of death`, Country, Sex, `Observation status`, `Unit multiplier`, `Units`, GeoCode, Value)
+# For this first time check where we have removed the 2001-2012 mortality data use the code below ----
+original_data_cleaned <- original_data %>%
+  mutate(Year = as.integer(Year)) %>%
+  filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
+  mutate(Year = as.character(Year)) %>%
+  mutate(Value = as.numeric(Value)) 
+combined_data_cleaned <- combined_data_no_duplicates_sorted %>% 
+  mutate(Year = as.integer(Year)) %>%
+  filter(Year<=2020) %>% 
+  mutate(Year = as.character(Year)) %>% 
+  mutate(Value = as.numeric(Value))
+# RE THE NA ISSUE IN UNIT MULTIPLIER, DROP THE COLUMN
+#original_data_cleaned <- subset(original_data_cleaned, select = -c(`Unit multiplier`))
+#combined_data_cleaned <- subset(combined_data_cleaned, select = -c(`Unit multiplier`))
+print(paste("The number of rows in the older data is: ", nrow(original_data)))
+print(paste("The number of rows in the updated data is: ", nrow(combined_data_no_duplicates_sorted)))
+print(paste("Checking for NA in combined_data. Total number of NA is: ", sum(is.na(combined_data_no_duplicates_sorted))))
+diff <- anti_join(combined_data_cleaned, original_data_cleaned, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
+print("If there are no inconsistencies then the table below should be empty")
+print(paste("There are number of inconsistent rows: ", nrow(diff)))
+knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
+# For future updates use the code below ----
+print("Below is a table of the non-matching rows for the original and updated data, it should only be populated for years which are later than are covered in the original data")
+# diff <- anti_join(combined_data, original_data, by=c("Year", "Series", "Sex", "Country", "Cause of death")) 
+# print(nrow(diff))
+# knitr::kable(diff[, c("Year", "Series", "Sex", "Country", "Cause of death", "Value")], "pipe")
+```
+
+# Plots
+There are too many possible time series to plot here (>100) but below are a few examples you can amend if there seems to be a discrepancy shown in the table above. If for all plots below you see only one shape of point marker, the original and updated datasets can be assumed identical in value for the selection shown in the plot.
+```{r echo=FALSE}
+# Load the original data again
+original_data <- read.csv("https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-1-1.csv", check.names = FALSE)
+original_data <- original_data %>% 
+  rename(Units = `Unit measure`) %>% 
+  mutate(Country = ifelse(Country=="England and Wales", "", Country)) %>% # Some rows were labelled "England and Wales" not ""
+  select(Year, Series, `Cause of death`, Country, Sex, `Observation status`, `Unit multiplier`, `Units`, GeoCode, Value)
+# For this first time check where we have removed the 2001-2012 mortality data use the code below ----
+original_data <- original_data %>%
+  mutate(Year = as.integer(Year)) %>%
+  filter(!(Year<=2012 & Series=="Age-standardised mortality rates per 100,000 population")) %>%
+  mutate(Year = as.character(Year)) %>%
+  mutate(Value = as.integer(Value))
+# Add marker variables to the original_data and combined_data so we can know which set a point is from
+original_data_cleaned_marked <- original_data_cleaned %>% 
+  mutate(dataset = "original")
+combined_data_cleaned_marked <- combined_data_cleaned %>% 
+  mutate(dataset = "updated")
+joined_data <- original_data_cleaned_marked %>% rbind(combined_data_cleaned_marked)
+ggplot(data = joined_data %>% filter(Series == "Number of deaths from exposure to forces of nature", `Cause of death` == "", Country == ""),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "All deaths for EW by sex")
+ggplot(data = joined_data %>% filter(Series == "Number of deaths from exposure to forces of nature", `Cause of death` == "Exposure to excessive natural cold", Country == "England"),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "Deaths by Exposure to excessive natural cold in England by sex")
+ggplot(data = joined_data %>% filter(Series == "Age-standardised mortality rates per 100,000 population", `Cause of death` == "", Country == ""),
+       aes(x = Year, y = Value, col = Sex)) + geom_point(aes(shape=dataset) ) +
+  labs(title = "Age-standardised mortality rate in England and Wales")
+# For future checks check the plots below----

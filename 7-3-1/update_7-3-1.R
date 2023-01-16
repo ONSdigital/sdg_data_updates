@@ -48,7 +48,7 @@ csv_formatted <- energy_csv %>%
 csv_formatted <- csv_formatted %>%            
 select("Year", "Series", "Industry sector", "Unit measure", "Unit multiplier", "Observation status", "Value")
 
-csv_formatted <- csv_formatted[order(csv_formatted$`Industry sector`), ]
+csv_output <- csv_formatted[order(csv_formatted$`Industry sector`), ]
 
 
 

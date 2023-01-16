@@ -100,7 +100,7 @@ for (i in 1:length(years)) {
   age_data <- rbind(`Under16`, `16 to 17`, `18 to 19`, `20 to 24`, `25 to 34`, `35 to 44`, `45 and over`, `Total`)
   
   # Fills these columns (left) with all of the same value (right)
-  age_data['Year']=year
+  age_data['Year']=years[i]
   age_data['Observation status'] = "Undefined"
   age_data['Unit multiplier'] = "Thousands"
   age_data['Unit measure']="Number"
@@ -188,7 +188,7 @@ for (i in 1:length(years)) {
   
   
   # Fills these columns (left) with all of the same value (right)
-  la_data_split['Year']=year
+  la_data_split['Year']=years[i]
   la_data_split['Observation status'] = "Undefined"
   la_data_split['Unit multiplier'] = "Thousands"
   la_data_split['Unit measure']="Number"

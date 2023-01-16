@@ -19,8 +19,6 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 
-setwd("template") # this line is to run the template only - 
-                  # do not copy into your code as this is usually found in update_indicator_main.R
 
  if (test_run == TRUE) {
    source("example_config.R")
@@ -58,7 +56,7 @@ qa_filename <- paste0(date, "_update_5-2-1_checks.html")
 write.csv(csv_formatted, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
-rmarkdown::render('5-2-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+#rmarkdown::render('5-2-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

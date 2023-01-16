@@ -18,10 +18,9 @@ library('stringr')
 library('janitor')
 library('tidyr')
 library('dplyr')
-
 library('readxl')
 
-# Oi oi oi !
+
 
 source("config.R") # pulls in all the configurations. Un-comment out code below for real update
 #if (test_run == TRUE) {

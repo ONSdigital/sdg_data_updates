@@ -105,12 +105,18 @@ new_data <- csv_output %>%
 # join to the new data
 joined_data <- live_data %>% 
   mutate(across(where(is.double), as.character), dataset = "live") %>%
-  rename(type_of_contraception = types_of_contraception) %>%
+  rename(type_of_contraception = types_of_contraception) %>%  #changes name to match
   bind_rows(new_data)
 
-# PLOTs
-# 
-plot <- joined_data %>%
+# Remove NAs (la_data not included prior to 2019/20)
+joined_data <- joined_data %>%
+  mutate(region_name = ifelse(is.na(region_name), "", region_name)) %>%
+  mutate(la_name = ifelse(is.na(la_name), "", la_name))
+
+# PLOTS
+# There are too many possible time series to plot here but below are a few examples you can amend if there seems to be a discrepancy shown in the table above. 
+# Age
+plot_age <- joined_data %>%
   ggplot(.,
          aes(x = year,
              y = value,
@@ -119,14 +125,47 @@ plot <- joined_data %>%
   geom_line(aes(linetype = dataset)) +
   facet_wrap(~ age,
              nrow = 2) +
-  theme_bw() 
+  theme_bw() +
+  ggtitle("Age")
 
+# Type of contraception
+plot_type <- joined_data %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_grid(main_method_of_contraception ~ type_of_contraception) +
+  theme_bw() +
+  ggtitle("Type of contraception")
+
+# Region name
+plot_region <- joined_data %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(~ region_name, nrow = 2) +
+  theme_bw() +
+  ggtitle("Region")
 ```
 
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot))
+suppressMessages(print(plot_age))
 ```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot_type))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot_region))
+```
+
 
 Finally, it is sometimes hard to see where new numbers don't match live numbers
 especially if there are lots of disaggregations. In such cases a table of 
@@ -139,15 +178,18 @@ differences is also useful. The following example is taken from 13-2-2:
   **If there are differences (see table below) please check that this still stands**
 
 ```{r, , echo = FALSE}
+# joined_data$value <- as.numeric(joined_data$value)
+joined_data <-  joined_data %>%
+    select(all_of(c("year", "region_name", "la_name", "age", "main_method_of_contraception", "type_of_contraception", "observation_status", "unit_multiplier", "unit_measure", "value", "dataset")))
+  
+
 comparison <- joined_data %>% 
   # select the columns that are in both the live and new data
   # Columns that have the same entry in every row (e.g. units), or
   # columns like geocode and obs status don't need to go in here.
-  mutate(region_name = ifelse(is.na(region_name), "", region_name)) %>%
-  mutate(la_name = ifelse(is.na(la_name), "", la_name)) %>%
-  select(year, age, main_method_of_contraception, type_of_contraception, region_name, la_name, value, dataset) %>% 
+  select(year, age, main_method_of_contraception, type_of_contraception, value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = value) %>% 
+              values_from = value) %>%
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top

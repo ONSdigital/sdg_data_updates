@@ -68,16 +68,11 @@ checks, or you may just pull in variables that were created in the main scripts
 
 
 ## Plots
-The plots are one of the most important parts of the QA file. If anything has 
-gone wrong in the automation it will show up on the plots. Below is an example
-plots section:  
-  
-  Please check the plots below for any differences between the live data (which 
-  is pulled in from the sdg-data (platform) github repo) and the new data.  
-  
-  Live data will appear over the top of new data. You should therefore only 
-  see points for the live data for previous years and only points for the new data 
-  in the years you are updating. 
+Please check the plots below for any differences between the live data (which 
+is pulled in from the sdg-data (platform) github repo) and the new data.  
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating.
 
 ```{r, echo = FALSE, fig.width=10}
 

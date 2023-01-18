@@ -111,8 +111,9 @@ for (i in 1:length(years)) {
     select(all_of(c("Year", "Age", "Main method of contraception", "Type of contraception", "Observation status", "Unit multiplier", "Unit measure", "Value")))
   
   # Replace these values with blanks
-  age_csv_ordered$`Type of contraception` <- gsub("Larcs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
+  age_csv_ordered$`Type of contraception` <- gsub("LARCs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods", as.character(age_csv_ordered$`Type of contraception`))
+  age_csv_ordered$`Type of contraception` <- gsub("User dependent methods total", "", as.character(age_csv_ordered$`Type of contraception`))
   # This one took a few goes because of the brackets
   age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("thousands", "", as.character(age_csv_ordered$`Type of contraception`))
@@ -182,7 +183,7 @@ for (i in 1:length(years)) {
       `Type of contraception` == "UD" ~  "User dependent",
       `Type of contraception` == "Oral contraceptives" ~ "User dependent",
       `Type of contraception` == "Male condom" ~ "User dependent",
-      `Type of contraception` == "Contraceptive Patch" ~ "User dependent",
+      `Type of contraception` == "Contraceptive patch" ~ "User dependent",
       `Type of contraception` == "Other" ~ "User dependent"))
   
   

@@ -24,9 +24,9 @@ for (i in 1:length(years)) {
   # creates a new dataframe with separate columns for main method of and type of contraception
   age_data_split <- age_source_data_sml %>%  
     mutate(`Main method of contraception` = case_when(
-      `Main method in use` == "Larcs total 3" ~ "Long acting reversible contraceptives",
-      `Main method in use` == "Iu device" ~ "Long acting reversible contraceptives",
-      `Main method in use` == "Iu system" ~ "Long acting reversible contraceptives",
+      `Main method in use` == "LARCs total 3" ~ "Long acting reversible contraceptives",
+      `Main method in use` == "IU device" ~ "Long acting reversible contraceptives",
+      `Main method in use` == "IU system" ~ "Long acting reversible contraceptives",
       `Main method in use` == "Implant" ~ "Long acting reversible contraceptives",
       `Main method in use` == "Injectable contraceptive" ~ "Long acting reversible contraceptives",
       `Main method in use` == "User dependent methods total" ~  "User dependent",
@@ -112,7 +112,7 @@ for (i in 1:length(years)) {
   
   # Replace these values with blanks
   age_csv_ordered$`Type of contraception` <- gsub("Larcs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
-  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "", as.character(age_csv_ordered$`Type of contraception`))
+  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods", as.character(age_csv_ordered$`Type of contraception`))
   # This one took a few goes because of the brackets
   age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("thousands", "", as.character(age_csv_ordered$`Type of contraception`))
@@ -242,6 +242,10 @@ for (i in 1:length(years)) {
                     "Type of contraception", "Observation status", "Unit multiplier",
                     "Unit measure", "Value"))) # order the columns
   
+  # Round values to 3dp (had issues with extra dp causing duplicates when 2 tables combined)
+  csv_joined$Value <- as.numeric(csv_joined$Value)
+  csv_joined$Value <- round(csv_joined$Value, digits = 3)
+  
   # Remove duplicates (there will be some in the totals for the whole of England)
   csv_final <- distinct(csv_joined)
   
@@ -263,23 +267,5 @@ duplicates_df <- csv_output %>%
   select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
                   "Type of contraception", "Observation status", "Unit multiplier",
                   "Unit measure"))) # create a df without values
-check_minus_value <- nrow(distinct(duplicates_df)) == nrow(duplicates_df)
-
-
-# print a final message informing of du  #' These two lines check whether there are duplicates for all  the columns except value
-# (the would-be-duplicate numbers appear to differ in sf between tables)
-duplicates_df <- csv_final %>%
-  select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
-                  "Type of contraception", "Observation status", "Unit multiplier",
-                  "Unit measure"))) # create a df without values
 check_wo_values <- nrow(distinct(duplicates_df)) == nrow(duplicates_df) # should be false
 
-
-# prints a message informing of duplicate status (mainly for checking while writing code)
-if (check_output == FALSE) {
-  message("WARNING: duplicates present in csv_output")
-} else if (check_wo_values == FALSE & check_output == TRUE) {
-    message("WARNING: duplicates present in csv_output but their values appear to differ")
-} else if (check_wo_values == TRUE & check_output == TRUE) {
-    message("No duplicates found, good to go")
-}

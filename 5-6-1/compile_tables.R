@@ -21,7 +21,6 @@ library('dplyr')
 library('readxl')
 
 
-
 source("config.R") # pulls in all the configurations. Un-comment out code below for real update
 #if (test_run == TRUE) {
 #  source("example_config.R")
@@ -65,6 +64,16 @@ write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALS
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
+
+# prints a message informing of presence of duplicates (mainly for checking while writing code)
+if (check_output == FALSE) {
+  message("WARNING: duplicates present in csv_output")
+} else if (check_wo_values == FALSE & check_output == TRUE) {
+  message("WARNING: duplicates present in csv_output but their values appear to differ")
+} else if (check_wo_values == TRUE & check_output == TRUE) {
+  message("No duplicates found, good to go")
+}
+
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

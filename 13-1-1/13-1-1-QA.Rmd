@@ -69,7 +69,9 @@ y = max(combined_data_no_duplicates_sorted$Year) - min(combined_data_no_duplicat
 nrow(combined_data_no_duplicates_sorted) == 99*y + 3*(y - 12)
 ```
 
-update_indicator has removed all rows which are duplicated on everything but Value (in case we had two rows denoting the same quantity but with different values). As a further check we check the number of unique combinations of Year, Series, Country, Sex and Cause of death found in the output is equal to the number of rows in the output.
+
+update_indicator has removed all duplicate entries. However, it has retained duplicate entries when the Value column is different.
+This is in case we had two rows denoting the same data entry but with different values. As a further check we check the number of unique combinations of Year, Series, Country, Sex and Cause of death found in the output is equal to the number of rows in the output.
 
 ```{r}
 nrow(combined_data_no_duplicates_sorted) == nrow(combined_data_no_duplicates_sorted[c("Country", "Year", "Sex", "Cause of death", "Series")])

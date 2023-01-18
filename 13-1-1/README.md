@@ -31,7 +31,7 @@ is looking for the SDGupdater package (folder) in the right place. Then use `ins
 ### QA PROCESS (SDG Data team):
 Read the automatically generated QA report. The QA report will display a table of non-matching rows between the original and updated datasets. If this table contains rows for years which are covered by the original dataset, an error has occurred.
 
-The QA report does not negate checking the source data for notes, but if everythig looks fine in the report, numbers should not need to be checked.
+The QA report does not negate checking the source data for notes, but if everything looks fine in the report, numbers should not need to be checked.
 
 ### TROUBLESHOOTING:
 Some possible errors (may not be an exact match) and solutions:    

@@ -257,3 +257,24 @@ for (i in 1:length(years)) {
 # Check for duplicates in output
 check_output <- nrow(distinct(csv_output)) == nrow(csv_output)
 
+#' These two lines check whether there are duplicates for all  the columns except value
+# (the would-be-duplicate numbers appear to differ in sf between tables)
+duplicates_df <- csv_output %>%
+  select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
+                  "Type of contraception", "Observation status", "Unit multiplier",
+                  "Unit measure"))) # create a df without values
+check_minus_value <- nrow(distinct(duplicates_df)) == nrow(duplicates_df)
+
+
+# print a final message informing of du  #' These two lines check whether there are duplicates for all  the columns except value
+# (the would-be-duplicate numbers appear to differ in sf between tables)
+duplicates_df <- csv_final %>%
+  select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
+                  "Type of contraception", "Observation status", "Unit multiplier",
+                  "Unit measure"))) # create a df without values
+check_minus_value <- nrow(distinct(duplicates_df)) == nrow(duplicates_df) # should be false
+
+message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
+               " as ", csv_filename, "and ", qa_filename, "'\n\n"))
+
+# print a final message informing of duplicate status

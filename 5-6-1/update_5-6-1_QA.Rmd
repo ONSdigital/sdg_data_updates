@@ -103,20 +103,20 @@ new_data <- csv_output %>%
   janitor::clean_names() 
   
 # join to the new data
-joined_data <- live_data %>% 
+joined_data2 <- live_data %>% 
   mutate(across(where(is.double), as.character), dataset = "live") %>%
   rename(type_of_contraception = types_of_contraception) %>%  #changes name to match
   bind_rows(new_data)
 
 # Remove NAs (la_data not included prior to 2019/20)
-joined_data <- joined_data %>%
+joined_data2 <- joined_data2 %>%
   mutate(region_name = ifelse(is.na(region_name), "", region_name)) %>%
   mutate(la_name = ifelse(is.na(la_name), "", la_name))
 
 # PLOTS
 # There are too many possible time series to plot here but below are a few examples you can amend if there seems to be a discrepancy shown in the table above. 
 # Age
-plot_age <- joined_data %>%
+plot_age <- joined_data2 %>%
   ggplot(.,
          aes(x = year,
              y = value,
@@ -129,7 +129,7 @@ plot_age <- joined_data %>%
   ggtitle("Age")
 
 # Type of contraception
-plot_type <- joined_data %>%
+plot_type <- joined_data2 %>%
   ggplot(.,
          aes(x = year,
              y = value,
@@ -141,7 +141,7 @@ plot_type <- joined_data %>%
   ggtitle("Type of contraception")
 
 # Region name
-plot_region <- joined_data %>%
+plot_region <- joined_data2 %>%
   ggplot(.,
          aes(x = year,
              y = value,
@@ -179,21 +179,21 @@ differences is also useful. The following example is taken from 13-2-2:
 
 ```{r, , echo = FALSE}
 # joined_data$value <- as.numeric(joined_data$value)
-joined_data <-  joined_data %>%
-    select(all_of(c("year", "region_name", "la_name", "age", "main_method_of_contraception", "type_of_contraception", "observation_status", "unit_multiplier", "unit_measure", "value", "dataset")))
+joined_data2 <-  joined_data2 %>%
+    select(all_of(c("year", "region_name", "la_name", "age", "main_method_of_contraception", "type_of_contraception",  "unit_measure", "value", "dataset", "observation_status", "unit_multiplier")))
   
 
-comparison <- joined_data %>% 
+comparison <- joined_data2 %>% 
   # select the columns that are in both the live and new data
   # Columns that have the same entry in every row (e.g. units), or
   # columns like geocode and obs status don't need to go in here.
-  select(year, age, main_method_of_contraception, type_of_contraception, value, dataset) %>% 
+  select(year, age, region_name, la_name, main_method_of_contraception, type_of_contraception, value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = value) %>%
-  mutate(difference = new - live) %>% 
-  filter(difference != 0) %>% 
+              values_from = value) #%>%
+  #mutate(difference = new - live) %>% 
+  #filter(difference != 0) %>% 
   # put the largest differences at the top
-  arrange(desc(abs(difference)))
+  #arrange(desc(abs(difference)))
 
 ```
   

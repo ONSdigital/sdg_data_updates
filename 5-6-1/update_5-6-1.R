@@ -1,5 +1,5 @@
 # author: Ali Campbell
-# date: 03/01/2023
+# date: 18/01/2023
 # read-in 2022 data disaggregated by age
 
 # Create an empty dataframe for the final output
@@ -135,7 +135,6 @@ for (i in 1:length(years)) {
     mutate(`Main method of contraception` = ifelse(is.na(`Main method of contraception`),
                                                    "", `Main method of contraception`))
   
-  
   # This is a line that you can run to check that you have filtered and selected 
   # correctly - all rows in the clean_population dataframe should be unique
   # so this should be TRUE
@@ -166,11 +165,11 @@ for (i in 1:length(years)) {
     rename("Total" = "...5", "LARC" = "Total...7", "IU device" = "IU device...8",
            "IU system" = "IU system...9", "Implant" = "Implant...10",
            "Injectable contraceptive" = "Injectable...11", "UD" = "Total...13", "Oral contraceptives" = "Oral (pill)...14",
-           "Male condom" = "Male condom...15", "Contraceptive Patch" = "Patch...16", "Other" = "Other 2...17")  # renames these columns
+           "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods" = "Other 2...17")  # renames these columns
     
   # pivot the data into long format so that types of contraception are in one column
   la_data_long <- la_source_data_sml %>%
-    pivot_longer(Total:Other, names_to = "Type of contraception", values_to = "Value")
+    pivot_longer(Total:`Other methods`, names_to = "Type of contraception", values_to = "Value")
   
   # creates a new dataframe with separate columns for main method of and type of contraception
   la_data_split <- la_data_long %>%  
@@ -184,7 +183,7 @@ for (i in 1:length(years)) {
       `Type of contraception` == "Oral contraceptives" ~ "User dependent",
       `Type of contraception` == "Male condom" ~ "User dependent",
       `Type of contraception` == "Contraceptive patch" ~ "User dependent",
-      `Type of contraception` == "Other" ~ "User dependent"))
+      `Type of contraception` == "Other methods" ~ "User dependent"))
   
   
   
@@ -214,6 +213,7 @@ for (i in 1:length(years)) {
   #la_csv_sorted <- la_csv_ordered[order(csv_ordered$Year, csv_ordered$`Main method of contraception`, csv_ordered$`Type of contraception`, csv_ordered$Age, na.last = FALSE), ]
   
   
+  
   # remove NAs from the csv that will be saved in Outputs
   # this changes Value to a character so will still use csv_formatted in the 
   # R markdown QA file
@@ -221,6 +221,10 @@ for (i in 1:length(years)) {
     mutate(Value = ifelse(is.na(Value), "", Value)) %>%
     mutate(`Main method of contraception` = ifelse(is.na(`Main method of contraception`), "", `Main method of contraception`)) %>%
     mutate(`LA name` = ifelse(is.na(`LA name`), "", `LA name`))
+  
+  #' This line removes the total for England for other methods. This is the only total that 
+  #' differs between the age and la tables, and historically age has been used so I've cut this one 
+  #' out to avoid duplicates
   
   # This is a line that you can run to check that you have filtered and selected 
   # correctly - all rows in the clean_population dataframe should be unique

@@ -52,7 +52,18 @@ date <- Sys.Date()
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
 csv_filename <- paste0(date, "_update_5-6-1.csv")
-qa_filename <- paste0(date, "_update_5-6-1_checks.html") 
+qa_filename <- paste0(date, "_update_5-6-1_checks.html")
+
+
+# prints a message informing of presence of duplicates (mainly for checking while writing code)
+if (check_output == FALSE) {
+  message("WARNING: duplicates present in csv_output")
+} else if (check_wo_values == FALSE & check_output == TRUE) {
+  message("WARNING: duplicates present in csv_output but their values appear to differ")
+} else if (check_wo_values == TRUE & check_output == TRUE) {
+  message("No duplicates found, good to go")
+}
+
 
 # save files and print messages ------------------------------------------------
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
@@ -64,15 +75,6 @@ write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALS
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
-
-# prints a message informing of presence of duplicates (mainly for checking while writing code)
-if (check_output == FALSE) {
-  message("WARNING: duplicates present in csv_output")
-} else if (check_wo_values == FALSE & check_output == TRUE) {
-  message("WARNING: duplicates present in csv_output but their values appear to differ")
-} else if (check_wo_values == TRUE & check_output == TRUE) {
-  message("No duplicates found, good to go")
-}
 
 
 # so we end on the same directory as we started before update_indicator_main.R was run:

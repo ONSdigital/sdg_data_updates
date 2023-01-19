@@ -55,6 +55,12 @@ csv_filename <- paste0(date, "_update_5-6-1.csv")
 qa_filename <- paste0(date, "_update_5-6-1_checks.html")
 
 
+
+# save files and print messages ------------------------------------------------
+write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+rmarkdown::render('update_5-6-1_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+
+
 # prints a message informing of presence of duplicates (mainly for checking while writing code)
 if (check_output == FALSE) {
   message("WARNING: duplicates present in csv_output")
@@ -63,12 +69,6 @@ if (check_output == FALSE) {
 } else if (check_wo_values == TRUE & check_output == TRUE) {
   message("No duplicates found, good to go")
 }
-
-
-# save files and print messages ------------------------------------------------
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-#rmarkdown::render('update_5-6-1_QA.Rmd', output_file = paste0(output_folder, "/", qa_filename))
-
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
 # rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))

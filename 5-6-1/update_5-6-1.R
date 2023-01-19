@@ -115,7 +115,7 @@ for (i in 1:length(years)) {
   age_csv_ordered$`Type of contraception` <- gsub("LARCs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
   #' Age is in brackets below because the other methods columns are calculated differently between the
   #' age and la tables, so instead of taking one out left them both in
-  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods (age)", as.character(age_csv_ordered$`Type of contraception`))
+  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods [age]", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("User dependent methods total", "", as.character(age_csv_ordered$`Type of contraception`))
   # Get rid of brackets
   age_csv_ordered$`Type of contraception` <- str_replace_all(age_csv_ordered$`Type of contraception`, "\\(|\\)", "")
@@ -169,11 +169,11 @@ for (i in 1:length(years)) {
     rename("Total" = "...5", "LARC" = "Total...7", "IU device" = "IU device...8",
            "IU system" = "IU system...9", "Implant" = "Implant...10",
            "Injectable contraceptive" = "Injectable...11", "UD" = "Total...13", "Oral contraceptives" = "Oral (pill)...14",
-           "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods (local authority)" = "Other 2...17")  # renames these columns
+           "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods [local authority]" = "Other 2...17")  # renames these columns
     
   # pivot the data into long format so that types of contraception are in one column
   la_data_long <- la_source_data_sml %>%
-    pivot_longer(Total:`Other methods (local authority)`, names_to = "Type of contraception", values_to = "Value")
+    pivot_longer(Total:`Other methods [local authority]`, names_to = "Type of contraception", values_to = "Value")
   
   # creates a new dataframe with separate columns for main method of and type of contraception
   la_data_split <- la_data_long %>%  
@@ -187,7 +187,7 @@ for (i in 1:length(years)) {
       `Type of contraception` == "Oral contraceptives" ~ "User dependent",
       `Type of contraception` == "Male condom" ~ "User dependent",
       `Type of contraception` == "Contraceptive patch" ~ "User dependent",
-      `Type of contraception` == "Other methods (local authority)" ~ "User dependent"))
+      `Type of contraception` == "Other methods [local authority]" ~ "User dependent"))
   
   
   

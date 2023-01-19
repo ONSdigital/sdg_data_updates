@@ -190,11 +190,10 @@ comparison <- joined_data2 %>%
   select(year, age, region_name, la_name, main_method_of_contraception, type_of_contraception, value, dataset) %>% 
   pivot_wider(names_from = dataset,
               values_from = value) #%>%
-  #mutate(difference = new - live) %>% 
+  #mutate(difference = new - live) #%>%
   #filter(difference != 0) %>% 
   # put the largest differences at the top
   #arrange(desc(abs(difference)))
-
 ```
   
   The table below shows all instances where the old value does not match the new 
@@ -208,6 +207,14 @@ datatable(comparison,
                          pageLength = 5,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
+
+
+joined_filename = "joined_data.csv"
+write.csv(joined_data2, paste0(output_folder, "/", joined_filename), row.names = FALSE)
+
+csv_filename = "csv_output.csv"
+write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+
 ```
 
 ## Session Info

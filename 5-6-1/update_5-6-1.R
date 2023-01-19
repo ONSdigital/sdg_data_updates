@@ -34,7 +34,7 @@ for (i in 1:length(years)) {
       `Main method in use` == "Male condom" ~ "User dependent",
       `Main method in use` == "Contraceptive patch" ~ "User dependent",
       `Main method in use` == "Natural family planning" ~ "User dependent",
-      `Main method in use` == "Other methods 4" ~ "User dependent")) %>%
+      `Main method in use` == "Other methods 4" ~ "User dependent")) %>%  # can do some tidying above so don't have to remove supersrcipts
     rename(`Type of contraception` = `Main method in use`)
   
   
@@ -108,16 +108,20 @@ for (i in 1:length(years)) {
   
   # puts columnns in correct order
   age_csv_ordered <-  age_data %>%
-    select(all_of(c("Year", "Age", "Main method of contraception", "Type of contraception", "Observation status", "Unit multiplier", "Unit measure", "Value")))
+    select(all_of(c("Year", "Age", "Main method of contraception", "Type of contraception",
+                    "Observation status", "Unit multiplier", "Unit measure", "Value")))
   
   # Replace these values with blanks
   age_csv_ordered$`Type of contraception` <- gsub("LARCs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
-  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods", as.character(age_csv_ordered$`Type of contraception`))
+  #' Age is in brackets below because the other methods columns are calculated differently between the
+  #' age and la tables, so instead of taking one out left them both in
+  age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods (age)", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("User dependent methods total", "", as.character(age_csv_ordered$`Type of contraception`))
-  # This one took a few goes because of the brackets
-  age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use", "", as.character(age_csv_ordered$`Type of contraception`))
-  age_csv_ordered$`Type of contraception` <- gsub("thousands", "", as.character(age_csv_ordered$`Type of contraception`))
-  age_csv_ordered$`Type of contraception` <- gsub("[()]", "", as.character(age_csv_ordered$`Type of contraception`))
+  # Get rid of brackets
+  age_csv_ordered$`Type of contraception` <- str_replace_all(age_csv_ordered$`Type of contraception`, "\\(|\\)", "")
+  age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use thousands", "", as.character(age_csv_ordered$`Type of contraception`))
+  #age_csv_ordered$`Type of contraception` <- gsub("thousands", "", as.character(age_csv_ordered$`Type of contraception`))
+  #age_csv_ordered$`Type of contraception` <- gsub("[()]", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Age` <- gsub("Total", "", as.character(age_csv_ordered$`Age`))
   
   
@@ -165,11 +169,11 @@ for (i in 1:length(years)) {
     rename("Total" = "...5", "LARC" = "Total...7", "IU device" = "IU device...8",
            "IU system" = "IU system...9", "Implant" = "Implant...10",
            "Injectable contraceptive" = "Injectable...11", "UD" = "Total...13", "Oral contraceptives" = "Oral (pill)...14",
-           "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods" = "Other 2...17")  # renames these columns
+           "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods (local authority)" = "Other 2...17")  # renames these columns
     
   # pivot the data into long format so that types of contraception are in one column
   la_data_long <- la_source_data_sml %>%
-    pivot_longer(Total:`Other methods`, names_to = "Type of contraception", values_to = "Value")
+    pivot_longer(Total:`Other methods (local authority)`, names_to = "Type of contraception", values_to = "Value")
   
   # creates a new dataframe with separate columns for main method of and type of contraception
   la_data_split <- la_data_long %>%  
@@ -183,7 +187,7 @@ for (i in 1:length(years)) {
       `Type of contraception` == "Oral contraceptives" ~ "User dependent",
       `Type of contraception` == "Male condom" ~ "User dependent",
       `Type of contraception` == "Contraceptive patch" ~ "User dependent",
-      `Type of contraception` == "Other methods" ~ "User dependent"))
+      `Type of contraception` == "Other methods (local authority)" ~ "User dependent"))
   
   
   
@@ -220,11 +224,8 @@ for (i in 1:length(years)) {
   la_csv_output <- la_csv_ordered %>% 
     mutate(Value = ifelse(is.na(Value), "", Value)) %>%
     mutate(`Main method of contraception` = ifelse(is.na(`Main method of contraception`), "", `Main method of contraception`)) %>%
+    mutate(`Region name` = ifelse(is.na(`Region name`), "", `Region name`)) %>%
     mutate(`LA name` = ifelse(is.na(`LA name`), "", `LA name`))
-  
-  #' This line removes the total for England for other methods. This is the only total that 
-  #' differs between the age and la tables, and historically age has been used so I've cut this one 
-  #' out to avoid duplicates
   
   # This is a line that you can run to check that you have filtered and selected 
   # correctly - all rows in the clean_population dataframe should be unique
@@ -250,6 +251,11 @@ for (i in 1:length(years)) {
   # Round values to 3dp (had issues with extra dp causing duplicates when 2 tables combined)
   csv_joined$Value <- as.numeric(csv_joined$Value)
   csv_joined$Value <- round(csv_joined$Value, digits = 3)
+  
+  # remove rows with NA values (were causing duplicates in the final output)
+  csv_joined <- csv_joined %>%
+    drop_na("Value")
+  
   
   # Remove duplicates (there will be some in the totals for the whole of England)
   csv_final <- distinct(csv_joined)

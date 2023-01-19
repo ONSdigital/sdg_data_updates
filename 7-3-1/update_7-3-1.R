@@ -21,14 +21,15 @@ colnames(energy_main_data) [3] <- "Industry sector"
 
 energy_main_data <- within(energy_main_data, rm("Sector code","Section code"))
 
-# remove unneeded data
+# select only needed rows 
 
 selected_rows <- c(1:22)
 
 energy_main_data <- energy_main_data %>%
   slice(selected_rows)
 
-energy_main_data <- energy_main_data[-c(21),]
+energy_main_data <- energy_main_data %>% 
+  na.omit()
 
 # format
 

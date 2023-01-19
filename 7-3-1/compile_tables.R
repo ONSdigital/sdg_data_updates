@@ -10,7 +10,7 @@ library('dplyr')
 
 library(SDGupdater)
 
-if (test_run == TRUE) { source("7-3-1_example_config.R") } else if (test_run == FALSE) { 
+if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE) { 
   source("7-3-1_config.R") } else { 
     stop("test_run must be either TRUE or FALSE") }
 

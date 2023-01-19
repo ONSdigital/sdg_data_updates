@@ -27,7 +27,7 @@ latest_year <- max(new_data$Year)
 
 ```
 
-## 15-7-1 and 15-c-1 update summary
+## 7-3-1 update summary
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
 saved as `r paste0(date, "_7-3-1", ".csv")` in the 7-3-1 Output folder.  
@@ -40,7 +40,7 @@ downloaded data have not accidentally been used.
 These settings can all be adjusted in `config.R`
     
 Files used to create the new data were downloaded and saved in 
-15-7-1_and_15-c-1/`r input_folder`.  
+7-3-1/`r input_folder`.  
   
 ```{r include= FALSE}
 filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 

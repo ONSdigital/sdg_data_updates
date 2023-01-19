@@ -11,7 +11,7 @@ Runtime is less than 30 seconds.
 
 Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs for anything that needs to be manually changed in the csv output (e.g., if any figures are estimated) or caveats that need to be included in the metadata. 
 
-### 15.7.1 and 15.c.1 update instructions
+### 7-3-1 update instructions
 
 1) Download the latest data from: https://www.ons.gov.uk/economy/environmentalaccounts/datasets/ukenvironmentalaccountsenergyreallocatedenergyconsumptionandenergyintensityunitedkingdom.
 2) Save the file as an xlsx file in the 'Input' folder in 7-3-1 (if this doesn't exist, make it inside the 7-3-1 folder).  

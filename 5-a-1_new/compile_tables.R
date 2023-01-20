@@ -16,12 +16,14 @@ packages <- c("stringr", "dplyr", "tools",
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
 
-library('stringr')
-library("dplyr")
 library("tools")
+library('openxlsx')
+library('stringr')
+library('janitor')
+library('tidyr')
+library('dplyr')
 
 
-source("config.R")  # pulls in all the configurations. Un-comment out code below for real update
 if (test_run == TRUE) {
   source("example_config.R")
  } else if (test_run == FALSE) {

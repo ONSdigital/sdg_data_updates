@@ -35,11 +35,6 @@ figures are provisional. Check this in the source data. If they
 are, in the indicator csv file change the observation status to 'Provisional'.
 
 
-Data for `r min(new_data$Year)` to `r latest_year` have been created and 
-saved as `r paste0(date, "_5-a-1", ".csv")` in the 5-a-1 Output folder.  
-
-
-
 ```{r include= FALSE}
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-a-1.csv") %>% 
   mutate(Sex = "Female") %>% 
@@ -55,10 +50,15 @@ old_data$`Occupation.unit.group` <- sub("Managers and proprietors in forestry fi
 
 date <- Sys.Date()
 
-new_data <- read.csv(paste0(output_folder, "/", date, "_5-a-1", ".csv")) %>% 
+
+new_data <- read.csv(paste0(output_folder, "/", date, "_5-a-1", ".csv")) %>%
   mutate(Year = as.integer(Year),
-         dataset = "new") 
-          
+         dataset = "new")
+
+```         
+
+
+```{r include= FALSE}
 latest_year <- max(new_data$Year)
 
 # join to the new data

@@ -6,9 +6,11 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx",
+packages <- c("openxlsx", "stringr", "janitor", "tidyr", "dplyr", "readxl",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
+
+
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
@@ -31,10 +33,9 @@ source("config.R") # pulls in all the configurations. Un-comment out code below 
 #}
 
 source("update_5-6-1.R") # does the donkey-work of making the csv - 
-                          # for real update this might be called e.g. 'update_1-2-1.R' 
 
 # at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_type_1 script.
+# pane (top right). These have been created by the update_5-6-1.R script.
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
@@ -70,10 +71,7 @@ if (check_output == FALSE) {
   message("No duplicates found, good to go")
 }
 
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
-
-message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
+(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
 
 

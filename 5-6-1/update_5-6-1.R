@@ -7,17 +7,19 @@ csv_output <- data.frame()
 
 # Loop over all the years given in config.R
 for (i in 1:length(years)) {
+  
   # AGE
   # Reads in age tab of spreadsheet and formats across columns
   age_source_data <- read_excel(paste0(input_folder, "/", filename_list[i]),
                                 sheet = tabname_age, skip = header_row_age -1) %>% 
     mutate(across(where(is.factor), as.character))
   
+  
   # Trim source data into a smaller dataframe
   age_source_data_sml <- age_source_data %>% 
     slice(1:14) %>% # selects rows 1 to 14
     drop_na("Main method in use") %>% # drops rows where main method in use is NA
-    select(!"...2") %>% # selects everything but the ...2 column
+    select(!"...2") %>% # selects everything but the ...2 column (is blank)
     rename(`Total` = `All ages 2`)  # renames the column
   
   
@@ -111,17 +113,16 @@ for (i in 1:length(years)) {
     select(all_of(c("Year", "Age", "Main method of contraception", "Type of contraception",
                     "Observation status", "Unit multiplier", "Unit measure", "Value")))
   
-  # Replace these values with blanks
-  age_csv_ordered$`Type of contraception` <- gsub("LARCs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
-  #' Age is in brackets below because the other methods columns are calculated differently between the
+  
+  #' Age is in brackets below because the 'Other methods' columns are calculated differently between the
   #' age and la tables, so instead of taking one out left them both in
   age_csv_ordered$`Type of contraception` <- gsub("Other methods 4", "Other methods [age]", as.character(age_csv_ordered$`Type of contraception`))
+  # Replace these values with blanks
+  age_csv_ordered$`Type of contraception` <- gsub("LARCs total 3", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Type of contraception` <- gsub("User dependent methods total", "", as.character(age_csv_ordered$`Type of contraception`))
   # Get rid of brackets
   age_csv_ordered$`Type of contraception` <- str_replace_all(age_csv_ordered$`Type of contraception`, "\\(|\\)", "")
   age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use thousands", "", as.character(age_csv_ordered$`Type of contraception`))
-  #age_csv_ordered$`Type of contraception` <- gsub("thousands", "", as.character(age_csv_ordered$`Type of contraception`))
-  #age_csv_ordered$`Type of contraception` <- gsub("[()]", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Age` <- gsub("Total", "", as.character(age_csv_ordered$`Age`))
   
   
@@ -148,7 +149,7 @@ for (i in 1:length(years)) {
   
   # LOCAL AUTHORITY
   
-  # sets filename differently for 19/20 (assuming future years will copy 21/22)
+  # sets filename differently for 19/20 (assuming future years will copy 20/21 & 21/22)
   if (filename_list[i] == "srh-serv-eng-19-20-tab.xlsx") {
     tabname_la <- "Table 17"
   } else {
@@ -215,7 +216,6 @@ for (i in 1:length(years)) {
   
   # DID NOT order for this set as it came sorted NE > SW
   #la_csv_sorted <- la_csv_ordered[order(csv_ordered$Year, csv_ordered$`Main method of contraception`, csv_ordered$`Type of contraception`, csv_ordered$Age, na.last = FALSE), ]
-  
   
   
   # remove NAs from the csv that will be saved in Outputs

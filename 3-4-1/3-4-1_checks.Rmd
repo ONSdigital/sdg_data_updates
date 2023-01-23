@@ -240,7 +240,7 @@ If there are differences, visible in the table below and plots, please investiga
 It is possible the data source has update its back time series, so the difference
 could be genuine. 
 
-```{r, , echo = FALSE}
+{r, , echo = FALSE}
 comparison <- joined_data %>% 
   select(Year, Country, Region, Age, Sex, `Type of disease`,
          `Chronic respiratory disease subtype`, Value, dataset) %>%
@@ -253,7 +253,6 @@ comparison <- pivot_wider(comparison, names_from = dataset,
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
-```
 
 
 The table below shows all instances where the old value does not match the new 

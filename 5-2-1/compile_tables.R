@@ -11,7 +11,7 @@ packages <- c("openxlsx", "stringr", "janitor", "tidyr", "dplyr", "readxl",
               "ggplot2", "DT", "pander")
 
 # this function installs any packages that are not already installed
-install_absent_packages(packages)
+# install_absent_packages(packages)
 
 library('openxlsx')
 library('stringr')

@@ -103,15 +103,13 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/5-2-1.csv", check.
 date <- Sys.Date()
 
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_5-2-1", ".csv"), check.names = FALSE) %>% 
-  mutate(dataset = "new") %>%
-  mutate(Year = as.factor(Year)) 
+  mutate(dataset = "new")
           
-latest_year <- max(new_data$Year)
 
 # join to the new data
 joined_data <- old_data %>% 
   bind_rows(new_data) 
-
+  
 ```
 
 
@@ -120,17 +118,29 @@ print("Below is a table of the non-matching rows for the original and updated da
 
 
 
+If there are differences, visible in the table below and plots, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. 
+
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
   pivot_wider(names_from = dataset,
               values_from = Value)
 
-
-mutate(difference = new - old) %>% 
+# replace the NULL returns with NA
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>% 
+  mutate(new = as.character(new)) %>% 
+  mutate(new = as.numeric(new)) %>% 
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 ```
+
 
 The table below shows all instances where the old value does not match the new 
 value. It is sorted so the largest absolute differences appear first, but can
@@ -146,24 +156,28 @@ datatable(comparison,
                            className = 'dt-center', targets = 0:3))))
 ```
 
-
 # Plots
 There are too many possible time series to plot here (>100) but below are a few examples you can amend if there seems to be a discrepancy shown in the table above. If for all plots below you see only one shape of point marker, the original and updated datasets can be assumed identical in value for the selection shown in the plot.
+
+The example plot below is just a the headline plot. Please edit the filter
+and facet grid as required to visualise the differences.
 
 
 ```{r echo=FALSE}
 
-# Add marker variables to the old_data and new_data so we can know which set a point is from
+# This is just a headline plot. Please edit the filter and facet grid
+  # as required to visualise the differences.
 
 headline_plot <- joined_data %>% 
-  filter(`Type of partner abuse` != "") %>% 
+  filter(`Type of partner abuse` != "" & `Abuse sub-category` == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point(aes(shape = dataset)) +
+  # Add marker variables to the old_data and new_data so we can know which set a point is from
+  geom_point(aes(shape = dataset)) + 
   geom_line() +
+  facet_grid(`Type of partner abuse` ~ Series) +
   theme_bw() +
   ggtitle("Partner abuse by type of abuse")
 

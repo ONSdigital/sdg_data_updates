@@ -244,10 +244,19 @@ could be genuine.
 comparison <- joined_data %>% 
   select(Year, Country, Region, Age, Sex, `Type of disease`,
          `Chronic respiratory disease subtype`, Value, dataset) %>%
-    na.omit(Value)
+    na.omit(Value) %>%
+  pivot_wider(names_from = dataset,
+              values_from = Value)
 
-comparison <- pivot_wider(comparison, names_from = dataset,
-              values_from = Value) %>% 
+# replace the NULL returns with NA
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>% 
+  mutate(new = as.numeric(new)) %>% 
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
   mutate(difference = new - old) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top

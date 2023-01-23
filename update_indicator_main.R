@@ -12,7 +12,7 @@
 setwd("D:/Coding_repos/sdg_data_updates")
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
-# rm(list = ls())
+rm(list = ls())
 
 
 indicator <- "3-4-1" # name of folder for indicator

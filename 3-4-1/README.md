@@ -9,9 +9,8 @@ This automation pulls together all relevant ICD-10 classification codes off NOMI
 3. Change indicator folder name (`indicator <- "3-4-1"`)  
 4. If config.R does not exist in the 3-4-1 folder, create it from the example_config.R file  
 5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes. 
-6. Check that the compile.tables.R script sources the correct config file (for an update it should call config.R. 
-To run the example data and get example output, it should be example_config.R).   
-7. Open update_indicator_main.R  
+6. Open update_indicator_main.R .   
+7. Ensure test_run <- FALSE.  
 8. Click Source (by default this is in top right of the script window)  
 9. Check for messages in the console. When the script is run a file titled '3-4-1.csv' will be saved in 3-4-1 > Output 
    Use this file for the Indicator csv.  

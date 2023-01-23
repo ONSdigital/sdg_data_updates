@@ -34,12 +34,12 @@ clean_data <- all_data %>%
                                     "C00-c97" = "Cancer",
                                     "E10-e14" = "Diabetes",
                                     "I00-i99" = "Cardiovascular disease",
-                                    "J30-j39" = "Chronic repiratory disease",
-                                    "J40-j47" = "Chronic repiratory disease",
-                                    "J60-j70" = "Chronic repiratory disease",
-                                    "J80-j84" = "Chronic repiratory disease",
-                                    "J85-j86" = "Chronic repiratory disease",
-                                    "J90-j94" = "Chronic repiratory disease",
+                                    "J30-j39" = "Chronic respiratory disease",
+                                    "J40-j47" = "Chronic respiratory disease",
+                                    "J60-j70" = "Chronic respiratory disease",
+                                    "J80-j84" = "Chronic respiratory disease",
+                                    "J85-j86" = "Chronic respiratory disease",
+                                    "J90-j94" = "Chronic respiratory disease",
                                     "J95" = "Chronic respiratory disease",
                                     "J96" = "Chronic respiratory disease",
                                     "J98" = "Chronic respiratory disease",
@@ -116,10 +116,19 @@ csv_formatted$Country <- gsub("Total Mortality", "", csv_formatted$Country)
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output <- csv_formatted %>% 
+csv_formatted <- csv_formatted %>% 
   mutate(Value = ifelse(is.na(Value), "", Value)) 
 
 # This is a line that you can run to check that you have filtered and selected 
-# correctly - all rows in the clean_population dataframe should be unique
-# so this should be TRUE
+# correctly - all rows should be unique, so this should be TRUE
 check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
+
+
+# If false you may need to remove duplicate rows. 
+csv_output <- unique(csv_formatted)
+
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows should be unique, so this should be TRUE
+check_all <- nrow(distinct(csv_output)) == nrow(csv_output)
+
+

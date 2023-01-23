@@ -92,7 +92,7 @@ Abuse <- rbind(Abuse_type, Characteristics) %>%
 
 #   REVIEWER - DO YOU HAVE A BETTER SOLUTION?
 
-P_Abuse <- Abuse[c(2, 4:8, 14:16, 24, 28, 35:39, 50:52, 61, 64:169),]
+P_Abuse <- Abuse[c(2, 4:8, 14:16, 24, 28, 35:39, 50:52, 61, 65:124, 126:169),]
 
 
 
@@ -386,6 +386,8 @@ Other_disagg <- Region_disagg %>%
 # need to correct the "other" as it falls into multiple disaggregations.
   # Same for "None" - falls into two.
 
+# NOTE FOR REVIEWER: 
+  # Any idea?
 
 
 
@@ -415,7 +417,7 @@ csv_prep <- Disaggs %>%
             `Highest qualification`, `Household income`, `Household tenure`, `Accommodation type`,
             `Output area classification`, `Urban or rural`, Country, Region)
 
-
+?arrange
 #### Final formatting adjustments ####
 
 # Remove  Unweighted base - number of adults rows
@@ -438,7 +440,7 @@ csv_formatted$`Abuse sub-category`[csv_formatted$`Abuse sub-category` == "Any se
 check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
 
 
-# If false you may need to remove duplictae rows. 
+# If false you may need to remove duplicate rows. 
 csv_output <- unique(csv_formatted)
 
 # This is a line that you can run to check that you have filtered and selected 

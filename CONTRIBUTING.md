@@ -202,7 +202,9 @@ Be critical and clear, but not mean. Ask questions and set actions.
   
 ## Finalising the automated update ## 
 Timely reviews are important as it will be easier for you to fix any bugs while the indicator is fresh in your mind.  
-Once your code has passed [review](#reviewing-indicator-automations) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.  
+Once your code has passed [review](#reviewing-indicator-automations) it can be merged into main. Whenever the main branch is changed it must be pulled down into the repostiory clone in Jemalex.
+
+**<ins>IMPORTANT NOTE:</ins> We are currently experiencing some issues with anyone being able to update the branch on Jemalex - there seems to be a permissions problem and only the person who cloned it can currently update. Until this is resolved, please let Atanaska Nikolova know that you have had an approved automation merged into the main branch. Atanaska will then be able to update the automation folder on Jemalex. Ignore the instructions until the end of this section**
 
 - Using Git Bash:
 > 

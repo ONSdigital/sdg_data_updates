@@ -21,9 +21,10 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 library('readxl')
+library('pander')
 
 
-source("config.R") # pulls in all the configurations. Un-comment out code below for real update
+source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
 #if (test_run == TRUE) {
 #  source("example_config.R")
 #} else if (test_run == FALSE) {

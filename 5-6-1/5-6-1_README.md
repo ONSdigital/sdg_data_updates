@@ -11,13 +11,13 @@ Once finished, output folder should contain a .csv output and a .html QA checks 
 In particular: 
 	- Prior to 2020/21 the local authority tab is called 'Table 17', but from 2020/21 onwards it is 'Table 17a', so check the tab names haven't changed
 	- Check that values being read in are thousands not percentages
-	- Check the foot notes for 'Other methods', the totals are are different depending on whether age or local authority data
+	- Check the foot notes for 'Other methods', the totals are different depending on whether age or local authority data
 
 ### Examples
 
 
 ### USER INSTRUCTIONS (SDG DATA TEAM)
-1) Save the most recent data from [Sexual and Reproductive Health Services (Contraception): https://digital.nhs.uk/data-and-information/publications/statistical/sexual-and-reproductive-health-services] as a .xlsx file in Z:\Data Collection and Reporting\Jemalex\sdg_data_updates\5-6-1
+1) Save the most recent data from [Sexual and Reproductive Health Services (Contraception): https://digital.nhs.uk/data-and-information/publications/statistical/sexual-and-reproductive-health-services] as a .xlsx file in Z:\Data Collection and Reporting\Jemalex\sdg_data_updates\5-6-1\Input. Ensure in the format “srh-serv-eng-21-22-tab.xlsx”.
 2) Open RStudio
 3) Go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. 
 4) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.
@@ -47,9 +47,21 @@ Some possible errors (may not be an exact match) and solutions:
 Error in file(filename, "r", encoding = encoding) : 
   cannot open the connection
 
-Set the working directory to the 5-6-1 folder.  
+Set the working directory to the sdgupdates folder.  
   
 ```  
+
+```
+Error in file(file, ifelse(append, "a", "w")) : 
+  cannot open the connection
+In addition: Warning message:
+In file(file, ifelse(append, "a", "w")) :
+  cannot open file 'Output/2023-01-27_update_5-6-1.csv': Permission denied
+  
+  You probably have one of the files from the Output folder open
+```
+
+
   
 ```diff
 - Error: Sheets not found: "1. 1"  

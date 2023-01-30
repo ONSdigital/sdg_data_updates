@@ -103,7 +103,7 @@ for (i in 1:length(years)) {
   
   # Fills these columns (left) with all of the same value (right)
   age_data['Year']=years[i]
-  age_data['Observation status'] = "Undefined"
+  age_data['Observation status'] = "Normal value"
   age_data['Unit multiplier'] = "Thousands"
   age_data['Unit measure']="Number"
   
@@ -124,7 +124,7 @@ for (i in 1:length(years)) {
   age_csv_ordered$`Type of contraception` <- str_replace_all(age_csv_ordered$`Type of contraception`, "\\(|\\)", "")
   age_csv_ordered$`Type of contraception` <- gsub("Total with a method in use thousands", "", as.character(age_csv_ordered$`Type of contraception`))
   age_csv_ordered$`Age` <- gsub("Total", "", as.character(age_csv_ordered$`Age`))
-  
+
   
   # Order the rows by columns values, na values first
   age_csv_sorted <- age_csv_ordered[order(age_csv_ordered$Year, age_csv_ordered$`Main method of contraception`,
@@ -167,7 +167,7 @@ for (i in 1:length(years)) {
     slice(2:162) %>% # selects rows 2 to 164
     slice(-2, -12) %>%  # removes these rows
     select(3:5, 7:11, 13:17) %>% # selects these columns
-    rename("Total" = "...5", "LARC" = "Total...7", "IU device" = "IU device...8",
+    rename("Local authority" = "LA name", "Region" = "Region name", "Total" = "...5", "LARC" = "Total...7", "IU device" = "IU device...8",
            "IU system" = "IU system...9", "Implant" = "Implant...10",
            "Injectable contraceptive" = "Injectable...11", "UD" = "Total...13", "Oral contraceptives" = "Oral (pill)...14",
            "Male condom" = "Male condom...15", "Contraceptive patch" = "Patch...16", "Other methods [local authority]" = "Other 2...17")  # renames these columns
@@ -201,16 +201,21 @@ for (i in 1:length(years)) {
   
   # puts columnns in correct order
   la_csv_ordered <-  la_data_split %>%
-    select(all_of(c("Year", "Region name", "LA name", "Main method of contraception", "Type of contraception", "Observation status", "Unit multiplier", "Unit measure", "Value"))) 
+    select(all_of(c("Year", "Region", "Local authority", "Main method of contraception", "Type of contraception", "Observation status", "Unit multiplier", "Unit measure", "Value"))) 
   
   # Replace these values with blanks
-  la_csv_ordered$`Region name` <- gsub("Total3", "", as.character(la_csv_ordered$`Region name`))
+  la_csv_ordered$`Region` <- gsub("Total3", "", as.character(la_csv_ordered$`Region`))
   la_csv_ordered$`Type of contraception` <- gsub("Total", "", 
                                                  as.character(la_csv_ordered$`Type of contraception`))
   la_csv_ordered$`Type of contraception` <- gsub("LARC", "", 
                                                  as.character(la_csv_ordered$`Type of contraception`))
   la_csv_ordered$`Type of contraception` <- gsub("UD", "", 
                                                  as.character(la_csv_ordered$`Type of contraception`))
+  # Change the observation status column to be SDMX compatible before we set the NA values as blank
+  la_csv_ordered <- la_csv_ordered %>%
+    mutate('Observation status' = case_when(`Value` == "*" ~ "Missing value; suppressed",
+                                                                  TRUE ~ "Normal value"))
+  # set NA values as blank
   la_csv_ordered$`Value` <- gsub("[*]", "",
                                  as.character(la_csv_ordered$`Value`))
   
@@ -224,8 +229,8 @@ for (i in 1:length(years)) {
   la_csv_output <- la_csv_ordered %>% 
     mutate(Value = ifelse(is.na(Value), "", Value)) %>%
     mutate(`Main method of contraception` = ifelse(is.na(`Main method of contraception`), "", `Main method of contraception`)) %>%
-    mutate(`Region name` = ifelse(is.na(`Region name`), "", `Region name`)) %>%
-    mutate(`LA name` = ifelse(is.na(`LA name`), "", `LA name`))
+    mutate(`Region` = ifelse(is.na(`Region`), "", `Region`)) %>%
+    mutate(`Local authority` = ifelse(is.na(`Local authority`), "", `Local authority`))
   
   # This is a line that you can run to check that you have filtered and selected 
   # correctly - all rows in the clean_population dataframe should be unique
@@ -237,14 +242,14 @@ for (i in 1:length(years)) {
   
   # COMBINE AGE AND LA DATAFRAMES
   # Add blank region and la columns to age df
-  age_csv_output['Region name'] = ""
-  age_csv_output['LA name'] = ""
+  age_csv_output['Region'] = ""
+  age_csv_output['Local authority'] = ""
   # Add blank age column to la df
   la_csv_output['Age'] = ""
   
   # Join the 2 dfs and order the columns
   csv_joined <- rbind(age_csv_output, la_csv_output) %>%
-    select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
+    select(all_of(c("Year", "Region", "Local authority", "Age", "Main method of contraception",
                     "Type of contraception", "Observation status", "Unit multiplier",
                     "Unit measure", "Value"))) # order the columns
   
@@ -275,7 +280,7 @@ check_output <- nrow(distinct(csv_output)) == nrow(csv_output)
 #' These two lines check whether there are duplicates for all  the columns except value
 # (the would-be-duplicate numbers appear to differ in sf between tables)
 duplicates_df <- csv_output %>%
-  select(all_of(c("Year", "Region name", "LA name", "Age", "Main method of contraception",
+  select(all_of(c("Year", "Region", "Local authority", "Age", "Main method of contraception",
                   "Type of contraception", "Observation status", "Unit multiplier",
                   "Unit measure"))) # create a df without values
 check_wo_values <- nrow(distinct(duplicates_df)) == nrow(duplicates_df) # should be false

@@ -35,7 +35,7 @@ long_data$Year <- gsub("-", "/", as.character(long_data$Year))
 long_data["Series"] = "Proportion of total government spending on essential services, education"
 long_data["Observation status"] = "Normal value"
 long_data["Unit multiplier"] = "Units"
-long_data["Units"] = "Percentage"
+long_data["Units"] = "Percentage (%)"
 
 # order columns
 csv_formatted <- long_data %>%
@@ -51,6 +51,9 @@ names(csv_formatted) <- str_to_sentence(names(csv_formatted))
 csv_output <- csv_formatted %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
 
-
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows in the clean_population dataframe should be unique
+# so this should be TRUE
+check_all <- nrow(distinct(csv_output)) == nrow(csv_output)
 
 

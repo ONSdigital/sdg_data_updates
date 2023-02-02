@@ -6,7 +6,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "readxl"
+packages <- c("stringr", "tidyr", "dplyr", "readxl", "janitor",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
 
@@ -20,21 +20,17 @@ library('tidyr')
 library('dplyr')
 library('readxl')
 
-#setwd("sdg_data_updates") # this line is to run the template only - 
-                  # do not copy into your code as this is usually found in update_indicator_main.R
 
-source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
-# if (test_run == TRUE) {
-#   source("example_config.R")
-# } else if (test_run == FALSE) {
-#   source("config.R")
-# } else {
-#   stop("test_run must be either TRUE or FALSE")
-# }
+if (test_run == TRUE) {
+ source("example_config.R")
+} else if (test_run == FALSE) {
+ source("config.R")
+} else {
+ stop("test_run must be either TRUE or FALSE")
+}
 
 source("update_indicator_1-a-2.R") # does the donkey-work of making the csv - 
-                          # for real update this might be called e.g. 'update_1-2-1.R' 
-
+                         
 # at this point you should see lots of variables appear in the global environment 
 # pane (top right). These have been created by the update_type_1 script.
 
@@ -53,15 +49,13 @@ date <- Sys.Date()
 # we add the date to the output file so that old outputs are not automatically overwritten.
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_type_1.csv")
-qa_filename <- paste0(date, "_update_type_1_checks.html") 
+csv_filename <- paste0(date, "_update_1-a-2.csv")
+qa_filename <- paste0(date, "_update_1-a-2_checks.html") 
 
 # save files and print messages ------------------------------------------------
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('1-a-2_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

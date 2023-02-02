@@ -5,11 +5,11 @@ source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname, 
 
 # trim source data into a smaller dataframe ------------------------------------
 # reformat column value - make sure these row names match those in the new data table, may change in new years
-main_data$`...1` <- gsub("9. Education \\(5\\)", "Education",
-                         as.character(main_data$`...1`))
+source_data$`...1` <- gsub("9. Education \\(5\\)", "Education",
+                         as.character(source_data$`...1`))
 
 # Select only education and public sector expenditure rows
-main_data <- subset(main_data, `...1` %in% c("Education", "Public sector expenditure on services")) %>%
+main_data <- subset(source_data, `...1` %in% c("Education", "Public sector expenditure on services")) %>%
   rename(`Spending category` = `...1`)
 
 # Pivot to longer format (one year per row)

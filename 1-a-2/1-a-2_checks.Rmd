@@ -1,7 +1,7 @@
 ---
-title: "template QA"
-author: "Emma Wood"
-date: "29/06/2022"
+title: "1-a-2 checks"
+author: "Ali Campbell"
+date: "02/02/2023"
 output: html_document
 ---
 ```{r setup, include=FALSE}
@@ -13,6 +13,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 **Run date and time: `r Sys.time()`**  
   
@@ -30,14 +31,10 @@ observation status to 'Provisional'.
 - Please check the configs below and change them if not correct
   
 ## Configurations
-in this section list the settings (configurations) and use snippets of code to 
-print the user input. The double asterisks make the text bold, while `r` tells 
-markdown to read the text inside the back-ticks as code. 
-
   The configurations are:  
   
   - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
-  - name of the tab the data are in: **`r tab_name`**  
+  - name of the tab the data are in: **`r tabname`**  
   - row number of the column names: **`r header_row`** 
   - location of the inputs **`r input_folder`**
   - location of the outputs: **`r output_folder`**

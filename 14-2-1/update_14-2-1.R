@@ -29,7 +29,7 @@ protected_area_main_data['At_Sea'] <- round(as.numeric(unlist(protected_area_mai
 
 # remove unwanted columns
 
-protected_area_main_data <- within(protected_area_main_data, rm("Total extent\n (million hectares)","Extent on land \n(million hectares)"))
+protected_area_main_data <- within(protected_area_main_data, rm("Total extent\n (million hectares)", "Extent on land \n(million hectares)"))
 
 # select only needed rows
 
@@ -58,11 +58,11 @@ colnames(protected_area_main_data) [2] <- "At_Sea"
 
 # calculate and round the value
 
-protected_area_main_data['Proportion_of_area_protected']  <-round((protected_area_main_data['At_Sea']/protected_area_main_data['UK_marine_area'])*100,2)
+protected_area_main_data['Proportion_of_area_protected']  <- round((protected_area_main_data['At_Sea']/protected_area_main_data['UK_marine_area'])*100, 2)
 
 
 # print(protected_area_main_data) just to check data is in appropriate format
-protected_area_main_data['At_Sea'] <- round(as.numeric(unlist(protected_area_main_data['At_Sea'])),2)
+protected_area_main_data['At_Sea'] <- round(as.numeric(unlist(protected_area_main_data['At_Sea'])), 2)
 
 # prepare the first data frame having data for Series(Proportion of marine protected area)
 df1 <- protected_area_main_data  %>%
@@ -70,14 +70,14 @@ df1 <- protected_area_main_data  %>%
            "Units" = "Percentage (%)",
             "Unit multiplier" =  "Unit",
             "Observation status" = "Normal value")
-#format column name
+# format column name
 colnames(df1) [4] <- "Value"
 
 # remove unwanted column
 df1 <- within(df1, rm("UK_marine_area"))
 
 # save data frame having proper column sequence "Year", "Series", "Observation status",  "Unit multiplier", "Units", "Value"
-df1= df1 %>%
+df1 = df1 %>%
   select("Year", "Series", "Observation status",  "Unit multiplier", "Units", "Value")
 
 
@@ -90,17 +90,17 @@ df2 <- protected_area_main_data  %>%
          "Unit multiplier" =  "Unit",
          "Observation status" = "Normal value")
 
-#format column name
+# format column name
 colnames(df2) [2] <- "Value"
 
 # remove unwanted column
 df2 <- within(df2, rm("UK_marine_area"))
 
 # save data frame having proper column sequence "Year", "Series", "Observation status",  "Unit multiplier", "Units", "Value"
-df2= df2 %>%
+df2 = df2 %>%
     select("Year", "Series", "Observation status",  "Unit multiplier", "Units", "Value")
 
-#join dataframe df1 and df2 vertically(df1 followed by df2) and save them in csv_output
+# join dataframe df1 and df2 vertically(df1 followed by df2) and save them in csv_output
 
 csv_output <- rbind(df1, df2)
 

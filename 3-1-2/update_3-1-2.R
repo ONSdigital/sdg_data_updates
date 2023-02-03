@@ -49,6 +49,7 @@ csv_formatted["Health Board"] = ""
 csv_formatted["Observation status"] = "Normal value"
 csv_formatted["Unit multiplier"] = "Units"
 csv_formatted["Units"] = "Percentage (%)"
+csv_formatted["Geo code"] = ""
 
 # Change the observation status column to be SDMX compatible before we set the NaN values as blank
 csv_formatted <- csv_formatted %>%
@@ -62,7 +63,7 @@ csv_formatted$Value <- gsub(NaN, "", as.character(csv_formatted$Value))
 csv_formatted <- csv_formatted %>%
   select(all_of(c("Year", "Series", "Age", "Number of previous live births", 
                   "Country", "Region", "Health Board", "Observation status",
-                  "Unit multiplier", "Units", "Value")))
+                  "Unit multiplier", "Units", "Geo code", "Value")))
 
 # put the column names in sentence case
 names(csv_formatted) <- str_to_sentence(names(csv_formatted))
@@ -73,6 +74,10 @@ names(csv_formatted) <- str_to_sentence(names(csv_formatted))
 csv_output <- csv_formatted %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
 
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows in the clean_population dataframe should be unique
+# so this should be TRUE
+check_all <- nrow(distinct(csv_output)) == nrow(csv_output)
 
 
 

@@ -24,7 +24,7 @@ colnames(protected_area_main_data) [3] <- "At_Sea"
 
 
 # convert to numeric and round
-protected_area_main_data['At_Sea'] <- round(as.numeric(unlist(protected_area_main_data['At_Sea'])),9)
+protected_area_main_data['At_Sea'] <- round(as.numeric(unlist(protected_area_main_data['At_Sea'])), 9)
 
 
 # remove unwanted columns

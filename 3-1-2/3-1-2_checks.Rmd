@@ -76,7 +76,6 @@ headline_plot <- joined_data %>%
              y = value,
              colour = dataset)) +
   geom_point(aes(shape = dataset)) +
-  geom_line(aes(linetype = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
   theme_bw() 
 
@@ -88,19 +87,54 @@ suppressMessages(print(headline_plot))
 ```
 
 ```{r}
-# plot the headline data
-plot <- joined_data %>% 
+# plot the age data
+plot_age <- joined_data %>%
+  filter(number_of_previous_live_births == "", country == "", region == "",
+         health_board == "") %>% 
   ggplot(.,
          aes(x = year,
              y = value,
              colour = dataset)) +
   geom_point(aes(shape = dataset)) +
-  geom_line(aes(linetype = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
-  facet_wrap()
+  facet_wrap(~ age) +
   theme_bw() 
 
-suppressMessages(print(plot))
+suppressMessages(print(plot_age))
+```
+
+```{r}
+# plot the previous births data
+plot_previous_births <- joined_data %>%
+  filter(age == "", country == "", region == "",
+         health_board == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ number_of_previous_live_births) +
+  theme_bw() 
+
+suppressMessages(print(plot_age))
+```
+
+```{r}
+# plot both age and births
+plot_both <- joined_data %>%
+  filter(country == "", region == "",
+         health_board == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_grid(age ~ number_of_previous_live_births) +
+  theme_bw() 
+
+suppressMessages(print(plot_both))
 ```
 
 
@@ -112,14 +146,13 @@ comparison <- joined_data %>%
   # select the columns that are in both the live and new data
   # Columns that have the same entry in every row (e.g. units), or
   # columns like geocode and obs status don't need to go in here.
-  select(year, gas, value, dataset) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = value) %>% 
+  select(year, age, number_of_previous_live_births, country, region, health_board,
+         observation_status, geo_code, dataset) %>% 
+  pivot_wider(names_from = "dataset", values_from = "value") %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
-
 ```
   
   The table below shows all instances where the old value does not match the new 

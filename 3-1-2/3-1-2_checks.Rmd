@@ -31,7 +31,7 @@ figures are provisional. If they are, in the indicator csv file change the
 observation status to 'Provisional'. 
 
 - Please check that the tabname, header_row etc still apply for the new data and that 
-the table format has not changed (configs below).
+the table format has not changed (configs below). Also make sure the year is correct as this is what the value will be in the final csv
   
 ## Configurations
 
@@ -86,7 +86,7 @@ headline_plot <- joined_data %>%
 suppressMessages(print(headline_plot))
 ```
 
-```{r}
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 # plot the age data
 plot_age <- joined_data %>%
   filter(number_of_previous_live_births == "", country == "", region == "",
@@ -103,7 +103,7 @@ plot_age <- joined_data %>%
 suppressMessages(print(plot_age))
 ```
 
-```{r}
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 # plot the previous births data
 plot_previous_births <- joined_data %>%
   filter(age == "", country == "", region == "",
@@ -117,10 +117,10 @@ plot_previous_births <- joined_data %>%
   facet_wrap(~ number_of_previous_live_births) +
   theme_bw() 
 
-suppressMessages(print(plot_age))
+suppressMessages(print(plot_previous_births))
 ```
 
-```{r}
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 # plot both age and births
 plot_both <- joined_data %>%
   filter(country == "", region == "",
@@ -147,10 +147,10 @@ comparison <- joined_data %>%
   # Columns that have the same entry in every row (e.g. units), or
   # columns like geocode and obs status don't need to go in here.
   select(year, age, number_of_previous_live_births, country, region, health_board,
-         observation_status, geo_code, dataset) %>% 
+         observation_status, value, dataset) %>% 
   pivot_wider(names_from = "dataset", values_from = "value") %>% 
   mutate(difference = new - live) %>% 
-  filter(difference != 0) %>% 
+  filter(difference != 0) %>%
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 ```

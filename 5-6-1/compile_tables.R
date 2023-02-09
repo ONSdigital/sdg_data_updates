@@ -21,6 +21,7 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 library('readxl')
+library('DT')
 library('pander')
 
 

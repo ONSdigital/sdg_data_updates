@@ -19,7 +19,7 @@ library(kableExtra)
 ```{r include= FALSE}
 
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/14-2-1.csv")
-# old_data <- read.csv("D:/coding_repos/sdg_data_updates/14-2-1/Example_Output/bcp/14-2-1.csv")
+
 
 date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_14-2-1", ".csv"))
@@ -62,7 +62,41 @@ The tab used is called
 `r tabname`. 
 
 
+
+
+
+
 ### Check data
+
+
+###Table of discrepancies
+
+If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has update its back time series, so the difference could be genuine.
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Series, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+```
+	  
+	The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+	datatable(comparison, 
+	          rownames = FALSE, 
+	          filter = "top",
+	          options = list(dom = 'tp', 
+	                         pageLength = 10,
+	
+	
+	                         columnDefs = list(list(
+	                           className = 'dt-center', targets = 0:3))))
+```
+
+
 The charts below show the new data (just created) plotted on top of the old data,
 which has been downloaded from the live site. If there are unexpected 
 discrepancies in the lines please investigate the reasons for these discrepancies.
@@ -72,10 +106,7 @@ new_data <- new_data %>%
 mutate(Year = as.integer(Year),
          dataset = "new")
 
-# colnames(old_data)[2] <- "Series"
-# colnames(old_data)[4] <- "Unit measure"
-# colnames(old_data)[5] <- "Unit multiplier"
-# colnames(old_data)[6] <- "Observation status"
+
 
 new_data$Value <- as.numeric(new_data$Value)
 
@@ -90,8 +121,7 @@ plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-    #scale_x_continuous(breaks = seq(min(year(joined_data$Year)), max(year(joined_data$Year)), by = 3))+
-  # scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +geom_point(aes(shape = dataset)) +
   geom_point() +
   geom_line() +

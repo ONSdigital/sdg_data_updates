@@ -12,7 +12,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 ### 14-2-1 update instructions
 
-1) Download the latest data from: https://hub.jncc.gov.uk/assets/e79d820e-5b1d-45de-94db-752f2542478d.
+1) Download the latest data from: https://hub.jncc.gov.uk/assets/e79d820e-5b1d-45de-94db-752f2542478d, This can be found under Resources in the bottom right of the webpage.
 2) Save the file as an xlsx file in the 'Input' folder in 14-2-1 (if this doesn't exist, make it inside the 14-2-1 folder).  
 3) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it. 
 4) If it exists, open the `config.R` file in 14-2-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as `config.R` in 14-2-1.

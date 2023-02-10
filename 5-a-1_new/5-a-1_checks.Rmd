@@ -97,6 +97,8 @@ headline_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Occupation unit group` ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Occupation Group by Sex")
 
 
@@ -112,6 +114,8 @@ country_plot_services <- joined_data %>%
   geom_line() +
   facet_grid(Country ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in agriculture related services by country")
 
 # Country plot - agriculture & horticulture
@@ -126,6 +130,8 @@ country_plot_agr_and_hort <- joined_data %>%
   geom_line() +
   facet_grid(Country ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in agriculture and horticulture by country")
 
 
@@ -141,6 +147,8 @@ country_plot_for_and_fish <- joined_data %>%
   geom_line() +
   facet_grid(Country ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in forestry, fishing and related services by country")
 
 
@@ -157,6 +165,8 @@ region_plot_services <- joined_data %>%
   geom_line() +
   facet_grid(Region ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in agriculture related services by region")
 
 # Regional plot - agriculture & horticulture
@@ -171,6 +181,8 @@ region_plot_agr_and_hort <- joined_data %>%
   geom_line() +
   facet_grid(Region ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in agriculture and horticulture by region")
 
 
@@ -186,6 +198,8 @@ region_plot_for_and_fish <- joined_data %>%
   geom_line() +
   facet_grid(Region ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Managers and proprietors in forestry, fishing and related services by region")
 
 

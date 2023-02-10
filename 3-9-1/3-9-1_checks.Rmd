@@ -4,11 +4,7 @@ author: "Emma Wood"
 date: `r Sys.time`
 output: html_document
 ---
-*This is only a template and will not produce real output as the variables *
-*referred to in the code do not exist - in a real one they will be pulled from*
-*the other scripts. For a working QA file similar to this template see 13-2-2*
 
-*Example text is indented, but shouldn't be indented in the real thing*
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

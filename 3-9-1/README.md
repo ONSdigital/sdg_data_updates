@@ -16,27 +16,32 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
           
 ### USER INSTRUCTIONS (SDG Data team):  
 
-### Generating Fingertips links  
-The links in the example_config file should work every year. However, if they fail they will need to be regenerated: 
-The current links were generated as following in **Google Chrome**:  
-1) Go to the [source link](https://fingertips.phe.org.uk/profile/public-health-outcomes-framework/data#page/9/gid/1000043/pat/159/par/K02000001/ati/15/are/E92000001/iid/93861/age/230/sex/4/cat/-1/ctp/-1/yrr/1/cid/4/tbm/1)
-2) Select Data view > Download   
-3) Scroll down and select 'data for all area types'. This will automatically download a csv to your downloads folder, which you can ignore.    
-4) Go to the three dots in the top right of the browser and select Downloads (or just use Ctrl+J).   
-5) Right click on the link and 'copy link' - this is the link used in the config file. 
+### Downloading and Sourcing Data  
+1) In folder 3-9-1 create a new folder called “Input”. 
+2) Go to [Fingertips API Source Link] https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator
+3) In “indicator id” select 30101.
+4) Click “Download indicator-data.csv”.
+5) Save this file in the “Input” folder.
+6) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in “indicator id” select 93861.
+7) Click “Download indicator-data.csv”.
+8) Save this file in the “Input” folder as well.
+
+
 1) Open RStudio.  
 2) Go to File > Open Project, and open sdg_data_updates.Rproj.  
 3) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.  
 4) Change `indicator` to '3-9-1' (Dashes NOT dots).  
 6) Set `test_run` to 'FALSE'.  
-7) If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Ensure `areas_filename` and `households_filename` in config.R match the filenames of your downloads in step 1. `input_folder` must be 'Input', not 'example_input'.    
-> The `header_row` settings refer to the row number of the main column names (the row number on which the headings 'non-decent', 'repair' etc are found).  
+7) If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Check that the new method includes the data for indicator 93861, and the old method includes the data for indicator 30101. 
 8) Go back to update_indicator_main.R and click the 'source' button (in the top right of the top left window). This will run the code.  
-9) csv and html (QA) files will be exported to the output folder in 11-1-1.  
+9) csv and html (QA) files will be exported to the output folder in 3-9-1. 
+	You may need to remove the # from line 66 of compile_tables 	(rmarkdown::render)
 10) If an error occurs (see troubleshooting section below), you will need to run the following code in the console: `setwd('./..')` before repeating step 7.  
-  
+
 Please check the data source to check for caveats (e.g in the notes on each tab), and check whether there are any new disaggregations we should include.
-  
+
+
+
 ### QA PROCESS (SDG Data team):
 Read the automatically generated QA report. Pay particular attention to the charts as this is where you are likely to spot any unexpected problems with the code. For
 examaple if a line or point is missing, or looks strange, this may indicate a change in the formatting of the data.  

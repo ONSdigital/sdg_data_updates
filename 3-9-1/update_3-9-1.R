@@ -83,3 +83,6 @@ csv_formatted <- deprivation %>%
   select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
          GeoCode, `Observation status`, Units, Value)  
 
+csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber" 
+
+

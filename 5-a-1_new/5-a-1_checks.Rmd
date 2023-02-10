@@ -78,6 +78,7 @@ the new data on dates where there is also live data this is a good thing.
 
 Please note that prior to January 2023 update we used an alternative data source,
 and therefore, for this update, the old and new data will not be identical.
+However, the magnitude of differences should be quite small.
 The new data, from NOMIS, has further disaggregations, by country and region.
 
 

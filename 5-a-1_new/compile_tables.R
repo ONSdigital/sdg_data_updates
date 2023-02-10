@@ -1,6 +1,6 @@
-# Author: Emma Wood
-# Initial date: 16/12/2021
-# purpose: set up for 3-c-1 indicator update, and save output files
+# Author: Michael Nairn
+# Initial date: November 2022
+# purpose: set up for 5-a-1 indicator update, and save output files
 #     This file is directly called by update_indicator_main.R.
 #     It has to be named compile_tables.R
 #     It is the control script that runs all the others.
@@ -22,6 +22,8 @@ library('stringr')
 library('janitor')
 library('tidyr')
 library('dplyr')
+library('DT')
+library('pander')
 
 
 if (test_run == TRUE) {
@@ -49,7 +51,7 @@ date <- Sys.Date()
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
 csv_filename <- paste0(date, "_5-a-1.csv")
-qa_filename <- paste0(date, "_5-a-1.html") 
+qa_filename <- paste0(date, "_5-a-1_checks.html") 
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 

@@ -1,6 +1,6 @@
 ### 3-4-1 automation
   
-This automation pulls together all relevant ICD-10 classification codes off NOMIS to display their mortality rate per 100,000 disaggregated by country, region and sex. Currently region age dissagregation starts from 30 years and over, with all other disaggregations starting from 0. 
+This automation pulls together all relevant ICD-10 classification codes off NOMIS to display their mortality rate per 100,000 disaggregated by country, region, age, sex, and type of disease. 
   
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
@@ -8,7 +8,7 @@ This automation pulls together all relevant ICD-10 classification codes off NOMI
 2. Open sdg_data_updates.Rproj  
 3. Change indicator folder name (`indicator <- "3-4-1"`)  
 4. If config.R does not exist in the 3-4-1 folder, create it from the example_config.R file  
-5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes. 
+5. Check the configs are correct. In particular, check the years variable as the latest year will likely need to be added when running an update. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes following UN or Topic Expert guidance. 
 6. Open update_indicator_main.R .   
 7. Ensure test_run <- FALSE.  
 8. Click Source (by default this is in top right of the script window)  

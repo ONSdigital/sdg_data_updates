@@ -82,6 +82,8 @@ country_headline_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Type of disease` ~ Country) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Country by Type of disease")
 
 
@@ -98,6 +100,8 @@ region_headline_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Type of disease` ~ Region) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Region by Type of disease")
 
 
@@ -113,12 +117,14 @@ age_headline_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Type of disease` ~ Age) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Age by Type of disease")
 
 
 # Sex by type of disease
 sex_headline_plot <- joined_data %>% 
-  filter(Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
+  filter(Country == "" & Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -128,6 +134,8 @@ sex_headline_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Type of disease` ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Sex by Type of disease")
 
 ```
@@ -166,6 +174,8 @@ chronic_respiratory_disease_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Chronic respiratory disease subtype` ~ Country) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Country by chronic respiratory disease subtype")
 
 # Region by chronic respiratory disease subtype
@@ -181,12 +191,14 @@ region_chronic_respiratory_disease_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Chronic respiratory disease subtype` ~ Region) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Region by chronic respiratory disease subtype")
 
 
 # Age by chronic respiratory disease subtype
 age_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Region == ""
+  filter(`Type of disease` == "Chronic respiratory disease" & Country == "" & Region == ""
          & Sex == "" ) %>% 
   ggplot(.,
          aes(x = Year,
@@ -197,12 +209,14 @@ age_chronic_respiratory_disease_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Chronic respiratory disease subtype` ~ Age) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Age by chronic respiratory disease subtype")
 
 
 # Sex by chronic respiratory disease subtype
 sex_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Region == ""
+  filter(`Type of disease` == "Chronic respiratory disease" & Country == "" & Region == ""
          & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
@@ -213,6 +227,8 @@ sex_chronic_respiratory_disease_plot <- joined_data %>%
   geom_line() +
   facet_grid(`Chronic respiratory disease subtype` ~ Sex) +
   theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Sex by chronic respiratory disease subtype")
 
 ```

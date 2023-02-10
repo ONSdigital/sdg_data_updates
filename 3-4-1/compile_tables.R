@@ -1,5 +1,5 @@
-# Author: Emma Wood
-# Initial date: 16/12/2021
+# Author: Michael Nairn
+# Initial date: 16/12/2022
 # purpose: set up for 3-4-1 indicator update, and save output files
 #     This file is directly called by update_indicator_main.R.
 #     It has to be named compile_tables.R
@@ -22,10 +22,14 @@ library(tibble)
 library(stringr)
 library(dplyr)
 library(tools)
+library(DT)
+library(pander)
 
 
 
-source("config.R") # pulls in all the configurations for updating indicator 3.4.1.
+if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE) {
+  source("config.R") } else {
+    stop("test_run must be either TRUE or FALSE") } # pulls in all the configurations for updating indicator 3.4.1.
 
 
 # run one year of data at a time as the dataset is too big to download all years 

@@ -88,11 +88,11 @@ csv_formatted <- clean_data %>%
   # split the geographies so country and region are in separate columns
   mutate(
     Country = case_when(
+      GEOGRAPHY_NAME == "Wales" ~ GEOGRAPHY_NAME,
       GEOGRAPHY_TYPE == "Countries" ~ GEOGRAPHY_NAME, 
       GEOGRAPHY_TYPE == "Regions" ~ "England",
       TRUE ~ ""),
     Region = ifelse(GEOGRAPHY_TYPE == "Regions", GEOGRAPHY_NAME, "")) %>%
-  
   
   mutate(Age = ifelse(grepl("otal", AGE_NAME), 
                       "",  
@@ -111,6 +111,13 @@ csv_formatted <- clean_data %>%
            "Unit measure", "Unit multiplier", "Observation status", "Value"))
 
 csv_formatted$Country <- gsub("Total Mortality", "", csv_formatted$Country)
+
+
+# devolved administrations duplicated as regions as well as countries. 
+  # Remove this duplication.
+  # Only Wales in this case.
+
+csv_formatted <- csv_formatted[csv_formatted$Region != "Wales", ]
 
 
 # remove NAs from the csv that will be saved in Outputs

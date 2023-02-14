@@ -14,9 +14,9 @@ This is a very simple automation: we read in one data table, calculate a percent
   - You WILL need to change the most_recent_year to be accurate
 
 To run the example data and get example output, it should be example_config.R.   
-6. Open update_indicator_main.R 
+7. Open update_indicator_main.R 
   - Make sure test_run is TRUE or FALSE: changes which Input folder is used
-7. Click Source (by default this is in top right of the script window)  
-8. Check for messages in the console. When the script is run a file titled '1-a-2.csv' will be saved in 1-a-2 > Output 
+8. Click Source (by default this is in top right of the script window)  
+9. Check for messages in the console. When the script is run a file titled '1-a-2.csv' will be saved in 1-a-2 > Output 
    Use this file for the Indicator csv.  
 10. A file called <date>_1-a-2_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  

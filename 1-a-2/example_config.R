@@ -1,11 +1,6 @@
-# configurations for type 1 data
+# configurations for indicator 1-a-2
 
 filename <- "PESA_2022_CP_Chapter_4_tables_example.xlsx"
-# # If you are using csv data make sure numbers are formatted as numbers in Excel 
-# # and DO NOT include the thousands separator
-# # tabname will not be needed if you are using csv data
-# filename <- "type_1_metadata_included.csv"
-# filename <- "type_1_no_metadata.csv"
 
 # tabname <- "no_metadata"
 tabname <- "4_2"

@@ -15,6 +15,9 @@ EW_data_trim <- EW_source_data %>%
 
 # calculations -----------------------------------------------------------------
 
+# Create column for total deaths under 5 years
+
+# column for under under 5 death rate per 1000 live births
 
 
 # make column names consistent across years ------------------------------------

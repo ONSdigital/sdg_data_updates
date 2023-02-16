@@ -17,7 +17,8 @@ install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 test_run <- TRUE # for real updates use FALSE
 
-indicator <- "1-a-2" # name of folder for indicator(s)
+indicator <- "5-a-1_new" # name of folder for indicator(s)
+
 
 setwd(indicator)
 

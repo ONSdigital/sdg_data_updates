@@ -2,9 +2,7 @@
 
 filename <- "smokinghabitsexample.xlsx"
 
-tabname <- "Table_1"
-## or
-# tabnames <- c("2008", "2009")
+tabnames <- c("Table_1", "Table_2", "Table_7", "Table_10", "Table_11")
 
 header_row <- 9
 

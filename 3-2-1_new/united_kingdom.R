@@ -4,13 +4,18 @@
 
 # read in data -----------------------------------------------------------------
 
+#' The data was read in using the xlsx_cells function in compile_tables.R so that 
+#' we can use the behead function below (trim data). This is not strictly necessary 
+#' for this table because there is one simple header row. If, in future years it 
+#' all goes pear shaped, I've left another simpler method hashed out below
+
 #UK_source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname_UK,
                              #skip = header_row_UK - 1)
 
 united_kingdom <- dplyr::filter(source_data, sheet == tabname_UK)
 
 
-# trim the data ---------------------------------------------------------------
+# trim data ----------------------------------------------------------------
 
 #UK_data_trim <- UK_source_data %>%
   #select("Year", "Live births", "Infant under 1 year", "Childhood deaths 1–4 years")
@@ -23,6 +28,19 @@ main_data <- united_kingdom %>%
   mutate(character = str_squish(character)) %>%
   remove_blanks_and_info_cells(header_row_UK) %>%
   mutate(character = suppressWarnings(remove_superscripts(character)))
+
+# tidy data up into a more usable table
+tidy_data <- main_data %>%
+  # these lines detail the direction of the relevant text for each data point
+  unpivotr::behead("left-up", area_code) %>%
+  unpivotr::behead("left-up", country) %>%
+  unpivotr::behead("left", sex) %>%
+  unpivotr::behead("up-left", event) %>%
+  dplyr::select(area_code, country, sex, event, numeric) %>%
+  # make wider so that each type of figure is in a different column
+  pivot_wider(names_from = event, values_from = numeric) %>%
+  # select only the columns we need for calculating rates
+  select(area_code, country, sex, "Live births", )
 
 # calculations -----------------------------------------------------------------
  

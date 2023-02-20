@@ -124,7 +124,7 @@ age_headline_plot <- joined_data %>%
 
 # Sex by type of disease
 sex_headline_plot <- joined_data %>% 
-  filter(Country == "" & Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
+  filter(Country == "England and Wales" & Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -198,8 +198,8 @@ region_chronic_respiratory_disease_plot <- joined_data %>%
 
 # Age by chronic respiratory disease subtype
 age_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "" & Region == ""
-         & Sex == "" ) %>% 
+  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
+         & Region == "" & Sex == "" ) %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -216,8 +216,8 @@ age_chronic_respiratory_disease_plot <- joined_data %>%
 
 # Sex by chronic respiratory disease subtype
 sex_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "" & Region == ""
-         & Age == "") %>% 
+  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
+         & Region == "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,

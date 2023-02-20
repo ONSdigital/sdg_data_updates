@@ -9,9 +9,9 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl",
+packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl", "janitor",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "DT", "pander", "janitor")
+              "ggplot2", "DT", "pander")
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
@@ -26,6 +26,7 @@ library('dplyr')
 library('rsdmx')
 library('openxlsx')
 library('readxl')
+library('janitor')
 
 
 source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update

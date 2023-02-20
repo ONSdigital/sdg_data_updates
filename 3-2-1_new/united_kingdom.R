@@ -40,11 +40,12 @@ tidy_data <- main_data %>%
   # make wider so that each type of figure is in a different column
   pivot_wider(names_from = event, values_from = numeric) %>%
   # select only the columns we need for calculating rates
-  select(area_code, country, sex, "Live births", )
+  select(area_code, country, sex, "Live births", "Infant deaths", "Childhood deaths 1-4 years")
 
 # calculations -----------------------------------------------------------------
- 
+
 # Create column for total deaths under 5 years
+
 
 # column for under under 5 death rate per 1000 live births
 

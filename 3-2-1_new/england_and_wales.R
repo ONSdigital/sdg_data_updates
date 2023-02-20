@@ -1,6 +1,6 @@
-# date: 14/02/2023
-
-#ENGLAND & WALES data
+# date: 17/02/2023
+# Author: Ali Campbell
+# creates csv for countries in UK under 5 child mortality data
 
 # read in data -----------------------------------------------------------------
 

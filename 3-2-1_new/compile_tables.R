@@ -1,3 +1,6 @@
+# These files will only work for 3-2-1 for the data for 2020 onwards, as the table format has changed since
+# There is an automation for the older data that was never used in the 3-2-1 branch on github, this will be in 3-2-1_new
+
 # This file is directly called by update_indicator_main.R.
 # It has to be called compile_tables.R
 # It is the control script that runs all the others.
@@ -13,6 +16,7 @@ packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openx
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
 
+# please check that all the libraries required are called here
 library('Rccp')
 library('stringr')
 library('unpivotr')
@@ -24,7 +28,7 @@ library('openxlsx')
 library('readxl')
 
 
-source("type_1_config.R") # pulls in all the configurations. Un-comment out code below for real update
+source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
 # if (test_run == TRUE) {
 #   source("example_config.R")
 # } else if (test_run == FALSE) {
@@ -32,6 +36,17 @@ source("type_1_config.R") # pulls in all the configurations. Un-comment out code
 # } else {
 #   stop("test_run must be either TRUE or FALSE")
 # }
+
+
+# check file is correct type
+if (SDGupdater::get_characters_after_dot(filename) != "xlsx") {
+  stop(paste0("File must be an xlsx file. Save ", filename, " as an xlsx file and re-run script."))
+}
+
+
+source_data <- xlsx_cells(paste0(input_folder, "/", filename),
+                                 sheets = c(tabname_UK, tabname_EW))
+
 
 source("update_type_1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 

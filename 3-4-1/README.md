@@ -31,7 +31,7 @@ The current nomis links were generated as follows:
 From Nomis, select Query > Life Events > Mortality statistics - underlying cause, sex and age.
 
 female link selections:  
-   Geography: Countries (all)   
+   Geography: Countries (all except Resident Outside England and Wales) and Regions (all except devolved administrations).
    Date: All years  
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only  
@@ -40,7 +40,7 @@ female link selections:
   
   
 all but female link selections:  
-   Geography: Countries (all)  
+   Geography: Countries (all except Resident Outside England and Wales) and Regions (all except devolved administrations).
    Date: All years  
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only   

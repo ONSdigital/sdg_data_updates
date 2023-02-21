@@ -1,0 +1,231 @@
+---
+title: "5-6-1 QA checks"
+author: "Ali Campbell"
+date: "16/01/2022"
+output: html_document
+
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(pander)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+  
+- This file runs some basic checks on the csv output and highlights some specific things that should manually be checked.  
+
+- 5-6-1 is a relatively straightforward indicator but contains lots of disaggregations and data so automating it saves a lot of time in wrangling the data. Since the last manual update we have included further data on region and local authority that definitely benefits from automation.
+
+- Make sure that the filenames are all in the correct format (srh-serv-eng-21-22-tab.xlsx)
+
+- Check that you have inputted the years variable correctly in config.R
+
+- Is set up so that should all work if you click 'Source' in compile_tables.R (make sure working directory is set to 5-6-1 in sdg_data_updates)
+
+- This automation assumes that the format of Table 7 and Table 17a does not change in future years
+  
+  
+## Configurations
+  The configurations are:
+
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder)`** (place .xlsx files here)
+  - years that are being read in: **`r years`**
+  - filenames being read in: **`r filename_list`**
+  - name of the tabs the data are in: **`r tabname_age`** and **`r tabname_la`** (Note: the tabname for the local authority data is 'Table 17' for years earlier than 20-21, this will display the tabname for the most recent year read) 
+  - row number of the column names; age: **`r header_row_age`**; local authority: **`r header_row_la`** 
+  - location of the outputs: **`r output_folder`**  
+  
+  
+## Basic checks
+Both should be true:
+
+  - No duplicates in output rows: **`r check_output`**
+  - No duplicates (not including values): **`r check_wo_values`**
+
+## Plots
+```{r, echo = FALSE, fig.width=10}
+# Read in the data currently on the website
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_5-6-1.csv') %>%
+  janitor::clean_names()
+
+#Change names to match
+live_data$types_of_contraception <- gsub("Other methods", "Other methods [age]", as.character(live_data$types_of_contraception))
+
+# Read in the new data 
+new_data <- csv_output %>% 
+  mutate(mutate(across(where(is.double), as.character)),
+         dataset = "new") %>%
+  # These two lines reformat the years back into the live format
+  #mutate(Year = str_replace_all(Year, "-", "/")) %>%
+  #mutate(Year = paste("20", Year, sep = "")) %>%
+  janitor::clean_names() 
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(across(where(is.double), as.character), dataset = "live") %>%
+  rename(type_of_contraception = types_of_contraception) %>%  #changes name to match
+  bind_rows(new_data)
+
+# Remove NAs local authorities/regions (la_data not included prior to 2019/20)
+joined_data <- joined_data %>%
+  mutate(region = ifelse(is.na(region), "", region)) %>%
+  mutate(local_authority = ifelse(is.na(local_authority), "", local_authority))
+
+# Changes names to match
+joined_data$type_of_contraception <- gsub("Natural family planning incl. rhythm method", "Natural family planning", as.character(joined_data$type_of_contraception))
+
+# Convert values to numeric so can be subtracted from each other later
+joined_data$value <- as.numeric(joined_data$value)
+```
+
+
+
+```{r, , echo = FALSE}
+# joined_data$value <- as.numeric(joined_data$value)
+joined_data <-  joined_data %>%
+    select(all_of(c("year", "region", "local_authority", "age", "main_method_of_contraception", "type_of_contraception",  "unit_measure", "value", "dataset", "observation_status", "unit_multiplier")))
+  
+
+# Calculate differences between new and live data
+comparison <- joined_data %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, age, region, local_authority, main_method_of_contraception, type_of_contraception, value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = value) %>%
+  mutate(difference = new - live) %>%
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+  
+  If there are differences, visible in the table and plots below, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+
+Please check the plots below for any differences between the live data (which 
+is pulled in from the sdg-data (platform) github repo) and the new data.  
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating.
+
+There are too many possible time series to plot here but below are a few examples you can amend if there seems to be a discrepancy shown in the table below. 
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# Headline
+headline_plot <- joined_data %>% 
+  filter(age == "" & main_method_of_contraception == "" & type_of_contraception == "" & region == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  # Add marker variables to the old_data and new_data so we can know which set a point is from
+  geom_point(aes(shape = dataset)) + 
+  scale_shape_manual(values = c(15, 19)) +
+  geom_line() +
+  #facet_grid(~ years) +
+  theme_bw() +
+  ggtitle("Headline values")
+
+suppressMessages(print(headline_plot))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# Age
+plot_age <- joined_data %>%
+  filter(region == "" & local_authority == "" & main_method_of_contraception == "" & type_of_contraception == "") %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(~ age,
+             nrow = 4) +
+  theme_bw() +
+  ggtitle("Age")
+
+suppressMessages(print(plot_age))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# Main method of contraception
+plot_method <- joined_data %>%
+  filter(age == "" & local_authority == "" & type_of_contraception == "" & region == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  geom_line(aes(linetype = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ main_method_of_contraception, nrow = 3) +
+  theme_bw() +
+  ggtitle("Main method of contraception")
+
+suppressMessages(print(plot_method))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# Type of contraception
+plot_type <- joined_data %>%
+  filter(age == "" & local_authority == "" & region == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(~ type_of_contraception, nrow= 6) +
+  theme_bw() +
+  ggtitle("Type of contraception")
+
+suppressMessages(print(plot_type))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# Region name
+plot_region <- joined_data %>%
+  filter() %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(~ region, nrow = 5) +
+  theme_bw() +
+  ggtitle("Region")
+
+suppressMessages(print(plot_region))
+```
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

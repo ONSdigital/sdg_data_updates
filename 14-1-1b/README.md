@@ -1,9 +1,9 @@
 ## Create csv and publication data for 14-1-1b plastic beach litter
 ### Introduction
 This code creates both the csv for the SDG data platform, and the publication tables. Tables are published either in the Natural Capital Habitat and Condition
-Accounts or (if these accounts are not published before June in the year following the GBBC) as an ad-hoc.  
+Accounts or (if these accounts are not published before June in the year following the GBBC) as an ad-hoc. In 2022 only headline figures were published by Natural Capital so the full data set was published as an ad-hoc.  
   
-Input data are ingested from the Marine Conservation Society (MCS) through DAO and DAP. See the contacts list, goal updates, and emails folder in Sharepoint for more information.
+Input data are ingested from the Marine Conservation Society (MCS) through DAO and DAP. See the contacts list, goal updates, and emails folder in Sharepoint for more information. There is also more info in Emma's handover document.
   
 ### Data in Example_input folder
 The example data are dummy data and are not a true reflection of data obtained from MCS. 

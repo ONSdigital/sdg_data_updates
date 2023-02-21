@@ -4,15 +4,23 @@
 \alias{clean_strings}
 \title{clean all character strings in dataframe}
 \usage{
-clean_strings(dat, remove_ss = TRUE)
+clean_strings(
+  dat,
+  remove_ss = FALSE,
+  case = c(NA, "str_to_lower", "str_to_sentence", "str_to_upper", "str_to_title")
+)
 }
 \arguments{
-\item{remove_ss}{logical. Default is TRUE. If TRUE superscripts are removed.
-Set to FALSE if there strings of letters that end in a number that you want
+\item{remove_ss}{logical. Default is FALSE. If TRUE superscripts are removed.
+Use default if there strings of letters that end in a number that you want
 to keep. Where a number falls at the end of an alphanumeric code, it will
 not be interpreted as a superscript and will not be removed. However, if the
 ONLY number in an alphanumeric code is at the end, the number will be seen
 as a superscript.}
+
+\item{case}{Used to change the case of the strings, using a stringr str_to...
+argument. Must be one of str_to_lower, str_to_upper, str_to_title, or
+str_to_sentence. If case is not given, the case will not be changed.}
 
 \item{source_data}{dataframe or tibble}
 }
@@ -20,10 +28,17 @@ as a superscript.}
 dataframe
 }
 \description{
-Change factors to character strings and remove superscripts and excess white
-space.
+Change factors to character strings, remove excess white
+space. Removing superscripts and changing the case are optional.
 }
 \examples{
-clean_data <- clean_strings(source_data, remove_ss = TRUE)
+test_data <- data.frame(
+"factor" = c("thEse      are ", "  alphaNumeric2", 
+             "  factors  wITh too many spaces   ", "that ought to be character strings",
+             stringsAsFactors = TRUE)
+
+clean_strings(test_data) 
+clean_strings(test_data, case="str_to_title")
+clean_strings(test_data, remove_ss = FALSE)
 
 }

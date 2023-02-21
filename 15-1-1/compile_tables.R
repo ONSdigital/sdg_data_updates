@@ -1,7 +1,24 @@
 # compile tables for 15.1.1
+library('SDGupdater')
 
+packages <- c('openxlsx', 'stringr', 
+              'tidyr', 'dplyr', 
+              'ggplot2', 'kableExtra', 'pander')
 
-source("config.R")
+install_absent_packages(packages)
+
+library('dplyr')
+library('tidyr')
+library('stringr')
+
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
+
 source("update_15-1-1.R")
 
 existing_files <- list.files()

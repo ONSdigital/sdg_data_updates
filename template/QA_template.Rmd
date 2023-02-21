@@ -115,7 +115,7 @@ gone wrong in the automation it will show up on the plots. Below is an example
 plots section:  
   
   Please check the plots below for any differences between the live data (which 
-  is pulled in from Jemalex) and the new data.  
+  is pulled in from the sdg-data (platform) github repo) and the new data.  
   
   Live data will appear over the top of new data. You should therefore only 
   see points for the live data for previous years and only points for the new data 
@@ -136,11 +136,13 @@ plots section:
 # with 'live' data that looks like the new data (for testing you could pull the 
 # 'live' data from the in progress file once you have put the new csv in there).
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv')
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_13-2-2.csv') %>%
+  janitor::clean_names()
 
-new_data <- csv_formatted %>% 
+new_data <- csv_formatted %>% # replace csv_formatted with whatever your final csv was called
   mutate(Year = as.integer(Year),
-         dataset = "new") 
+         dataset = "new") %>%
+  janitor::clean_names() 
   
 # join to the new data
 joined_data <- live_data %>% 
@@ -150,12 +152,12 @@ joined_data <- live_data %>%
 # plot the data
 plot <- joined_data %>% 
   ggplot(.,
-         aes(x = Year,
-             y = Value,
+         aes(x = year,
+             y = value,
              colour = dataset)) +
   geom_point() +
-  geom_line() +
-  facet_wrap(vars(Gas),
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(gas),
              nrow = 2) +
   theme_bw() 
 
@@ -178,9 +180,12 @@ differences is also useful. The following example is taken from 13-2-2:
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, gas, value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
+              values_from = value) %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
@@ -196,8 +201,13 @@ datatable(comparison,
           rownames = FALSE, 
           filter = "top",
           options = list(dom = 'tp', 
-                         pageLength = 10,
+                         pageLength = 5,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
 ```
 

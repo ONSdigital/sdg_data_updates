@@ -12,11 +12,10 @@ This automation ... explain what it does
 3. Change indicator folder name (`indicator <- "x-x-x"`)  
 4. If config.R does not exist in the x-x-x folder, create it from the example_config.R file  
 5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove occupation codes. 
-6. Check that the compile.tables.R script sources the correct config file (for an update it should call config.R. 
 To run the example data and get example output, it should be example_config.R).   
-7. Open update_indicator_main.R  
-8. Click Source (by default trhis is in top right of the script window)  
-9. Check for messages in the console. When the script is run a file titled 'x-x-x.csv' will be saved in x-x-x > Output 
+6. Open update_indicator_main.R  
+7. Click Source (by default trhis is in top right of the script window)  
+8. Check for messages in the console. When the script is run a file titled 'x-x-x.csv' will be saved in x-x-x > Output 
    Use this file for the Indicator csv.  
 10. A file called <date>_x-x-x_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  
 

@@ -1,0 +1,439 @@
+---
+title: "11-1-1 QA"
+author: "Emma Wood"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(pander)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+
+The source data for 11-1-1 are on two spreadsheets and each year is given on a 
+separate tab. Updating the indicator and making sure revisions are spotted 
+therefore takes quite a long time.  
+  
+In addition, not all possible disaggregations were included on the platform 
+before this automation. This may be partly due to the time consuming nature of
+including all variables.  
+  
+This file runs some basic checks on the csv output and highlights some specific 
+things that should manually be checked.  
+  
+Data in the csv are labelled as 'Normal data' in the Observation status column. 
+However, notes should be checked in the spreadsheet to ensure this is correct
+for new data.  
+   
+## Configurations
+
+There are two series for this indicator, which are stored in separate files:  
+- filepath for the 'dwellings' data: 
+**`r paste0(getwd(), "/", input_folder, "/", areas_filename)`**  
+- filepath for the 'households' data: 
+**`r paste0(getwd(), "/", input_folder, "/", households_filename)`**    
+  
+There are multiple headers, however all the information we need for column names
+is on the header just above the values. The row on which this header is found is
+set using the 'header_row' arguments in the config file:  
+- row number of the column names for dwellings data: **`r areas_header_row`**  
+- row number of the column names for households data: **`r households_header_row`**    
+  
+There is a tab for each year. Which years to run is set in the configs. For this 
+run the following tabs were set to run: **`r tabnames`**  
+   
+Location of the outputs: **`r paste0(getwd(), "/", output_folder)`**  
+
+
+## Plots and tables 
+Please check the plots and tables below for any differences between the live 
+data (which is pulled in from Github) and the new data.  
+     
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
+
+If there are zig-zag lines or plots look unusual there may be something 
+different in the source data that is causing an issue. This will need to 
+be investigated.  
+  
+The table below each plot shows all instances where the old (live) value does 
+not match the new value. It is sorted so the largest absolute differences appear 
+first, but can be sorted in other ways using the arrows at the top.
+
+## Differences between live and new data
+tiny differences may just be due to differences in rounding, which is not an 
+issue.  
+Larger differences may be due to revisions, but could also indicate an error in 
+the code.    
+**If there are differences larger than 0.05 please check that new data match source**
+
+```{r, fig.width=10}
+
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
+  janitor::clean_names() 
+
+new_data <- csv_data %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>%
+  mutate(Year = as.integer(Year),
+         Value = as.numeric(Value),
+         dataset = "new") %>% 
+  janitor::clean_names()
+
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data) %>% 
+  mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
+  mutate(year = as.integer(year),
+         value = as.numeric(value))
+         
+```
+
+```{r}
+# functions for making tables & plots of differences between live and new data
+# plots:
+filter_for_plot <- function(series_value, var1, var2) {
+  
+  standard_cols <- c("year", "value", "units", "series",
+                     "observation_status", "unit_multiplier",
+                     "dataset", var1, var2)
+  
+  series_filter <- joined_data %>% 
+    filter(series == series_value)
+  
+  # get just the columns we want to filter to be blank
+  disaggs <- setdiff(names(joined_data), standard_cols)
+  
+  for (i in 1:length(disaggs)) {
+    series_filter <- series_filter %>% 
+      filter(!!(as.name(disaggs[i])) == "" | is.na(!!(as.name(disaggs[i]))))
+  }
+  
+  return(series_filter)
+} 
+
+make_plot <- function(dat, var1, var2) {
+  
+  ggplot(dat,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+    geom_point() +
+    geom_line() +
+    facet_grid(vars({{var1}}), vars({{var2}})) +
+    theme_bw() +
+    theme(axis.text.x = element_text(angle = 45,
+                                     vjust = 1, hjust = 1))
+}
+
+# tables
+
+calculate_differences <- function(dat, var1, var2) {
+  
+  dat %>% 
+    mutate(disagg_combo = paste(!!as.name(var1), ",", !!as.name(var2))) %>% 
+    select(year, series, disagg_combo,
+           dataset, value)  %>% 
+    pivot_wider(names_from = dataset,
+                values_from = value) %>% 
+    mutate(difference = new - live) %>% 
+    filter(difference != 0) %>%
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
+  
+}
+# and then to present it as a datatable
+create_datatable <- function (data) {
+  
+  datatable(data, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 3,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+}
+
+```
+
+
+### Series: Dwellings 
+#### Decent homes criteria by urbanisation sub-category
+```{r, fig.width=10}
+
+dwell_urbanisation <- filter_for_plot("Dwellings (%)" , 
+                                     "decent_homes_criteria", 
+                                     "urbanisation_sub_category") 
+
+dwell_urbanisation_plot <- make_plot(dwell_urbanisation,
+                           decent_homes_criteria, urbanisation_sub_category)
+
+suppressMessages(print(dwell_urbanisation_plot))
+
+```
+  
+```{r}
+dwell_urbanisation_diffs <- dwell_urbanisation %>% 
+  calculate_differences("decent_homes_criteria", "urbanisation_sub_category")
+
+create_datatable(dwell_urbanisation_diffs)
+```
+
+#### Decent homes criteria by sub-national area
+```{r, echo = FALSE, fig.width=10}
+
+dwell_subnat <- filter_for_plot("Dwellings (%)", 
+                                "decent_homes_criteria", 
+                                "sub_national_area")
+
+dwell_subnat_plot <-  make_plot(dwell_subnat, 
+                                decent_homes_criteria, sub_national_area)
+
+suppressMessages(print(dwell_subnat_plot))
+
+```
+
+```{r}
+dwell_subnat_diffs <- dwell_subnat %>% 
+  calculate_differences("decent_homes_criteria", "sub_national_area")
+
+create_datatable(dwell_subnat_diffs)
+```
+#### Decent homes criteria by region
+```{r, fig.width=10}
+
+dwell_region <- filter_for_plot("Dwellings (%)" , 
+                                "decent_homes_criteria", 
+                                "region") 
+
+dwell_region_plot <- make_plot(dwell_region,
+                               decent_homes_criteria, region)
+
+suppressMessages(print(dwell_region_plot))
+
+```
+```{r}
+dwell_region_diffs <- dwell_region %>% 
+  calculate_differences("decent_homes_criteria", "region")
+
+create_datatable(dwell_region_diffs)
+```
+  
+#### Decent homes criteria by IMD
+```{r, fig.width=10}
+
+dwell_imd <- filter_for_plot("Dwellings (%)" , 
+                             "decent_homes_criteria", 
+                             "deprivation_decile") 
+
+dwell_imd_plot <-  make_plot(dwell_imd,
+                             decent_homes_criteria, deprivation_decile)
+
+suppressMessages(print(dwell_imd_plot))
+
+```
+```{r}
+dwell_imd_diffs <- dwell_imd %>% 
+  calculate_differences("decent_homes_criteria", "deprivation_decile")
+
+create_datatable(dwell_imd_diffs)
+```
+### Series: Households
+#### Decent homes criteria by age of oldest person
+```{r, fig.width=10}
+
+hh_old <- filter_for_plot("Households (%)" , 
+                          "decent_homes_criteria", 
+                          "age_of_oldest_person") 
+
+hh_old_plot <- make_plot(hh_old,
+                         decent_homes_criteria, age_of_oldest_person)
+
+suppressMessages(print(hh_old_plot))
+
+```
+```{r}
+hh_old_diffs <- hh_old %>% 
+  calculate_differences("decent_homes_criteria", "age_of_oldest_person")
+
+create_datatable(hh_old_diffs)
+```
+
+  
+#### Decent homes criteria by age of youngest person
+```{r, fig.width=10}
+
+hh_young <- filter_for_plot("Households (%)" , 
+                            "decent_homes_criteria", 
+                            "age_of_youngest_person")
+
+hh_young_plot <-  make_plot(hh_young,
+                            decent_homes_criteria, age_of_youngest_person)
+
+suppressMessages(print(hh_young_plot))
+
+```
+```{r}
+hh_young_diffs <- hh_young %>% 
+  calculate_differences("decent_homes_criteria", "age_of_youngest_person")
+
+create_datatable(hh_young_diffs)
+```
+  
+#### Decent homes criteria by disability status (HH)
+```{r, fig.width=10}
+
+hh_disability <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "disability_status_household")
+
+hh_disability_plot <-  make_plot(hh_disability,
+            decent_homes_criteria, disability_status_household)
+
+suppressMessages(print(hh_disability_plot))
+
+```
+```{r}
+hh_disability_diffs <- hh_disability %>% 
+  calculate_differences("decent_homes_criteria", "disability_status_household")
+
+create_datatable(hh_disability_diffs)
+```
+  
+#### Decent homes criteria by ethnicity (HH)
+```{r, fig.width=10}
+
+hh_ethnicity <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "ethnicity_of_household_reference_person_hrp") 
+
+hh_ethnicity_plot <-  make_plot(hh_ethnicity,
+            decent_homes_criteria, ethnicity_of_household_reference_person_hrp)
+
+suppressMessages(print(hh_ethnicity_plot))
+
+```
+```{r}
+hh_ethnicity_diffs <- hh_ethnicity %>% 
+  calculate_differences("decent_homes_criteria", 
+                        "ethnicity_of_household_reference_person_hrp")
+
+create_datatable(hh_ethnicity_diffs)
+```
+  
+#### Decent homes criteria by income
+```{r, fig.width=10}
+
+hh_income <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "income_quintile_household")
+
+hh_income_plot <-  make_plot(hh_income,
+            decent_homes_criteria, income_quintile_household)
+
+suppressMessages(print(hh_income_plot))
+
+```
+```{r}
+hh_income_diffs <- hh_income %>% 
+  calculate_differences("decent_homes_criteria", "income_quintile_household")
+
+create_datatable(hh_income_diffs)
+```
+  
+#### Decent homes criteria by HH composition
+```{r, fig.width=10}
+
+hh_compostion <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "household_composition") 
+
+hh_compostion_plot <-  make_plot(hh_compostion,
+            decent_homes_criteria, household_composition)
+
+suppressMessages(print(hh_compostion_plot))
+
+```
+```{r}
+hh_compostion_diffs <- hh_compostion %>% 
+  calculate_differences("decent_homes_criteria", "household_composition")
+
+create_datatable(hh_compostion_diffs)
+```
+
+
+#### Decent homes criteria by length of residence
+```{r, fig.width=10}
+
+hh_reslength <- filter_for_plot("Households (%)" , 
+                                "decent_homes_criteria", 
+                                "length_of_residence") 
+
+hh_reslength_plot <-  make_plot(hh_reslength,
+                                decent_homes_criteria, length_of_residence)
+
+suppressMessages(print(hh_reslength_plot))
+
+```
+```{r}
+hh_reslength_diffs <- hh_reslength %>% 
+  calculate_differences("decent_homes_criteria", "length_of_residence")
+
+create_datatable(hh_reslength_diffs)
+```
+  
+#### Decent homes criteria by poverty status
+```{r, fig.width=10}
+
+hh_poverty <- filter_for_plot("Households (%)" , 
+                                 "decent_homes_criteria", 
+                                 "poverty_status") 
+hh_poverty_plot <- make_plot(hh_poverty,
+            decent_homes_criteria, poverty_status)
+
+suppressMessages(print(hh_poverty_plot))
+
+```
+```{r}
+hh_poverty_diffs <- hh_poverty %>% 
+  calculate_differences("decent_homes_criteria", "poverty_status")
+
+create_datatable(hh_poverty_diffs)
+```
+  
+#### Decent homes criteria by workless HH
+```{r, fig.width=10}
+
+hh_workless <- filter_for_plot("Households (%)" , 
+                               "decent_homes_criteria", 
+                               "workless_households") 
+
+hh_workless_plot <-  make_plot(hh_workless,
+                               decent_homes_criteria, workless_households)
+
+suppressMessages(print(hh_workless_plot))
+
+```
+```{r}
+hh_workless_diffs <- hh_workless %>% 
+  calculate_differences("decent_homes_criteria", "workless_households")
+
+create_datatable(hh_workless_diffs)
+```
+  
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

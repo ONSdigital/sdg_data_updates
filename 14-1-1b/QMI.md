@@ -310,7 +310,7 @@ We report median litter count by each of the constituent countries of the UK, an
   
 Data are annually made publicly available on the UK SDG platform. Data are presented graphically, and machine readable data can be downloaded. The UK SDG platform has an [accessibility rating of AA](https://digitalaccessibilitycentre.org/index.php/ons-sustainable-development-goals/).  
   
-### Methods used to produce the GBBC beach litter statistics
+### Methods used to produce the ONS GBBC beach litter statistics 
 #### MCS survey method
 The Marine Conservation Society’s Great British Beach Clean is a citizen science project that occurs every year on the second weekend of September.   
   

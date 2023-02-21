@@ -1,163 +1,102 @@
-# date: 17/02/2023
+# date: 221/02/2023
 # Author: Ali Campbell
 # creates csv for countries in UK under 5 child mortality data
 
 # read in data -----------------------------------------------------------------
 
-EW_source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname_EW,
-                             skip = header_row_EW - 1)
+england_wales <- dplyr::filter(source_data, sheet == tabname_EW)
 
-# trim the data ---------------------------------------------------------------
+# trim & tidy data -------------------------------------------------------------
 
-EW_data_trim <- EW_source_data %>%
-  select("Year", "Live births", "Infant under 1 year", "Childhood deaths 1–4 years") %>%
-  rename("Infant deaths" = "Infant under 1 year")
+info_cells <- SDGupdater::get_info_cells(england_wales, header_row_EW)
+country <- SDGupdater::unique_to_string(info_cells$Country)
+
+main_data <- england_wales %>%
+  mutate(character = str_squish(character)) %>%
+  remove_blanks_and_info_cells(header_row_EW) %>%
+  mutate(character = suppressWarnings(remove_superscripts(character)))
+
+
+#' STOPPED HERE - CANT FIGURE OUT WHY INFANT_UNDER_1_YEAR WON'T CHANGE, OTHERS DO
+
+# tidy data up into a more usable table
+tidy_data <- main_data %>%
+  # these lines detail the direction of the relevant text for each data point
+  behead("left", year) %>%
+  behead("up-left", event) %>%
+  select(year, event, numeric) %>%
+  # make wider so that each type of figure is in a different column
+  pivot_wider(names_from = event, values_from = numeric) %>%
+  # convert df to snake case and remove excess white space
+  clean_names() %>%
+  clean_strings() %>%
+  # rename columns based on a pattern in case specific names change between years
+  rename_column(primary = c("infant", "under", "1", "year"),
+                not_pattern = c("still", "rate"), new_name = "POO") %>%
+  rename_column(primary = c("live", "births"), new_name = "BIG") %>%
+  rename_column(primary = c("deaths", "1_4"), new_name = "1_4_deaths") #%>%
+   #%>%
+  # select only the columns we need for calculating rates
+  select(area_code, country, sex, live_births, infant_deaths, "1_4_deaths")
 
 # calculations -----------------------------------------------------------------
 
-# Create column for total deaths under 5 years
+calculations <- tidy_data %>%
+  # Create column for total deaths under 5 years
+  mutate(under_5_deaths = infant_deaths + `1_4_deaths`) %>%
+  # column for under under 5 death rate per 1000 live births
+  mutate(under_5_rate = calculate_valid_rates_per_1000(under_5_deaths, live_births, decimal_places = 5)) %>%
+  # for now Northern Ireland rates will need to be blank because the numerator and denominator treat non-residents differently
+  # use a pattern to identify Northern Ireland in case of differences in spelling, capitalisation, spaces etc
+  mutate(remove_NI = grepl(NI_string, country)) %>%
+  # blank out deaths and rates for NI
+  mutate(under_5_deaths = ifelse(remove_NI == TRUE, NA, under_5_deaths)) %>%
+  mutate(under_5_rate = ifelse(remove_NI == TRUE, NA, under_5_rate)) %>%
+  # Observation status column for SDMX
+  mutate(`Observation status` = case_when(
+    under_5_deaths < 3 | is.na(under_5_deaths) ~ "Missing value; suppressed", 
+    under_5_deaths >= 3 & under_5_deaths <= 19 ~ "Low reliability",
+    under_5_deaths > 19  ~ "Normal value")) %>% 
+  mutate(`Observation status` = ifelse(remove_NI == TRUE,
+                                       "Missing value", `Observation status`))
 
-# column for under under 5 death rate per 1000 live births
-
-
-# make column names consistent across years ------------------------------------
-
-# If you know a column name may change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# You can use the rename_column function to rename them based on patterns that 
-# are always present in the column name. See below for some examples of usage.
-#
-# You can then use the new name to refer to the columns through the 
-# rest of the code.
-
-# If there aren't too many columns that you are going to use you could do this 
-# step for all columns but be careful you don't introduce errors!
-
-renamed_main <- main_data %>% 
-  rename_column(primary = "year", new_name = "year") %>% 
-  rename_column(primary = "sex", new_name = "sex") %>% 
-  rename_column(primary = "age", new_name = "age") %>% 
-  rename_column(primary = "all_households", 
-                not_pattern = "sample",
-                new_name = "all_households_000s") %>% 
-  rename_column(primary = c("sample", "size"), alternate = "count", 
-                new_name = "sample_size") #%>%
-  # # the following isn't something we want to do here, but to show how you
-  # # match multiple potential patterns using the OR operator:
-  # rename_column(primary = "type", not_pattern = "a|b|c|other",
-  #               new_name = "d")
-  
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# Join dataframes, do relevant calculations etc
-
-# some useful dplyr functions:
-# left_join(), right_join, 
-# add_row(), filter(), select(), group_by(), summarise()
-# pivot_longer(), pivot_wider()
-
-# If, like in type_1_data, you have multiple columns with values, e.g. where each
-# holds the values for a level of a disaggregation, pivot_longer is your friend
-
-tidy_data <- renamed_main %>% 
-  pivot_longer(
-    cols = c(contains("type"), all_households_000s),
-    names_to = "type",
-    values_to = "value"
-  )
-
-# # for doing calculations, you may rather want values in separate columns, but the same row.
-# # The reverse of pivot_longer is pivot wider. e.g. if I wanted to add types a and b
-# # and the data were already tidy (one value per row)
-# calculation_example <- tidy_data %>% 
-#   pivot_wider(names_from = "type",
-#               values_from = "value") %>% 
-#   mutate(type_a_plus_b = as.numeric(type_a) + as.numeric(type_b))
-# 
-# # then back to tidy:
-# example_tidied <- calculation_example %>% 
-#   pivot_longer(
-#     cols = c(contains("type"), all_households_000s),
-#     names_to = "type",
-#     values_to = "value"
-#   )
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
 
 # finalise csv -----------------------------------------------------------------
 
-# make column names sentence case
+csv_format <- calculations
 
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
+# add extra columns for SDMX
+csv_format["Unit multiplier"] = "Units"
+csv_format["Unit measure"] = "Rate per 1,000 live births"
+csv_format["Year"] = year
 
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
+# put columns in correct order
+csv_format <- csv_format %>%
+  select(all_of(c("Year", "country", "sex", "area_code", "Observation status",
+                  "Unit multiplier", "Unit measure", "under_5_rate")))
 
-csv_formatted <- tidy_data %>% 
-  # rename columns that need renaming
-  rename(`housing type` = type) %>%
-  # you might want to use the country and year we got from extract_metadata above.
-  # These are in a list called metadata. Make sure there is only ONE country / ONE 
-  # year given. If so, they can be accessed like this:
-  mutate(country = metadata$country) %>% 
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "All", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         country = ifelse(country == "UK", "", country),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-         ) %>% 
-  # you can also use pattern matching to change level names, e.g. removing the 
-  # word 'type' fromthe housing types column
-  mutate(`housing type` = stringr::str_replace(`housing type`,"type_|_types",  "")) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # ... or remove it using filter() as the commented line below
-  # filter(!is.na(Value)) %>%
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
+# rename columns
+csv_format <- csv_format %>%
+  rename("Country" = "country", "Sex" = "sex", "GeoCode" = "area_code", "Value" = "under_5_rate")
 
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
+# blanks for totals
+csv_format <- csv_format %>%
+  mutate(Sex = ifelse(Sex == "All", "", Sex), Country = ifelse(Country == "United Kingdom", "", Country))
 
-# put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
 
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output <- csv_formatted %>% 
+csv_output_UK <- csv_format %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
 
-
-
-
+# clean workspace of objects that will be used in E&W script
+# (apart from year, as we will use this to select the correct row)
+rm(calculations,
+   clean_data,
+   csv_format,
+   info_cells,
+   main_data,
+   renamed_data,
+   tidy_data,
+   country)

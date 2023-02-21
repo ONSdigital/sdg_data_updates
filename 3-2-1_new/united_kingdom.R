@@ -96,11 +96,6 @@ csv_format <- csv_format %>%
   mutate(Sex = ifelse(Sex == "All", "", Sex), Country = ifelse(Country == "United Kingdom", "", Country))
 
 
-# Order the rows by columns values, na values first
-age_csv_sorted <- age_csv_ordered[order(age_csv_ordered$Year, age_csv_ordered$`Main method of contraception`,
-                                        age_csv_ordered$`Type of contraception`, age_csv_ordered$Age,
-                                        na.last = FALSE), ]
-
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
@@ -108,6 +103,7 @@ csv_output_UK <- csv_format %>%
   mutate(Value = ifelse(is.na(Value), "", Value))
 
 # clean workspace of objects that will be used in E&W script
+# (apart from year, as we will use this to select the correct row)
 rm(calculations,
    clean_data,
    csv_format,
@@ -115,7 +111,6 @@ rm(calculations,
    main_data,
    renamed_data,
    tidy_data,
-   country,
-   year)
+   country)
 
 

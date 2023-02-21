@@ -9,7 +9,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
-packages <- c("Rccp", "stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl", "janitor",
+packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl", "janitor",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "DT", "pander")
 
@@ -17,7 +17,6 @@ packages <- c("Rccp", "stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx"
 install_absent_packages(packages)
 
 # please check that all the libraries required are called here
-library('Rccp')
 library('stringr')
 library('unpivotr')
 library('tidyxl')
@@ -49,7 +48,7 @@ source_data <- xlsx_cells(paste0(input_folder, "/", filename),
                                  sheets = c(tabname_UK, tabname_EW))
 
 
-source("update_type_1.R") # does the donkey-work of making the csv - 
+source("united_kingdom.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 
 
 # at this point you should see lots of variables appear in the global environment 

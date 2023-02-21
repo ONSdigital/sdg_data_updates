@@ -5,14 +5,14 @@ This automation pulls together all relevant ICD-10 classification codes off NOMI
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
    *Others:* Checkout sdg_data_updates main branch to your local repository.     
-2. Open sdg_data_updates.Rproj  
-3. Change indicator folder name (`indicator <- "3-4-1"`)  
-4. If config.R does not exist in the 3-4-1 folder, create it from the example_config.R file  
+2. Open sdg_data_updates.Rproj.
+3. Change indicator folder name (`indicator <- "3-4-1"`).
+4. If config.R does not exist in the 3-4-1 folder, create it from the example_config.R file.  
 5. Check the configs are correct. In particular, check the years variable as the latest year will likely need to be added when running an update. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes following UN or Topic Expert guidance. 
-6. Open update_indicator_main.R .   
+6. Open update_indicator_main.R.  
 7. Ensure test_run <- FALSE.  
-8. Click Source (by default this is in top right of the script window)  
-9. Check for messages in the console. When the script is run a file titled '3-4-1.csv' will be saved in 3-4-1 > Output 
+8. Click Source (by default this is in top right of the script window).  
+9. Check for messages in the console. When the script is run a file titled '3-4-1.csv' will be saved in 3-4-1 > Output. 
    Use this file for the Indicator csv.  
 10. A file called <date>_3-4-1_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  
 
@@ -36,7 +36,7 @@ female link selections:
    Age: All years (except for regions where currently 30 and over)  
    Rates: Age-standardised mortality rate only  
    Sex: Females only  
-   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99,       J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
+   Underlying Cause: Full ICD-10 Clasification > C00-C97, E10-E14, I00-I99, J30-39, J40-J47, J60-J70, J80-J84, J85-J86, J90-94, J95, J96, J98 and LC47  
   
   
 all but female link selections:  

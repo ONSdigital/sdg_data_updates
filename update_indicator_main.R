@@ -9,21 +9,18 @@
 # install.packages("tidyr", dependencies = TRUE, type = "win.binary")
 
 # Because SDGupdater is a local package we install it slightly differently:
-#setwd("D:/Coding_repos/sdg_data_updates")
 
+setwd("D:/Coding_repos/sdg_data_updates")
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 # rm(list = ls())
 
-test_run <- TRUE # for real updates use FALSE
+test_run <- FALSE
+=======
 
-indicator <- "5-a-1_new" # name of folder for indicator(s)
 
+indicator <- "3-4-1" # name of folder for indicator
 
 setwd(indicator)
 
 source("compile_tables.R")
-
-
-
-

@@ -90,11 +90,6 @@ csv_format <- csv_format %>%
 csv_format <- csv_format %>%
   rename("Country" = "country", "Sex" = "sex", )
 
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
 
 csv_formatted <- tidy_data %>% 
   # rename columns that need renaming

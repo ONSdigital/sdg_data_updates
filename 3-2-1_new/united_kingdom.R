@@ -87,6 +87,8 @@ csv_format <- csv_format %>%
                   "Unit multiplier", "Unit measure", "under_5_rate")))
 
 # rename columns
+csv_format <- csv_format %>%
+  rename("Country" = "country", "Sex" = "sex", )
 
 # order of disaggregations depend on order they appear. In some cases this won't 
 # be alphanumeric order, so specify the order here and arrange by this fake column 

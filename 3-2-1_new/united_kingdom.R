@@ -88,7 +88,9 @@ csv_format <- csv_format %>%
 
 # rename columns
 csv_format <- csv_format %>%
-  rename("Country" = "country", "Sex" = "sex", )
+  rename("Country" = "country", "Sex" = "sex", "GeoCode" = "area_code", "Value" = "under_5_rate")
+
+
 
 
 csv_formatted <- tidy_data %>% 

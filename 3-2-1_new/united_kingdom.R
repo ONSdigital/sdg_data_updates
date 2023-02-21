@@ -5,8 +5,9 @@
 # read in data -----------------------------------------------------------------
 
 #' The data was read in using the xlsx_cells function in compile_tables.R so that 
-#' we can use the behead function below (trim data). This is not strictly necessary 
-#' for this table because there is one simple header row. If, in future years it 
+#' we can use the behead function below (trim & tidy data). This is not strictly 
+#' necessary for this table because there is one simple header row, but works if 
+#' the format reverts to the previous years' format. If, in future years it 
 #' all goes pear shaped, I've left another simpler method hashed out below
 
 #UK_source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname_UK,
@@ -90,67 +91,31 @@ csv_format <- csv_format %>%
 csv_format <- csv_format %>%
   rename("Country" = "country", "Sex" = "sex", "GeoCode" = "area_code", "Value" = "under_5_rate")
 
+# blanks for totals
+csv_format <- csv_format %>%
+  mutate(Sex = ifelse(Sex == "All", "", Sex), Country = ifelse(Country == "United Kingdom", "", Country))
 
 
-
-csv_formatted <- tidy_data %>% 
-  # rename columns that need renaming
-  rename(`housing type` = type) %>%
-  # you might want to use the country and year we got from extract_metadata above.
-  # These are in a list called metadata. Make sure there is only ONE country / ONE 
-  # year given. If so, they can be accessed like this:
-  mutate(country = metadata$country) %>% 
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "All", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         country = ifelse(country == "UK", "", country),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-         ) %>% 
-  # you can also use pattern matching to change level names, e.g. removing the 
-  # word 'type' fromthe housing types column
-  mutate(`housing type` = stringr::str_replace(`housing type`,"type_|_types",  "")) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # ... or remove it using filter() as the commented line below
-  # filter(!is.na(Value)) %>%
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
-
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
-
-# put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
+# Order the rows by columns values, na values first
+age_csv_sorted <- age_csv_ordered[order(age_csv_ordered$Year, age_csv_ordered$`Main method of contraception`,
+                                        age_csv_ordered$`Type of contraception`, age_csv_ordered$Age,
+                                        na.last = FALSE), ]
 
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output <- csv_formatted %>% 
+csv_output_UK <- csv_format %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
 
-
+# clean workspace of objects that will be used in E&W script
+rm(calculations,
+   clean_data,
+   csv_format,
+   info_cells,
+   main_data,
+   renamed_data,
+   tidy_data,
+   country,
+   year)
 
 

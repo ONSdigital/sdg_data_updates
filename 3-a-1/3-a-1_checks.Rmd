@@ -1,7 +1,9 @@
-title: "3-a-1 QA"
+---
+title: "3-a-1 checks"
 author: "Katie Uzzell"
-date: "21/02/2023"
+date: "22/02/2023"
 output: html_document
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -17,7 +19,7 @@ library(DT)
 library(pander)
 ```
 
-## 3-a-1 update summary
+## **3-a-1 update summary**
 
 The 3-a-1 automation uses multiple tabs of one excel spreadsheet to report data
 on 'Percentage of people who are current cigarette smokers aged 18 years and older'
@@ -35,7 +37,7 @@ on the platform.
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
 saved as `r paste0(date, "_3-a-1", ".csv")` in the 3-a-1 Output folder.  
     
-### Check configurations
+### **Check configurations**
 
 Please check that the information below is as you expect. In particular, pay 
 attention to the time since data were saved, to check that previously 
@@ -62,10 +64,7 @@ date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_3-a-1", ".csv"))
 
 new_data <- new_data %>%
-mutate(dataset = "new") %>% 
-  rename(Age = "Age.group",
-         Region = "Region.of.England",
-         Socio.economic.classification = "Socio.economic.group")
+mutate(dataset = "new")
 
 latest_year <- max(new_data$Year)
 
@@ -75,7 +74,7 @@ joined_data <- old_data %>%
 
 ```
 
-**Smoking habit data from health data team (ONS)**  
+### **Smoking habit data from health data team (ONS)**  
 
 Smoking habit data are in the file `r filename`.   
 
@@ -83,231 +82,35 @@ This file was saved at `r filename_save_time`: It has been
 `r time_since_data_saved` days since the file was saved in 
 `r input_folder`  
 
-The tabs used is called
+The tabs used are called
 `r tabnames`. 
 
-### Calculations
+### **Calculations**
 
 No calculations were performed on this data.
 
-## Check data
+## **Check data**
 
-Please check the plots below for any differences between the live and new data.
-Live data will appear over the top of new data, so if you don't see points for
-the new data on dates where there is also live data this is a good thing.  
-
-```{r, echo = FALSE, fig.width=10}
-
-# Country by age
-country_sex_age_plot <- joined_data %>% 
-  filter(Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Country ~ Age.group) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by country and age")
-
-
-# Region by type of disease
-region_headline_plot <- joined_data %>% 
-  filter(Country =="England" & `Chronic respiratory disease subtype` == "" & Age == ""
-         & Sex == "" ) %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Type of disease` ~ Region) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Region by Type of disease")
-
-
-# Age by type of disease
-age_headline_plot <- joined_data %>% 
-  filter(`Chronic respiratory disease subtype` == "" & Region == "" & Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Type of disease` ~ Age) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Age by Type of disease")
-
-
-# Sex by type of disease
-sex_headline_plot <- joined_data %>% 
-  filter(Country == "England and Wales" & Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Type of disease` ~ Sex) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by Type of disease")
-
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(country_sex_age_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(region_headline_plot))
-```
-
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(age_headline_plot))
-```
-
-  
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_headline_plot))
-```
-
-
-```{r, echo = FALSE, fig.width=10}
-
-# Country by chronic respiratory disease subtype
-chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(Region == "" & `Type of disease` == "Chronic respiratory disease" & Age == ""
-         & Sex == "" ) %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Country) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Country by chronic respiratory disease subtype")
-
-# Region by chronic respiratory disease subtype
-region_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(Country == "England" & `Type of disease` == "Chronic respiratory disease" & Age == ""
-         & Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Region) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Region by chronic respiratory disease subtype")
-
-
-# Age by chronic respiratory disease subtype
-age_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
-         & Region == "" & Sex == "" ) %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Age) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Age by chronic respiratory disease subtype")
-
-
-# Sex by chronic respiratory disease subtype
-sex_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
-         & Region == "" & Age == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Sex) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by chronic respiratory disease subtype")
-
-```
-
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(region_chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(age_chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_chronic_respiratory_disease_plot))
-```
-
-
-
-If there are differences, visible in the table below and plots, please investigate these.
+Please check the table below for any differences between the live and new data.
+If there are differences visible in the table below, please investigate these.
 It is possible the data source has update its back time series, so the difference
 could be genuine. 
 
 ```{r, , echo = FALSE}
+
 comparison <- joined_data %>% 
-  select(Year, Country, Region, Age, Sex, `Type of disease`,
-         `Chronic respiratory disease subtype`, Value, dataset) %>%
-    na.omit(Value) %>%
-  pivot_wider(names_from = dataset,
-              values_from = Value)
-
-# replace the NULL returns with NA
+    select(Year, Sex, Age, Country, Region, Socio.economic.classification, Ethnicity, Country.of.birth,
+        Value, dataset) %>%
+    pivot_wider(names_from = dataset,
+                values_from = Value)
 
 comparison <- comparison %>% 
-  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>% 
-  mutate(new = as.numeric(new)) %>% 
-  mutate(old = as.character(old)) %>%
-  mutate(old = as.numeric(old))
-
-comparison <- comparison %>% 
-  mutate(difference = new - old) %>% 
-  filter(difference != 0) %>% 
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+    mutate(difference = new - old) %>% 
+    filter(difference != 0) %>% 
+    # put the largest differences at the top
+    arrange(desc(abs(difference)))
 
 ```
-
 
 The table below shows all instances where the old value does not match the new 
 value. It is sorted so the largest absolute differences appear first, but can
@@ -322,8 +125,6 @@ datatable(comparison,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
 ```
-  
-
 
 ## Session Info
 ```{r}

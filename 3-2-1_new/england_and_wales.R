@@ -17,8 +17,6 @@ main_data <- england_wales %>%
   mutate(character = suppressWarnings(remove_superscripts(character)))
 
 
-#' STOPPED HERE - CANT FIGURE OUT WHY INFANT_UNDER_1_YEAR WON'T CHANGE, OTHERS DO
-
 # tidy data up into a more usable table
 tidy_data <- main_data %>%
   # these lines detail the direction of the relevant text for each data point
@@ -31,34 +29,31 @@ tidy_data <- main_data %>%
   clean_names() %>%
   clean_strings() %>%
   # rename columns based on a pattern in case specific names change between years
-  rename_column(primary = c("infant", "under", "1", "year"),
-                not_pattern = c("still", "rate"), new_name = "POO") %>%
-  rename_column(primary = c("live", "births"), new_name = "BIG") %>%
-  rename_column(primary = c("deaths", "1_4"), new_name = "1_4_deaths") #%>%
-   #%>%
+  rename_column(primary = c("live", "births"), new_name = "live_births") %>%
+  rename_column(primary = c("deaths", "1_4"), new_name = "1_4_deaths") %>%
+  # can probably use a more general pattern than this but this is the only one 
+  # I could get to work for now
+  rename_column(primary = c("infant_under_1_year"),
+                not_pattern = c("rate"), new_name = "infant_deaths") %>%
   # select only the columns we need for calculating rates
-  select(area_code, country, sex, live_births, infant_deaths, "1_4_deaths")
+  select(year, live_births, infant_deaths, `1_4_deaths`)
+
+# to remove cells that are just ends of a header that have run on to the next row
+clean_data <- tidy_data %>%
+  dplyr::filter(!is.na(numeric)) 
 
 # calculations -----------------------------------------------------------------
 
-calculations <- tidy_data %>%
+calculations <- clean_data %>%
   # Create column for total deaths under 5 years
   mutate(under_5_deaths = infant_deaths + `1_4_deaths`) %>%
   # column for under under 5 death rate per 1000 live births
   mutate(under_5_rate = calculate_valid_rates_per_1000(under_5_deaths, live_births, decimal_places = 5)) %>%
-  # for now Northern Ireland rates will need to be blank because the numerator and denominator treat non-residents differently
-  # use a pattern to identify Northern Ireland in case of differences in spelling, capitalisation, spaces etc
-  mutate(remove_NI = grepl(NI_string, country)) %>%
-  # blank out deaths and rates for NI
-  mutate(under_5_deaths = ifelse(remove_NI == TRUE, NA, under_5_deaths)) %>%
-  mutate(under_5_rate = ifelse(remove_NI == TRUE, NA, under_5_rate)) %>%
   # Observation status column for SDMX
   mutate(`Observation status` = case_when(
     under_5_deaths < 3 | is.na(under_5_deaths) ~ "Missing value; suppressed", 
     under_5_deaths >= 3 & under_5_deaths <= 19 ~ "Low reliability",
-    under_5_deaths > 19  ~ "Normal value")) %>% 
-  mutate(`Observation status` = ifelse(remove_NI == TRUE,
-                                       "Missing value", `Observation status`))
+    under_5_deaths > 19  ~ "Normal value"))
 
 
 # finalise csv -----------------------------------------------------------------
@@ -68,35 +63,24 @@ csv_format <- calculations
 # add extra columns for SDMX
 csv_format["Unit multiplier"] = "Units"
 csv_format["Unit measure"] = "Rate per 1,000 live births"
-csv_format["Year"] = year
+csv_format["Country"] = "England and Wales"
+csv_format["Sex"] = ""
+csv_format["GeoCode"] = england_wales_geocode
 
 # put columns in correct order
 csv_format <- csv_format %>%
-  select(all_of(c("Year", "country", "sex", "area_code", "Observation status",
+  select(all_of(c("year", "Country", "Sex", "GeoCode", "Observation status",
                   "Unit multiplier", "Unit measure", "under_5_rate")))
 
 # rename columns
 csv_format <- csv_format %>%
-  rename("Country" = "country", "Sex" = "sex", "GeoCode" = "area_code", "Value" = "under_5_rate")
+  rename("Year" = "year", "Value" = "under_5_rate")
 
-# blanks for totals
-csv_format <- csv_format %>%
-  mutate(Sex = ifelse(Sex == "All", "", Sex), Country = ifelse(Country == "United Kingdom", "", Country))
-
+csv_filtered <- csv_format %>%
+  filter(Year == year)
 
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output_UK <- csv_format %>% 
+csv_output_EW <- csv_filtered %>% 
   mutate(Value = ifelse(is.na(Value), "", Value))
-
-# clean workspace of objects that will be used in E&W script
-# (apart from year, as we will use this to select the correct row)
-rm(calculations,
-   clean_data,
-   csv_format,
-   info_cells,
-   main_data,
-   renamed_data,
-   tidy_data,
-   country)

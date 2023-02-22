@@ -51,9 +51,13 @@ tidy_data <- main_data %>%
   # select only the columns we need for calculating rates
   select(area_code, country, sex, live_births, infant_deaths, "1_4_deaths")
 
+# to remove cells that are just ends of a header that have run on to the next row
+clean_data <- tidy_data %>%
+  dplyr::filter(!is.na(numeric)) 
+
 # calculations -----------------------------------------------------------------
 
-calculations <- tidy_data %>%
+calculations <- clean_data %>%
   # Create column for total deaths under 5 years
   mutate(under_5_deaths = infant_deaths + `1_4_deaths`) %>%
   # column for under under 5 death rate per 1000 live births

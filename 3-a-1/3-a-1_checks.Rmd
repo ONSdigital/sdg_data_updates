@@ -62,7 +62,10 @@ date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_3-a-1", ".csv"))
 
 new_data <- new_data %>%
-mutate(dataset = "new")
+mutate(dataset = "new") %>% 
+  rename(Age = "Age.group",
+         Region = "Region.of.England",
+         Socio.economic.classification = "Socio.economic.group")
 
 latest_year <- max(new_data$Year)
 
@@ -95,10 +98,9 @@ the new data on dates where there is also live data this is a good thing.
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Country by type of disease
-country_headline_plot <- joined_data %>% 
-  filter(Region == "" & `Chronic respiratory disease subtype` == "" & Age == ""
-         & Sex == "" ) %>% 
+# Country by age
+country_sex_age_plot <- joined_data %>% 
+  filter(Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -106,11 +108,11 @@ country_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Country) +
+  facet_grid(Country ~ Age.group) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Country by Type of disease")
+  ggtitle("Sex by country and age")
 
 
 # Region by type of disease
@@ -167,7 +169,7 @@ sex_headline_plot <- joined_data %>%
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(country_headline_plot))
+suppressMessages(print(country_sex_age_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}

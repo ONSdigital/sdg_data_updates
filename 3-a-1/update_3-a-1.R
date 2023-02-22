@@ -10,13 +10,13 @@ source("country_SEC.R")
 source("ethnicity_sex_country.R")
 source("country_COB.R")
 
-combined_data <- list.files(path = "./Output/CSVs",  
+combined_data <- list.files(path = "./CSVs",  
                        pattern = "*.csv", full.names = TRUE) %>% 
   lapply(read_csv) %>%                             
-  bind_rows                                         
+  bind_rows      
 
 csv_output <- combined_data %>% 
-  select("Year", "Sex","Age group", "Country", "Region of England", "Socio-economic group", "Ethnicity", "Country of birth", "Units", 
+  select("Year", "Series", "Sex","Age group", "Country", "Region of England", "Socio-economic group", "Ethnicity", "Country of birth", "Units", 
          "Unit multiplier", "Observation status", "Value")
 
 csv_output <- sapply(csv_output, as.character)
@@ -24,3 +24,5 @@ csv_output[is.na(csv_output)] <- ""
 csv_output[csv_output == "Persons"] <- ""
 csv_output[csv_output == "Women"] <- "Female"
 csv_output[csv_output == "Men"] <- "Male"
+
+

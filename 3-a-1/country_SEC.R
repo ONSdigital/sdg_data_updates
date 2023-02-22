@@ -31,8 +31,16 @@ table_7_data$Year = substr(table_7_data$Year,1,4)
 table_7_data <- table_7_data %>% 
   mutate("Units" = "Percentage",
          "Unit multiplier" =  "Units",
-         "Observation status" = "Normal value") %>%  # make sure to check source data and manually change this if data is provisional etc.
-  select("Year", "Country", "Socio-economic group", "Units", 
+         "Observation status" = "Normal value", # make sure to check source data and manually change this if data is provisional etc.
+         "Series" = "Percentage of people who are current cigarette smokers aged 18 years and older") %>%
+  select("Year", "Series", "Country", "Socio-economic group", "Units", 
          "Unit multiplier", "Observation status", "Value")
 
-write_csv(table_7_data, "./Output/CSVs/table_7_data.csv")
+existing_output_files <- list.files()
+csv_folder_exists <- ifelse(csv_folder %in% existing_output_files, TRUE, FALSE)
+
+if (csv_folder_exists == FALSE) {
+  dir.create(csv_folder)
+}
+
+write_csv(table_7_data, "./CSVs/table_7_data.csv")

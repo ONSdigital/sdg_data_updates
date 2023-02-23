@@ -10,16 +10,16 @@
 
 # Because SDGupdater is a local package we install it slightly differently:
 
-setwd("D:/Coding_repos/sdg_data_updates")
+#setwd("D:/Coding_repos/sdg_data_updates")
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 # rm(list = ls())
 
-test_run <- FALSE
-=======
+test_run <- FALSE # Set FALSE for a real indicator update, or TRUE if you want to run with the test data
 
 
-indicator <- "3-4-1" # name of folder for indicator
+
+indicator <- "ODA" # name of folder for indicator
 
 setwd(indicator)
 

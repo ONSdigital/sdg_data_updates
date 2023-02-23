@@ -8,7 +8,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 # depending on what you add to the code
 packages <- c("openxlsx", "stringr", "janitor", "tidyr", "dplyr", "readr",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "DT", "pander")
+              "ggplot2", "DT", "pander", "knitr")
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
@@ -19,6 +19,7 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 library('readr')
+library('knitr')
 
 
 if (test_run == TRUE) {
@@ -54,6 +55,8 @@ csv_filename <- paste0(date, "_3-a-1.csv")
 qa_filename <- paste0(date, "_3-a-1_checks.html") 
 
 write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+
+save.image(file = 'img.RData')
 
 # # If you have a QA document written in Rmarkdown this is how you can run it and save it
 rmarkdown::render('3-a-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))

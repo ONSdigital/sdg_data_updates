@@ -4,23 +4,34 @@ author: "Katie Uzzell"
 date: "22/02/2023"
 output: html_document
 ---
-```{r setup, echo=FALSE}
 
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE)
+```
 
+```{r echo=FALSE}
+load('img.RData')
 ```
 
 ```{r load-packages, echo=FALSE}
-
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
 library(DT)
 library(pander)
-
 ```
 
+```{r echo=FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-a-1.csv") %>%
+  mutate(dataset = "old") %>%
+  select(-GeoCode)
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_3-a-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+```
 ## **3-a-1 update summary**
 
 The 3-a-1 automation uses multiple tabs of one excel spreadsheet to report data
@@ -38,45 +49,31 @@ on the platform.
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
 saved as `r paste0(date, "_3-a-1", ".csv")` in the 3-a-1 Output folder.  
-    
+
 ### **Check configurations**
 
 Please check that the information below is as you expect. In particular, pay 
 attention to the time since data were saved, to check that previously 
 downloaded data have not accidentally been used.
-    
+
 These settings can all be adjusted in `config.R`
-    
+
 Files used to create the new data were downloaded and saved in 
 3-a-1/`r input_folder`.  
-  
-```{r echo=FALSE}
 
+```{r echo=FALSE}
 filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
                                 full.names = TRUE)$ctime[1]
 time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
-
 ```
 
-```{r echo=FALSE}
-
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-a-1.csv") %>%
-  mutate(dataset = "old") %>%
-  select(-GeoCode)
-
-date <- Sys.Date()
-
-new_data <- read.csv(paste0(output_folder, "/", date, "_3-a-1", ".csv"))
-
+```{r include=FALSE}
 new_data <- new_data %>%
-mutate(dataset = "new")
-
-latest_year <- max(new_data$Year)
+  mutate(dataset = "new")
 
 # join to the new data
 joined_data <- old_data %>% 
   bind_rows(new_data) 
-
 ```
 
 ### **Smoking habit data from health data team (ONS)**  
@@ -101,19 +98,19 @@ If there are differences visible in the table below, please investigate these.
 It is possible the data source has update its back time series, so the difference
 could be genuine. 
 
-```{r echo=FALSE}
+```{r include=FALSE}
 
 comparison <- joined_data %>% 
-    select(Year, Sex, Age, Country, Region, Socio.economic.classification, Ethnicity, Country.of.birth,
-        Value, dataset) %>%
-    pivot_wider(names_from = dataset,
-                values_from = Value)
+  select(Year, Sex, Age, Country, Region, Socio.economic.classification, Ethnicity, Country.of.birth,
+         Value, dataset) %>%
+  pivot_wider(names_from = dataset,
+              values_from = Value)
 
 comparison <- comparison %>% 
-    mutate(difference = new - old) %>% 
-    filter(difference != 0) %>% 
-    # put the largest differences at the top
-    arrange(desc(abs(difference)))
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
 
 ```
 
@@ -122,7 +119,6 @@ value. It is sorted so the largest absolute differences appear first, but can
 be sorted in other ways using the arrows at the top.
 
 ```{r echo=FALSE}
-
 datatable(comparison, 
           rownames = FALSE, 
           filter = "top",
@@ -130,13 +126,10 @@ datatable(comparison,
                          pageLength = 10,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
-
 ```
 
 ## Session Info
 ```{r}
-
 pander(sessionInfo())
-
 ```
 

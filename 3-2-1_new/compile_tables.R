@@ -51,8 +51,11 @@ source_data <- xlsx_cells(paste0(input_folder, "/", filename),
 source("united_kingdom.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 
 
-# at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_type_1 script.
+bound_tables <- csv_output_UK
+
+source("england_and_wales.R")
+
+bound_tables <- bind_rows(bound_tables, csv_output_EW)
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()

@@ -6,11 +6,56 @@ source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname, 
 
 # format table  to long format -------------------------------------------------
 
-# Select only rows containing these Place of birth values
-main_data <- subset(source_data, `Place of birth` %in% c("Total", "NHS establishments", "Non-NHS establishments"))
 
-# clean up the column names (snake case, lowercase, no trailing dots etc.)
-main_data <- clean_names(main_data)
+source_data_clean <- source_data %>%
+  # make columns snake case w/o white space
+  clean_strings() %>%
+  # use this instead of tolower() because it changes non alphanumeric characters
+  # to _
+  clean_names() %>%
+  # rename columns
+  rename_column(primary = c("number", "previous", "children"), alternate = c("born", "children"),
+                new_name = "no_previous_children") %>%
+  rename_column(primary = c("place", "of", "birth"), alternate = "birth", 
+                new_name = "place_of_birth") %>%
+  rename_column(primary = c("all", "ages"), 
+                new_name = "mothers_all_ages") %>%
+  rename_column(primary = c("under", "20"), alternate = "under", 
+                new_name = "mothers_under_20") %>%
+  rename_column(primary = c("20", "24"), 
+                new_name = "mothers_20-24") %>%
+  rename_column(primary = c("25", "29"), 
+                new_name = "mothers_25-29") %>%
+  rename_column(primary = c("30", "34"), 
+                new_name = "mothers_30-34") %>%
+  rename_column(primary = c("35", "39"), 
+                new_name = "mothers_35-39") %>%
+  rename_column(primary = c("40", "44"), 
+                new_name = "mothers_40-44") %>%
+  rename_column(primary = c("45", "over"), 
+                new_name = "mothers_over_45") %>%
+  rename_column(primary = c("age", "not", "stated"), 
+                new_name = "mothers_age_not_stated")
+
+# clean up text values in place_of_birth
+source_data_clean$place_of_birth <- sapply(source_data_clean$place_of_birth,
+                                           make_clean_names, USE.NAMES = F)
+
+# these lines do essentially the same future-proofing thing as rename_columns 
+# above but for the row values of place_of_birth
+source_data_scrubbed <- mutate(source_data_clean, place_of_birth = 
+                                 case_when(grepl("total", place_of_birth) ~ "total",
+                                           (grepl("nhs", place_of_birth) &
+                                              !(grepl("non", place_of_birth))) ~ "nhs",
+                                           (grepl("non", place_of_birth) & 
+                                              grepl("nhs", place_of_birth)) ~ "non_nhs",
+                                           TRUE ~ as.character(place_of_birth)))
+
+# Select only rows containing these Place of birth values
+main_data <- source_data_scrubbed %>%
+  subset(place_of_birth %in% c("total", "nhs", "non_nhs"))
+
+# GOT TO HERE
 
 # Long format
 long_data <- main_data %>%

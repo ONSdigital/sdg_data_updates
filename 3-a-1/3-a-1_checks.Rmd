@@ -4,19 +4,21 @@ author: "Katie Uzzell"
 date: "22/02/2023"
 output: html_document
 ---
+```{r setup, echo=FALSE}
 
-```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
+```{r load-packages, echo=FALSE}
 
-```{r load-packages, include=FALSE}
 library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
 library(DT)
 library(pander)
+
 ```
 
 ## **3-a-1 update summary**
@@ -48,19 +50,22 @@ These settings can all be adjusted in `config.R`
 Files used to create the new data were downloaded and saved in 
 3-a-1/`r input_folder`.  
   
-```{r include= FALSE}
+```{r echo=FALSE}
+
 filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
                                 full.names = TRUE)$ctime[1]
 time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
 
 ```
 
-```{r include= FALSE}
+```{r echo=FALSE}
+
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-a-1.csv") %>%
   mutate(dataset = "old") %>%
   select(-GeoCode)
 
 date <- Sys.Date()
+
 new_data <- read.csv(paste0(output_folder, "/", date, "_3-a-1", ".csv"))
 
 new_data <- new_data %>%
@@ -96,7 +101,7 @@ If there are differences visible in the table below, please investigate these.
 It is possible the data source has update its back time series, so the difference
 could be genuine. 
 
-```{r, , echo = FALSE}
+```{r echo=FALSE}
 
 comparison <- joined_data %>% 
     select(Year, Sex, Age, Country, Region, Socio.economic.classification, Ethnicity, Country.of.birth,
@@ -116,7 +121,8 @@ The table below shows all instances where the old value does not match the new
 value. It is sorted so the largest absolute differences appear first, but can
 be sorted in other ways using the arrows at the top.
 
-```{r, echo = FALSE}
+```{r echo=FALSE}
+
 datatable(comparison, 
           rownames = FALSE, 
           filter = "top",
@@ -124,10 +130,13 @@ datatable(comparison,
                          pageLength = 10,
                          columnDefs = list(list(
                            className = 'dt-center', targets = 0:3))))
+
 ```
 
 ## Session Info
 ```{r}
+
 pander(sessionInfo())
+
 ```
 

@@ -17,78 +17,64 @@ main_data <- source_data %>%
   remove_blanks_and_info_cells(header_row) %>%
   mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
 
+# create usable table from source data
 tidy_data <- main_data %>%
   behead("left-up", no_previous_children) %>%
   behead("left-up", place_of_birth) %>%
-  behead("up", mothers_age)
+  behead("up", mothers_age) %>%
+  select(no_previous_children, place_of_birth, mothers_age, numeric) %>%
+  # make wider table for calculation later
+  pivot_wider(names_from = place_of_birth, values_from = numeric)
 
 
-# format table  to long format -------------------------------------------------
+# future-proof (hopefully) table -----------------------------------------------
 
-
-source_data_clean <- source_data %>%
+tidy_data_clean <- tidy_data %>%
   # make columns snake case w/o white space
   clean_strings() %>%
   # use this instead of tolower() because it changes non alphanumeric characters
   # to _
   clean_names() %>%
   # rename columns
-  rename_column(primary = c("number", "previous", "children"), alternate = c("born", "children"),
-                new_name = "no_previous_children") %>%
-  rename_column(primary = c("place", "of", "birth"), alternate = "birth", 
-                new_name = "place_of_birth") %>%
-  rename_column(primary = c("all", "ages"), 
-                new_name = "all_ages") %>%
-  rename_column(primary = c("under", "20"), alternate = "under", 
-                new_name = "19_and_under") %>%
-  rename_column(primary = c("20", "24"), 
-                new_name = "20_to_24") %>%
-  rename_column(primary = c("25", "29"), 
-                new_name = "25_to_29") %>%
-  rename_column(primary = c("30", "34"), 
-                new_name = "30_to_34") %>%
-  rename_column(primary = c("35", "39"), 
-                new_name = "35_to_39") %>%
-  rename_column(primary = c("40", "44"), 
-                new_name = "40_to_44") %>%
-  rename_column(primary = c("45", "over"), 
-                new_name = "45_and_over") %>%
-  rename_column(primary = c("not", "stated"), 
-                new_name = "not_stated")
-
-# clean up text values in place_of_birth
-source_data_clean$place_of_birth <- sapply(source_data_clean$place_of_birth,
-                                           make_clean_names, USE.NAMES = F)
-
-# these lines do essentially the same future-proofing thing as rename_columns 
-# above but for the row values of place_of_birth
-source_data_scrubbed <- mutate(source_data_clean, place_of_birth = 
-                                 case_when(grepl("total", place_of_birth) ~ "total",
-                                           (grepl("nhs", place_of_birth) &
-                                              !(grepl("non", place_of_birth))) ~ "nhs",
-                                           (grepl("non", place_of_birth) & 
-                                              grepl("nhs", place_of_birth)) ~ "non_nhs",
-                                           TRUE ~ as.character(place_of_birth)))
-
-# Select only rows containing these Place of birth values
-main_data <- source_data_scrubbed %>%
-  subset(place_of_birth %in% c("total", "nhs", "non_nhs"))
+  rename_column(primary = "total", new_name = "total") %>%
+  rename_column(primary = c("nhs"), not_pattern = "non", new_name = "nhs") %>%
+  rename_column(primary = c("non", "nhs"), new_name = "non_nhs")
 
 # GOT TO HERE
 
-# Long format
-long_data <- main_data %>%
-  pivot_longer(all_ages: not_stated, names_to = "mothers_age",
-               values_to = "Number") %>%
-  # pivot wider here to make calculating percentages easier
-  pivot_wider(names_from = place_of_birth, values_from = "Number")
+# clean up text values in place_of_birth
+tidy_data_clean$mothers_age <- sapply(tidy_data_clean$mothers_age,
+                                           make_clean_names, USE.NAMES = F)
+
+# these lines do essentially the same future-proofing thing as rename_columns 
+# above but for the row values of mothers_age
+tidy_data_scrubbed <- mutate(tidy_data_clean, mothers_age = 
+                                 case_when(grepl("all", mothers_age) ~ "all_ages",
+                                           (grepl("under", mothers_age) &
+                                              (grepl("20", mothers_age))) ~ "19_and_under",
+                                           (grepl("20", mothers_age) & 
+                                              grepl("24", mothers_age)) ~ "20_to_24",
+                                           (grepl("25", mothers_age) & 
+                                              grepl("29", mothers_age)) ~ "25_to_29",
+                                           (grepl("30", mothers_age) & 
+                                              grepl("34", mothers_age)) ~ "30_to_34",
+                                           (grepl("35", mothers_age) & 
+                                              grepl("39", mothers_age)) ~ "35_to_39",
+                                           (grepl("40", mothers_age) & 
+                                              grepl("44", mothers_age)) ~ "40_to_44",
+                                           (grepl("45", mothers_age) & 
+                                              grepl("over", mothers_age)) ~ "45_and_over",
+                                           (grepl("not", mothers_age) & 
+                                              grepl("stated", mothers_age)) ~ "not_stated",
+                                           TRUE ~ as.character(mothers_age)))
 
 # calculate percentage of births occurring within a medical facility -----------
-long_data$Value <- ((long_data$nhs + long_data$non_nhs) / long_data$total) * 100
+tidy_data_scrubbed$Value <- ((tidy_data_scrubbed$nhs + tidy_data_scrubbed$non_nhs) / 
+                               tidy_data_scrubbed$total) * 100
 
 # finalise csv -----------------------------------------------------------------
 
-csv_formatted <- long_data
+csv_formatted <- tidy_data_scrubbed
 
 # Reformat ages
 csv_formatted$mothers_age <- gsub("_", " ", as.character(csv_formatted$mothers_age))

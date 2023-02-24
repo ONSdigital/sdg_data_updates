@@ -106,6 +106,10 @@ and the data read in as a csv from the Input folder.
 ```diff
 - Error in c("x-x-x", "x-x-x", "x-x-x", ) : argument N is empty
 
-"x-x-x" here stands for any of the ODA list idicators. You may get this error if you ran a few indicators in bulk so you commented out the ones you don't want from the indicators variable in the config file, but you left out a comma after the last uncommented indicator. Remove the comma after your last indicator. You will also need to reset the working directory before you hit "Source" again by typing `setwd('..')` in the console window. 
+"x-x-x" here stands for any of the ODA list idicators. You may get this error if you ran a few indicators in bulk 
+and you commented out the ones you don't want from the indicators variable in the config file. You
+probably left out a comma after the last uncommented indicator. Remove the comma after your last
+indicator. You will also need to reset the working directory before you hit "Source" again 
+by typing `setwd('..')` in the console window. 
 
 ```

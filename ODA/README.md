@@ -23,6 +23,8 @@ Additional source data used for these automations are:
 - Biodiversity taxes data from OECD for 15-a-1b (duplicate of 15-b-1b)  
   
 The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1.  
+
+See [troubleshooting](#troubleshooting) for common errors and fixes
   
 ## Instructions  
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 

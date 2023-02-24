@@ -1,8 +1,27 @@
 # date: 03/02/2023
 
+#' Have hashed out old method that was replaced with behead method
+
 # read in data -----------------------------------------------------------------
 
-source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname, skip = header_row - 1)
+#source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname, skip = header_row - 1)
+
+source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename), sheet = tabname)
+
+info_cells <- get_info_cells(source_data, header_row)
+year <- unique_to_string(info_cells$Year)
+country <- unique_to_string(info_cells$Country)
+
+main_data <- source_data %>%
+  mutate(character = str_squish(character)) %>% 
+  remove_blanks_and_info_cells(header_row) %>%
+  mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
+
+tidy_data <- main_data %>%
+  behead("left-up", no_previous_children) %>%
+  behead("left-up", place_of_birth) %>%
+  behead("up", mothers_age)
+
 
 # format table  to long format -------------------------------------------------
 
@@ -19,23 +38,23 @@ source_data_clean <- source_data %>%
   rename_column(primary = c("place", "of", "birth"), alternate = "birth", 
                 new_name = "place_of_birth") %>%
   rename_column(primary = c("all", "ages"), 
-                new_name = "mothers_all_ages") %>%
+                new_name = "all_ages") %>%
   rename_column(primary = c("under", "20"), alternate = "under", 
-                new_name = "mothers_under_20") %>%
+                new_name = "19_and_under") %>%
   rename_column(primary = c("20", "24"), 
-                new_name = "mothers_20-24") %>%
+                new_name = "20_to_24") %>%
   rename_column(primary = c("25", "29"), 
-                new_name = "mothers_25-29") %>%
+                new_name = "25_to_29") %>%
   rename_column(primary = c("30", "34"), 
-                new_name = "mothers_30-34") %>%
+                new_name = "30_to_34") %>%
   rename_column(primary = c("35", "39"), 
-                new_name = "mothers_35-39") %>%
+                new_name = "35_to_39") %>%
   rename_column(primary = c("40", "44"), 
-                new_name = "mothers_40-44") %>%
+                new_name = "40_to_44") %>%
   rename_column(primary = c("45", "over"), 
-                new_name = "mothers_over_45") %>%
-  rename_column(primary = c("age", "not", "stated"), 
-                new_name = "mothers_age_not_stated")
+                new_name = "45_and_over") %>%
+  rename_column(primary = c("not", "stated"), 
+                new_name = "not_stated")
 
 # clean up text values in place_of_birth
 source_data_clean$place_of_birth <- sapply(source_data_clean$place_of_birth,
@@ -59,13 +78,13 @@ main_data <- source_data_scrubbed %>%
 
 # Long format
 long_data <- main_data %>%
-  pivot_longer(mothers_all_ages: mothers_age_not_stated, names_to = "mothers_age", # Not bothering with apostrophes as live data doesn't either
+  pivot_longer(all_ages: not_stated, names_to = "mothers_age",
                values_to = "Number") %>%
-  pivot_wider(names_from = place_of_birth, values_from = "Number")  # pivot wider here to make calculating percentages easier
+  # pivot wider here to make calculating percentages easier
+  pivot_wider(names_from = place_of_birth, values_from = "Number")
 
 # calculate percentage of births occurring within a medical facility -----------
-
-long_data$Value <- ((long_data$`NHS establishments` + long_data$`Non-NHS establishments`) / long_data$Total) * 100
+long_data$Value <- ((long_data$nhs + long_data$non_nhs) / long_data$total) * 100
 
 # finalise csv -----------------------------------------------------------------
 
@@ -75,20 +94,18 @@ csv_formatted <- long_data
 csv_formatted$mothers_age <- gsub("_", " ", as.character(csv_formatted$mothers_age))
 csv_formatted$mothers_age <- gsub("mothers ", "", as.character(csv_formatted$mothers_age))
 csv_formatted$mothers_age <- gsub("all ages", "", as.character(csv_formatted$mothers_age))
-csv_formatted$mothers_age <- gsub("under 20", "19 and under", as.character(csv_formatted$mothers_age))
-csv_formatted$mothers_age <- gsub("age not stated", "not stated", as.character(csv_formatted$mothers_age))
 
-csv_formatted$number_of_previous_live_born_children <- gsub("Total", "", as.character(csv_formatted$number_of_previous_live_born_children))
+csv_formatted$no_previous_children <- gsub("total", "", as.character(csv_formatted$no_previous_children))
 
 # Change column names
 csv_formatted <- csv_formatted %>%
-  rename("Number of previous live births" = "number_of_previous_live_born_children") %>%
+  rename("Number of previous live births" = "no_previous_children") %>%
   rename("Age" = "mothers_age")
 
 # add extra columns for SDMX
 csv_formatted["Year"] = year
 csv_formatted["Series"] = "Births occurring within a medical facility"
-csv_formatted["Country"] = ""
+csv_formatted["Country"] = country
 csv_formatted["Region"] = ""
 csv_formatted["Health Board"] = ""
 csv_formatted["Observation status"] = "Normal value"

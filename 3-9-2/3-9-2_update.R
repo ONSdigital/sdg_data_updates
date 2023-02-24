@@ -33,11 +33,29 @@ population_data <- read.csv(population_link) %>%
 
 #### Clean the population data #### 
 
+# Select and rename relevant columns
+population_small <- population_data %>%
+  select(DATE, GEOGRAPHY_NAME, GEOGRAPHY_TYPE,
+                  SEX_NAME, OBS_VALUE, OBS_STATUS_NAME) %>% 
+  rename(Year = DATE,
+         Value = OBS_VALUE,
+         `Observation status` = OBS_STATUS_NAME,
+         Sex = SEX_NAME) %>% 
+  mutate(`Cause of death` = "")
 
 
 
 #### Clean the England and Wales data #### 
 
+# Select and rename relevant columns
+england_wales_small <- england_wales_data %>%
+  select(DATE, CAUSE_OF_DEATH_NAME, GEOGRAPHY_NAME, GEOGRAPHY_TYPE,
+         GENDER_NAME, OBS_VALUE, OBS_STATUS_NAME) %>% 
+  rename(Year = DATE,
+         `Cause of death` = CAUSE_OF_DEATH_NAME,
+         Value = OBS_VALUE,
+         `Observation status` = OBS_STATUS_NAME,
+         Sex = GENDER_NAME)
 
 
 
@@ -56,6 +74,12 @@ population_data <- read.csv(population_link) %>%
 
 
 
+#### Clean the Mortality data ####
+
+
+
+
+#### Group cause of death, where appropriate, according to UN metadata ####
 
 
 

@@ -27,7 +27,7 @@ The following ODA indicators are not included in this automation as they use a d
 ## Instructions  
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
   
-**IF YOU ARE RUNNING 1-a-1, OR 15-a-1b/15-b-1b USE A NON-ONS INTERNET NETWORK** as the OECD APIs won't work on the ONS network.  
+ 
 1. Download and save the ODA, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
 2. Open the `sdg_data_updates.Rproj` from inside RStudio. 
 3. If it exists, open the `config.R` file in ODA (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 

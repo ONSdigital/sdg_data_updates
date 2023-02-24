@@ -1,6 +1,6 @@
 # Configurations for all ODA indicators that use the data underlying SID source.
 # If you only want to run a subset of these you can comment out (#) the ones
-# you don't want to run
+# you don't want to run. To run a single indicator see lines 19-20.
 
 indicators <- c(
   "1-a-1", # net oda
@@ -15,6 +15,9 @@ indicators <- c(
   "17-9-1", # net ODA
   "17-19-1" # net ODA
 )
+
+# FOR A SINGLE INDICATOR use the format below, but comment out (#) everything from line 5 to 17 above.
+#indicators <- "1-a-1"
 
 # ODA indicators without an automation yet as different data source is used: 10-b-1, 17-2-1, 17-3-1, 15-a-1, 15-b-1
 #-------------------------------------------------------------------------------

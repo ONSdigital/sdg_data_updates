@@ -56,7 +56,7 @@ The main data required for all the indicators in the ODA folder are the same tab
   
 Download the most recent 'final' table and save it in ODA > Input as a **csv**    
   
-The most recent data file probably only goes back to 2017. Pre 2017 data are in data-underlying-sid-2017_110322.csv, which should already be in the Inputfolder. If not, the 'Data underlying the SID publication' should be downloaded from [Statistics on International Development 2017](https://www.gov.uk/government/statistics/statistics-on-international-development-2017) and saved as a csv.  
+The most recent data file probably only goes back to 2017. Pre 2017 data are in data-underlying-sid-2017_110322.csv, which should already be in the Input folder. If not, the 'Data underlying the SID publication' should be downloaded from [Statistics on International Development 2017](https://www.gov.uk/government/statistics/statistics-on-international-development-2017) and saved as a csv. Make sure you turn the last 3 columns into "Number" format on the csv, otherwise you will get an error when you run the automation. 
   
 #### Deflators and exchange rates
 Deflators and exchange rates are taken from the [OECD Development finance data page](https://www.oecd.org/dac/financing-sustainable-development/development-finance-data/). The required tables are in the data tables section e.g.:  

@@ -42,11 +42,11 @@ The input filepaths used for this output are:
 
 ```{r}
 if ("1-a-1" %in% indicators) {
-  print(paste0("- OECD GNI url (for 1-a-1): ", gni_api))
+  print(paste0("OECD GNI url (for 1-a-1): ", gni_api))
 }
 
 if("15-a-1_15-b-1" %in% indicators) {
-  print(paste0("- OECD Biodiversity url (for 15-a-1b and 15-b-1b): ", biodiversity_api))
+  print(paste0("OECD Biodiversity url (for 15-a-1b and 15-b-1b): ", biodiversity_api))
 }
 
 ```

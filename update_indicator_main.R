@@ -13,7 +13,7 @@
 #setwd("D:/Coding_repos/sdg_data_updates")
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
-# rm(list = ls())
+rm(list = ls())
 
 test_run <- FALSE # Set FALSE for a real indicator update, or TRUE if you want to run with the test data
 

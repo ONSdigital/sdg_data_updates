@@ -6,17 +6,18 @@ off NOMIS to display their mortality rate per 100,000 disaggregated by
 country, region, sex, and type of disease.
   
 ### Instructions to run update ###
-1. *UK SDG data team:* Go to Jemalex > sdg_data_updates.    
+1. Use information and data source links in Jemalex > Indicators > 3.9.2 to add raw death counts for Scotland and Northern Ireland to "Scotland_NI_data.csv" within the Input folder. 
+2. *UK SDG data team:* Go to Jemalex > sdg_data_updates.    
    *Others:* Checkout sdg_data_updates main branch to your local repository.     
-2. Open sdg_data_updates.Rproj
-3. Change indicator folder name (indicator <- "3-9-2")
-4. If config.R does not exist in the 3-9-2 folder, create it from the example_config.R file
-5. Check the configs are correct. In particular, check the years variable as the latest year will likely need to be     added when running an update. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes following UN or Topic Expert guidance.
-6. Open update_indicator_main.R .
-7. Ensure test_run <- FALSE.
-8. Click Source (by default this is in top right of the script window)
-9. Check for messages in the console. When the script is run a file titled '3-9-2.csv' will be saved in 3-9-2 > Output Use this file for the Indicator csv.
-10. A file called 3-9-2_checks.html will also be in the outputs folder. Read through this as a QA of the csv.
+3. Open sdg_data_updates.Rproj
+4. Change indicator folder name (indicator <- "3-9-2")
+5. If config.R does not exist in the 3-9-2 folder, create it from the example_config.R file
+6. Check the configs are correct. In particular, check the years variable as the latest year will likely need to be     added when running an update. The nomis links should not need to be edited, unless you want to add or remove ICD-10 classification codes following UN or Topic Expert guidance.
+7. Open update_indicator_main.R .
+8. Ensure test_run <- FALSE.
+9. Click Source (by default this is in top right of the script window)
+10. Check for messages in the console. When the script is run a file titled '3-9-2.csv' will be saved in 3-9-2 > Output Use this file for the Indicator csv.
+11. A file called 3-9-2_checks.html will also be in the outputs folder. Read through this as a QA of the csv.
 
 
 ### Instructions for metadata ###

@@ -15,7 +15,7 @@ The full list of indicators, and whether they are based on net ODA or amounts ex
 -  4-b-1  
 -  6-a-1  
 -  8-a-1  
--  15-a-1  
+-  15-a-1 NOTE: automation for 15-a-1/15-b-1 is currently not working properly and is under investigation
   
 Additional source data used for these automations are:  
 - exchange rate and deflator data for converting GBP to constant USD (used in several indicators)  

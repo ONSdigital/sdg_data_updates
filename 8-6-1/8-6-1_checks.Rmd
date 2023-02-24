@@ -1,7 +1,7 @@
 ---
-title: "14-2-1 checks"
+title: "8-6-1 checks"
 author: "Abhishek Singh"
-date: "01/02/2023"
+date: "--/--/----"
 output: html_document
 ---
 
@@ -18,11 +18,11 @@ library(kableExtra)
 
 ```{r include= FALSE}
 
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/14-2-1.csv")
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-6-1.csv")
 
 
 date <- Sys.Date()
-new_data <- read.csv(paste0(output_folder, "/", date, "_update_14-2-1", ".csv"))
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-6-1", ".csv"))
 
 latest_year <- max(new_data$Year)
 
@@ -31,7 +31,7 @@ latest_year <- max(new_data$Year)
 ## 14-2-1 update summary
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
-saved as `r paste0(date, "_14-2-1", ".csv")` in the 14-2-1 Output folder.  
+saved as `r paste0(date, "_8-6-1", ".csv")` in the 8-6-1 Output folder.  
     
 ### Check configurations
 Please check that the information below is as you expect. In particular, pay 
@@ -41,7 +41,7 @@ downloaded data have not accidentally been used.
 These settings can all be adjusted in `config.R`
     
 Files used to create the new data were downloaded and saved in 
-14-2-1/`r input_folder`.  
+8-6-1/`r input_folder`.  
   
 ```{r include= FALSE}
 filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
@@ -69,32 +69,6 @@ The tab used is called
 ### Check data
 
 
-###Table of discrepancies
-
-If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has update its back time series, so the difference could be genuine.
-```{r, , echo = FALSE}
-comparison <- joined_data %>% 
-  select(Year, Series, Value, dataset) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
-  mutate(difference = new - old) %>% 
-  filter(difference != 0) %>% 
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
-```
-	  
-	The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
-```{r, echo = FALSE}
-	datatable(comparison, 
-	          rownames = FALSE, 
-	          filter = "top",
-	          options = list(dom = 'tp', 
-	                         pageLength = 10,
-	
-	
-	                         columnDefs = list(list(
-	                           className = 'dt-center', targets = 0:3))))
-```
 
 
 The charts below show the new data (just created) plotted on top of the old data,
@@ -103,7 +77,7 @@ discrepancies in the lines please investigate the reasons for these discrepancie
     
 ```{r, echo=FALSE, fig.width=70, fig.height=15}
 new_data <- new_data %>%
-mutate(Year = as.integer(Year),
+mutate(Year = as.character(Year),
          dataset = "new")
 
 
@@ -137,6 +111,49 @@ plot <- joined_data %>%
 suppressMessages(print(plot))
 ```
 
+###Table of discrepancies
+
+If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has update its back time series, so the difference could be genuine.
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Series, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value) %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+```
+	  
+	The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+	datatable(comparison, 
+	          rownames = FALSE, 
+	          filter = "top",
+	          options = list(dom = 'tp', 
+	                         pageLength = 10,
+	
+	
+	                         columnDefs = list(list(
+	                           className = 'dt-center', targets = 0:3))))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### Calculations
 
 Calculations were made to generate the “Proportion of marine protected area” series. Proportion of marine protected area is calculated using the following formula. 100 * (Extent at sea - million hectares / UK sea area). See C1. Protected Areas for more information on methodology.
@@ -147,5 +164,5 @@ The calculations used to create these data were:
 protected_area_main_data['Proportion_of_area_protected']  <-round((protected_area_main_data['At_Sea']/protected_area_main_data['UK_marine_area'])*100,2)
 
 ```
-Warning: This is copied from `update_14-2-1.R` and will not dynamically update 
+Warning: This is copied from `update_8-6-1.R` and will not dynamically update 
 if that code is changed.

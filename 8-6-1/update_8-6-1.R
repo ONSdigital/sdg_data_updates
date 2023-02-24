@@ -1,132 +1,79 @@
-# date: 04/04/2022
-# THIS IS A TEMPLATE. It may be that not everything is relevant for your data.
-# This script runs on test data so you can look at what everything does line by line
+# author: Abhishek Singh
+# date: 23/02/2023
 
-# Type 2 data is complex - multiple rows/columns containing headers
-# There may or may not be metadata above the column headings 
-
-# Most comments can (should) be deleted in your file 
-
-# read in data -----------------------------------------------------------------
-
-source_data <- tidyxl::xlsx_cells(paste0(input_folder, "/", filename),
-                                  sheets = tabname)
-
-# get the info from above the headers (if there is info there that you want)----
-
-info_cells <- SDGupdater::get_info_cells(source_data, 
-                                         first_header_row, 
-                                         "xlsx_cells")
-
-year <- SDGupdater::unique_to_string(info_cells$'Aged 16-24')
-country <- SDGupdater::unique_to_string(info_cells$'People who were NEET as a percentage of people in relevant population group')
-
-# remove info cells and clean character column ---------------------------------
-clean_cells <- source_data %>%
-  SDGupdater::remove_blanks_and_info_cells(first_header_row) %>%
-  dplyr::mutate(character = tolower(str_squish(character))) %>% 
-  # dplyr::mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
-  dplyr::mutate(character = SDGupdater::remove_superscripts(character))
-
-# put data into a more standard format -----------------------------------------
-# the code below is just an example - each indicator will be quite different
-# there is further guidance on the behead function in the template folder
-beheaded <- clean_cells %>%
-  unpivotr::behead("left-up", disagg) %>%
-  unpivotr::behead("left", disagg_level) %>%
-  unpivotr::behead("up-left", unused_header) %>%
-  unpivotr::behead("up", type) %>%
-  dplyr::select(disagg, disagg_level, type, 
-                numeric) # note that unused_header is not included - add it in here if you want to see why
-# note that in the process of doing behead, the footnotes are removed
-
-# sometimes you end up with columns that aren't quite what you want,
-# if this is the case, put the data in a more sensible format
-tidy_data <- beheaded %>% 
-  # remove rows containing the words "sample size" in the type column
-  filter(!grepl("sample size", type)) %>% 
-  # put the different disaggs (sex and age) in their own columns
-  pivot_wider(names_from = disagg,
-              values_from = disagg_level) %>% 
-  janitor::remove_empty(c("rows", "cols"))
-
-# make column names consistent across years ------------------------------------
-
-# If you know a column name may change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# You can use the rename_column function to rename them based on patterns that 
-# are always present in the column name. See below for some examples of usage.
-#
-# You can then use the new name to refer to the columns through the 
-# rest of the code.
-
-# If there aren't too many columns that you are going to use you could do this 
-# step for all columns but be careful you don't introduce errors!
-
-renamed <- tidy_data %>% 
-  SDGupdater::rename_column(primary = "sex", new_name = "sex") %>% 
-  SDGupdater::rename_column(primary = "age", new_name = "age") %>% 
-  dplyr::rename(value = numeric, # xlsx_cells data is consistent in calling this column numeric
-                `housing type` = type) 
-
-# Join dataframes, do relevant calculations etc --------------------------------
-
-# some useful dplyr functions:
-# left_join(), right_join, 
-# add_row(), filter(), select(), group_by(), summarise()
-# pivot_longer(), pivot_wider()
+# Code to automate data update for indicator 8-6-1 
+# (Proportion of youth (aged 15–24 years) not in education, employment or training)
 
 
-# finalise the csv -------------------------------------------------------------
 
-# You can use the dplyr function `arrange` to order the disaggregations columns
-# however this is done by alphanumeric order. So if the order you want is not
-# alphanumeric, specify the order here and then you will be able to arrange by 
-# this 'fake' columninstead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
+# read in data 
+source_data <- get_type1_data(header_row,filename, tabname)
 
-csv_formatted <- renamed %>% 
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "all", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(grepl("all", `housing type`), "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-  ) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
-  
-  # we got year from the info above the headers so can put it in here
-  mutate(Year = year) %>% 
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(Year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(Year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
+# filter required columns
+main_data= source_data[c(1,6,11,16)]
 
-# finally, put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
+
+#source for function
+source("function.R")
+
+
+
+# Extract & format data from Seasonally Adjusted NEET People table
+data_people_sa <- format_data_8_6_1(table_people_sa_START_row,
+                                    table_people_sa_END_row,
+                                    main_data, 
+                                    NSA_or_SA="Seasonally adjusted",
+                                    SEX="")
+
+# Extract & format data from Not seasonally adjusted NEET People table
+data_people_nsa <- format_data_8_6_1(table_people_nsa_START_row, 
+                                     table_people_nsa_END_row,
+                                     main_data,
+                                     NSA_or_SA="Not seasonally adjusted",
+                                     SEX="")
+
+# Extract & format data from Seasonally Adjusted NEET Man table
+data_men_sa <- format_data_8_6_1(table_men_sa_START_row,
+                                 table_men_sa_END_row, 
+                                 main_data,
+                                 NSA_or_SA="Seasonally adjusted",
+                                 SEX="Male")
+
+# Extract & format data from Not seasonally adjusted Man People table
+data_men_nsa <- format_data_8_6_1(table_men_nsa_START_row,
+                                  table_men_nsa_END_row, 
+                                  main_data, 
+                                  NSA_or_SA="Not seasonally adjusted",
+                                  SEX="Male")
+
+# Extract & format data from Seasonally Adjusted NEET Man table
+data_women_sa <- format_data_8_6_1(table_woman_sa_START_row,
+                                   table_woman_sa_END_row, 
+                                   main_data, 
+                                   NSA_or_SA="Seasonally adjusted", 
+                                   SEX="Female")
+
+# Extract & format data from Not seasonally adjusted Man People table
+data_women_nsa <- format_data_8_6_1(table_woman_nsa_START_row, 
+                                    table_woman_nsa_END_row,
+                                    main_data,
+                                    NSA_or_SA="Not seasonally adjusted",
+                                    SEX="Female")
+
+
+
+# combine all data together into final data frame
+csv_output <- rbind(data_people_sa,
+                    data_people_nsa,
+                    data_men_sa,
+                    data_men_nsa,
+                    data_women_sa,
+                    data_women_nsa)
+
+
+
+
+
 
 
 

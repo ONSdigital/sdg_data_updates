@@ -47,7 +47,7 @@ population_clean <- population_small %>%
     Region = ifelse(GEOGRAPHY_TYPE == "Regions", GEOGRAPHY_NAME, "")) %>%
   select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value)
 
-
+population_clean$Sex <- gsub("Total", "", population_clean$Sex)
 
 #### Clean the England and Wales data #### 
 
@@ -85,23 +85,55 @@ mortality <- rbind(scotland_NI_small, england_wales_small)
 
 #### Group cause of death, where appropriate, according to UN metadata ####
 
-# see 3-4-1 as an example? 
+mortality_grouped <- mortality %>%
+  mutate(`Cause of death` = recode(`Cause of death`, 
+          "A00 cholera" = "Diarrhoea",
+          "A01 typhoid and paratyphoid fevers" = "Diarrhoea",
+          "A03 shigellosis" = "Diarrhoea",
+          "A04 other bacterial intestinal infections" = "Diarrhoea",
+          "A06 amoebiasis" = "Diarrhoea",
+          "A07 other protozoal intestinal diseases" = "Diarrhoea",
+          "A08 viral and other specified intestinal infections" = "Diarrhoea",
+          "A09 other gastroenteritis and colitis of infectious and unspecified origin" = "Diarrhoea",
+          "B76 hookworm diseases" = "Intestinal nematode infections",
+          "B77 ascariasis" = "Intestinal nematode infections",
+          "B79 trichuriasis" = "Intestinal nematode infections",
+          "E40-e46 malnutrition" = "Protein-energy malnutrition",
+          "H65 nonsuppurative otitis media" = "Acute respiratory infections",
+          "H66 suppurative and unspecified otitis media" = "Acute respiratory infections",
+          "J00-j06 acute upper respiratory infections" = "Acute respiratory infections",
+          "J09-j18 influenza and pneumonia" = "Acute respiratory infections",
+          "J20-j22 other acute lower respiratory infections" = "Acute respiratory infections",
+          "P23 congenital pneumonia" = "Acute respiratory infections"))
 
+mortality_grouped$Sex <- gsub("Total", "", mortality_grouped$Sex)
+
+
+#### Calculate United Kingdom totals ####
+
+# UK_added <- mortality_grouped %>%
+  # mutate(Country = "United Kingdom")
+
+# Add together when "Region" == "", and Year, Cause of death, Sex are all the same.
+  # Name United Kingdom
 
 
 #### Join mortality and population data #### 
-proportion_data <- mortality_clean %>% 
-  left_join(population_clean, by = c("Year", "Country", "Region"))
+proportion_data <- mortality_grouped %>% 
+  left_join(population_clean, by = c("Year", "Country", "Sex", "Region"))
 
 
 #### Calculate proportion per million population ####
 
-# see 5-a-1 as an example?
+proportion_data <- proportion_data %>%
+  mutate(Value = 1000000*(Value.x/Value.y))
 
 
 #### Format data for csv file ####
+#
 
 
- 
+
+
 
 

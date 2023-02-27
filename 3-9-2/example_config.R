@@ -17,3 +17,4 @@ scotland_NI_data <- "Input/Scotland_NI_data.csv"
 population_link <- "https://www.nomisweb.co.uk/api/v01/dataset/NM_31_1.data.csv?geography=2092957699,2092957703,2092957698,2092957702,2092957701,2092957697,2092957700,2013265926,2013265924,2013265927,2013265921,2013265922,2013265928,2013265929,2013265925,2013265923&date=latestMINUS8-latest&sex=5...7&age=0&measures=20100"
 
 output_folder <- "Output"
+

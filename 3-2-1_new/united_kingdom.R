@@ -4,22 +4,10 @@
 
 # read in data -----------------------------------------------------------------
 
-#' The data was read in using the xlsx_cells function in compile_tables.R so that 
-#' we can use the behead function below (trim & tidy data). This is not strictly 
-#' necessary for this table because there is one simple header row, but works if 
-#' the format reverts to the previous years' format. If, in future years it 
-#' all goes pear shaped, I've left another simpler method hashed out below
-
-#UK_source_data <- read_excel(paste0(input_folder, "/", filename), sheet = tabname_UK,
-                             #skip = header_row_UK - 1)
-
 united_kingdom <- dplyr::filter(source_data, sheet == tabname_UK)
 
 
 # trim & tidy data -------------------------------------------------------------
-
-#UK_data_trim <- UK_source_data %>%
-  #select("Year", "Live births", "Infant under 1 year", "Childhood deaths 1–4 years")
 
 info_cells <- SDGupdater::get_info_cells(united_kingdom, header_row_UK)
 year <- SDGupdater::unique_to_string(info_cells$Year)
@@ -99,12 +87,14 @@ csv_format <- csv_format %>%
 csv_format <- csv_format %>%
   mutate(Sex = ifelse(Sex == "All", "", Sex), Country = ifelse(Country == "United Kingdom", "", Country))
 
-
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
 csv_output_UK <- csv_format %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
+  mutate(Value = ifelse(is.na(Value), "", as.numeric(Value)))
+
+# make sure numeric
+csv_output_UK$Value <- as.numeric(csv_output_UK$Value)
 
 # clean workspace of objects that will be used in E&W script
 # (apart from year, as we will use this to select the correct row)

@@ -11,7 +11,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 # depending on what you add to the code
 packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl", "janitor",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "DT", "pander")
+              "ggplot2", "DT", "pander", "markdown")
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
@@ -26,6 +26,7 @@ library('rsdmx')
 library('openxlsx')
 library('readxl')
 library('janitor')
+library('markdown')
 
 
 source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
@@ -48,14 +49,33 @@ source_data <- xlsx_cells(paste0(input_folder, "/", filename),
                                  sheets = c(tabname_UK, tabname_EW))
 
 
-source("united_kingdom.R") # does the donkey-work of making the csv - 
-                          # for real update this might be called e.g. 'update_1-2-1.R' 
+source("united_kingdom.R")
 
 bound_tables <- csv_output_UK
 
 source("england_and_wales.R")
 
 bound_tables <- bind_rows(bound_tables, csv_output_EW)
+
+country_order <- data.frame(Country = c("",
+                                        "England and Wales",
+                                        "England",
+                                        "Northern Ireland",
+                                        "Scotland",
+                                        "Wales"),
+                            country_order = c(1:6))
+
+csv_data <- bound_tables %>%
+  dplyr::left_join(country_order, by = "Country") %>%
+  dplyr::mutate(`Units` = "Rate per 1,000 live births",
+                `Unit multiplier` = "Units",
+                GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode)),
+                Value = ifelse(is.na(Value), "", as.numeric(Value))) %>% 
+  dplyr::arrange(country_order, Sex) %>%
+  dplyr::select(Year, Country, Sex, 
+                GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
+
+# GOT TO HERE
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
@@ -72,15 +92,13 @@ date <- Sys.Date()
 # we add the date to the output file so that old outputs are not automatically overwritten.
 # However, it shouldn't matter if they are overwritten, as files can easily be recreated with the code.
 # We may want to review the decision to add date to the filename.
-csv_filename <- paste0(date, "_update_type_1.csv")
-qa_filename <- paste0(date, "_update_type_1_checks.html") 
+csv_filename <- paste0(date, "_update_3-2-1.csv")
+qa_filename <- paste0(date, "_update_3-2-1_checks.html") 
 
 # save files and print messages ------------------------------------------------
 
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-
-# # If you have a QA document written in Rmarkdown this is how you can run it and save it
-# rmarkdown::render('type_1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
+write.csv(bound_tables, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+markdown::renderMarkdown('_update_3-2-1_checks.Rmd', output = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

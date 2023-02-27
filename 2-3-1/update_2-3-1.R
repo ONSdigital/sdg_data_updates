@@ -10,47 +10,102 @@ agriprod_source_data <- get_type1_data(header_row, filename, tabname)
 
 # remove cells above column names
 
-agriprod_main_data <- extract_data(energy_source_data, header_row)
+agriprod_main_data <- extract_data(agriprod_source_data, header_row)
 
 # rename column 1
 
-colnames(energy_main_data) [1] <- "???"
+colnames(agriprod_main_data) [1] <- "Productivity type"
 
-# remove unwanted columns
+agriprod_main_data <- agriprod_main_data %>%
+  mutate(across(everything(), as.character))
 
-energy_main_data <- within(energy_main_data, rm("Sector code","Section code"))
+# select necessary rows
 
-# select only needed rows 
+productivity_data <- agriprod_main_data[agriprod_main_data$`Productivity type` %in% 
+                                           c("Total factor productivity (11 divided by 25)",
+                                             "Productivity by intermediate consumption (11 divided by 21)",
+                                             "Productivity by capital consumption (11 divided by 22)",
+                                             "Productivity by labour (11 divided by 23)",
+                                             "Productivity by land (11 divided by 24)"),]
 
-selected_rows <- c(1:22)
+productivity_data[productivity_data == 'Total factor productivity (11 divided by 25)'] <- 'Total factor productivity'
+productivity_data[productivity_data == 'Productivity by intermediate consumption (11 divided by 21)'] <- 'Productivity by intermediate consumption'
+productivity_data[productivity_data == 'Productivity by capital consumption (11 divided by 22)'] <- 'Productivity by capital consumption'
+productivity_data[productivity_data == 'Productivity by labour (11 divided by 23)'] <- 'Productivity by labour'
+productivity_data[productivity_data == 'Productivity by land (11 divided by 24)'] <- 'Productivity by land'
 
-energy_main_data <- energy_main_data %>%
-  slice(selected_rows)
+productivity_data <- productivity_data %>% 
+  rename_column(primary = "Productivity type", 
+                new_name = "Productivity")
 
-energy_main_data <- energy_main_data %>% 
-  na.omit()
+inputs_data <- agriprod_main_data[agriprod_main_data$`Productivity type` %in% 
+                                          c("23 All Labour",
+                                            "25 All Inputs and Entrepreneurial Labour"),]
+
+inputs_data[inputs_data == '23 All Labour'] <- 'Labour inputs'
+inputs_data[inputs_data == '25 All Inputs and Entrepreneurial Labour'] <- 'All inputs'
+
+inputs_data <- inputs_data %>% 
+  rename_column(primary = "Productivity type", 
+                new_name = "Inputs")
+
+outputs_data <- agriprod_main_data[agriprod_main_data$`Productivity type` %in% 
+                                          c("11 All outputs"),]
+
+outputs_data[outputs_data == '11 All outputs'] <- 'All outputs'
+
+outputs_data <- outputs_data %>% 
+  rename_column(primary = "Productivity type", 
+                new_name = "Outputs")
+
+joined_data <- inner_join(productivity_data, inputs_data)
+
 
 # format
 
-energy_csv <- energy_main_data %>% 
-  pivot_longer(-c("Industry sector"), names_to = "Year", values_to = "Value")
+productivity_csv <- productivity_data %>% 
+  pivot_longer(-c("Productivity"), names_to = "Year", values_to = "Value")
 
-energy_csv$`Industry sector` <- sub("Total", "", energy_csv$`Industry sector`)
+productivity_csv <- productivity_csv %>% 
+  mutate("Unit measure" = "Index",
+         "Unit multiplier" =  "Units",
+         "Observation status" = "Normal value") %>% 
+  select("Year", "Productivity", "Observation status", "Unit multiplier", "Unit measure", "Value")
 
-# Format csv 
+inputs_csv <- inputs_data %>% 
+  pivot_longer(-c("Inputs"), names_to = "Year", values_to = "Value")
 
-csv_formatted <- energy_csv %>% 
-         mutate("Series" = "Energy intensity level of primary energy",
-           "Unit measure" = "Terajoules per million pounds (TJ/£ million)",
-            "Unit multiplier" =  "Units",
-            "Observation status" = "Normal value")
+inputs_csv <- inputs_csv %>% 
+  mutate("Unit measure" = "Index",
+         "Unit multiplier" =  "Units",
+         "Observation status" = "Normal value") %>% 
+  select("Year", "Inputs", "Observation status", "Unit multiplier", "Unit measure", "Value")
 
-csv_formatted <- csv_formatted %>%            
-select("Year", "Series", "Industry sector", "Unit measure", "Unit multiplier", "Observation status", "Value")
+outputs_csv <- outputs_data %>% 
+  pivot_longer(-c("Outputs"), names_to = "Year", values_to = "Value")
 
-csv_output <- csv_formatted[order(csv_formatted$`Industry sector`), ]
+outputs_csv <- outputs_csv %>% 
+  mutate("Unit measure" = "Index",
+         "Unit multiplier" =  "Units",
+         "Observation status" = "Normal value") %>% 
+  select("Year", "Outputs", "Observation status", "Unit multiplier", "Unit measure", "Value")
 
+existing_output_files <- list.files()
+csv_folder_exists <- ifelse(csv_folder %in% existing_output_files, TRUE, FALSE)
 
+if (csv_folder_exists == FALSE) {
+  dir.create(csv_folder)
+}
 
+write_csv(productivity_csv, "./CSVs/productivity.csv")
+write_csv(inputs_csv, "./CSVs/inputs.csv")
+write_csv(outputs_csv, "./CSVs/outputs.csv")
 
+combined_data <- list.files(path = "./CSVs",  
+                            pattern = "*.csv", full.names = TRUE) %>% 
+  lapply(read_csv) %>%                             
+  bind_rows
 
+csv_output <- combined_data %>% 
+  select("Year", "Productivity", "Outputs", "Inputs", "Observation status", 
+         "Unit multiplier", "Unit measure", "Value")

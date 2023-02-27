@@ -31,8 +31,8 @@ figures are provisional. If they are, in the indicator csv file change the
 observation status to 'Provisional'. 
 
 - Please check that the tabname, header_row etc still apply for the new data and that 
-the table format has not changed (configs below). Also make sure the year is correct as this is what the value will be in the final csv
-  
+the table format has not changed (configs below).
+
 ## Configurations
 
   The configurations are below. Please check that these still apply:  

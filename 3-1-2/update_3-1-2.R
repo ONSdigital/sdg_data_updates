@@ -16,7 +16,7 @@ main_data <- source_data %>%
   mutate(character = str_squish(character)) %>% 
   remove_blanks_and_info_cells(header_row) %>%
   mutate(character = suppressWarnings(SDGupdater::remove_superscripts(character)))
-
+  
 # create usable table from source data
 tidy_data <- main_data %>%
   behead("left-up", no_previous_children) %>%
@@ -81,7 +81,7 @@ csv_formatted$mothers_age <- gsub("_", " ", as.character(csv_formatted$mothers_a
 csv_formatted$mothers_age <- gsub("mothers ", "", as.character(csv_formatted$mothers_age))
 csv_formatted$mothers_age <- gsub("all ages", "", as.character(csv_formatted$mothers_age))
 
-csv_formatted$no_previous_children <- gsub("total", "", as.character(csv_formatted$no_previous_children))
+csv_formatted$no_previous_children <- gsub("Total", "", as.character(csv_formatted$no_previous_children))
 
 # Change column names
 csv_formatted <- csv_formatted %>%
@@ -91,7 +91,7 @@ csv_formatted <- csv_formatted %>%
 # add extra columns for SDMX
 csv_formatted["Year"] = year
 csv_formatted["Series"] = "Births occurring within a medical facility"
-csv_formatted["Country"] = country
+csv_formatted["Country"] = ""
 csv_formatted["Region"] = ""
 csv_formatted["Health Board"] = ""
 csv_formatted["Observation status"] = "Normal value"

@@ -77,6 +77,7 @@ headline_plot <- joined_data %>%
              colour = dataset)) +
   geom_point(aes(shape = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
+  ggtitle("Headline data") +
   theme_bw() 
 
 ```
@@ -98,6 +99,7 @@ plot_age <- joined_data %>%
   geom_point(aes(shape = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
   facet_wrap(~ age) +
+  ggtitle("Age") +
   theme_bw() 
 
 suppressMessages(print(plot_age))
@@ -115,6 +117,7 @@ plot_previous_births <- joined_data %>%
   geom_point(aes(shape = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
   facet_wrap(~ number_of_previous_live_births) +
+  ggtitle("No of previous live born children") +
   theme_bw() 
 
 suppressMessages(print(plot_previous_births))
@@ -132,6 +135,7 @@ plot_both <- joined_data %>%
   geom_point(aes(shape = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
   facet_grid(age ~ number_of_previous_live_births) +
+  ggtitle("Age and previous births") +
   theme_bw() 
 
 suppressMessages(print(plot_both))

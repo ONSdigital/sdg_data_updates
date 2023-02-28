@@ -17,6 +17,8 @@ install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 test_run <- FALSE
 
+indicator <- "3-9-2" # name of folder for indicator(s)
+
 setwd(indicator)
 
 source("compile_tables.R")

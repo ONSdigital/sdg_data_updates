@@ -127,31 +127,49 @@ mortality_summed_totals <- mortality_summed %>%
       TRUE ~ ""),
     English_region = case_when(
       Country == "England" ~ Region,
-      TRUE ~ "")) 
+      TRUE ~ ""))
 
-mortality_summed_england <- mortality_summed_totals %>% 
-  group_by(Year, Sex, England) %>% 
-  summarize(Value = sum(Value))
+
+mortality_summed_wales <- mortality_summed_totals %>%
+  group_by(Year, Sex, Wales) %>%
+  summarize(Value = sum(Value)) %>%
+  mutate(Country = "Wales") %>% 
+  mutate(`Cause of death` = "") %>%
+  mutate(Region = "") %>%
+  select(Year, `Cause of death`, Country, Region, Sex, Value) 
+
+mortality_summed_regions <- mortality_summed_totals %>%
+  group_by(Year, Sex, English_region) %>%
+  summarize(Value = sum(Value)) %>% 
+  rename(Region = English_region) %>%
+  mutate(Country = "England") %>% 
+  mutate(`Cause of death` = "") %>%
+  select(Year, `Cause of death`, Country, Region, Sex, Value)
+  
+# mortality_summed_england <- mortality_summed_totals %>% 
+#   group_by(Year, Sex, England) %>% 
+#   summarize(Value = sum(Value))
 
 #value appears to be double
 
-mortality_summed_wales <- mortality_summed_totals %>% 
-  group_by(Year, Sex, Wales) %>% 
-  summarize(Value = sum(Value))
 
-mortality_summed_regions <- mortality_summed_totals %>% 
-  group_by(Year, Sex, English_region) %>% 
-  summarize(Value = sum(Value))
+# mortality_summed_UK <- mortality_summed_totals %>%
+#   group_by(Year, Sex, UK) %>%
+#   summarize(Value = sum(Value))
+# 
+# # not quite working 
 
-mortality_summed_UK <- mortality_summed_totals %>% 
-  group_by(Year, Sex, UK) %>% 
-  summarize(Value = sum(Value))
 
+
+
+mortality_total <- rbind(mortality_summed_regions, 
+                         mortality_summed_wales) %>% 
+                  drop_na(Value)
 
 
 
 #### Join mortality and population data #### 
-proportion_data <- mortality_grouped %>% 
+proportion_data <- mortality_summed %>% 
   left_join(population_clean, by = c("Year", "Country", "Sex", "Region"))
 
 
@@ -170,7 +188,7 @@ csv_formatted <- proportion_data %>%
   mutate(Country = toTitleCase(Country),
          Region = toTitleCase(Region)) %>% 
   mutate(`Observation status` = "Undefined") %>%
-  mutate('Unit measure' = "Rate per 1,000,000 population")
+  mutate('Unit measure' = "Rate per 1,000,000 population") %>%
   # Put columns in order required for csv file.
   select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value) %>% 
   # Arrange data by Year, Country, region, Sex 
@@ -180,21 +198,16 @@ csv_formatted <- proportion_data %>%
 csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber"
 
 
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows should be unique, so this should be TRUE
+check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
+
+
 #### Remove NAs from the csv that will be saved in Outputs ####
 
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
-
-
-# This is a line that you can run to check that you have filtered and selected 
-# correctly - all rows should be unique, so this should be TRUE
-check_all <- nrow(distinct(csv_output)) == nrow(csv_output)
-
-
-# If false you may need to remove duplicate rows. 
-csv_output <- unique(csv_output)
+csv_output <- csv_formatted
 
 
 

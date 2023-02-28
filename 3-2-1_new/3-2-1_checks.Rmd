@@ -34,6 +34,9 @@ things that should manually be checked.
   - row number of the column names: E&W: **`r header_row_EW`**, UK: **`r header_row_EW`** 
   - location of the outputs: **`r output_folder`**  
 
+## Basic checks
+  - no duplicates present: **`r check_output`**
+
 ## Plots
   Please check the plots below for any differences between the live data (which 
   is pulled in from the sdg-data (platform) github repo) and the new data.  
@@ -50,22 +53,26 @@ new_data <- csv_data %>%
   mutate(Year = as.integer(Year),
          dataset = "new") %>%
   janitor::clean_names() 
+
+# make sure value columns are both numeric
+live_data$value <- as.numeric(live_data$value)
+new_data$value <- as.numeric(new_data$value)
   
 # join to the new data
 joined_data <- live_data %>% 
   mutate(dataset = "live") %>% 
   bind_rows(new_data)
 
-# plot the data
+# headline data
 plot <- joined_data %>% 
   ggplot(.,
          aes(x = year,
              y = value,
              colour = dataset)) +
-  geom_point() +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(c(15, 19)) +
   geom_line(aes(linetype = dataset)) +
-  facet_wrap(vars(gas),
-             nrow = 2) +
+  #facet_wrap() +
   theme_bw() 
 
 ```

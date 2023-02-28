@@ -67,15 +67,11 @@ country_order <- data.frame(Country = c("",
 
 csv_data <- bound_tables %>%
   dplyr::left_join(country_order, by = "Country") %>%
-  dplyr::mutate(`Units` = "Rate per 1,000 live births",
-                `Unit multiplier` = "Units",
-                GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode)),
+  dplyr::mutate(GeoCode = ifelse(is.na(GeoCode), "", as.character(GeoCode)),
                 Value = ifelse(is.na(Value), "", as.numeric(Value))) %>% 
   dplyr::arrange(country_order, Sex) %>%
-  dplyr::select(Year, Country, Sex, 
-                GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
-
-csv_data$Value <- as.numeric(csv_data$Value)
+  dplyr::select(Year, Country, Sex, GeoCode,
+                `Observation status`, `Unit multiplier`, `Unit measure`, Value)
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
@@ -104,6 +100,9 @@ rmarkdown::render('3-2-1_checks.Rmd', output_file = paste0(output_folder, "/", q
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
+
+# check for duplicates
+check_output <- nrow(distinct(csv_data)) == nrow(csv_data)
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

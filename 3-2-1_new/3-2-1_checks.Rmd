@@ -30,9 +30,9 @@ things that should manually be checked.
   The configurations are:  
   
   - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
-  - name of the tab the data are in; England & Wales: **`r tab_name_EW`**, UK: **`r tab_name_UK`**
+  - name of the tab the data are in; England & Wales: **`r tabname_EW`**, UK: **`r tabname_UK`**
   - row number of the column names: E&W: **`r header_row_EW`**, UK: **`r header_row_EW`** 
-  - location of the outputs: **`r output_folder`**  
+  - location of the outputs: **`r output_folder`**
 
 ## Basic checks
   - no duplicates present: **`r check_output`**
@@ -54,7 +54,7 @@ new_data <- csv_data %>%
          dataset = "new") %>%
   janitor::clean_names() 
 
-# make sure value columns are both numeric and same dp
+# make sure both value columns are numeric and same dp
 # Doing this in compile_tables converts the blanks back to NA, which is why it's
 # left to here
 live_data$value <- live_data$value %>%
@@ -78,7 +78,7 @@ plot <- joined_data %>%
          aes(x = year,
              y = value,
              colour = dataset)) +
-  geom_point(aes(linetype = dataset, shape = dataset)) +
+  geom_point(aes(shape = dataset)) +
   scale_shape_manual(values = c(15, 19)) +
   #facet_wrap() +
   theme_bw() 

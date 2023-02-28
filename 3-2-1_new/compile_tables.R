@@ -73,6 +73,9 @@ csv_data <- bound_tables %>%
   dplyr::select(Year, Country, Sex, GeoCode,
                 `Observation status`, `Unit multiplier`, `Unit measure`, Value)
 
+# check for duplicates
+check_output <- nrow(distinct(csv_data)) == nrow(csv_data)
+
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
 output_folder_exists <- ifelse(output_folder %in% existing_files, TRUE, FALSE)
@@ -93,16 +96,11 @@ qa_filename <- paste0(date, "_update_3-2-1_checks.html")
 
 # save files and print messages ------------------------------------------------
 
-write.csv(bound_tables, paste0(output_folder, "/", csv_filename), row.names = FALSE)
-
-# GOT TO HERE
+write.csv(csv_data, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 rmarkdown::render('3-2-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))
-
-# check for duplicates
-check_output <- nrow(distinct(csv_data)) == nrow(csv_data)
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")

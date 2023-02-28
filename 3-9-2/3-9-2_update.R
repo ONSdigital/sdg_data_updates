@@ -108,14 +108,46 @@ mortality_grouped <- mortality %>%
 
 mortality_grouped$Sex <- gsub("Total", "", mortality_grouped$Sex)
 
+#### Sum each cause of death from sub-causes ####
+mortality_summed <- mortality_grouped %>% 
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+#this has worked
 
-#### Calculate United Kingdom totals ####
+#### Calculate England, Wales and UK totals ####
+mortality_summed_totals <- mortality_summed %>%
+  mutate(England = case_when(
+    Country == "England" ~ "England",
+        TRUE ~ ""),
+    Wales = case_when(
+      Country == "Wales" ~ "Wales",
+      TRUE ~ ""),
+    UK = case_when(
+      Region == "" ~ "United Kingdom",
+      TRUE ~ ""),
+    English_region = case_when(
+      Country == "England" ~ Region,
+      TRUE ~ "")) 
 
-# UK_added <- mortality_grouped %>%
-  # mutate(Country = "United Kingdom")
+mortality_summed_england <- mortality_summed_totals %>% 
+  group_by(Year, Sex, England) %>% 
+  summarize(Value = sum(Value))
 
-# Add together when "Region" == "", and Year, Cause of death, Sex are all the same.
-  # Name United Kingdom
+#value appears to be double
+
+mortality_summed_wales <- mortality_summed_totals %>% 
+  group_by(Year, Sex, Wales) %>% 
+  summarize(Value = sum(Value))
+
+mortality_summed_regions <- mortality_summed_totals %>% 
+  group_by(Year, Sex, English_region) %>% 
+  summarize(Value = sum(Value))
+
+mortality_summed_UK <- mortality_summed_totals %>% 
+  group_by(Year, Sex, UK) %>% 
+  summarize(Value = sum(Value))
+
+
 
 
 #### Join mortality and population data #### 
@@ -126,13 +158,42 @@ proportion_data <- mortality_grouped %>%
 #### Calculate proportion per million population ####
 
 proportion_data <- proportion_data %>%
-  mutate(Value = 1000000*(Value.x/Value.y))
+  mutate(Value = 1000000*(Value.x/Value.y)) %>%
+  rename(`Cause of death` = `Cause of death.x`) %>%
+  select(Year, `Cause of death`, Country, Region, Sex, Value)
 
 
 #### Format data for csv file ####
-#
+
+csv_formatted <- proportion_data %>% 
+  # Format countries and regions to title case
+  mutate(Country = toTitleCase(Country),
+         Region = toTitleCase(Region)) %>% 
+  mutate(`Observation status` = "Undefined") %>%
+  # Put columns in order required for csv file.
+  select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value) %>% 
+  # Arrange data by Year, Country, region, Sex 
+  arrange(Year, `Cause of death`, Country, Region, Sex)
+
+# Correct spelling of Yorkshire and The Humber
+csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber"
 
 
+#### Remove NAs from the csv that will be saved in Outputs ####
+
+# this changes Value to a character so will still use csv_formatted in the 
+# R markdown QA file
+csv_output <- csv_formatted %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value))
+
+
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows should be unique, so this should be TRUE
+check_all <- nrow(distinct(csv_output)) == nrow(csv_output)
+
+
+# If false you may need to remove duplicate rows. 
+csv_output <- unique(csv_output)
 
 
 

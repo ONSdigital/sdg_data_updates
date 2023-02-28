@@ -170,6 +170,7 @@ csv_formatted <- proportion_data %>%
   mutate(Country = toTitleCase(Country),
          Region = toTitleCase(Region)) %>% 
   mutate(`Observation status` = "Undefined") %>%
+  mutate('Unit measure' = "Rate per 1,000,000 population")
   # Put columns in order required for csv file.
   select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value) %>% 
   # Arrange data by Year, Country, region, Sex 

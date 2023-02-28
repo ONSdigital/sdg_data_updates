@@ -11,7 +11,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 # depending on what you add to the code
 packages <- c("stringr", "unpivotr", "tidyxl", "tidyr", "dplyr", "rsdmx", "openxlsx", "readxl", "janitor",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "DT", "pander", "markdown")
+              "ggplot2", "DT", "pander", "rmarkdown")
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
@@ -26,7 +26,7 @@ library('rsdmx')
 library('openxlsx')
 library('readxl')
 library('janitor')
-library('markdown')
+library('rmarkdown')
 
 
 source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
@@ -75,7 +75,7 @@ csv_data <- bound_tables %>%
   dplyr::select(Year, Country, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
-
+csv_data$Value <- as.numeric(csv_data$Value)
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
@@ -100,7 +100,7 @@ qa_filename <- paste0(date, "_update_3-2-1_checks.html")
 write.csv(bound_tables, paste0(output_folder, "/", csv_filename), row.names = FALSE)
 
 # GOT TO HERE
-markdown::renderMarkdown('_update_3-2-1_checks.Rmd', output = paste0(output_folder, "/", qa_filename))
+rmarkdown::render('3-2-1_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),
                " as ", csv_filename, "and ", qa_filename, "'\n\n"))

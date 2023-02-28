@@ -4,7 +4,7 @@
 
 # list the packages used in this automation - you may need to add some, 
 # depending on what you add to the code
-packages <- c("stringr", "dplyr", "openxlsx", "tidyr", "janitor", "readr"
+packages <- c("stringr", "dplyr", "openxlsx", "tidyr", "janitor", "readr",
               # packages used in the Rmarkdown script (library called there):
               "ggplot2", "kableExtra")
 # install any packages that are not already installed

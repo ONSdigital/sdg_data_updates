@@ -58,10 +58,7 @@ outputs_data <- outputs_data %>%
   rename_column(primary = "Productivity type", 
                 new_name = "Outputs")
 
-joined_data <- inner_join(productivity_data, inputs_data)
-
-
-# format
+# format into CSVs and join together
 
 productivity_csv <- productivity_data %>% 
   pivot_longer(-c("Productivity"), names_to = "Year", values_to = "Value")
@@ -109,3 +106,7 @@ combined_data <- list.files(path = "./CSVs",
 csv_output <- combined_data %>% 
   select("Year", "Productivity", "Outputs", "Inputs", "Observation status", 
          "Unit multiplier", "Unit measure", "Value")
+
+csv_output[is.na(csv_output)] <- ""
+  
+  

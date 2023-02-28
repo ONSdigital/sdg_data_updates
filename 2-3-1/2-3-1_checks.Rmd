@@ -1,0 +1,142 @@
+---
+title: "2-3-1 checks"
+author: "Katie Uzzell"
+date: "28/02/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+```{r include= FALSE}
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/2-3-1.csv")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_2-3-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 2-3-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_2-3-1", ".csv")` in the 2-3-1 Output folder.  
+    
+## Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+2-3-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+
+#### **Total factor productivity of the agricultural industry data (DEFRA)**  
+
+Agricultural productivity data are in the file `r filename`.   
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`  
+
+The tab used is called
+`r tabname`. 
+
+
+## Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+
+new_data <- new_data %>%
+mutate(dataset = "new")
+
+old_data <- old_data %>% 
+      rename("Observation status" = "Observation.status",
+         "Unit multiplier" = "Unit.multiplier",
+         "Unit measure" = "Unit.measure")
+
+joined_data <- old_data %>%
+  mutate(dataset = "old") %>%
+  bind_rows(new_data)
+ 
+prod_plot <- joined_data[joined_data$Productivity != "",] %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Productivity, ncol = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+   ggtitle("Productivity")
+
+outputs_plot <- joined_data[joined_data$Outputs != "",] %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("All outputs")
+
+inputs_plot <- joined_data[joined_data$Inputs != "",] %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Inputs, ncol = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+   ggtitle("Inputs")
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(prod_plot))
+
+suppressMessages(print(outputs_plot))
+
+suppressMessages(print(inputs_plot))
+```
+
+## Calculations
+
+No calculations were performed on this data.
+
+## Session Info
+```{r, echo = FALSE}
+pander(sessionInfo())
+```

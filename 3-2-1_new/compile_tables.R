@@ -75,7 +75,7 @@ csv_data <- bound_tables %>%
   dplyr::select(Year, Country, Sex, 
                 GeoCode, `Units`, `Unit multiplier`, `Observation status`, Value)
 
-# GOT TO HERE
+
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()
@@ -98,6 +98,8 @@ qa_filename <- paste0(date, "_update_3-2-1_checks.html")
 # save files and print messages ------------------------------------------------
 
 write.csv(bound_tables, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+
+# GOT TO HERE
 markdown::renderMarkdown('_update_3-2-1_checks.Rmd', output = paste0(output_folder, "/", qa_filename))
 
 message(paste0("The csv and QA file have been created and saved in '", paste0(getwd(), "/", output_folder, "'"),

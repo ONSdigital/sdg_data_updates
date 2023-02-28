@@ -5,7 +5,7 @@ Date: 16/01/2023
 
 Creates csv data for 7-3-1 (Energy intensity measured in terms of primary energy and GDP).
 
-Very simple automation that is only involves formatting the data. 
+Very simple automation that only involves formatting the data. 
 
 Runtime is less than 30 seconds.
 

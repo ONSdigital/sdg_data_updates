@@ -54,42 +54,88 @@ new_data <- csv_data %>%
          dataset = "new") %>%
   janitor::clean_names() 
 
-# make sure value columns are both numeric
-live_data$value <- as.numeric(live_data$value)
-new_data$value <- as.numeric(new_data$value)
+# make sure value columns are both numeric and same dp
+# Doing this in compile_tables converts the blanks back to NA, which is why it's
+# left to here
+live_data$value <- live_data$value %>%
+  as.numeric() %>%
+  round(digits = 2)
+new_data$value <- new_data$value %>%
+  as.numeric() %>%
+  round(digits = 2)
   
 # join to the new data
 joined_data <- live_data %>% 
   mutate(dataset = "live") %>% 
   bind_rows(new_data)
+```
 
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 # headline data
 plot <- joined_data %>% 
   ggplot(.,
          aes(x = year,
              y = value,
              colour = dataset)) +
-  geom_point(aes(shape = dataset)) +
-  scale_shape_manual(c(15, 19)) +
-  geom_line(aes(linetype = dataset)) +
+  geom_point(aes(linetype = dataset, shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
   #facet_wrap() +
   theme_bw() 
 
-```
-
-
-```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(plot))
 ```
 
-Finally, it is sometimes hard to see where new numbers don't match live numbers
-especially if there are lots of disaggregations. In such cases a table of 
-differences is also useful. The following example is taken from 13-2-2:
-  
-  At the time of writing this code (June 2022), the following note is given in the
-  source notes tab: 'in these statistics the entire time series going back to 
-  1990 is revised each year to take account of methodological improvements'.  
-  
+```{r, echo = FALSE, fig.width = 10}
+# plot the country data
+plot_country <- joined_data %>%
+  filter(sex == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ country) +
+  ggtitle("Country") +
+  theme_bw() 
+
+suppressMessages(print(plot_country))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot the sex data
+plot_sex <- joined_data %>%
+  filter(country == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ sex) +
+  ggtitle("Sex") +
+  theme_bw() 
+
+suppressMessages(print(plot_sex))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot both country and sex data
+plot_country_sex <- joined_data %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_grid(sex ~ country) +
+  ggtitle("Country and Sex") +
+  theme_bw() 
+
+suppressMessages(print(plot_country_sex))
+```
+
   **If there are differences (see table below) please check that this still stands**
 
 ```{r, , echo = FALSE}
@@ -97,7 +143,7 @@ comparison <- joined_data %>%
   # select the columns that are in both the live and new data
   # Columns that have the same entry in every row (e.g. units), or
   # columns like geocode and obs status don't need to go in here.
-  select(year, gas, value, dataset) %>% 
+  select(year, country, sex, value, dataset) %>% 
   pivot_wider(names_from = dataset,
               values_from = value) %>% 
   mutate(difference = new - live) %>% 

@@ -13,7 +13,7 @@ source_data <- get_type1_data(header_row,filename, tabname)
 main_data= source_data[c(1,6,11,16)]
 
 
-#source for function
+# source for function 
 source("function.R")
 
 
@@ -46,14 +46,14 @@ data_men_nsa <- format_data_8_6_1(table_men_nsa_START_row,
                                   NSA_or_SA="Not seasonally adjusted",
                                   SEX="Male")
 
-# Extract & format data from Seasonally Adjusted NEET Man table
+# Extract & format data from Seasonally Adjusted NEET Woman table
 data_women_sa <- format_data_8_6_1(table_woman_sa_START_row,
                                    table_woman_sa_END_row, 
                                    main_data, 
                                    NSA_or_SA="Seasonally adjusted", 
                                    SEX="Female")
 
-# Extract & format data from Not seasonally adjusted Man People table
+# Extract & format data from Not seasonally adjusted NEET Woman table
 data_women_nsa <- format_data_8_6_1(table_woman_nsa_START_row, 
                                     table_woman_nsa_END_row,
                                     main_data,

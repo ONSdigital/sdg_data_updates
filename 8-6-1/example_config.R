@@ -4,11 +4,12 @@ filename <- "8.6.1.xlsx"
 
 tabname <- "Source 1"
 
-#Please do not change this
+# Please DON'T change this header_row variable
 header_row <- 0
 
 
-# Important Steps!
+# Important Steps! Need to provide these values (table start and end row)
+# Do not include the header row as start row
 
 # Not in Education, Employment or Training ('NEET') by age: People (seasonally adjusted)
 table_people_sa_START_row <- 21

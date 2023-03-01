@@ -21,8 +21,45 @@ library(kableExtra)
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-6-1.csv")
 
 
+# old_data$Series = str_replace(old_data$Series, "Proportion of youth not in education, employment or training", "Yearly")
+
+old_data$Series = gsub( "Proportion of youth not in education, employment or training (quarterly)",
+                        "Quaterly", old_data$Series, fixed=TRUE)
+
+old_data$Series = gsub("Proportion of youth not in education, employment or training",
+                       "Yearly", old_data$Series, fixed=TRUE)
+
+old_data$Age = gsub(".", "People", old_data$Age, fixed=TRUE)
+old_data["Sex"][is.na(old_data["Sex"])] <- "People"
+
+
+old_data$`Seasonally.adjusted.or.not` = str_replace(old_data$`Seasonally.adjusted.or.not`, "Seasonally adjusted", "SA")
+old_data$`Seasonally.adjusted.or.not` = str_replace(old_data$`Seasonally.adjusted.or.not`, "Not seasonally adjusted", "NSA")
+
+
+
+
+
+
 date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-6-1", ".csv"))
+
+# new_data$Series = str_replace(new_data$Series, "Proportion of youth not in education, employment or training (quarterly)", "Quarterly")
+# new_data$Series = str_replace(new_data$Series, "Proportion of youth not in education, employment or training", "Yearly")
+
+new_data$Series = gsub("Proportion of youth not in education, employment or training (quarterly)",
+                       "Quaterly", new_data$Series, fixed=TRUE)
+
+new_data$Series = gsub("Proportion of youth not in education, employment or training",
+                       "Yearly", new_data$Series, fixed=TRUE)
+# new_data$Age = gsub(".", "People", new_data$Age, fixed=TRUE)
+new_data["Sex"][is.na(new_data["Sex"])] <- "People"
+
+new_data$`Seasonally.adjusted.or.not` = str_replace(new_data$`Seasonally.adjusted.or.not`, "Seasonally adjusted", "SA")
+
+new_data$`Seasonally.adjusted.or.not` = str_replace(new_data$`Seasonally.adjusted.or.not`, "Not seasonally adjusted", "NSA")
+
+
 
 latest_year <- max(new_data$Year)
 
@@ -80,6 +117,8 @@ new_data <- new_data %>%
 mutate(Year = as.character(Year),
          dataset = "new")
 
+# For review, how to plot Q1 til Q4 ??
+
 
 
 new_data$Value <- as.numeric(new_data$Value)
@@ -88,27 +127,51 @@ joined_data <- old_data %>%
   mutate(dataset = "old") %>%
   bind_rows(new_data)
 
-joined_data$`Series`[joined_data$Series == ""] <- "Headline"
- 
-plot <- joined_data %>%
+Yearly_plot_data  <- joined_data %>% 
+  filter(Series == "Yearly") 
+
+# Yearly plot
+Yearly_plot <- joined_data %>%
+  filter(Series == "Yearly") %>%
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +geom_point(aes(shape = dataset)) +
+  # scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_wrap(~Series) +
+  facet_grid(~Series ~Seasonally.adjusted.or.not ~ Age ~ Sex) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 5)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Proportion of youth not in education, employment or training by Year")
+  
+
+# Quaterly Plot
+ 
+plot <- joined_data %>%
+  filter(Series == "Quaterly") %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  # scale_y_continuous(limits=c(min(joined_data$Value), max(joined_data$Value))) +
+  geom_point(aes(shape = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(~Series ~Seasonally.adjusted.or.not ~ Age ~ Sex,scales = "free_x", space='free_x') +
+  scale_x_discrete(expand = c(0, 0.5)) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 3.5)) +
   theme(axis.text.y = element_text(size = 7))
+  ggtitle("Proportion of youth not in education, employment or training Quaterly")
 
 ```
 
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(plot))
+suppressMessages(print(Yearly_plot))
 ```
 
 ###Table of discrepancies

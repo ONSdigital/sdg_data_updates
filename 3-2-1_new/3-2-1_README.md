@@ -2,6 +2,8 @@
   
 This automation calculates the under 5 death rate per 1000 live births disaggregated by country and sex.
 
+This code works on the data for 2020 (and hopefully newer), data for 2019 and older is in quite a different table format. There is code that works for the older data on 3-2-1 on the github, hence why this automation is under 3-2-1_new.
+
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
    *Others:* Checkout sdg_data_updates main branch to your local repository.     

@@ -1,7 +1,13 @@
+
+```{r include=FALSE}
+      today <-Sys.Date() 
+      
+      # today <- as.Date(today, "%d/%m/%Y")
+```
 ---
 title: "8-6-1 checks"
 author: "Abhishek Singh"
-date: "--/--/----"
+date: "`r format(today, format="%d-%B- %Y") `"
 output: html_document
 ---
 
@@ -87,7 +93,7 @@ time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = 
 
 ```
 
-**Total extent and proportion of protected areas at sea (ONS)**  
+**Proportion of youth (aged 15–24 years) not in education, employment or training**  
 
 Protected areas data are in the file `r filename`.   
 
@@ -130,14 +136,30 @@ joined_data <- old_data %>%
 Yearly_plot_data  <- joined_data %>% 
   filter(Series == "Yearly") 
 
+
+
+# get yearly data from joined
+Yearly_data <- joined_data %>%
+  filter(Series == "Yearly")
+
+Yearly_data <- Yearly_data %>% 
+      mutate(Year = as.numeric(Year), Value = as.numeric(Value))
+
+
+
+
+
+
+
 # Yearly plot
-Yearly_plot <- joined_data %>%
-  filter(Series == "Yearly") %>%
+Yearly_plot <- Yearly_data %>%
+  # filter(Series == "Yearly") %>%
+  # joined_data$Year = as.integer(joined_data$Year) %>%
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  # scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  scale_x_continuous (breaks=min (Yearly_data$Year):max (Yearly_data$Year)) +
   geom_point() +
   geom_line() +
   facet_grid(~Series ~Seasonally.adjusted.or.not ~ Age ~ Sex) +
@@ -163,7 +185,7 @@ plot <- joined_data %>%
   scale_x_discrete(expand = c(0, 0.5)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 3.5)) +
-  theme(axis.text.y = element_text(size = 7))
+  theme(axis.text.y = element_text(size = 7)) +
   ggtitle("Proportion of youth not in education, employment or training Quaterly")
 
 ```
@@ -171,35 +193,14 @@ plot <- joined_data %>%
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(plot))
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
 suppressMessages(print(Yearly_plot))
 ```
 
-###Table of discrepancies
-
-If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has update its back time series, so the difference could be genuine.
-```{r, , echo = FALSE}
-comparison <- joined_data %>% 
-  select(Year, Series, Value, dataset) %>% 
-  pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
-  mutate(difference = new - old) %>% 
-  filter(difference != 0) %>% 
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
-```
-	  
-	The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
-```{r, echo = FALSE}
-	datatable(comparison, 
-	          rownames = FALSE, 
-	          filter = "top",
-	          options = list(dom = 'tp', 
-	                         pageLength = 10,
-	
-	
-	                         columnDefs = list(list(
-	                           className = 'dt-center', targets = 0:3))))
-```
 
 
 
@@ -216,16 +217,5 @@ comparison <- joined_data %>%
 
 
 
-
-### Calculations
-
-Calculations were made to generate the “Proportion of marine protected area” series. Proportion of marine protected area is calculated using the following formula. 100 * (Extent at sea - million hectares / UK sea area). See C1. Protected Areas for more information on methodology.
-
-The calculations used to create these data were:
-```
-
-protected_area_main_data['Proportion_of_area_protected']  <-round((protected_area_main_data['At_Sea']/protected_area_main_data['UK_marine_area'])*100,2)
-
-```
 Warning: This is copied from `update_8-6-1.R` and will not dynamically update 
 if that code is changed.

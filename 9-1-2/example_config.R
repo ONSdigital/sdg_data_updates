@@ -1,4 +1,4 @@
-# configurations for type 1 data
+# configurations for 9-1-2 (Air passenger and air freight volumes)
 
 filename <- "avi0102.xlsx"
 

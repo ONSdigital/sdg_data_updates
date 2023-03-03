@@ -47,7 +47,6 @@ An example of what you may put in this section -
   The configurations are:  
   
   - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", csv_filename)`**
-  - name of the tab the data are in: **`r tab_name`**  
   
   
 ## Basic checks
@@ -192,14 +191,20 @@ differences is also useful. The following example is taken from 13-2-2:
 comparison <- joined_data %>% 
   select(year, value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = value) %>% 
+              values_from = value)
+
+comparison <- comparison %>% 
+  mutate(across("live":"new", ~replace(., lengths(.) == 0, "")))
+
+comparison <- comparison %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
 ```
-  
+
+
   The table below shows all instances where the old value does not match the new 
   value. It is sorted so the largest absolute differences appear first, but can
   be sorted in other ways using the arrows at the top.

@@ -17,14 +17,14 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
 ### USER INSTRUCTIONS (SDG Data team):  
 
 ### Downloading and Sourcing Data  
-1) In folder 3-9-1 create a new folder called “Input”. 
+1) In folder 3-9-1 create a new folder called ?Input?. 
 2) Go to [Fingertips API Source Link] https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator
-3) In “indicator id” select 30101.
-4) Click “Download indicator-data.csv”. 
-5) Save this file in the “Input” folder. Rename as old method.
-6) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in “indicator id” select 93861.
-7) Click “Download indicator-data.csv”.
-8) Save this file in the “Input” folder as well. rename as new method.
+3) In ?indicator id? select 30101.
+4) Click ?Download indicator-data.csv?. 
+5) Save this file in the ?Input? folder. Rename as old_method.csv.
+6) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in ?indicator id? select 93861.
+7) Click ?Download indicator-data.csv?.
+8) Save this file in the ?Input? folder as well. rename as new_method.csv.
 
 
 1) Open RStudio.  

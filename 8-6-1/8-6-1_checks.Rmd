@@ -7,7 +7,7 @@
 ---
 title: "8-6-1 checks"
 author: "Abhishek Singh"
-date: "`r format(today, format="%d-%B- %Y") `"
+date: "**`r format(today, format="%d-%B-%Y")`**"
 output: html_document
 ---
 
@@ -20,14 +20,15 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
+library(pander)
 ```
 
 ```{r include= FALSE}
 
+# Reading and formatting Old Data
+
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-6-1.csv")
 
-
-# old_data$Series = str_replace(old_data$Series, "Proportion of youth not in education, employment or training", "Yearly")
 
 old_data$Series = gsub( "Proportion of youth not in education, employment or training (quarterly)",
                         "Quaterly", old_data$Series, fixed=TRUE)
@@ -43,35 +44,29 @@ old_data$`Seasonally.adjusted.or.not` = str_replace(old_data$`Seasonally.adjuste
 old_data$`Seasonally.adjusted.or.not` = str_replace(old_data$`Seasonally.adjusted.or.not`, "Not seasonally adjusted", "NSA")
 
 
-
-
-
-
+# System date
 date <- Sys.Date()
-new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-6-1", ".csv"))
 
-# new_data$Series = str_replace(new_data$Series, "Proportion of youth not in education, employment or training (quarterly)", "Quarterly")
-# new_data$Series = str_replace(new_data$Series, "Proportion of youth not in education, employment or training", "Yearly")
+# Reading and formatting NEW Data
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-6-1", ".csv"))
 
 new_data$Series = gsub("Proportion of youth not in education, employment or training (quarterly)",
                        "Quaterly", new_data$Series, fixed=TRUE)
 
 new_data$Series = gsub("Proportion of youth not in education, employment or training",
                        "Yearly", new_data$Series, fixed=TRUE)
-# new_data$Age = gsub(".", "People", new_data$Age, fixed=TRUE)
+
 new_data["Sex"][is.na(new_data["Sex"])] <- "People"
 
 new_data$`Seasonally.adjusted.or.not` = str_replace(new_data$`Seasonally.adjusted.or.not`, "Seasonally adjusted", "SA")
 
 new_data$`Seasonally.adjusted.or.not` = str_replace(new_data$`Seasonally.adjusted.or.not`, "Not seasonally adjusted", "NSA")
 
-
-
 latest_year <- max(new_data$Year)
 
 ```
 
-## 14-2-1 update summary
+## 8-6-1 update summary
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and 
 saved as `r paste0(date, "_8-6-1", ".csv")` in the 8-6-1 Output folder.  
@@ -93,9 +88,9 @@ time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = 
 
 ```
 
-**Proportion of youth (aged 15–24 years) not in education, employment or training**  
+**Proportion of youth (aged 15–24 years) not in education, employment or training (NEET)**  
 
-Protected areas data are in the file `r filename`.   
+NEET data is in the file `r filename`.   
 
 This file was saved at `r filename_save_time`: It has been 
 `r time_since_data_saved` days since the file was saved in 
@@ -123,7 +118,7 @@ new_data <- new_data %>%
 mutate(Year = as.character(Year),
          dataset = "new")
 
-# For review, how to plot Q1 til Q4 ??
+# For review, how to plot Q1 till Q4?
 
 
 
@@ -138,7 +133,7 @@ Yearly_plot_data  <- joined_data %>%
 
 
 
-# get yearly data from joined
+# filter and format yearly data from joined data
 Yearly_data <- joined_data %>%
   filter(Series == "Yearly")
 
@@ -147,14 +142,8 @@ Yearly_data <- Yearly_data %>%
 
 
 
-
-
-
-
 # Yearly plot
 Yearly_plot <- Yearly_data %>%
-  # filter(Series == "Yearly") %>%
-  # joined_data$Year = as.integer(joined_data$Year) %>%
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -166,18 +155,16 @@ Yearly_plot <- Yearly_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Proportion of youth not in education, employment or training by Year")
+  ggtitle("Proportion of youth not in education, employment or training by Year (Annual)")
   
 
-# Quaterly Plot
- 
+# Quarterly Plot
 plot <- joined_data %>%
   filter(Series == "Quaterly") %>%
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  # scale_y_continuous(limits=c(min(joined_data$Value), max(joined_data$Value))) +
   geom_point(aes(shape = dataset)) +
   geom_point() +
   geom_line() +
@@ -186,7 +173,7 @@ plot <- joined_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 3.5)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Proportion of youth not in education, employment or training Quaterly")
+  ggtitle("Proportion of youth not in education, employment or training Quarterly")
 
 ```
 
@@ -205,17 +192,20 @@ suppressMessages(print(Yearly_plot))
 
 
 
+### Calculations
 
+Calculations were made to Calculate Annual data. This Annual data was calculated from the quarterly data using a 4 Quarter average. 
 
+The calculations used to create these data were:
+```
 
+ Annual data was calculated from the quarterly data using a 4 Quarter average
+ 
+ For example,  2000 = (2000 Q1 + 2000 Q2 + 2000 Q3 + 2000 Q4)/4
 
+```
 
-
-
-
-
-
-
-
-Warning: This is copied from `update_8-6-1.R` and will not dynamically update 
-if that code is changed.
+## Session Info
+```{r}
+pander(sessionInfo())
+```

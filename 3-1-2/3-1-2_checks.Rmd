@@ -1,0 +1,179 @@
+---
+title: "3-1-2 checks"
+author: "Ali Campbell"
+date: "03/02/2023"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(DT)
+library(pander)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+
+- The csv for 3-1-2 is relatively simple but the original download needs a fair 
+bit of formatting and a calculation before it is ready for output, so is perfect
+for automation
+  
+- This file runs some basic checks on the csv output and highlights some specific 
+things that should manually be checked.
+  
+- Before putting the csv in the indicator file please check in the source data if the most recent 
+figures are provisional. If they are, in the indicator csv file change the 
+observation status to 'Provisional'. 
+
+- Please check that the tabname, header_row etc still apply for the new data and that 
+the table format has not changed (configs below).
+
+## Configurations
+
+  The configurations are below. Please check that these still apply:  
+  
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
+  - year being read in: **`r year`**
+  - name of the tab the data are in: **`r tabname`**  
+  - row number of the column names: **`r header_row`**
+  - location for input: **`r input_folder`**
+  - location of the outputs: **`r output_folder`**  
+  
+  
+## Basic checks
+  - no duplicates present: **`r check_all`**
+
+## Plots
+Please check the plots below for any differences between the live data (which 
+is pulled in from the sdg-data (platform) github repo) and the new data.  
+  
+Live data will appear over the top of new data. You should therefore only see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
+
+```{r, echo = FALSE, fig.width=10}
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_3-1-2.csv') %>%
+  janitor::clean_names()
+
+new_data <- csv_output %>%
+  mutate(Year = as.integer(Year), Value = as.numeric(Value),
+         dataset = "new") %>%
+  janitor::clean_names() 
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(year = as.integer(year), value = as.numeric(value), dataset = "live") %>% 
+  bind_rows(new_data)
+
+# plot the headline data
+headline_plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  ggtitle("Headline data") +
+  theme_bw() 
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(headline_plot))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot the age data
+plot_age <- joined_data %>%
+  filter(number_of_previous_live_births == "", country == "", region == "",
+         health_board == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ age) +
+  ggtitle("Age") +
+  theme_bw() 
+
+suppressMessages(print(plot_age))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot the previous births data
+plot_previous_births <- joined_data %>%
+  filter(age == "", country == "", region == "",
+         health_board == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ number_of_previous_live_births) +
+  ggtitle("No of previous live born children") +
+  theme_bw() 
+
+suppressMessages(print(plot_previous_births))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot both age and births
+plot_both <- joined_data %>%
+  filter(country == "", region == "",
+         health_board == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_grid(age ~ number_of_previous_live_births) +
+  ggtitle("Age and previous births") +
+  theme_bw() 
+
+suppressMessages(print(plot_both))
+```
+
+
+
+**If there are differences (see table below) please check that this still stands**
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, age, number_of_previous_live_births, country, region, health_board,
+         observation_status, value, dataset) %>% 
+  pivot_wider(names_from = "dataset", values_from = "value") %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>%
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

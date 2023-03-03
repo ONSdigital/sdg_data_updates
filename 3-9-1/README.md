@@ -20,11 +20,11 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
 1) In folder 3-9-1 create a new folder called “Input”. 
 2) Go to [Fingertips API Source Link] https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator
 3) In “indicator id” select 30101.
-4) Click “Download indicator-data.csv”.
-5) Save this file in the “Input” folder.
+4) Click “Download indicator-data.csv”. 
+5) Save this file in the “Input” folder. Rename as old method.
 6) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in “indicator id” select 93861.
 7) Click “Download indicator-data.csv”.
-8) Save this file in the “Input” folder as well.
+8) Save this file in the “Input” folder as well. rename as new method.
 
 
 1) Open RStudio.  
@@ -32,10 +32,9 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
 3) update_indicator_main.R should open. If it doesnt go to File > Open File, and open it.  
 4) Change `indicator` to '3-9-1' (Dashes NOT dots).  
 6) Set `test_run` to 'FALSE'.  
-7) If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Check that the new method includes the data for indicator 93861, and the old method includes the data for indicator 30101. 
+7) Navigate to folder 3-9-1. If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Check that the new method includes the data for indicator 93861, and the old method includes the data for indicator 30101. 
 8) Go back to update_indicator_main.R and click the 'source' button (in the top right of the top left window). This will run the code.  
 9) csv and html (QA) files will be exported to the output folder in 3-9-1. 
-	You may need to remove the # from line 66 of compile_tables 	(rmarkdown::render)
 10) If an error occurs (see troubleshooting section below), you will need to run the following code in the console: `setwd('./..')` before repeating step 7.  
 
 Please check the data source to check for caveats (e.g in the notes on each tab), and check whether there are any new disaggregations we should include.
@@ -44,9 +43,9 @@ Please check the data source to check for caveats (e.g in the notes on each tab)
 
 ### QA PROCESS (SDG Data team):
 Read the automatically generated QA report. Pay particular attention to the charts as this is where you are likely to spot any unexpected problems with the code. For
-examaple if a line or point is missing, or looks strange, this may indicate a change in the formatting of the data.  
+example if a line or point is missing, or looks strange, this may indicate a change in the formatting of the data.  
   
-The QA report does not negate checking the source data for notes, but if everythig looks fine in the report, the numbers should not need to be checked.  
+The QA report does not negate checking the source data for notes, but if everything looks fine in the report, the numbers should not need to be checked.  
   
 If you get an error on the QA file, run it block by block. Any errors at this stage are usually because there is something unexpected in the data that needs to be addressed.  
 

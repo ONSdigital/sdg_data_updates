@@ -11,7 +11,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 ### 8-6-1 update instructions
 
 1) Download the latest data from: [https://www.ons.gov.uk/employmentandlabourmarket/peoplenotinwork/unemployment/datasets/youngpeoplenotineducationemploymentortrainingneettable1], This can be found under dropdown for **Current edition of this dataset** of the webpage.
-2) Open this file and copy the updated data from 6 different sheets which are (People-SA, Men-SA, Women-SA, People-NSA, Men-NSA, Women-NSA). And copy the respected sheet data to the tables present in the **"Source 1"** sheet of file 8.6.1.xls, this file is present in the Example_Input folder. 
+2) Open this file and copy the updated data from 6 different sheets which are (People-SA, Men-SA, Women-SA, People-NSA, Men-NSA, Women-NSA). And Paste the respected sheet data to the tables present in the **"Source 1"** sheet of file 8.6.1.xls, this file is present in the Example_Input folder. ***(Warning! make sure while pasting the table values that it doesn't overwrite the next table in the following rows below )***
 3) Once updated the data, **Save** this file as an xlsx file in the 'Input' folder in 8-6-1 (if this doesn't exist, make it inside the 8-6-1 folder).  
 4) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it. 
 5) If it exists, open the `config.R` file in 8-6-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as `config.R` in 8-6-1.

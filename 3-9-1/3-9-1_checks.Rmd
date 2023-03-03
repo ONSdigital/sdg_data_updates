@@ -1,7 +1,6 @@
 ---
 title: "QA 3-9-1"
 author: "Emma Wood"
-date: `r Sys.time`
 output: html_document
 ---
 
@@ -47,10 +46,8 @@ An example of what you may put in this section -
   
   The configurations are:  
   
-  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", csv_filename)`**
   - name of the tab the data are in: **`r tab_name`**  
-  - row number of the column names: **`r header_row`** 
-  - location of the outputs: **`r output_folder`**  
   
   
 ## Basic checks
@@ -163,7 +160,6 @@ joined_data <- live_data %>%
 joined_data %>% 
   filter(#(is.na(region) | region == "") & 
            (is.na(local_authority) | local_authority == "") & 
-           (is.na(county) | county == "") &
            (is.na(deprivation_decile) | deprivation_decile == "")) %>%  
   ggplot(.,
          aes(x = year,
@@ -194,9 +190,9 @@ differences is also useful. The following example is taken from 13-2-2:
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
+  select(year, value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
+              values_from = value) %>% 
   mutate(difference = new - live) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top

@@ -8,4 +8,3 @@ header_row <- 9
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"
-csv_folder <- "CSVs"

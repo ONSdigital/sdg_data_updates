@@ -136,7 +136,3 @@ suppressMessages(print(inputs_plot))
 
 No calculations were performed on this data.
 
-## Session Info
-```{r, echo = FALSE}
-pander(sessionInfo())
-```

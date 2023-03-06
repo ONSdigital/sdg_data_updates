@@ -87,21 +87,7 @@ outputs_csv <- outputs_csv %>%
          "Observation status" = "Normal value") %>% 
   select("Year", "Outputs", "Observation status", "Unit multiplier", "Unit measure", "Value")
 
-existing_output_files <- list.files()
-csv_folder_exists <- ifelse(csv_folder %in% existing_output_files, TRUE, FALSE)
-
-if (csv_folder_exists == FALSE) {
-  dir.create(csv_folder)
-}
-
-write_csv(productivity_csv, "./CSVs/productivity.csv")
-write_csv(inputs_csv, "./CSVs/inputs.csv")
-write_csv(outputs_csv, "./CSVs/outputs.csv")
-
-combined_data <- list.files(path = "./CSVs",  
-                            pattern = "*.csv", full.names = TRUE) %>% 
-  lapply(read_csv) %>%                             
-  bind_rows
+combined_data <- bind_rows (productivity_csv, inputs_csv, outputs_csv)
 
 csv_output <- combined_data %>% 
   select("Year", "Productivity", "Outputs", "Inputs", "Observation status", 

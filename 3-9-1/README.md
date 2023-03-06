@@ -12,7 +12,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 ### Examples
 Example outputs are given in the Example_outut folder.  
 Example input is given in the 'Example_automatic_download' folder. This is not a standard 'Example_input' folder because the input is automatically pulled from the fingertips website. The old series in the download actually goes back to 2010, but only more recent years are shown in the example data to reduce filesize.
-Example configurations can be run by setting `test_run` in update_inidcator_main.R to `TRUE`. Note that the outputs will not exactly match the example output because it will be affected by updates to the Fingertips data.      
+Example configurations can be run by setting `test_run` in update_indicator_main.R to `TRUE`. Note that the outputs will not exactly match the example output because it will be affected by updates to the Fingertips data.      
           
 ### USER INSTRUCTIONS (SDG Data team):  
 
@@ -24,7 +24,7 @@ Example configurations can be run by setting `test_run` in update_inidcator_main
 5) Save this file in the ?Input? folder. Rename as old_method.csv.
 6) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in ?indicator id? select 93861.
 7) Click ?Download indicator-data.csv?.
-8) Save this file in the ?Input? folder as well. rename as new_method.csv.
+8) Save this file in the ?Input? folder as well. Rename as new_method.csv.
 
 
 1) Open RStudio.  

@@ -19,7 +19,7 @@ colnames(agriprod_main_data) [1] <- "Productivity type"
 agriprod_main_data <- agriprod_main_data %>%
   mutate(across(everything(), as.character))
 
-# select necessary rows
+# select necessary rows and format them
 
 productivity_data <- agriprod_main_data[agriprod_main_data$`Productivity type` %in% 
                                            c("Total factor productivity (11 divided by 25)",

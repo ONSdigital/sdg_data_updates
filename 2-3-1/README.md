@@ -10,8 +10,8 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 ### 2-3-1 update instructions
 
-1) Download the latest data from: https://www.gov.uk/government/statistics/total-factor-productivity-of-the-agricultural-industry.
-2) Save the file as an xlsx file in the 'Input' folder in 2-3-1 (if this folder doesn't exist, make it inside the 2-3-1 folder).
+1) Download the latest data from: https://www.gov.uk/government/statistics/total-factor-productivity-of-the-agricultural-industry. Download the source data in ODS (OpenDocument Spreadsheet) format (using the 'Total factor productivity of the UK agricultural industry - dataset' link).
+2) Save the ODS file as an xlsx file in the 'Input' folder in 2-3-1 (if this folder doesn't exist, make it inside the 2-3-1 folder).
 3) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it.
 4) If it exists, open the config.R file in 2-3-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as config.R in 2-3-1.
 5) Check the configurations (e.g. filename and tab names) are correct, and if not, correct them and save. For example, if you have had to save example_config.R as config.R, make sure 'Example_Input' and 'Example_Output' are changed to 'Input' and 'Output' and the file name is correct.

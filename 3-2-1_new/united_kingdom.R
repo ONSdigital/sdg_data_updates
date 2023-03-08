@@ -40,12 +40,12 @@ tidy_data <- main_data %>%
   select(area_code, country, sex, live_births, infant_deaths, "1_4_deaths")
 
 # to remove cells that are just ends of a header that have run on to the next row
-clean_data <- tidy_data %>%
-  dplyr::filter(!is.na(numeric)) 
+#clean_data <- tidy_data %>%
+  #dplyr::filter(!is.na(numeric)) 
 
 # calculations -----------------------------------------------------------------
 
-calculations <- clean_data %>%
+calculations <- tidy_data %>%
   # Create column for total deaths under 5 years
   mutate(under_5_deaths = infant_deaths + `1_4_deaths`) %>%
   # column for under under 5 death rate per 1000 live births
@@ -99,11 +99,9 @@ csv_output_UK$Value <- as.numeric(csv_output_UK$Value)
 # clean workspace of objects that will be used in E&W script
 # (apart from year, as we will use this to select the correct row)
 rm(calculations,
-   clean_data,
    csv_format,
    info_cells,
    main_data,
-   renamed_data,
    tidy_data,
    country)
 

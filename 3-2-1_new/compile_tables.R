@@ -29,14 +29,13 @@ library('janitor')
 library('rmarkdown')
 
 
-source("example_config.R") # pulls in all the configurations. Un-comment out code below for real update
-# if (test_run == TRUE) {
-#   source("example_config.R")
-# } else if (test_run == FALSE) {
-#   source("config.R")
-# } else {
-#   stop("test_run must be either TRUE or FALSE")
-# }
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
 
 
 # check file is correct type

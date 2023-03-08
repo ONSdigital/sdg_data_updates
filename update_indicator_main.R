@@ -13,7 +13,7 @@
 
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
-# rm(list = ls())
+rm(list = ls())
 
 test_run <- TRUE # for real updates use FALSE
 

@@ -5,10 +5,47 @@
 # (Proportion of youth (aged 15–24 years) not in education, employment or training)
 
 
-
 # read in data 
-source_data <- get_type1_data(header_row,filename, tabname)
 
+# People-SA
+data_people_sa <- get_type1_data(header_row, filename, people_sa_tabname)
+data_people_sa <- data_people_sa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_people_sa)
+
+# People-NSA
+data_people_nsa <- get_type1_data(header_row, filename, people_nsa_tabname)
+data_people_nsa <- data_people_nsa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_people_nsa)
+
+# Men-SA
+data_men_sa <- get_type1_data(header_row, filename, men_sa_tabname)
+data_men_sa <- data_men_sa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_men_sa)
+
+# Men-NSA
+data_men_nsa <- get_type1_data(header_row, filename, men_nsa_tabname)
+data_men_nsa <- data_men_nsa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_men_nsa)
+
+
+# Women-SA
+data_women_sa <- get_type1_data(header_row, filename, women_sa_tabname)
+data_women_sa <- data_women_sa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_women_sa)
+
+# Women-NSA
+data_women_nsa <- get_type1_data(header_row, filename, women_nsa_tabname)
+data_women_nsa <- data_women_nsa[c(1,6,11,16)] %>%
+  filter(X6 != "..") %>%
+  na.omit(data_women_nsa)
+
+
+#  
 # filter required columns
 main_data= source_data[c(1,6,11,16)]
 

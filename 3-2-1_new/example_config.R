@@ -2,9 +2,9 @@
 
 filename <- "EXAMPLE_cim2020deathcohortworkbook.xlsx"
 
-# tabname <- "no_metadata"
-tabname_EW <- "Table_1"
-tabname_UK <- "Table_2"
+# tabname
+tabname_EW <- "1"
+tabname_UK <- "2"
 
 # row where the column headers are in each sheet
 header_row_EW <- 6

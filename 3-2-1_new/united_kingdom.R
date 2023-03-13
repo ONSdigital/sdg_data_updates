@@ -39,9 +39,6 @@ tidy_data <- main_data %>%
   # select only the columns we need for calculating rates
   select(area_code, country, sex, live_births, infant_deaths, "1_4_deaths")
 
-# to remove cells that are just ends of a header that have run on to the next row
-#clean_data <- tidy_data %>%
-  #dplyr::filter(!is.na(numeric)) 
 
 # calculations -----------------------------------------------------------------
 

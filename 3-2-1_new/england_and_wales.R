@@ -1,4 +1,4 @@
-# date: 221/02/2023
+# date: 22/02/2023
 # Author: Ali Campbell
 # creates csv for countries in UK under 5 child mortality data
 
@@ -37,10 +37,6 @@ tidy_data <- main_data %>%
                 not_pattern = c("rate"), new_name = "infant_deaths") %>%
   # select only the columns we need for calculating rates
   select(year, live_births, infant_deaths, `1_4_deaths`)
-
-# to remove cells that are just ends of a header that have run on to the next row
-#clean_data <- tidy_data %>%
-  #dplyr::filter(!is.na(numeric)) 
 
 # calculations -----------------------------------------------------------------
 

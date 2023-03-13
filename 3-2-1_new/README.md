@@ -6,16 +6,17 @@ This code works on the data for 2020 (and hopefully newer), data for 2019 and ol
 
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
-   *Others:* Checkout sdg_data_updates main branch to your local repository.     
-2. Open sdg_data_updates.Rproj
-3. If config.R does not exist in the 3-2-1_new folder, create it from the example_config.R file  
-4. Check the configs are correct.
+   *Others:* Checkout sdg_data_updates main branch to your local repository.
+2. Download the data from https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/childmortalitystatisticschildhoodinfantandperinatalchildhoodinfantandperinatalmortalityinenglandandwales and place it in the Input folder in sdg_data_updates/3-2-1_new
+3. Open sdg_data_updates.Rproj
+4. If config.R does not exist in the 3-2-1_new folder, create it from the example_config.R file  
+5. Check the configs are correct.
   - To run the example data and get example output, it should be example_config.R.   
-5. Open update_indicator_main.R - change indicator folder name (`indicator <- "3-2-1_new"`).
-6. Click Source (by default this is in top right of the script window)  
-7. Check for messages in the console. When the script is run a file titled '<date>_update_3-2-1.csv' will be saved in 3-2-1_new > Output 
+6. Open update_indicator_main.R - change indicator folder name (`indicator <- "3-2-1_new"`).
+7. Click Source (by default this is in top right of the script window)  
+8. Check for messages in the console. When the script is run a file titled '<date>_update_3-2-1.csv' will be saved in 3-2-1_new > Output 
    Use this file for the Indicator csv.  
-8. A file called <date>_update_3-2-1_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  
+9. A file called <date>_update_3-2-1_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  
 
 ### Code edits that may be needed: ###  
 *use this section for any problems or changes you can foresee*

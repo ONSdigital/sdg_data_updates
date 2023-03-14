@@ -14,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 ## Introduction
 
@@ -70,7 +71,7 @@ Live data will appear over the top of new data. You should therefore only
 see points for the live data for previous years and only points for the new data 
 in the years you are updating. 
 
-```{r}
+```{r, echo = FALSE}
 # functions for making tables & plots of differences between live and new data
 # plots:
 filter_for_plot <- function(series_value, var1, var2) {
@@ -152,8 +153,7 @@ new_data <- read.csv(paste0(output_folder, "/", csv_filename)) %>%
 
 # join to the new data
 joined_data <- live_data %>% 
-  bind_rows(new_data) %>% 
-  mutate(region = ifelse(region == "England", "", region))
+  bind_rows(new_data) 
 
 # plot the data
 joined_data %>% 
@@ -164,11 +164,14 @@ joined_data %>%
          aes(x = year,
              y = value,
              colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$year):max (joined_data$year)) +
   geom_point() +
   geom_line() +
   facet_wrap(vars(region),
              nrow = 2) +
-  theme_bw() 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7))
 
 ```
 
@@ -189,15 +192,11 @@ differences is also useful. The following example is taken from 13-2-2:
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(year, value, dataset) %>% 
   pivot_wider(names_from = dataset,
               values_from = value)
 
 comparison <- comparison %>% 
-  mutate(across("live":"new", ~replace(., lengths(.) == 0, "")))
-
-comparison <- comparison %>% 
-  mutate(difference = new - live) %>% 
+  mutate(difference = new - live) %>%
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))

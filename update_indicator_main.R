@@ -9,7 +9,7 @@
 # note that to install this package the working directory needs to be
 # sdg_data_updates. Use getwd() to check this is the folder you are in.
 
-setwd("D:/Coding_Repos/sdg_data_updates")
+# setwd("D:/Coding_Repos/sdg_data_updates")
 
 # rm(list = ls())
 

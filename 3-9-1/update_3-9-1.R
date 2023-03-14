@@ -67,7 +67,7 @@ csv_formatted <- deprivation %>%
   left_join(deprivation_order, by = "Deprivation decile") %>% 
   rename(`Observation status` = value_note,
          GeoCode = area_code,
-         `Local Authority` = LA,
+         `Local authority` = LA,
          Year = year,
          Value = value,
          Series = series) %>% 
@@ -79,8 +79,8 @@ csv_formatted <- deprivation %>%
   ) %>%
   mutate(Value = round(Value, 2),
          Units = "Percentage (%)") %>% 
-  arrange(Year, order,`Local Authority`, Region) %>%
-  select(Year, Series, Region, `Local Authority`, `Deprivation decile`,
+  arrange(Year, order,`Local authority`, Region) %>%
+  select(Year, Series, Region, `Local authority`, `Deprivation decile`,
          GeoCode, `Observation status`, Units, Value)  
 
 csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yorkshire and The Humber" 

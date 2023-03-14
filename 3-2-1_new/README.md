@@ -10,7 +10,7 @@ This code works on the data for 2020 (and hopefully newer), data for 2019 and ol
 2. Download the data from https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/childmortalitystatisticschildhoodinfantandperinatalchildhoodinfantandperinatalmortalityinenglandandwales and place it in the Input folder in sdg_data_updates/3-2-1_new
 3. Open sdg_data_updates.Rproj
 4. If config.R does not exist in the 3-2-1_new folder, create it from the example_config.R file  
-5. Check the configs are correct.
+5. Check the configs are correct. In particular, input_folder and output_folder. For real updates these should be "Input" and "Output".
   - To run the example data and get example output, it should be example_config.R.   
 6. Open update_indicator_main.R - change indicator folder name (`indicator <- "3-2-1_new"`).
 7. Click Source (by default this is in top right of the script window)  

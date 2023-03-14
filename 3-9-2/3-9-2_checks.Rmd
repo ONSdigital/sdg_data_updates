@@ -22,7 +22,7 @@ library(pander)
    
 ## 3-9-2 update summary
 
-3-4-1 is an indicator that uses a NOMIS API link to provide data. Unless the 
+3-9-2 is an indicator that uses a NOMIS API link to provide data. Unless the 
 format of NOMIS API downloads changes, the update_3-9-2 script should not need 
 changing. However, always check before running the update script. 
 
@@ -153,18 +153,9 @@ suppressMessages(print(sex_headline_plot))
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, `Cause of death`, Country, Region, Sex, Value, dataset) %>%
-    na.omit(Value) %>%
-pivot_wider(names_from = dataset,
+    select(Year, `Cause of death`, Country, Region, Sex, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
               values_from = Value)
-
-# replace the NULL returns with NA
-
-comparison <- comparison %>% 
-  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>% 
-  mutate(new = as.numeric(new)) %>% 
-  mutate(old = as.character(old)) %>%
-  mutate(old = as.numeric(old))
 
 comparison <- comparison %>% 
   mutate(difference = new - old) %>% 

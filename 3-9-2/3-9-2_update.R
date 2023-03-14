@@ -114,6 +114,11 @@ mortality_summed <- mortality_grouped %>%
   summarize(Value = sum(Value))
 #this has worked
 
+
+####  Calculate sex totals ####
+
+
+
 #### Calculate England, Wales and UK totals ####
 mortality_summed_totals <- mortality_summed %>%
   mutate(England = case_when(

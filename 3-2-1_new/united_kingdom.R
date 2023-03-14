@@ -101,5 +101,3 @@ rm(calculations,
    main_data,
    tidy_data,
    country)
-
-

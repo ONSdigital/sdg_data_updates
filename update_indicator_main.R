@@ -16,13 +16,8 @@ rm(list = ls())
 
 test_run <- FALSE # for real updates use FALSE
 
-indicator <- "3-2-1_new" # name of folder for indicator(s)
-
+indicator <- "9-1-2" # name of folder for indicator(s)
 
 setwd(indicator)
 
 source("compile_tables.R")
-
-
-
-

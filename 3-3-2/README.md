@@ -1,9 +1,10 @@
-*This is a template readme. Some of it will remain much the same for all nomis indicators.
-However, some of it is quite specific, e.g. how to generate nomis links, so will need editing*  
+### 3-3-2 automation
   
-### x-x-x automation
-  
-This automation ... explain what it does
+This automation reads in data from two sources for indicator 3-3-2, one for the UK and one for England. This one is quite tricky as the most recent data is only available in pdf format; excel workbooks are only available for England data prior to 2019. 
+Due to the fact that pdf formats are much more liable to change I HAVE ATTEMPTED TO PUT MULTIPLE OPTIONS IN FOR READING IN THE DATA:
+1. Using PDE package to read in pdf
+2. The user copy and pastes data from the pdf into an excel workbook (for if the above method doesn't work)
+There will be an option in the config to select which of these the program does
   
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
@@ -55,4 +56,13 @@ Check last updated date [here](https://www.nomisweb.co.uk/query/construct/summar
   
 ### Code edits that may be needed: ###  
 *use this section for any problems or changes you can foresee*
-  
+
+If PDE doesn't work, maybe need this dependency:
+`PDE_install_Xpdftools4.02()    # Download and install the Xpdf command line tools
+PDE_check_Xpdf_install()        # Check if all required XPDF tools are installed correctly`
+
+PDE::PDE_install_Xpdftools4.02()
+Do you want to download and install xpdf version 4.02? (y/n) 
+
+1: Y
+2: N

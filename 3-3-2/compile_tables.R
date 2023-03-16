@@ -4,16 +4,20 @@
 
 library('SDGupdater') # this needs to come before install absent_packages as that is from the SDGupdater package
 
-# list the packages used in this automation - you may need to delete/add some, 
-# depending on what you add to the code
-packages <- c(
+# packages required for this automation
+packages <- c("tcltk2", "PDE"
               # packages used in the Rmarkdown script (library called there):
               )
 
 # this function installs any packages that are not already installed
 install_absent_packages(packages)
 
-library('')
+library(tcltk2)
+library(PDE)
+
+# install one of the dependencies for using PDE to read PDFs
+PDE::PDE_install_Xpdftools4.02()
+PDE::PDE_check_Xpdf_install()
 
 setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R

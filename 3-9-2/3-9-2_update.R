@@ -26,7 +26,7 @@ population_data <- read.csv(population_link) %>%
  
 
 
-#### Clean the population data #### 
+#### Clean the population data for denominator #### 
 
 # Select and rename relevant columns
 population_small <- population_data %>%
@@ -68,24 +68,9 @@ england_wales_small <- england_wales_data %>%
   select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value)
 
 
-
-#### Clean the Scotland and NI data ####
-scotland_NI_small <- scotland_NI_data %>%
-  mutate(Region = "") %>%
-  rename(`Cause of death` = Cause.of.death,
-         `Observation status` = Observation.status) %>%
-  select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value)
-
-
-
-#### Combine the Mortality data #### 
-
-mortality <- rbind(scotland_NI_small, england_wales_small)
-
-
 #### Group cause of death, where appropriate, according to UN metadata ####
 
-mortality_grouped <- mortality %>%
+mortality_grouped <- england_wales_small %>%
   mutate(`Cause of death` = recode(`Cause of death`, 
           "A00 cholera" = "Diarrhoea",
           "A01 typhoid and paratyphoid fevers" = "Diarrhoea",
@@ -108,6 +93,7 @@ mortality_grouped <- mortality %>%
 
 mortality_grouped$Sex <- gsub("Total", "", mortality_grouped$Sex)
 
+
 #### Sum each cause of death from sub-causes ####
 mortality_summed <- mortality_grouped %>% 
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
@@ -115,66 +101,75 @@ mortality_summed <- mortality_grouped %>%
 #this has worked
 
 
-####  Calculate sex totals ####
 
+#### Calculate English regions, England, Wales and UK totals ####
 
+mortality_summed_wales <- mortality_summed %>% 
+  filter(Country == "Wales") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
 
-#### Calculate England, Wales and UK totals ####
-mortality_summed_totals <- mortality_summed %>%
-  mutate(England = case_when(
-    Country == "England" ~ "England",
-        TRUE ~ ""),
-    Wales = case_when(
-      Country == "Wales" ~ "Wales",
-      TRUE ~ ""),
-    UK = case_when(
-      Region == "" ~ "United Kingdom",
-      TRUE ~ ""),
-    English_region = case_when(
-      Country == "England" ~ Region,
-      TRUE ~ ""))
+mortality_summed_england <- mortality_summed %>% 
+  filter(Country == "England" & Region == "") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
 
+mortality_summed_regions <- mortality_summed %>% 
+  filter(Region != "") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
 
-mortality_summed_wales <- mortality_summed_totals %>%
-  group_by(Year, Sex, Wales) %>%
+mortality_summed_uk <- mortality_summed %>% 
+  filter(Region == "") %>%
+  group_by(Year, `Cause of death`, Sex) %>% 
   summarize(Value = sum(Value)) %>%
-  mutate(Country = "Wales") %>% 
-  mutate(`Cause of death` = "") %>%
+  mutate(Country = "United Kingdom") %>% 
   mutate(Region = "") %>%
-  select(Year, `Cause of death`, Country, Region, Sex, Value) 
-
-mortality_summed_regions <- mortality_summed_totals %>%
-  group_by(Year, Sex, English_region) %>%
-  summarize(Value = sum(Value)) %>% 
-  rename(Region = English_region) %>%
-  mutate(Country = "England") %>% 
-  mutate(`Cause of death` = "") %>%
   select(Year, `Cause of death`, Country, Region, Sex, Value)
-  
-# mortality_summed_england <- mortality_summed_totals %>% 
-#   group_by(Year, Sex, England) %>% 
-#   summarize(Value = sum(Value))
-
-#value appears to be double
 
 
-# mortality_summed_UK <- mortality_summed_totals %>%
-#   group_by(Year, Sex, UK) %>%
-#   summarize(Value = sum(Value))
-# 
-# # not quite working 
+####  Calculate sex totals ####
+mortality_summed_male <- mortality_summed %>% 
+  filter(Sex == "Male") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+
+mortality_summed_female <- mortality_summed %>% 
+  filter(Sex == "Female") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+
+mortality_summed_bothsex <- mortality_summed %>% 
+  filter(Sex == "") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+
+
+#### Clean the Scotland and NI data ####
+scotland_NI_small <- scotland_NI_data %>%
+  mutate(Region = "") %>%
+  rename(`Cause of death` = Cause.of.death,
+         `Observation status` = Observation.status) %>%
+  select(Year, `Cause of death`, Country, Region, Sex, Value)
 
 
 
+#### Combine the Mortality data #### 
 
-mortality_total <- rbind(mortality_summed_regions, 
-                         mortality_summed_wales) %>% 
-                  drop_na(Value)
+mortality <- rbind(scotland_NI_small,
+                   mortality_summed_wales,
+                   mortality_summed_england,
+                   mortality_summed_regions,
+                   mortality_summed_uk,
+                   mortality_summed_male,
+                   mortality_summed_female,
+                   mortality_summed_bothsex)
+
 
 
 
 #### Join mortality and population data #### 
-proportion_data <- mortality_summed %>% 
+proportion_data <- mortality %>% 
   left_join(population_clean, by = c("Year", "Country", "Sex", "Region"))
 
 

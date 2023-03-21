@@ -44,7 +44,10 @@ observation status to 'Provisional'.
 
 ## Plots
 Please check the plots below for any differences between the live data (which 
-is pulled in from the live site) and the new data.  
+is pulled in from the live site) and the new data. 
+
+Local authority data is not plotted due to there being too many to visualise. 
+Please use the table of differences to guide investigation of differences in local authority data.
   
 Live data will appear over the top of new data. You should therefore only 
 see points for the live data for previous years and only points for the new data 

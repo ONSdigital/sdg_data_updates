@@ -156,14 +156,15 @@ scotland_NI_small <- scotland_NI_data %>%
 
 #### Combine the Mortality data #### 
 
-mortality <- rbind(scotland_NI_small,
-                   mortality_summed_wales,
+mortality <- rbind(mortality_summed_wales,
                    mortality_summed_england,
                    mortality_summed_regions,
                    mortality_summed_uk,
                    mortality_summed_male,
                    mortality_summed_female,
                    mortality_summed_bothsex)
+
+# still need totals and then combine with scotland and NI
 
 
 

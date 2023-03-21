@@ -1,3 +1,11 @@
+library('SDGupdater')
+
+packages <- c('tidyr', 'dplyr', 'stringr',
+              'openxlsx', 'janitor', 
+              'ggplot2', 'DT', 'pander')
+
+install_absent_packages(packages)
+
 library(tidyr)
 library(dplyr)
 library(stringr)
@@ -6,8 +14,15 @@ library(janitor)
 library(ggplot2) # for figures for QMI
 
 # run scripts (create outputs) -------------------------------------------------
+if (test_run == TRUE) {
+  source("example_config.R")
+} else if (test_run == FALSE) {
+  source("config.R")
+} else {
+  stop("test_run must be either TRUE or FALSE")
+}
+
 source('14-1-1b_functions.R')
-source('example_config.R') # change to 'config.R' for real run
 source('14-1-1b_update.R')
 
 # create an output file if one does not already exist --------------------------
@@ -142,7 +157,10 @@ saveWorkbook(publication,
 # ----------------- csv and QA -----------------
 
 
-write.csv(csv_output, paste0(output_folder, "/", csv_filename), row.names = FALSE)
+write.csv(csv_output, 
+          paste0(output_folder, "/", csv_filename), 
+          row.names = FALSE,
+          na = "")
 
 rmarkdown::render('14-1-1b_checks.Rmd', output_file = paste0(output_folder, "/", qa_filename))
 

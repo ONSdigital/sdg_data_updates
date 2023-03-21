@@ -6,6 +6,7 @@
 \alias{read_deflators}
 \alias{gbp_to_usd}
 \alias{usd_to_constant_usd}
+\alias{check_data}
 \alias{apply_exchange_rate}
 \alias{apply_deflators}
 \title{Convert GBP to constant USD}
@@ -24,6 +25,8 @@ read_deflators(deflators_filepath)
 gbp_to_usd(exchange_rates, gbp_data, unit_multiplier = "($ thousands)")
 
 usd_to_constant_usd(deflators, usd_data, unit_multiplier = "$ thoudands")
+
+check_data(dat, min_expected, max_expected)
 
 apply_exchange_rate(
   gbp_data,
@@ -79,6 +82,8 @@ for the base year.
 \item \code{gbp_to_usd}: convert GBP to (non-constant) USD
 
 \item \code{usd_to_constant_usd}: convert USD to constant USD
+
+\item \code{check_data}: convert GBP to (non-constant) USD
 
 \item \code{apply_exchange_rate}: apply US exchange rate to GBP
 

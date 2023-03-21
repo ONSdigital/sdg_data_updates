@@ -10,13 +10,16 @@ data_without_superscripts <- age_sex_data %>%
   dplyr::mutate(character = remove_bracketted_superscripts(character)) %>% 
   mutate(across(where(is.character), stringr::str_trim))
 
-first_set <- filter(data_without_superscripts, row %in% first_date_row_age_sex:(second_date_row_age_sex - 1))
+first_set <- filter(data_without_superscripts, 
+                    row %in% first_date_row_age_sex:(second_date_row_age_sex - 1))
 first_set_correct_columns <- create_disaggregation_columns(first_set)
 
-second_set <- filter(data_without_superscripts, row %in% second_date_row_age_sex:(third_date_row_age_sex - 1))
+second_set <- filter(data_without_superscripts, 
+                     row %in% second_date_row_age_sex:(third_date_row_age_sex - 1))
 second_set_correct_columns <- create_disaggregation_columns(second_set)
 
-third_set <- filter(data_without_superscripts, row >= third_date_row_age_sex)
+third_set <- filter(data_without_superscripts, 
+                    row >= third_date_row_age_sex)
 third_set_correct_columns <- create_disaggregation_columns(third_set)
 
 
@@ -27,7 +30,16 @@ all_data <- bind_rows(first_set_correct_columns,
   # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
   filter(substr(Date, 7, 7) == month_numeric | substr(Date, 4, 6) == month_character) %>% 
   filter(!is.na(numeric)) %>% 
-  select(-c(row, sex_age_status, Date))
+  select(-c(row, sex_age_status, Date)) %>% 
+  # we have decided to only include post 2009 data so identify that series and remove the old method data here
+  mutate(keep = case_when(
+    Year == "2009 see note in original data" ~ TRUE,
+    Year == "2009" ~ FALSE,
+    suppressWarnings(as.numeric(Year)) < 2009 ~ FALSE,
+    TRUE ~ TRUE
+  )) %>% 
+  filter(keep == TRUE) %>% 
+  mutate(Year = as.integer(substr(Year, 1, 4)))
 
 data_for_calculations <- all_data %>% 
   tidyr::pivot_wider(names_from = Status,

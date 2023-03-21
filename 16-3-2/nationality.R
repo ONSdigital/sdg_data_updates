@@ -34,14 +34,23 @@ completed_nationality_column <- tidied_data %>%
   select(-Nationality) %>% 
   left_join(nationality_for_each_row, by = "row")
 
-data_with_year <- add_year_column(completed_nationality_column)
- 
+data_with_year <- add_year_column(completed_nationality_column) %>% 
+  # we have decided to only include post 2009 data so identify that series and remove the old method data here
+  mutate(keep = case_when(
+    Year == "2009 see note in original data" ~ TRUE,
+    Year == "2009" ~ FALSE,
+    suppressWarnings(as.numeric(Year)) < 2009 ~ FALSE,
+    TRUE ~ TRUE
+  )) %>% 
+  filter(keep == TRUE) %>% 
+  mutate(Year = as.integer(substr(Year, 1, 4)))
+  
 all_data <- data_with_year %>%
   mutate(Status = ifelse(is.na(Status), "all_prisoners", Status)) %>%
   # from 2010 reporting is quarterly (hidden columns in the source data). we only use the first quarter
   filter(substr(Date, 7, 7) == month_numeric | substr(Date, 4, 6) == month_character) %>% 
   filter(!is.na(numeric)) %>%
-  select(-c(row, nationality_status, Date))
+  select(-c(row, nationality_status, keep, Date))
  
 data_for_calculations <- all_data %>%
   tidyr::pivot_wider(names_from = Status,
@@ -53,7 +62,7 @@ proportions_calculated <- data_for_calculations %>%
 
 csv_nationality <- proportions_calculated %>%
   mutate(Nationality = ifelse(Nationality == "Total",
-                      "", Nationality),
+                      "", str_to_sentence(Nationality)),
          Sex = "",
          Age = "",
          `Unit measure` = "Percentage (%)",

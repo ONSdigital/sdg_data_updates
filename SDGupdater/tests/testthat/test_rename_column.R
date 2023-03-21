@@ -91,32 +91,35 @@ test_that("rename_column doesn't rename columns contaning not_pattern", {
 })
 
 
-context('testing underlying function - get_column_index')
+context('testing underlying function - get_index')
 
-test_that("get_column_index stops with incorrect data input", {
-  expect_error(get_column_index(c("numbers_1_4", 10), "numbers"))
-  expect_error(get_column_index("numbers_1_4", "numbers"))
-  expect_error(get_column_index(matrix(c(1:4), nrow = 2, ncol = 2), "numbers"))
+test_that("get_indices throws an error dattype is not a vector", {
+  expect_error(get_indices(testing_data, "1"), 
+               "dat must be a vector of more than one value")
+  expect_error(get_indices("numbers_1_4", "numbers"), 
+               "dat must be a vector of more than one value")
+  expect_error(get_indices(matrix(c(1:4), nrow = 2, ncol = 2), "numbers"), 
+               "dat must be a vector of more than one value")
 })
 
-test_that("get_column_index finds single patterns", {
-  expect_equal(get_column_index(testing_data, "numbers"), c(1,2))
-  expect_equal(get_column_index(testing_data, "num"), c(1,2))
-  expect_equal(get_column_index(testing_data, "um"), c(1,2))
-  expect_equal(get_column_index(testing_data, "e"), c(1,2,3))
-  expect_equal(get_column_index(testing_data, "_"), c(1,2,3))
-  expect_equal(get_column_index(testing_data, "4"), c(1,2,3))
-  expect_equal(get_column_index(testing_data, "1_4"), c(1,3))
+test_that("get_indices finds single patterns", {
+  expect_equal(get_indices(names(testing_data), "numbers"), c(1,2))
+  expect_equal(get_indices(names(testing_data), "num"), c(1,2))
+  expect_equal(get_indices(names(testing_data), "um"), c(1,2))
+  expect_equal(get_indices(names(testing_data), "e"), c(1,2,3))
+  expect_equal(get_indices(names(testing_data), "_"), c(1,2,3))
+  expect_equal(get_indices(names(testing_data), "4"), c(1,2,3))
+  expect_equal(get_indices(names(testing_data), "1_4"), c(1,3))
 })
 
-test_that("get_column_index finds double patterns", {
-  expect_equal(get_column_index(testing_data, c("numbers", "0")), 2)
-  expect_equal(get_column_index(testing_data, c("0", "numbers")), 2)
-  expect_equal(get_column_index(testing_data, c("r", "s", "_4", "n")), 1)
+test_that("get_indices finds double patterns", {
+  expect_equal(get_indices(names(testing_data), c("numbers", "0")), 2)
+  expect_equal(get_indices(names(testing_data), c("0", "numbers")), 2)
+  expect_equal(get_indices(names(testing_data), c("r", "s", "_4", "n")), 1)
 })
 
-test_that("get_column_index returns nothing if pattern not found", {
-  expect_equal(get_column_index(testing_data, "not_there"), integer(0))
-  expect_equal(get_column_index(testing_data, "11"), integer(0))
-  expect_equal(get_column_index(testing_data, "Numbers"), integer(0))
+test_that("get_indices returns nothing if pattern not found", {
+  expect_equal(get_indices(names(testing_data), "not_there"), integer(0))
+  expect_equal(get_indices(names(testing_data), "11"), integer(0))
+  expect_equal(get_indices(names(testing_data), "Numbers"), integer(0))
 })

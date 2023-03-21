@@ -6,7 +6,7 @@
 # Other info: This script is called by compile_tables.R
 
 # read in and clean data -------------------------------------------------------
-original_data <- read.csv(filepath_main_data)
+original_data <- read.csv(paste0(input_folder, "/", filename_main_data))
 
 main_clean <- original_data %>% 
   mutate(across(where(is.factor), as.character)) %>% 
@@ -21,7 +21,7 @@ main_clean <- original_data %>%
          length_surveyed = as.numeric(length_surveyed))
 
 # Retain the original format of the sources data for use in the table output
-sources_data_original <- read.csv(filepath_sources) 
+sources_data_original <- read.csv(paste0(input_folder, "/", filename_sources)) 
 
 sources_data <- sources_data_original %>% 
   mutate(across(where(is.factor), as.character)) %>% 
@@ -301,7 +301,7 @@ wales <- all_tables %>%
 # # To err on the side of caution I have therefore marked samples of less than
 # # 35 beaches as having a 'small sample size'
 
-csv_output <- output_data %>% 
+csv_output_all <- output_data %>% 
   mutate(
     `Observation status` = case_when(
       `Number of beaches` < 35 & year != 2020 ~ "Low reliability",
@@ -316,9 +316,21 @@ csv_output <- output_data %>%
     country = ifelse(
       country == "UK", "", country),
     Units = "Median count") %>% 
-  select(year, country, source, Units, `Observation status`, median_count) %>% 
+  select(year, country, source, Units, `Observation status`, median_count, `Number of beaches`) %>% 
   rename(Value = median_count,
          `Suspected source` = source) 
+
+if (remove_unreliable_values == TRUE) {
+  csv_output <- csv_output_all %>% 
+    mutate(Value = ifelse(`Number of beaches` < 4, NA, Value),
+           `Observation status` = ifelse(`Number of beaches` < 4, 
+                                         "Missing value; suppressed", 
+                                         `Observation status`)) %>% 
+    select(-`Number of beaches`)
+} else {
+  csv_output <- csv_output_all %>% 
+    select(-`Number of beaches`)
+}
 
 names(csv_output) <- str_to_sentence(names(csv_output))
 

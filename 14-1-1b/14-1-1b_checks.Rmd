@@ -14,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 
 ## Introduction
@@ -191,4 +192,105 @@ print(source_plot)
 
 
 ## Add section to show new data plotted against old data
+Please check the plots below for any differences between the live data (which 
+is pulled in from the sdg-data (platform) github) and the new data.  
+  
+Live data will appear over the top of new data. You should therefore only 
+see points for the live data for previous years and only points for the new data 
+in the years you are updating. 
 
+```{r, echo = FALSE, fig.width=10}
+
+# This example is taken from the 13-2-2 update because it is a straightforward
+# one.
+#
+# Some will be more complex, for example when there are multiple disaggregations.
+# See the 3-c-1 QA.Rmd file for an example of more complex QA plots
+#
+# Note that you may have improved the indicator at the same time as updating it
+# when writing the automation. If this is the case, the plots code you write for 
+# the first round of checks may need to be slightly different to how it will 
+# need to be in future years. So you will need to check the Rmd file works
+# with 'live' data that looks like the new data (for testing you could pull the 
+# 'live' data from the in progress file once you have put the new csv in there).
+
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_14-1-1.csv') %>%
+  janitor::clean_names()
+
+new_data <- csv_output %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") %>%
+  janitor::clean_names() 
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data)
+
+# plot the data
+main_plot <- joined_data %>% 
+  filter(is.na(suspected_source)|
+           suspected_source == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_wrap(vars(country),
+             nrow = 2) +
+  theme_bw() 
+
+source_plot <- joined_data %>% 
+  filter(!is.na(suspected_source)|
+           suspected_source != "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line(aes(linetype = dataset)) +
+  facet_grid(country ~ suspected_source) +
+  theme_bw() 
+
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(main_plot))
+suppressMessages(print(source_plot))
+```
+
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, country, suspected_source, value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+  
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```

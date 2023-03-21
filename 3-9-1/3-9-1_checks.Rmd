@@ -162,7 +162,7 @@ suppressMessages(print(plot))
   
   **If there are differences (see table below) please check that this still stands**
 
-```{r, , echo = FALSE}
+```{r, echo = FALSE}
 comparison <- joined_data %>% 
   pivot_wider(names_from = dataset,
               values_from = value)

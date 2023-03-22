@@ -71,6 +71,8 @@ joined_data <- live_data %>%
 
 # plot the headline data
 headline_plot <- joined_data %>% 
+filter(number_of_previous_live_births == "", country == "", region == "",
+         health_board == "", age == "") %>% 
   ggplot(.,
          aes(x = year,
              y = value,

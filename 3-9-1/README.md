@@ -5,7 +5,8 @@ Create csv data for 3-9-1 'Fraction of all-cause adult mortality attributable to
 - Region
 - Local Authority (Districts and Unitary Authorities combined)
 - IMD decile
-There are two series as there is a long time series for the old method, but this is no longer updated and there are no plans to backdate the series using the new method.  
+There are two series as there is a long time series for the old method, but this is no longer updated and there are no plans to backdate the series using the new method. 
+### The old method should end in 2020, with no new data added for 2021 onwards. 
   
 Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs as caveats may change in the future.  
   

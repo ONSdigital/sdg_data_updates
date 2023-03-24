@@ -32,6 +32,7 @@ clean_data <- NOMIS_data %>%
                                     "X44" = "Accidental poisoning by and exposure to other and unspecified drugs, medicaments and biological substances",
                                     "X46" = "Accidental poisoning by and exposure to organic solvents and halogenated hydrocarbons and their vapours",
                                     "X47" = "Accidental poisoning by and exposure to other gases and vapours",
+                                    "X48" = "Accidental poisoning by and exposure to pesticides",
                                     "X49" = "Accidental poisoning by and exposure to other and unspecified chemicals and noxious substances")) %>%
   
 
@@ -77,6 +78,7 @@ csv_formatted$Region <- gsub("the Humber", "The Humber", csv_formatted$Region)
 # R markdown QA file
 csv_formatted <- csv_formatted %>% 
   mutate(Value = ifelse(is.na(Value), "", Value)) 
+
 
 # This is a line that you can run to check that you have filtered and selected 
 # correctly - all rows should be unique, so this should be TRUE

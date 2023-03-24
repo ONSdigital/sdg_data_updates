@@ -36,8 +36,7 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 
 ```{r include= FALSE}
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-9-3.csv") %>%
-  rename("Type of disease" = "Type.of.disease",
-         "Chronic respiratory disease subtype" = "Chronic.respiratory.disease.subtype") %>%
+  rename("Unintentional poisoning category" = "Unintentional.poisoning.category") %>%
   mutate(dataset = "old") %>%
   select(-GeoCode)
   
@@ -46,8 +45,7 @@ date <- Sys.Date()
 new_data <- read.csv(paste0("Output/", date, "_3-9-3", ".csv")) %>% 
   mutate(Year = as.integer(Year),
          dataset = "new") %>%
-  rename("Type of disease" = "Type.of.disease",
-         "Chronic respiratory disease subtype" = "Chronic.respiratory.disease.subtype") 
+  rename("Unintentional poisoning category" = "Unintentional.poisoning.category") 
 
 latest_year <- max(new_data$Year)
 
@@ -69,10 +67,9 @@ the new data on dates where there is also live data this is a good thing.
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Country by type of disease
+# Country by Unintentional poisoning category
 country_headline_plot <- joined_data %>% 
-  filter(Region == "" & `Chronic respiratory disease subtype` == "" & Age == ""
-         & Sex == "" ) %>% 
+  filter(Region == ""  & Age == "" & Sex == "" ) %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -80,17 +77,16 @@ country_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Country) +
+  facet_grid(`Unintentional poisoning category` ~ Country) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Country by Type of disease")
+  ggtitle("Country by Type of poisoning")
 
 
-# Region by type of disease
+# Region by Unintentional poisoning category
 region_headline_plot <- joined_data %>% 
-  filter(Country =="England" & `Chronic respiratory disease subtype` == "" & Age == ""
-         & Sex == "" ) %>% 
+  filter(Country =="England" & Age == "" & Sex == "" ) %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -98,16 +94,16 @@ region_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Region) +
+  facet_grid(`Unintentional poisoning category` ~ Region) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Region by Type of disease")
+  ggtitle("Region by Unintentional poisoning category")
 
 
-# Age by type of disease
+# Age by Unintentional poisoning category
 age_headline_plot <- joined_data %>% 
-  filter(`Chronic respiratory disease subtype` == "" & Region == "" & Sex == "") %>% 
+  filter(Country == "England and Wales" & Region == "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -115,16 +111,16 @@ age_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Age) +
+  facet_grid(`Unintentional poisoning category` ~ Age) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Age by Type of disease")
+  ggtitle("Age by Unintentional poisoning category")
 
 
-# Sex by type of disease
+# Sex by Unintentional poisoning category
 sex_headline_plot <- joined_data %>% 
-  filter(Country == "England and Wales" & Region == "" & `Chronic respiratory disease subtype` == "" & Age == "") %>% 
+  filter(Country == "England and Wales" & Region == "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -132,11 +128,11 @@ sex_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Type of disease` ~ Sex) +
+  facet_grid(`Unintentional poisoning category` ~ Sex) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by Type of disease")
+  ggtitle("Sex by Unintentional poisoning category")
 
 ```
 
@@ -159,107 +155,14 @@ suppressMessages(print(sex_headline_plot))
 ```
 
 
-```{r, echo = FALSE, fig.width=10}
-
-# Country by chronic respiratory disease subtype
-chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(Region == "" & `Type of disease` == "Chronic respiratory disease" & Age == ""
-         & Sex == "" ) %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Country) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Country by chronic respiratory disease subtype")
-
-# Region by chronic respiratory disease subtype
-region_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(Country == "England" & `Type of disease` == "Chronic respiratory disease" & Age == ""
-         & Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Region) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Region by chronic respiratory disease subtype")
-
-
-# Age by chronic respiratory disease subtype
-age_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
-         & Region == "" & Sex == "" ) %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Age) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Age by chronic respiratory disease subtype")
-
-
-# Sex by chronic respiratory disease subtype
-sex_chronic_respiratory_disease_plot <- joined_data %>% 
-  filter(`Type of disease` == "Chronic respiratory disease" & Country == "England and Wales"
-         & Region == "" & Age == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(`Chronic respiratory disease subtype` ~ Sex) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by chronic respiratory disease subtype")
-
-```
-
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(region_chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(age_chronic_respiratory_disease_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_chronic_respiratory_disease_plot))
-```
-
-
-
 If there are differences, visible in the table below and plots, please investigate these.
 It is possible the data source has update its back time series, so the difference
 could be genuine. 
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Country, Region, Age, Sex, `Type of disease`,
-         `Chronic respiratory disease subtype`, Value, dataset) %>%
+  select(Year, Country, Region, Age, Sex, `Unintentional poisoning category`,
+         Value, dataset) %>%
     na.omit(Value) %>%
   pivot_wider(names_from = dataset,
               values_from = Value)

@@ -37,7 +37,6 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 ```{r include= FALSE}
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-9-3.csv") %>%
   rename("Unintentional poisoning category" = "Unintentional.poisoning.category") %>%
-  remove(`Unintentional poisoning category` == "X44 Accidental poisoning by and exposure to other and unspecified drugs, medicaments and biological substances") %>%
   mutate(dataset = "old") %>%
   select(-GeoCode)
 

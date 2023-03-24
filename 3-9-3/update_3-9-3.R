@@ -72,6 +72,8 @@ csv_formatted <- clean_data %>%
 
 csv_formatted$Region <- gsub("the Humber", "The Humber", csv_formatted$Region)
 
+###### Headline figure absent. Needs work ######
+
 
 # remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 

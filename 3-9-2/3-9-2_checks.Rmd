@@ -102,7 +102,7 @@ country_headline_plot <- joined_data %>%
 
 # Region by cause of death
 region_headline_plot <- joined_data %>% 
-  filter(Country == "England" & Sex == "") %>% 
+  filter(Region != "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -120,7 +120,7 @@ region_headline_plot <- joined_data %>%
 
 # Sex by cause of death
 sex_headline_plot <- joined_data %>% 
-  filter(Region == "" & Country == "") %>% 
+  filter(Country == "United Kingdom") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,

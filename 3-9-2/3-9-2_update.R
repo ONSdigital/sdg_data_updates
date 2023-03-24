@@ -49,10 +49,21 @@ population_clean <- population_small %>%
 
 population_clean$Sex <- gsub("Total", "", population_clean$Sex)
 
+
+#### Clean the Scotland and NI data ####
+scotland_NI <- scotland_NI_data %>%
+  mutate(Region = "") %>%
+  rename(`Cause of death` = Cause.of.death,
+         `Observation status` = Observation.status) %>%
+  select(Year, `Cause of death`, Country, Region, Sex, Value)
+
+
+
+
 #### Clean the England and Wales data #### 
 
 # Select and rename relevant columns
-england_wales_small <- england_wales_data %>%
+england_wales <- england_wales_data %>%
   select(DATE, CAUSE_OF_DEATH_NAME, GEOGRAPHY_NAME, GEOGRAPHY_TYPE,
          GENDER_NAME, OBS_VALUE, OBS_STATUS_NAME) %>% 
   rename(Year = DATE,
@@ -70,7 +81,7 @@ england_wales_small <- england_wales_data %>%
 
 #### Group cause of death, where appropriate, according to UN metadata ####
 
-mortality_grouped <- england_wales_small %>%
+england_wales_grouped <- england_wales %>%
   mutate(`Cause of death` = recode(`Cause of death`, 
           "A00 cholera" = "Diarrhoea",
           "A01 typhoid and paratyphoid fevers" = "Diarrhoea",
@@ -91,80 +102,97 @@ mortality_grouped <- england_wales_small %>%
           "J20-j22 other acute lower respiratory infections" = "Acute respiratory infections",
           "P23 congenital pneumonia" = "Acute respiratory infections"))
 
-mortality_grouped$Sex <- gsub("Total", "", mortality_grouped$Sex)
+england_wales_grouped$Sex <- gsub("Total", "", england_wales_grouped$Sex)
 
 
 #### Sum each cause of death from sub-causes ####
-mortality_summed <- mortality_grouped %>% 
-  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
-  summarize(Value = sum(Value))
-#this has worked
-
-
-
-#### Calculate English regions, England, Wales and UK totals ####
-
-mortality_summed_wales <- mortality_summed %>% 
-  filter(Country == "Wales") %>%
+england_wales_summed <- england_wales_grouped %>% 
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
-mortality_summed_england <- mortality_summed %>% 
-  filter(Country == "England" & Region == "") %>%
+
+
+#### need to calculate headline values for all disaggs here. ####
+  # not disaggregated by cause of death
+
+england_wales_total_deaths <- england_wales_summed %>%
+  group_by(Year, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+  
+
+
+
+#### bind all 4 countries together ####
+
+uk <- dplyr::bind_rows(england_wales_summed,
+                       england_wales_total_deaths,
+                 scotland_NI) %>%
+  mutate(`Cause of death` = ifelse(is.na(`Cause of death`), "", `Cause of death`)) 
+
+
+
+#### Calculate England and Wales totals ####
+
+summed_wales <- uk %>% 
+  filter(Country == "Wales" & Sex == "") %>%
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
-mortality_summed_regions <- mortality_summed %>% 
-  filter(Region != "") %>%
+summed_england <- uk %>% 
+  filter(Country == "England" & Region == "" & Sex == "") %>%
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
-mortality_summed_uk <- mortality_summed %>% 
+
+#### Calculate region totals ####
+
+summed_regions <- uk %>% 
+  filter(Region != "" & Sex == "") %>%
+  group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
+  summarize(Value = sum(Value))
+
+
+#### Calculate UK totals ####
+
+summed_uk <- uk %>% 
   filter(Region == "") %>%
   group_by(Year, `Cause of death`, Sex) %>% 
   summarize(Value = sum(Value)) %>%
-  mutate(Country = "United Kingdom") %>% 
+  mutate(Country = "United kingdom") %>% 
   mutate(Region = "") %>%
   select(Year, `Cause of death`, Country, Region, Sex, Value)
 
 
 ####  Calculate sex totals ####
-mortality_summed_male <- mortality_summed %>% 
+
+summed_male <- uk %>% 
   filter(Sex == "Male") %>%
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
-mortality_summed_female <- mortality_summed %>% 
+summed_female <- uk %>% 
   filter(Sex == "Female") %>%
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
-mortality_summed_bothsex <- mortality_summed %>% 
+summed_bothsex <- uk %>% 
   filter(Sex == "") %>%
   group_by(Year, `Cause of death`, Country, Region, Sex) %>% 
   summarize(Value = sum(Value))
 
 
-#### Clean the Scotland and NI data ####
-scotland_NI_small <- scotland_NI_data %>%
-  mutate(Region = "") %>%
-  rename(`Cause of death` = Cause.of.death,
-         `Observation status` = Observation.status) %>%
-  select(Year, `Cause of death`, Country, Region, Sex, Value)
-
-
-
 #### Combine the Mortality data #### 
 
-mortality <- rbind(mortality_summed_wales,
-                   mortality_summed_england,
-                   mortality_summed_regions,
-                   mortality_summed_uk,
-                   mortality_summed_male,
-                   mortality_summed_female,
-                   mortality_summed_bothsex)
+mortality <- dplyr::bind_rows(uk,
+                              summed_wales,
+                              summed_england,
+                              summed_regions,
+                              summed_uk,
+                              summed_male,
+                              summed_female,
+                              summed_bothsex)
 
-# still need totals and then combine with scotland and NI
+
 
 
 
@@ -191,7 +219,8 @@ csv_formatted <- proportion_data %>%
   mutate(`Observation status` = "Undefined") %>%
   mutate('Unit measure' = "Rate per 1,000,000 population") %>%
   # Put columns in order required for csv file.
-  select(Year, `Cause of death`, Country, Region, Sex, `Observation status`, Value) %>% 
+  select(Year, `Cause of death`, Country, Region, Sex, 
+         `Unit measure`, `Observation status`, Value) %>% 
   # Arrange data by Year, Country, region, Sex 
   arrange(Year, `Cause of death`, Country, Region, Sex)
 
@@ -203,12 +232,15 @@ csv_formatted$Region[csv_formatted$Region == "Yorkshire and the Humber"] <- "Yor
 # correctly - all rows should be unique, so this should be TRUE
 check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
 
+# If false you may need to remove duplicate rows. 
+csv_output <- unique(csv_formatted)
 
-#### Remove NAs from the csv that will be saved in Outputs ####
 
+# remove NAs from the csv that will be saved in Outputs
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
-csv_output <- csv_formatted
+csv_output <- csv_output %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value)) 
 
 
 

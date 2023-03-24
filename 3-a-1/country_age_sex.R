@@ -26,7 +26,7 @@ table_1_data <- table_1_data %>%
 table_1_data$Year = substr(table_1_data$Year,1,4)  
 
 table_1_data <- table_1_data %>% 
-  mutate("Units" = "Percentage",
+  mutate("Units" = "Percentage (%)",
          "Unit multiplier" =  "Units",
          "Observation status" = "Normal value", # make sure to check source data and manually change this if data is provisional etc.
          "Series" = "Percentage of people who are current cigarette smokers aged 18 years and older") %>%  

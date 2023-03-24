@@ -1,0 +1,173 @@
+---
+title: "3-2-1 checks"
+author: "Ali Campbell"
+date: "27/02/2023"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(ggplot2)
+library(DT)
+library(janitor)
+library(pander)
+```
+**Run date and time: `r Sys.time()`**  
+  
+## Introduction
+
+Short explanation that can include details such as:   
+  
+- 3-2-1 data comes in two large tables that need to be formatted down and have a death
+rate per 1000 live births calculated
+  
+- This file runs some basic checks on the csv output and highlights some specific 
+things that should manually be checked.
+  
+## Configurations
+  The configurations are:  
+  
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
+  - name of the tab the data are in; England & Wales: **`r tabname_EW`**, UK: **`r tabname_UK`**
+  - row number of the column names: E&W: **`r header_row_EW`**, UK: **`r header_row_EW`** 
+  - location of the outputs: **`r output_folder`**
+
+## Basic checks
+  - no duplicates present: **`r check_output`**
+
+## Plots
+  Please check the plots below for any differences between the live data (which 
+  is pulled in from the sdg-data (platform) github repo) and the new data.  
+  
+  Live data will appear over the top of new data. You should therefore only 
+  see points for the live data for previous years and only points for the new data 
+  in the years you are updating. 
+
+```{r, echo = FALSE, fig.width=10}
+live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_3-2-1.csv') %>%
+  janitor::clean_names()
+
+new_data <- csv_data %>%
+  mutate(Year = as.integer(Year),
+         dataset = "new") %>%
+  janitor::clean_names() 
+
+# make sure both value columns are numeric and same dp
+# Doing this in compile_tables converts the blanks back to NA, which is why it's
+# left to here
+live_data$value <- live_data$value %>%
+  as.numeric() %>%
+  round(digits = 2)
+new_data$value <- new_data$value %>%
+  as.numeric() %>%
+  round(digits = 2)
+  
+# join to the new data
+joined_data <- live_data %>% 
+  mutate(dataset = "live") %>% 
+  bind_rows(new_data)
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# headline data
+plot <- joined_data %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  #facet_wrap() +
+  theme_bw() 
+
+suppressMessages(print(plot))
+```
+
+```{r, echo = FALSE, fig.width = 10}
+# plot the country data
+plot_country <- joined_data %>%
+  filter(sex == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ country) +
+  ggtitle("Country") +
+  theme_bw() 
+
+suppressMessages(print(plot_country))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot the sex data
+plot_sex <- joined_data %>%
+  filter(country == "") %>% 
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_wrap(~ sex) +
+  ggtitle("Sex") +
+  theme_bw() 
+
+suppressMessages(print(plot_sex))
+```
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+# plot both country and sex data
+plot_country_sex <- joined_data %>%
+  ggplot(.,
+         aes(x = year,
+             y = value,
+             colour = dataset)) +
+  geom_point(aes(shape = dataset)) +
+  scale_shape_manual(values = c(15, 19)) +
+  facet_grid(sex ~ country) +
+  ggtitle("Country and Sex") +
+  theme_bw() 
+
+suppressMessages(print(plot_country_sex))
+```
+
+  **If there are differences (see table below) please check that this still stands**
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  # select the columns that are in both the live and new data
+  # Columns that have the same entry in every row (e.g. units), or
+  # columns like geocode and obs status don't need to go in here.
+  select(year, country, sex, value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = value) %>% 
+  mutate(difference = new - live) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+  
+  The table below shows all instances where the old value does not match the new 
+  value. It is sorted so the largest absolute differences appear first, but can
+  be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 5,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

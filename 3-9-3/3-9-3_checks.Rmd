@@ -39,6 +39,13 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-9-3.csv") %>%
   rename("Unintentional poisoning category" = "Unintentional.poisoning.category") %>%
   mutate(dataset = "old") %>%
   select(-GeoCode)
+
+old_data$`Unintentional poisoning category` <- gsub("X40 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X43 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X44 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X46 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X47 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X49 ", "", old_data$`Unintentional poisoning category`)
   
 
 date <- Sys.Date()

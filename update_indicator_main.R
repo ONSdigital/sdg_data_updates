@@ -14,9 +14,6 @@
 
 test_run <- FALSE # for real updates use FALSE
 
-indicator <- "3-9-3" # name of folder for indicator(s)
 
-setwd(indicator)
-
-source("compile_tables.R")
+indicator <- "3-9-2" # name of folder for indicator(s)
 

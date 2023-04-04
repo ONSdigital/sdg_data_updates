@@ -1,13 +1,12 @@
 
 #    Information
 # create a function "format_data_8_6_1" to filter, modify, and format data in
-# required format this function takes table start row(tStart), 
-# table end row (tEnd), alldata as (main_data), value of Seasonally Adjusted
+# required format, this function takes main_data, value of Seasonally Adjusted
 # or Not in a variable as (NSA_or_SA), value of sex in a varialbe as (SEX)
 # and return the final formatted data.
 
-format_data_8_6_1 <- function(tStart,tEnd,main_data,NSA_or_SA, SEX) { 
-  data <- main_data[tStart:tEnd,]
+format_data_8_6_1 <- function(main_data,NSA_or_SA, SEX) { 
+  data <- main_data
   
   data <- data %>%
     mutate(across(`X1`, str_replace, 'Jan-Mar', 'Q1'),

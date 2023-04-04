@@ -25,8 +25,13 @@ if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE)
   source("config.R") } else { 
     stop("test_run must be either TRUE or FALSE") }
 
+# source for function 
+source("function.R") 
+
 source("update_8-6-1.R") # does the donkey-work of making the csv - 
 # for real update this might be called e.g. 'update_1-2-1.R' 
+
+
 
 # at this point you should see lots of variables appear in the global environment 
 # pane (top right). These have been created by the update_14-2-1.Rdate_type_1 script.

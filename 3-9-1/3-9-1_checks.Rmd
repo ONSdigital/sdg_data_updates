@@ -1,14 +1,9 @@
 ---
 title: "QA 3-9-1"
-author: "Emma Wood"
-date: `r Sys.time`
+author: "Michael Nairn"
 output: html_document
 ---
-*This is only a template and will not produce real output as the variables *
-*referred to in the code do not exist - in a real one they will be pulled from*
-*the other scripts. For a working QA file similar to this template see 13-2-2*
 
-*Example text is indented, but shouldn't be indented in the real thing*
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -19,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(DT)
+library(pander)
 ```
 ## Introduction
 
@@ -28,57 +24,36 @@ but that code is now in the archive as it used an out of date link.
   
 The method for this PHE Public Health Outcome Framework indicator has recently
 been changed but they do not intend to use the new method on the backseries. The 
-two series should not be presented on the same chart without making this clear
+two series should not be presented on the same chart without making this clear.
    
 This file runs some basic checks on the csv output and highlights some specific 
 things that should manually be checked.
   
-- specific things that should be checked in addition to reading this document 
-e.g. if provisional figures are likely to be included but this info is not 
-picked up by the automation you may put something like "Before putting the csv 
-in the indicator file please check in the source data if the most recent 
+Before putting the csv in the indicator file please check in the source data if the most recent 
 figures are provisional. If they are, in the indicator csv file change the 
-observation status to 'Provisional'."  
+observation status to 'Provisional'.
   
-- other important info you think the user needs to be aware of.
-  
+ 
 ## Configurations
-in this section list the settings (configurations) and use snippets of code to 
-print the user input. The double asterisks make the text bold, while `r` tells 
-markdown to read the text inside the back-ticks as code. 
 
-An example of what you may put in this section -
-  
   The configurations are:  
   
-  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", filename)`**
-  - name of the tab the data are in: **`r tab_name`**  
-  - row number of the column names: **`r header_row`** 
-  - location of the outputs: **`r output_folder`**  
+  - filepath for the input data: **`r paste0(getwd(), "/", input_folder, "/", csv_filename)`**
   
   
-## Basic checks
-Deprivation deciles are based on different IMDs depending on the year. This 
-information should be checked in the metadata tab of the indicator file. If it
-doesn't match what is shown in the table below, please correct it.
-
-```{r}
-print(deprivation_note_compiled)
-
-```
-   
-age is `r unique(required_compiled$age)`  
-sex is `r unique(required_compiled$sex)`  
 
 ## Plots
 Please check the plots below for any differences between the live data (which 
-is pulled in from the live site) and the new data.  
+is pulled in from the live site) and the new data. 
+
+Local authority data is not plotted due to there being too many to visualise. 
+Please use the table of differences to guide investigation of differences in local authority data.
   
 Live data will appear over the top of new data. You should therefore only 
 see points for the live data for previous years and only points for the new data 
 in the years you are updating. 
 
-```{r}
+```{r, echo = FALSE}
 # functions for making tables & plots of differences between live and new data
 # plots:
 filter_for_plot <- function(series_value, var1, var2) {
@@ -160,24 +135,25 @@ new_data <- read.csv(paste0(output_folder, "/", csv_filename)) %>%
 
 # join to the new data
 joined_data <- live_data %>% 
-  bind_rows(new_data) %>% 
-  mutate(region = ifelse(region == "England", "", region))
+  bind_rows(new_data) 
 
 # plot the data
 joined_data %>% 
   filter(#(is.na(region) | region == "") & 
            (is.na(local_authority) | local_authority == "") & 
-           (is.na(county) | county == "") &
            (is.na(deprivation_decile) | deprivation_decile == "")) %>%  
   ggplot(.,
          aes(x = year,
              y = value,
              colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$year):max (joined_data$year)) +
   geom_point() +
   geom_line() +
   facet_wrap(vars(region),
              nrow = 2) +
-  theme_bw() 
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7))
 
 ```
 
@@ -186,31 +162,27 @@ joined_data %>%
 suppressMessages(print(plot))
 ```
 
-Finally, it is sometimes hard to see where new numbers don't match live numbers
-especially if there are lots of disaggregations. In such cases a table of 
-differences is also useful. The following example is taken from 13-2-2:
-  
-  At the time of writing this code (June 2022), the following note is given in the
-  source notes tab: 'in these statistics the entire time series going back to 
-  1990 is revised each year to take account of methodological improvements'.  
   
   **If there are differences (see table below) please check that this still stands**
 
-```{r, , echo = FALSE}
+```{r, echo = FALSE}
 comparison <- joined_data %>% 
-  select(Year, Gas, Value, dataset) %>% 
   pivot_wider(names_from = dataset,
-              values_from = Value) %>% 
-  mutate(difference = new - live) %>% 
+              values_from = value)
+
+comparison <- comparison %>% 
+  mutate(difference = new - live) %>%
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
 ```
-  
+
+
   The table below shows all instances where the old value does not match the new 
   value. It is sorted so the largest absolute differences appear first, but can
   be sorted in other ways using the arrows at the top.
+  
 ```{r, echo = FALSE}
 datatable(comparison, 
           rownames = FALSE, 

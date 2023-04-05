@@ -3,10 +3,18 @@
 This automation ... explain what it does
   
 ### Instructions to run update ###
-1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
-   *Others:* Checkout sdg_data_updates main branch to your local repository.     
+1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates. 
+   *Others:* Checkout sdg_data_updates main branch to your local repository.
+2. DOWNLOAD DATA:
+  - Source 1:
+    - Go to [https://digital.nhs.uk/data-and-information/publications/statistical/nhs-immunisation-statistics/england---2020-21#chapter-index]
+    - Scroll down to Resources and download the Childhood Vaccination Coverage Statistics
+    - Open the zip file and put the four excel files in the 'Input' folder
+  - Source 2:
+    - Go to [https://www.gov.uk/government/statistics/human-papillomavirus-hpv-vaccine-coverage-estimates-in-england-2021-to-2022]. If newer data is available it may not be displayed on this page and you will need to search for it at [https://www.gov.uk/search/research-and-statistics?parent=%2Fhealth-and-social-care%2Fhealth-protection-immunisation&topic=43d071e7-a450-4bb6-b34a-c4ed256a226d].
+    - Download the data in excel format and place in the 'Input' folder
 2. Open sdg_data_updates.Rproj  
-3. Change indicator folder name (`indicator <- "x-x-x"`)  
+3. Change indicator folder name (`indicator <- "3-b-1"`)
 4. If config.R does not exist in the x-x-x folder, create it from the example_config.R file  
 5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove occupation codes. 
 To run the example data and get example output, it should be example_config.R).   

@@ -1,15 +1,14 @@
-# date: 24/03/2022
-# THIS IS A TEMPLATE. It may be that not everything is relevant for your data.
-# This script runs on test data so you can look at what everything does line by line
-
-# Type 1 data is simple - one row of column headings and no row names
-# There may or may not be metadata above the column headings - this code allows for both scenarios
-
-# Most comments can (should) be deleted in your file 
+# Ali Campbell 05/04/2023
 
 # read in data -----------------------------------------------------------------
 
-source_data <- get_type1_data(header_row, filename, tabname)
+nhs_source_data <- readr::read_csv(nhs_filenames)
+
+# What we want from the source data:
+#' Vaccines: 
+#' (1) 1st birthday (2) 2nd birthday (3) 3rd birthday
+#' HPV: (4) proportion of girls vaccinated against HPV
+#' (5) Proportion of boys vaccinated against HPV
 
 # clean the data and get yer and country info from above the headers -----------
 

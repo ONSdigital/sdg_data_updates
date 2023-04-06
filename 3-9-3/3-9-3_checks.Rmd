@@ -1,0 +1,213 @@
+title: "3-9-3 QA"
+author: "Michael Nairn"
+date: "24/03/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 3-9-3 update summary
+
+3-9-3 is an indicator that uses a NOMIS API link to provide data. Unless the 
+format of NOMIS API downloads changes, the update_3-9-3 script should not need 
+changing. However, always check before running the update script. 
+
+This file runs some basic checks and gives information about the update.
+  
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-9-3.csv") %>%
+  rename("Unintentional poisoning category" = "Unintentional.poisoning.category") %>%
+  mutate(dataset = "old") %>%
+  select(-GeoCode)
+
+old_data$`Unintentional poisoning category` <- gsub("X40 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X43 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X46 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X47 ", "", old_data$`Unintentional poisoning category`)
+old_data$`Unintentional poisoning category` <- gsub("X49 ", "", old_data$`Unintentional poisoning category`)
+  
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_3-9-3", ".csv")) %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new") %>%
+  rename("Unintentional poisoning category" = "Unintentional.poisoning.category") 
+
+latest_year <- max(new_data$Year)
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) %>%
+  rename(`Observation status` = `Observation.status`,
+         `Unit multiplier` = `Unit.multiplier`,
+         `Unit measure` = `Unit.measure`)
+
+```
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing.  
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Country by Unintentional poisoning category
+country_headline_plot <- joined_data %>% 
+  filter(Region == ""  & Age == "" & Sex == "" ) %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Unintentional poisoning category` ~ Country) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Country by Type of poisoning")
+
+
+# Region by Unintentional poisoning category
+region_headline_plot <- joined_data %>% 
+  filter(Country =="England" & Age == "" & Sex == "" ) %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Unintentional poisoning category` ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Region by Unintentional poisoning category")
+
+
+# Age by Unintentional poisoning category
+age_headline_plot <- joined_data %>% 
+  filter(Country == "England and Wales" & Region == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Unintentional poisoning category` ~ Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Age by Unintentional poisoning category")
+
+
+# Sex by Unintentional poisoning category
+sex_headline_plot <- joined_data %>% 
+  filter(Country == "England and Wales" & Region == "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Unintentional poisoning category` ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Sex by Unintentional poisoning category")
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(country_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_headline_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_headline_plot))
+```
+
+  
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_headline_plot))
+```
+
+
+If there are differences, visible in the table below and plots, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. 
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Country, Region, Age, Sex, `Unintentional poisoning category`,
+         Value, dataset) %>%
+    na.omit(Value) %>%
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+# replace the NULL returns with NA
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>% 
+  mutate(new = as.numeric(new)) %>% 
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

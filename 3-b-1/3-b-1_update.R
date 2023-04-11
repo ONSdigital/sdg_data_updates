@@ -2,17 +2,20 @@
 
 # read in data -----------------------------------------------------------------
 
-nhs_source_data <- readr::read_csv(nhs_filenames)
+nhs_source_data <- readr::read_csv(nhs_filename)
 
 # Unaccounted for: MenC pri + boost, Hib pri
 
-# What we want from the ChilVaccStat_2020-21:
+# What we want from the NHS ChilVaccStat_2020-21:
 #' (1) 1st birthday: DTaP_IPV_Hib_12m, PCV_12m, Rota_12m, MenB_12m
 #' (2) 2nd birthday: DTaP_IPV_Hib_24m, MMR_24m, Hip_MenC_24m, PCV_24m,
-#' Men_booster_24m
-#' (3) 3rd birthday
-#' HPV: (4) proportion of girls vaccinated against HPV
-#' (5) Proportion of boys vaccinated against HPV
+#' MenB_booster_24m
+#' (3) 5th birthday: DtaP_IPV_Hib_5y, MMR1_5y, MMR2_5y, Hib_MenC_5y,
+#' DTaP_IPV_5y
+#' 
+#' HSA: See highlighted cells in ods file
+#' HPV: (4) proportion of girls vaccinated against HPV: 
+#' (5) Proportion of boys vaccinated against HPV: 
 
 # clean the data and get yer and country info from above the headers -----------
 

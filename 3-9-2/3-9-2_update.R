@@ -205,7 +205,7 @@ proportion_data <- mortality %>%
 #### Calculate proportion per million population ####
 
 proportion_data <- proportion_data %>%
-  mutate(Value = 1000000*(Value.x/Value.y)) %>%
+  mutate(Value = 100000*(Value.x/Value.y)) %>%
   rename(`Cause of death` = `Cause of death.x`) %>%
   select(Year, `Cause of death`, Country, Region, Sex, Value)
 
@@ -217,7 +217,7 @@ csv_formatted <- proportion_data %>%
   mutate(Country = toTitleCase(Country),
          Region = toTitleCase(Region)) %>% 
   mutate(`Observation status` = "Undefined") %>%
-  mutate('Unit measure' = "Rate per 1,000,000 population") %>%
+  mutate('Unit measure' = "Rate per 100,000 population") %>%
   # Put columns in order required for csv file.
   select(Year, `Cause of death`, Country, Region, Sex, 
          `Unit measure`, `Observation status`, Value) %>% 

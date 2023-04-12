@@ -5,8 +5,7 @@
 # (Proportion of youth (aged 15–24 years) not in education, employment or training)
 
 
-# source for function 
-source("function.R") 
+
 
 # read in data 
 

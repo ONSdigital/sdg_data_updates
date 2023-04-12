@@ -1,10 +1,22 @@
 # Ali Campbell 05/04/2023
 
+# NHS
 # read in data -----------------------------------------------------------------
+nhs_source_data <- readr::read_csv(paste0(input_folder, "/", nhs_filename))
 
-nhs_source_data <- readr::read_csv(nhs_filename)
+# select relevant data ---------------------------------------------------------
 
-# Unaccounted for: MenC pri + boost, Hib pri
+nhs_tidy_data <- nhs_source_data %>%
+  SDGupdater::clean_strings() %>% # redundant but will leave in as future-proofing
+  janitor::clean_names() %>%
+  #rename_column(primary = "total", new_name = "total")
+  
+
+
+  rename_column(primary = c("nhs"), not_pattern = "non", new_name = "nhs") %>%
+  rename_column(primary = c("non", "nhs"), new_name = "non_nhs")
+
+# Unaccounted for: MenC pri + boost, Hib pri (no longer in dataset)
 
 # What we want from the NHS ChilVaccStat_2020-21:
 #' (1) 1st birthday: DTaP_IPV_Hib_12m, PCV_12m, Rota_12m, MenB_12m
@@ -12,7 +24,10 @@ nhs_source_data <- readr::read_csv(nhs_filename)
 #' MenB_booster_24m
 #' (3) 5th birthday: DtaP_IPV_Hib_5y, MMR1_5y, MMR2_5y, Hib_MenC_5y,
 #' DTaP_IPV_5y
-#' 
+
+
+
+
 #' HSA: See highlighted cells in ods file
 #' HPV: (4) proportion of girls vaccinated against HPV: 
 #' (5) Proportion of boys vaccinated against HPV: 

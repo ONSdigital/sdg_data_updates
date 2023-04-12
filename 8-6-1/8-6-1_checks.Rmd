@@ -96,8 +96,9 @@ This file was saved at `r filename_save_time`: It has been
 `r time_since_data_saved` days since the file was saved in 
 `r input_folder`  
 
-The tab used is called
-`r tabname`. 
+The tab used is 
+**`r people_sa_tabname`, `r people_nsa_tabname`,  `r men_sa_tabname`,  `r men_nsa_tabname`,  `r women_sa_tabname`,  `r women_nsa_tabname`**
+
 
 
 
@@ -143,6 +144,7 @@ Yearly_data <- Yearly_data %>%
 
 
 # Yearly plot
+
 Yearly_plot <- Yearly_data %>%
   ggplot(.,
          aes(x = Year,
@@ -155,10 +157,12 @@ Yearly_plot <- Yearly_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Proportion of youth not in education, employment or training by Year (Annual)")
+  ggtitle("Proportion of youth not in education, employment or training by Year (Annual) NEET")
   
 
 # Quarterly Plot
+mx <- max(joined_data$Value)
+mn <- min(joined_data$Value)
 plot <- joined_data %>%
   filter(Series == "Quaterly") %>%
   ggplot(.,
@@ -166,14 +170,16 @@ plot <- joined_data %>%
              y = Value,
              colour = dataset)) +
   geom_point(aes(shape = dataset)) +
-  geom_point() +
   geom_line() +
-  facet_grid(~Series ~Seasonally.adjusted.or.not ~ Age ~ Sex,scales = "free_x", space='free_x') +
-  scale_x_discrete(expand = c(0, 0.5)) +
+  geom_point() +
+  facet_grid(~Series ~Seasonally.adjusted.or.not ~Age  + Sex ~ .,scales='free_x', space='free')+
+  scale_x_discrete(expand = c(0, 0.5) ) +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 3.5)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Proportion of youth not in education, employment or training Quarterly")
+  theme(strip.text.y = element_text(size = 5))+ 
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 5)) +
+  theme(axis.text.y = element_text(size = 5)) +
+  expand_limits(y = c(mn, mx)) +
+  ggtitle("Proportion of youth not in education, employment or training Quarterly (NEET)")
 
 ```
 

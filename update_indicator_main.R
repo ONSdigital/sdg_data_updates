@@ -14,3 +14,7 @@ rm(list = ls())
 test_run <- FALSE # for real updates use FALSE
 
 indicator <- "ODA" # name of folder for indicator
+
+setwd(indicator)
+
+source("compile_tables.R")

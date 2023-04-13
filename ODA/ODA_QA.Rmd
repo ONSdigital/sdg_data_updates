@@ -728,7 +728,7 @@ if ("csv_17191" %in% objects()) {
     filter(grepl("USD", units)) %>% 
     basic_plot(.) +
     facet_wrap(vars(country_income_classification), nrow = 3) +
-    ggtitle("17-19-1 by country income classification (Constant USD)") 
+    ggtitle("17-19-1 by country income classification (USD)") 
 } else {
   print("17-19-1 data not produced")
 }  
@@ -752,7 +752,7 @@ if ("csv_17191" %in% objects()) {
       mutate(units = 
                ifelse(
                  grepl("USD", units) == TRUE, 
-                 "Constant USD, thousands", units)) 
+                 "USD, thousands", units)) 
   )
   
   try(

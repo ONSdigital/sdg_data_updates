@@ -2,7 +2,7 @@
 ### 3-5-1 automation ###
 
 
-Data for 3.5.1 are all produced (or commissioned) by PHE However, they are downloaded from different websites:
+Data for 3.5.1 are downloaded from different websites:
 
 Source 1 - [National Drug Treatment Monitoring System] https://www.ndtms.net/ViewIt/Adult
 Source 2 - [Fingertips] https://fingertips.phe.org.uk/api

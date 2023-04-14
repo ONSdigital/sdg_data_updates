@@ -224,6 +224,11 @@ treatment_and_met_need <- dplyr::bind_rows(treatment_total,
                                            met_need_clean)
 
 
+#### Calculate met need from pre 2018/19 ####
+
+# Unmet need % from fingertips only goes back to 2018/19.
+  # therefore calculate prior to this from estimated prevalence 
+
 ###############
 
 
@@ -250,13 +255,6 @@ alcohol_prevalence_by_LA <- read.csv('Input\\Estimates_of_Alcohol_Dependent_Adul
     Year == "2013" ~ "2013/14",
     Year == "2014" ~ "2014/15",
     TRUE ~ as.character(Year))) 
-
-
-
-
-#########################################
-#           ---- ALCOHOL ----           #
-#########################################
 
 
 

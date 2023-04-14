@@ -57,7 +57,9 @@ joined_data <- old_data %>%
 ```
 
 ## Calculations 
+The calculation for MET need is 100 - unmet need. 
 
+We need to calculate met need for all other available years ourselves as (number in treatment / number estimated to have that substance use disorder) * 100
 
 
 

@@ -2,7 +2,7 @@
 # Author: Michael Nairn
 
 
-#### Read in data #### 
+#### Read in treatment numbers data #### 
 England_data <- read.csv(paste0(input_folder, "/", filename_England)) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
@@ -15,7 +15,7 @@ LA_data <- read.csv(paste0(input_folder, "/", filename_LA)) %>%
   mutate(across(where(is.character), str_squish)) 
 
 
-#### select and rename columns from England data ###
+#### Select and rename columns from England treatment data ####
 
 England_clean <- England_data %>%
   rename(Year = ReportingPeriod_Data, Area = Area_Data, Sex = Gender_Data, 
@@ -31,7 +31,7 @@ England_clean <- England_data %>%
          Ethnicity_black, Ethnicity_other, Total)
 
 
-#### Select and rename relevant columns from LA data ####
+#### Select and rename relevant columns from LA treatment data ####
 
 LA_clean <- LA_data %>% 
   rename(Year = ReportingPeriod, Sex = sex, Age = age_group,
@@ -53,34 +53,178 @@ LA_clean <- LA_data %>%
 
 
 
-#### Bind England and LA data #### 
+#### Bind England and LA treatment data #### 
 
 treatment_numbers <- dplyr::bind_rows(England_clean,
                                       LA_clean)
 
 
-#### Recode age, sex ####
+#### Read in unmet need data ####
+unmet_opiates_data <- read.csv(paste0(input_folder, "/", unmet_opiates)) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish)) 
+
+unmet_alcohol_data <- read.csv(paste0(input_folder, "/", unmet_alcohol)) %>% 
+  mutate(across(where(is.factor), as.character)) %>% 
+  mutate(across(where(is.character), str_to_sentence)) %>% 
+  mutate(across(where(is.character), str_squish)) 
+
+
+#### Bind unmet need data ####
+unmet_need_data <- dplyr::bind_rows(unmet_alcohol_data,
+                                    unmet_opiates_data)
+
+#### Select and rename relevant columns of unmet need data ####
+
+unmet_need_clean <- unmet_need_data %>%
+  rename(Year = Time.period,
+         Area = Area.Name,
+         drug_group = Indicator.Name,
+         unmet_need = Value) %>% 
+  mutate(Series = "Met need (%)",
+         Units = "Percentage (%)") %>%
+  select(Year, Series, drug_group, Area, Sex, Age, Units, unmet_need)
+
+
+#### Calculate met need ####
+met_need <- unmet_need_clean %>%
+  mutate(Value = 100 - unmet_need) %>% 
+  select(-unmet_need)
+
+
+
+#### Recode age, sex, and drug group ####
 
 treatment_numbers_clean <- treatment_numbers %>%
   mutate(Sex = recode(Sex, "Total" = "", "F" = "Female", "M" = "Male")) %>%
   mutate(Age = gsub("\\-", " to ", Age), 
          Age = gsub("\\+", " and over", Age),
          Age = gsub("Total", "", Age),
-         Age = str_to_sentence(Age))
+         Age = str_to_sentence(Age)) %>%
+  mutate(`Drug group` = recode(drug_group,
+                               Total = ""))
+  
+
+met_need_clean <- met_need %>%
+  mutate(Sex = recode(Sex, "Persons" = "")) %>%
+  mutate(Age = gsub("\\-", " to ", Age), 
+         Age = gsub("\\+", " and over", Age),
+         Age = gsub(" yrs", "", Age),
+         Age = str_to_sentence(Age)) %>%
+  mutate(`Drug group` = recode(drug_group, 
+                               "Proportion of dependent drinkers not in treatment (%) (current method)" = "Alcohol",
+                               "Proportion of opiates and/or crack cocaine users (i.e. Ocu) not in treatment (%)" = "Opiates"))
 
 
 #### Add in geography disaggs ####
 treatment_numbers_clean <- treatment_numbers_clean %>% 
-  mutate(Country = "England") %>%
+  mutate(Country = "England",
+         Units = "Number",
+         Series = "People in treatment") %>%
   mutate('Local authority' = case_when(
     Area == "England" ~ "", 
     TRUE ~ toTitleCase(Area))) %>%
-  select(Year, Country, `Local authority`, Sex, Age, drug_group,
-         Ethnicity_white, Ethnicity_mixed, Ethnicity_asian, 
-         Ethnicity_black, Ethnicity_other, Total)
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity_white, Ethnicity_mixed, Ethnicity_asian, 
+         Ethnicity_black, Ethnicity_other, Units, Total)
 
 
-##############
+met_need_clean <- met_need_clean %>% 
+  mutate(Ethnicity = "") %>%
+  mutate(Country = "England") %>%
+  mutate('Local authority' = case_when(
+    Area == "England" ~ "", 
+    TRUE ~ toTitleCase(Area))) %>% 
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+
+#### Make ethnicity column for treatment number ####
+treatment_numbers_white <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "White") %>%
+  mutate(Value = `Ethnicity_white`) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+treatment_numbers_mixed <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "Mixed") %>%
+  mutate(Value = `Ethnicity_mixed`) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+treatment_numbers_asian <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "Asian") %>%
+  mutate(Value = `Ethnicity_asian`) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+treatment_numbers_black <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "Black") %>%
+  mutate(Value = `Ethnicity_black`) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+treatment_numbers_other <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "Other") %>%
+  mutate(Value = `Ethnicity_other`) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+treatment_numbers_total <- treatment_numbers_clean %>%
+  mutate(Ethnicity = "") %>%
+  mutate(Value = Total) %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
+
+treatment_numbers_disaggs <- dplyr::bind_rows(treatment_numbers_total,
+                                              treatment_numbers_white,
+                                              treatment_numbers_asian,
+                                              treatment_numbers_black,
+                                              treatment_numbers_other,
+                                              treatment_numbers_mixed)
+
+
+#### Calculating alcohol and non-opiates in treatment number ####
+  # For alcohol need to add "Alcohol only" and "Alcohol & non-opiates"
+  # For non-opiates need to add "non-opiates only" and "Alcohol & non-opiates"
+
+treatment_alcohol <- treatment_numbers_disaggs %>%
+  filter(`Drug group` == "Alcohol only" | 
+         `Drug group` == "Alcohol & non-opiates") %>%
+  mutate(`Drug group` = "Alcohol") %>%
+  group_by(Year, Series, `Drug group`, Country, `Local authority`, 
+           Sex, Age, Ethnicity) %>%
+  summarize(Value = sum(Value))
+
+
+treatment_opiates <- treatment_numbers_disaggs %>%
+  filter(`Drug group` == "Opiates")
+  
+  
+treatment_non_opiates <- treatment_numbers_disaggs %>% 
+  filter(`Drug group` == "Non-opiates only" | 
+         `Drug group` == "Alcohol & non-opiates") %>%
+  mutate(`Drug group` = "Non-opiates") %>% 
+  group_by(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity) %>%
+  summarize(Value = sum(Value))
+
+treatment_total <- treatment_numbers_disaggs %>% 
+  filter(`Drug group` == "")
+
+
+#### Combine treatment numbers and met need % ####
+
+treatment_and_met_need <- dplyr::bind_rows(treatment_total,
+                                           treatment_opiates,
+                                           treatment_non_opiates,
+                                           treatment_alcohol,
+                                           met_need_clean)
+
+
+###############
 
 
 
@@ -113,32 +257,6 @@ alcohol_prevalence_by_LA <- read.csv('Input\\Estimates_of_Alcohol_Dependent_Adul
 #########################################
 #           ---- ALCOHOL ----           #
 #########################################
-
-alcohol_category_list_viewit <- c("alcohol only", "alcohol & non-opiates")
-alcohol_category_list_phe <- c("Alcohol.only", "Non.opiate.and.alcohol")
-
-# Get alcohol figures for England (PHE table)
-# add together the numbers for the different alcohol groups
-treatment_data_alcohol_England <- treatment_data %>% 
-  filter(Substance %in% alcohol_category_list_phe) %>% 
-  group_by(Year) %>% 
-  summarise(number_in_treatment = sum(number_in_treatment)) %>% 
-  # identify data as being England, for appending to the LA data
-  mutate(Area = "England") 
-
-# Get alcohol treatment figures by Local Authority (from ViewIT website)
-# headline LA figures (not disaggregated by age or sex)
-treatment_data_alcohol_by_LA <- viewit_data_by_LA %>% 
-  filter(drug_group %in% alcohol_category_list_viewit &
-           gender == "Total" &
-           age_group == "Total") %>% 
-  mutate(Year = substr(as.character(pend), 7, 10)) %>% 
-  mutate(Year = paste(as.numeric(Year)-1, "/", substr(Year, 3, 4), sep = "")) %>%  # pend seems to give the final date of collection (which according to PHE runs 1 April - 31 March)
-  rename(Substance = drug_group) %>% 
-  # add figures for alcohol groups together
-  group_by(Year, Area) %>% 
-  summarise(number_in_treatment = sum(InTreatment_AllInTx)) 
-
 
 
 
@@ -234,22 +352,7 @@ if(LA_names_check_result == "LA names match"){
 
 
 
-alcohol_PHE_met_need <- unmet_need_alcohol_by_LA %>% 
-  filter(Indicator.Name == "Proportion of dependent drinkers not in treatment (%) (Current method)",
-         Category == "") %>% 
-  mutate(Time.period = as.character(Time.period)) %>% 
-  rename(Year = Time.period,
-         Area_Code_GSS = Area.Code,
-         Local_Authority = Area.Name,
-         Alcohol_dependent = Denominator) %>% 
-  mutate(number_in_treatment = Alcohol_dependent - Count) %>% 
-  mutate(met_need = 100 - Value) %>% 
-  select(Year, Area_Code_GSS, Local_Authority, met_need, number_in_treatment, Alcohol_dependent)
 
-
-alcohol_all_calcs <- alcohol_PHE_met_need %>% 
-  bind_rows(alcohol_met_need) %>% 
-  mutate(year_numeric = as.numeric(substr(Year, 1, 4)))
 
 LA_list <- unique(alcohol_all_calcs$Local_Authority)
 
@@ -274,31 +377,6 @@ prevalence_sum_of_LAs_check <- alcohol_prevalence_by_LA %>%
   mutate(Local_Authority = "England") %>% 
   left_join(alcohol_prevalence_by_LA, by = c("Year", "Local_Authority"))
 
-# Format for csv file
-alcohol_met_need_for_csv <- alcohol_all_calcs %>% 
-  select(Year, Area_Code_GSS, Local_Authority, met_need) %>% 
-  mutate(Units = "Met need (%)",
-         `Unit measure` = "Percentage (%)") %>% 
-  rename(Value = met_need)
-alcohol_in_treatment_for_csv <- alcohol_all_calcs %>% 
-  select(Year, Area_Code_GSS, Local_Authority, number_in_treatment) %>% 
-  mutate(Units = "Number of people in treatment",
-         `Unit measure` = "Count") %>% 
-  rename(Value = number_in_treatment)
-alcohol_prevalence_for_csv <- alcohol_all_calcs %>% 
-  select(Year, Area_Code_GSS, Local_Authority, Alcohol_dependent) %>% 
-  mutate(Units = "Estimated prevalence",
-         `Unit measure` = "Number") %>% 
-  rename(Value = Alcohol_dependent)
-alcohol_for_csv <- bind_rows(alcohol_met_need_for_csv,
-                             alcohol_in_treatment_for_csv,
-                             alcohol_prevalence_for_csv) %>% 
-  mutate(Substance = "Alcohol",
-         `Unit multiplier` = "Units") %>% 
-  # reorder columns
-  select(Year, Units, Local_Authority, Substance, `Unit multiplier`, `Unit measure`, Value) %>% 
-  # make England blank
-  mutate(Local_Authority = ifelse(Local_Authority == "England", "", Local_Authority))
 
 # investigate NA values and remove them if they should be removed
 alcohol_NAs <- alcohol_for_csv %>% 

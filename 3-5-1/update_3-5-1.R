@@ -3,13 +3,13 @@
 
 
 #### Read in treatment numbers data #### 
-England_data <- read.csv(paste0(input_folder, "/", filename_England)) %>% 
+England_data <- read.csv(paste0(input_folder, "/", treatment_England)) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
 
 
-LA_data <- read.csv(paste0(input_folder, "/", filename_LA)) %>% 
+LA_data <- read.csv(paste0(input_folder, "/", treatment_LA)) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) 
@@ -215,11 +215,13 @@ treatment_total <- treatment_numbers_disaggs %>%
   filter(`Drug group` == "")
 
 
+#### Bind treatment drug groups ####
 
-#### Calculate met need from pre 2018/19 ####
+treatment_final <- dplyr::bind_rows(treatment_total,
+                                    treatment_opiates,
+                                    treatment_non_opiates,
+                                    treatment_alcohol)
 
-# Unmet need % from fingertips only goes back to 2018/19.
-  # therefore calculate prior to this from estimated prevalence 
 
 #### Read in estimated prevalence data #### 
 alcohol_prevalence_data <- read.csv(paste0(input_folder, "/", alcohol_prevalence)) %>% 
@@ -228,8 +230,24 @@ alcohol_prevalence_data <- read.csv(paste0(input_folder, "/", alcohol_prevalence
   mutate(across(where(is.character), str_squish)) 
 
 
+
+#### England as a LA in prevalence data #### 
+# alcohol prevalence for England overall is only in the dataset from 2015/16
+# Numbers we get doing this are VERY similar to the figure for England (2017/18 is the same, 2015/16 and 2016/7 differs by 3 or 4)
+# so remove the years where and England figure is given and use sum of LAs where England figure is not given
+England_prevalence_calculation <- alcohol_prevalence_data %>% 
+  filter(Local_Authority != "England") %>% 
+  group_by(Year) %>% 
+  summarise(Alcohol_dependent = sum(Alcohol_dependent)) %>% 
+  filter(Year != "2018/19" & Year != "2017/18" & Year != "2016/17") %>% 
+  mutate(Local_Authority = "England")
+# append to data
+alcohol_prevalence_all <- alcohol_prevalence_data %>% 
+  bind_rows(England_prevalence_calculation)
+
+
 #### Manipulate alcohol prevalence dataframe ####
-alcohol_prevalence_clean <- alcohol_prevalence_data %>% 
+alcohol_prevalence_clean <- alcohol_prevalence_all %>% 
   # there is an error in the spreadsheet: the Sheffield report says they provide data from 2010/11 to 2014/15
   # this is presented in the PHE spreadsheet as 2010 - 2014 in the actual tab - correct this here
   mutate(Year = case_when(
@@ -241,7 +259,9 @@ alcohol_prevalence_clean <- alcohol_prevalence_data %>%
     TRUE ~ as.character(Year))) %>% 
   rename(`Local authority` = Local_Authority,
          Value = Alcohol_dependent) %>%
-  mutate(`Local authority` = toTitleCase(`Local authority`)) %>%
+  mutate(`Local authority` = case_when(
+    `Local authority` == "England" ~ "", 
+    TRUE ~ toTitleCase(`Local authority`))) %>%
   mutate(Ethnicity = "",
          Country = "England",
          Age = "18 and over",
@@ -252,50 +272,92 @@ alcohol_prevalence_clean <- alcohol_prevalence_data %>%
   select(Year, Series, `Drug group`, Country, `Local authority`, 
          Sex, Age, Ethnicity, Units, Value)
          
-  
-#### Combine treatment numbers, estimated prevalence and met need % ####
 
-treatment_prevalence_and_met_need <- dplyr::bind_rows(treatment_total,
-                                           treatment_opiates,
-                                           treatment_non_opiates,
-                                           treatment_alcohol,
-                                           met_need_clean,
-                                           alcohol_prevalence_clean)
+#### Check Local Authority names match between datasets ####
+alcohol_prevalence_distinct_LAs <- alcohol_prevalence_clean %>% 
+  distinct(`Local authority`) %>% 
+  mutate(dataset_prevalence = TRUE)
+
+alcohol_treatment_distinct_LAs <- treatment_final %>% 
+  distinct(`Local authority`) %>% 
+  mutate(dataset_treatment = TRUE)
+
+alcohol_met_need_distinct_LAs <- met_need_clean %>% 
+  distinct(`Local authority`) %>% 
+  mutate(dataset_met_need = TRUE)
+
+
+LA_names_check <- alcohol_treatment_distinct_LAs %>% 
+  # keep all rows from all datasets
+  full_join(alcohol_prevalence_distinct_LAs, by = c("Local authority")) %>%
+  full_join(alcohol_met_need_distinct_LAs, by = c("Local authority")) %>% 
+  # just keep rows where the LA is not in all datasets
+  filter(is.na(dataset_treatment) | is.na(dataset_prevalence))
+# for check to pass, there should be no rows remaining with data
+LA_names_check_result <- ifelse(nrow(LA_names_check)==0, "LA names match", paste(nrow(LA_names_check), "rows do not match for LA"))
+LA_names_check_result
 
 
 #### Some LA discrepancies to sort out ####
 
-treatment_prevalence_and_met_need <- treatment_prevalence_and_met_need %>% 
+treatment_final <- treatment_final %>% 
   mutate(`Local authority` = case_when(
     `Local authority` == "Durham" ~ "County Durham",
+    `Local authority` == "Dorset (Pre April 2019)" ~ "Dorset",
+    `Local authority` == "Northamptonshire (Pre April 2022)" ~ "Northamptonshire",
     `Local authority` == "Stockton" ~ "Stockton-on-Tees",
+    `Local authority` == "Bristol" ~ "Bristol, City of",
     `Local authority` == "St Helens" ~ "St. Helens",
     `Local authority` == "Kingston upon Hull, City of" ~ "Kingston Upon Hull, City of",
     `Local authority` == "Kingston upon Hull" ~ "Kingston Upon Hull, City of",
     `Local authority` == "Kingston Upon Hull" ~ "Kingston Upon Hull, City of",
     `Local authority` == "Herefordshire" ~ "Herefordshire, County of",
-    `Local authority` == "Bedfordshire (to 2011/12)" ~ "Bedfordshire (Discontinued)",
-    `Local authority` == "Cheshire (to 2011/12)" ~ "Cheshire (Discontinued)",
-    `Local authority` == "Bournemouth (to 2018/19)" ~ "Bournemouth (Discontinued)",
-    `Local authority` == "Bournemouth Christchurch and Poole (from 2019/20)" ~ "Bournemouth, Christchurch and Poole (from 2019/20)",
+    `Local authority` == "Bedfordshire (to 2011/12)" ~ "Bedfordshire",
+    `Local authority` == "Cheshire (to 2011/12)" ~ "Cheshire",
+    `Local authority` == "Bournemouth (to 2018/19)" ~ "Bournemouth",
+    `Local authority` == "Bournemouth Christchurch and Poole (from 2019/20)" ~ "Bournemouth, Christchurch and Poole",
     `Local authority` == "Bedford (from 2012/13)" ~ "Bedford",
     `Local authority` == "Central Bedfordshire (from 2012/13)" ~ "Central Bedfordshire",
     TRUE ~ as.character(`Local authority`)))
 
-treatment_prevalence_and_met_need <- treatment_prevalence_and_met_need %>% 
+met_need_clean <- met_need_clean %>% 
   mutate(`Local authority` = gsub(" Ua", "", `Local authority`)) %>%
   mutate(`Local authority` = gsub("\\(", "", `Local authority`)) %>%  
   mutate(`Local authority` = gsub("\\)", "", `Local authority`)) %>% 
   mutate(`Local authority` = gsub(" Cty", "", `Local authority`)) 
 
 
-# check Local Authority names match between prevalence and treatment datasets (and unmet_need data)
-distinct_LAs <- treatment_prevalence_and_met_need %>% 
+#### Rerun Check for Local Authority names match between datasets
+alcohol_prevalence_distinct_LAs <- alcohol_prevalence_clean %>% 
   distinct(`Local authority`) %>% 
   mutate(dataset_prevalence = TRUE)
 
+alcohol_treatment_distinct_LAs <- treatment_final %>% 
+  distinct(`Local authority`) %>% 
+  mutate(dataset_treatment = TRUE)
 
-# calculate met need for alcohol
+alcohol_met_need_distinct_LAs <- met_need_clean %>% 
+  distinct(`Local authority`) %>% 
+  mutate(dataset_met_need = TRUE)
+
+
+LA_names_check <- alcohol_treatment_distinct_LAs %>% 
+  # keep all rows from all datasets
+  full_join(alcohol_prevalence_distinct_LAs, by = c("Local authority")) %>%
+  full_join(alcohol_met_need_distinct_LAs, by = c("Local authority")) %>% 
+  # just keep rows where the LA is not in all datasets
+  filter(is.na(dataset_treatment) | is.na(dataset_prevalence))
+# for check to pass, there should be no rows remaining with data
+LA_names_check_result <- ifelse(nrow(LA_names_check)==0, "LA names match", paste(nrow(LA_names_check), "rows do not match for LA"))
+LA_names_check_result
+
+
+# Please note, some cannot be fixed.
+
+############# Calculate met need from pre 2018/19 #################
+
+# Unmet need % from fingertips only goes back to 2018/19.
+# therefore calculate prior to this from estimated prevalence 
 # number of drinkers in treatment / number estimated to have an alcohol use disorder * 100
 
 if(LA_names_check_result == "LA names match"){
@@ -318,6 +380,20 @@ if(LA_names_check_result == "LA names match"){
 
 
 LA_list <- unique(alcohol_all_calcs$Local_Authority)
+
+
+
+
+
+#### Combine treatment numbers, estimated prevalence and met need % ####
+
+treatment_prevalence_and_met_need <- dplyr::bind_rows(
+  treatment_final,
+  met_need_clean,
+  alcohol_prevalence_clean)
+
+
+
 
 
 # the counts from the fingertips website must be number NOT in treatment

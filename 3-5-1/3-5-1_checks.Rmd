@@ -32,27 +32,35 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 
 ```{r include= FALSE}
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-5-1.csv") %>%
-  mutate(`Cause.of.death` = "") %>%
-  mutate(Region = "") %>%
+  mutate(`Drug group` = "Alcohol") %>%
+  mutate(Series = recode(Series, "Alcohol - People in treatment" = "People in treatment",
+                         "Alcohol - Estimated prevalence" = "Estimated prevalence",
+                         "Alcohol - Met need" = "Met need (%)")) %>%
+  rename(`Local authority` = Local.Authority) %>%
   mutate(dataset = "old") %>%
-  select(-GeoCode)
+  mutate(Sex = "") %>%
+  mutate(Age = "") %>%
+  mutate(Ethnicity = "") %>%
+  select(-c(GeoCode, Unit.multiplier, Unit.measure))
+
+old_data <- old_data %>%
+  filter(Deprivation.decile == "")
   
 
 date <- Sys.Date()
 new_data <- read.csv(paste0("Output/", date, "_3-5-1", ".csv")) %>% 
-  mutate(Year = as.integer(Year),
-         dataset = "new")
+  rename(`Local authority` = Local.authority) %>%
+  rename(`Drug group` = Drug.group) %>%
+  mutate(dataset = "new")
  
-latest_year <- max(new_data$Year)
 
 # join to the new data
 joined_data <- old_data %>% 
   bind_rows(new_data) %>%
-  rename(`Cause of death` = `Cause.of.death`,
-         `Observation status` = `Observation.status`,
-         `Unit measure` = `Unit.measure`) %>%
-  select(Year, `Cause of death`, Country, Region, Sex, `Unit measure`,
-          `Observation status`, Value, dataset)
+  select(Year, Series, `Drug group`, `Local authority`, Sex, 
+         Age, Ethnicity, Units, Value, dataset)
+
+
 
 ```
 
@@ -65,15 +73,25 @@ We need to calculate met need for all other available years ourselves as (number
 
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
-    select(Year, `Cause of death`, Country, Region, Sex, Value, dataset) %>% 
+    select(Year, Series, `Drug group`, `Local authority`, Sex, 
+           Age, Ethnicity, Units, Value, dataset) %>% 
+    na.omit(Value) %>% # replace the NULL returns with NA
   pivot_wider(names_from = dataset,
               values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, "")))
+
 
 comparison <- comparison %>% 
   mutate(difference = new - old) %>% 
   filter(difference != 0) %>% 
   # put the largest differences at the top
   arrange(desc(abs(difference)))
+
+
+
 
 ```
 
@@ -111,14 +129,18 @@ but below are a few examples you can amend if there seems to be a discrepancy. I
 particular for any discrepancies shown in the table. 
 You may need to change the filters in the plots. 
 
+Notably, selecting specific local authorities by editing the "filter" command to 
+include the local authorities you wish. 
+  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
+                `Local authority` == "Barnsley")
 
 
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Country by cause of death
-country_headline_plot <- joined_data %>% 
-  filter(Region == "" & Sex == "") %>% 
+# Met need by drug group
+met_need_headline_plot <- joined_data %>% 
+  filter(`Local authority` == "" & Ethnicity == "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -126,7 +148,7 @@ country_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Cause of death` ~ Country) +
+  facet_grid(`Met need (%)` ~ `Drug group`) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +

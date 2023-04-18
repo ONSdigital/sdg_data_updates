@@ -193,10 +193,12 @@ treatment_numbers_disaggs <- dplyr::bind_rows(treatment_numbers_total,
 treatment_alcohol <- treatment_numbers_disaggs %>%
   filter(`Drug group` == "Alcohol only" | 
          `Drug group` == "Alcohol & non-opiates") %>%
-  mutate(`Drug group` = "Alcohol") %>%
-  group_by(Year, Series, `Drug group`, Country, `Local authority`, 
+  group_by(Year, Series, Country, `Local authority`, 
            Sex, Age, Ethnicity, Units) %>%
-  summarize(Value = sum(Value))
+  summarize(Value = sum(Value)) %>%
+  mutate(`Drug group` = "Alcohol") %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
 
 
 treatment_opiates <- treatment_numbers_disaggs %>%
@@ -206,10 +208,13 @@ treatment_opiates <- treatment_numbers_disaggs %>%
 treatment_non_opiates <- treatment_numbers_disaggs %>% 
   filter(`Drug group` == "Non-opiates only" | 
          `Drug group` == "Alcohol & non-opiates") %>%
-  mutate(`Drug group` = "Non-opiates") %>% 
-  group_by(Year, Series, `Drug group`, Country, `Local authority`, 
+  group_by(Year, Series, Country, `Local authority`, 
          Sex, Age, Ethnicity, Units) %>%
-  summarize(Value = sum(Value))
+  summarize(Value = sum(Value)) %>%
+  mutate(`Drug group` = "Non-opiates") %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value)
+
 
 treatment_total <- treatment_numbers_disaggs %>% 
   filter(`Drug group` == "")
@@ -379,6 +384,8 @@ alcohol_met_need <- alcohol_prevalence_clean %>%
   select(Year, Series, `Drug group`, Country, `Local authority`, 
          Sex, Age, Ethnicity, Units, Value) 
 
+# no need for country as all England
+
 met_need_final <- dplyr::bind_rows(alcohol_met_need,
                                     met_need_clean)
 
@@ -388,7 +395,8 @@ met_need_final <- dplyr::bind_rows(alcohol_met_need,
 csv_formatted <- dplyr::bind_rows(
   treatment_final,
   met_need_final,
-  alcohol_prevalence_clean)
+  alcohol_prevalence_clean) %>% 
+  select (-Country)
 
 
 #### Remove NAs from the csv that will be saved in Outputs ####

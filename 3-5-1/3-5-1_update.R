@@ -192,7 +192,9 @@ treatment_numbers_disaggs <- dplyr::bind_rows(treatment_numbers_total,
 
 treatment_alcohol <- treatment_numbers_disaggs %>%
   filter(`Drug group` == "Alcohol only" | 
-         `Drug group` == "Alcohol & non-opiates") %>%
+         `Drug group` == "Alcohol & non-opiates" | 
+         `Drug group` == "Non-opiate & alcohol" |
+         `Drug group` == "Non-opiates & alcohol") %>%
   group_by(Year, Series, Country, `Local authority`, 
            Sex, Age, Ethnicity, Units) %>%
   summarize(Value = sum(Value)) %>%
@@ -202,12 +204,15 @@ treatment_alcohol <- treatment_numbers_disaggs %>%
 
 
 treatment_opiates <- treatment_numbers_disaggs %>%
-  filter(`Drug group` == "Opiates")
+  filter(`Drug group` == "Opiates" |`Drug group` ==  "Opiate")
   
   
 treatment_non_opiates <- treatment_numbers_disaggs %>% 
-  filter(`Drug group` == "Non-opiates only" | 
-         `Drug group` == "Alcohol & non-opiates") %>%
+  filter(`Drug group` == "Non-opiate only" | 
+         `Drug group` == "Alcohol & non-opiates" | 
+         `Drug group` == "Non-opiates only" | 
+         `Drug group` == "Non-opiates & alcohol" | 
+         `Drug group` == "Non-opiate & alcohol") %>%
   group_by(Year, Series, Country, `Local authority`, 
          Sex, Age, Ethnicity, Units) %>%
   summarize(Value = sum(Value)) %>%
@@ -244,7 +249,7 @@ England_prevalence_calculation <- alcohol_prevalence_data %>%
   filter(Local_Authority != "England") %>% 
   group_by(Year) %>% 
   summarise(Alcohol_dependent = sum(Alcohol_dependent)) %>% 
-  filter(Year != "2018/19" & Year != "2017/18" & Year != "2016/17") %>% 
+  filter(Year != "2018/19" & Year != "2017/18" & Year != "2016/17" & Year!= "2015/16") %>% 
   mutate(Local_Authority = "England")
 # append to data
 alcohol_prevalence_all <- alcohol_prevalence_data %>% 

@@ -324,10 +324,13 @@ met_need_clean <- met_need_clean %>%
   mutate(`Local authority` = gsub(" Ua", "", `Local authority`)) %>%
   mutate(`Local authority` = gsub("\\(", "", `Local authority`)) %>%  
   mutate(`Local authority` = gsub("\\)", "", `Local authority`)) %>% 
+  mutate(`Local authority` = gsub("Bristol", "Bristol, City of", `Local authority`)) %>%
+  mutate(`Local authority` = gsub("Kingston Upon Hull", "Kingston Upon Hull, City of", `Local authority`)) %>%
+  mutate(`Local authority` = gsub("Herefordshire", "Herefordshire, County of", `Local authority`)) %>%
   mutate(`Local authority` = gsub(" Cty", "", `Local authority`)) 
 
 
-#### Rerun Check for Local Authority names match between datasets
+#### Rerun Check for Local Authority names match between datasets ####
 alcohol_prevalence_distinct_LAs <- alcohol_prevalence_clean %>% 
   distinct(`Local authority`) %>% 
   mutate(dataset_prevalence = TRUE)
@@ -354,87 +357,56 @@ LA_names_check_result
 
 # Please note, some cannot be fixed.
 
-############# Calculate met need from pre 2018/19 #################
+#### Calculate alcohol met need from pre 2018/19 ####
+
+# alcohol_prevalence_clean
+# treatment_final
+# met_need_clean
 
 # Unmet need % from fingertips only goes back to 2018/19.
 # therefore calculate prior to this from estimated prevalence 
 # number of drinkers in treatment / number estimated to have an alcohol use disorder * 100
+# then bind to the fingertips data from 2018/19 onwards
 
-if(LA_names_check_result == "LA names match"){
-  
-  years_available <- unique(c(unique(alcohol_prevalence_all$Year), unique(treatment_data_alcohol_by_LA$Year)))
-  
-  alcohol_met_need <- alcohol_prevalence_all %>% 
-    full_join(treatment_data_alcohol_by_LA, by = c("Local_Authority" = "Area", "Year")) %>% 
-    # remove years where we don't have data for both numerator and denominator
-    filter(Year %in% years_available) %>% 
-    mutate(met_need = (number_in_treatment / Alcohol_dependent)*100) # CIs are not symmetrical, so the way Martin said to calculate CIs can't be right...
-  
-}else{print(paste("alcohol met need by LA not calculated because", LA_names_check_result))}
+alcohol_met_need <- alcohol_prevalence_clean %>% 
+  left_join(treatment_final, by = c("Year", "Local authority", "Sex",
+                                    "Ethnicity", "Drug group", "Country")) %>% 
+  filter(Age.y == "") %>% # can only do calculation for 18 and over as prevalence data is not age disaggregated.
+  mutate(Value = (Value.y / Value.x)*100) %>% 
+  rename(Age = Age.x) %>% 
+  mutate(Series = "Met need (%)") %>%
+  mutate(Units = "Percentage (%)") %>%
+  select(Year, Series, `Drug group`, Country, `Local authority`, 
+         Sex, Age, Ethnicity, Units, Value) 
 
-# check that my numbers are not weird compared to the published PHE figures for 2018/19 (treatment numbers by LA not available for 2018/19 so can't check exact match)
-# make sure LA names in unmet_need data match 
-
-
-
-
-
-LA_list <- unique(alcohol_all_calcs$Local_Authority)
-
-
-
+met_need_final <- dplyr::bind_rows(alcohol_met_need,
+                                    met_need_clean)
 
 
 #### Combine treatment numbers, estimated prevalence and met need % ####
 
-treatment_prevalence_and_met_need <- dplyr::bind_rows(
+csv_formatted <- dplyr::bind_rows(
   treatment_final,
-  met_need_clean,
+  met_need_final,
   alcohol_prevalence_clean)
 
 
+#### Remove NAs from the csv that will be saved in Outputs ####
+# this changes Value to a character so will still use csv_formatted in the 
+# R markdown QA file
+csv_formatted_nas <- csv_formatted %>% 
+  mutate(Value = ifelse(is.na(Value), "", Value)) 
+
+
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows should be unique, so this should be TRUE
+check_all <- nrow(distinct(csv_formatted_nas)) == nrow(csv_formatted_nas)
+
+
+# If false you may need to remove duplicate rows. 
+csv_output <- unique(csv_formatted_nas)
 
 
 
-# the counts from the fingertips website must be number NOT in treatment
-# when you then calculate number IN treatment (denominator - count), they quite don't match the numbers from the ViewIt website
-# out by a maximum of 4 - ask PHE why this is.
-
-unmet_need_calc_in_treatment <- alcohol_PHE_met_need %>% 
-  rename(calc_in_treatment = number_in_treatment) %>% 
-  select(Local_Authority, calc_in_treatment)
-unmet_need_count_check <- treatment_data_alcohol_by_LA %>% 
-  filter(Year == "2018/19") %>% 
-  full_join(unmet_need_calc_in_treatment, by = c("Area" = "Local_Authority")) %>% 
-  mutate(difference = number_in_treatment - calc_in_treatment)
-
-# check the sum of LA prevalence == England prevalence: very close to a match (out by max 4)
-prevalence_sum_of_LAs_check <- alcohol_prevalence_by_LA %>% 
-  filter(Local_Authority != "England") %>% 
-  group_by(Year) %>% 
-  summarise(England_estimate = sum(Alcohol_dependent)) %>%
-  mutate(Local_Authority = "England") %>% 
-  left_join(alcohol_prevalence_by_LA, by = c("Year", "Local_Authority"))
 
 
-# investigate NA values and remove them if they should be removed
-alcohol_NAs <- alcohol_for_csv %>% 
-  filter(is.na(Value)) %>% 
-  # no prevalence data for 2009/10 (dates are wrong on spreadsheet), or any years before then.
-  # NAs will be given to prevalence on rows created for treatment in 2018/19
-  filter(Year %!in% c("2009/10", "2008/09", "2007/08", "2006/07", "2005/06", "2018/19")) %>% 
-  # In 2010/11 treatment figs are given for Bedfordshire (discontinued) and Cheshire (discontinued), but not for their component LAs
-  # however, prevalence is only given for the component LAs
-  filter(Local_Authority %!in% c("Cheshire East", "Cheshire West and Chester", "Cheshire (Discontinued)",
-                                 "Bedford", "Central Bedfordshire", "Bedfordshire (Discontinued)")) %>% 
-  # In 2017/18 and 2018/19 prevalence seem to only have been calculated for Cornwall, while treatment figures are 
-  # for Cornwall & Isles of Scilly. The 2018/19 prevalence estimate is treated as though it is for Cornwall & Isles of Scilly
-  # as Prevalence (Denominator) minus Count equals the treatment figures for Cornwall & Isles of Scilly.
-  # For now drop Cornwall-only estimates but after checking with PHE I might need to add them in and join them to Cornwall & IoS treatment figures.
-  filter(Local_Authority %!in% c("Cornwall", "Cornwall & Isles of Scilly"))
-
-# All NA rows can be removed (for reasons why see previous block)  
-alcohol_for_csv_final <- alcohol_for_csv %>% 
-  filter(!is.na(Value)) %>% 
-  filter(Year %!in% c("2009/10", "2008/09", "2007/08", "2006/07", "2005/06")) %>% 
-  filter(Local_Authority != "Cornwall")

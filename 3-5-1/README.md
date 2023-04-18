@@ -7,6 +7,8 @@ Data for 3.5.1 are downloaded from different websites:
 Source 1 - [National Drug Treatment Monitoring System] https://www.ndtms.net/ViewIt/Adult
 Source 2 - [Fingertips] https://fingertips.phe.org.uk/api
 
+Source 3 - A further source, [Estimated prevalence of alcohol dependency prior to 2018/19], is available in the Input folder. Estimates_of_Alcohol_Dependent_Adults_in_England_for_R
+
 
 
 ### Downloading and Sourcing Data  
@@ -27,8 +29,8 @@ Source 2 - [Fingertips] https://fingertips.phe.org.uk/api
 
 
 
+The code manipulates the multiple sources, and calculates met need. Prior to 2018/19 this calculation uses the estimates of alcohol dependency (Source 3)and People in treatment (Source 1). From 2018/19 onwards this calculation uses the unmet need figures from fingertips (Source 2).   
 
-The code does the following checks and calculations (currently just for alcohol):
 
   
 ### Instructions to run update ###

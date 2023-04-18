@@ -138,7 +138,24 @@ include the local authorities you wish.
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Met need by drug group
+# People in treatment by drug group
+People_in_treatment_headline_plot <- joined_data %>% 
+  filter(`Local authority` == "" & Ethnicity == "" & Sex == "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`People in treatment` ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by Drug group")
+
+
+# met need by drug group
 met_need_headline_plot <- joined_data %>% 
   filter(`Local authority` == "" & Ethnicity == "" & Sex == "") %>% 
   ggplot(.,
@@ -152,12 +169,26 @@ met_need_headline_plot <- joined_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Country by Cause of death")
+  ggtitle("met need by Drug group")
 
 
-# Region by cause of death
-region_headline_plot <- joined_data %>% 
-  filter(Region != "" & Sex == "") %>% 
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(People_in_treatment_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(met_need_headline_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Ethnicity by drug group
+ethnicity_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Age == "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -165,17 +196,17 @@ region_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Cause of death` ~ Region) +
+  facet_grid(Ethnicity ~ `Drug group`) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Region by Cause of death")
+  ggtitle("People in treatment by ethnicity and Drug group")
 
 
-
-# Sex by cause of death
-sex_headline_plot <- joined_data %>% 
-  filter(Country == "United Kingdom") %>% 
+# Sex by drug group
+sex_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Age == "" & Ethnicity == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -183,25 +214,43 @@ sex_headline_plot <- joined_data %>%
   scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Cause of death` ~ Sex) +
+  facet_grid(Sex ~ `Drug group`) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Sex by Cause of death")
+  ggtitle("People in treatment by sex and Drug group")
+
+
+# Age by drug group
+age_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Sex == "" & Ethnicity == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Age ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by age and Drug group")
+
 
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(country_headline_plot))
+suppressMessages(print(ethnicity_by_drug_group_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(region_headline_plot))
+suppressMessages(print(sex_by_drug_group_plot))
 ```
 
-
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_headline_plot))
+suppressMessages(print(age_by_drug_group_plot))
 ```
 
 

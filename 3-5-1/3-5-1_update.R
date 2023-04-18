@@ -204,7 +204,8 @@ treatment_alcohol <- treatment_numbers_disaggs %>%
 
 
 treatment_opiates <- treatment_numbers_disaggs %>%
-  filter(`Drug group` == "Opiates" |`Drug group` ==  "Opiate")
+  filter(`Drug group` == "Opiates" |`Drug group` ==  "Opiate") %>%
+  mutate(`Drug group`= recode(`Drug group`, "Opiates" = "Opiate")) %>%
   
   
 treatment_non_opiates <- treatment_numbers_disaggs %>% 

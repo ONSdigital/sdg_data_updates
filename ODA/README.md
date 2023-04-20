@@ -30,17 +30,17 @@ See [troubleshooting](#troubleshooting) for common errors and fixes
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
   
  
-1. Download and save the ODA, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
+1. Download and save the ODA data, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
 2. Open the `sdg_data_updates.Rproj` from inside RStudio. 
 3. If it exists, open the `config.R` file in ODA (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 If not, save `example_config.R` as `config.R` in ODA.  
-4. Check that test_run in update_indicator_main is FALSE.
-5. Check the configurations are correct for the files you have saved, and if not correct them and save `config.R`.  
+4. Check the configurations are correct (see bullets below) for the files you have saved, and if not correct them and save the `config.R`: 
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
-     2. `filename_2017` is the name of file (including the .csv extension) containing archived data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. 
-     3. `deflators_filename` is the name of the most recent deflators data, including the .xls extension
-     4. `exchange_filename` is the name of the most recent exchange rates data, including the .xls extension
-6. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and click 'Source' button to run the script (top right corner of the script panel).  
+     2. `filename_2017` is the name of file (including the .csv extension) containing older data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. See [Data sources](#data-sources) for details if the file is not already present. 
+     3. `deflators_filename` is the name of the **most recent** deflators data, including the .xlsx extension. You must save is as xlsx if downloaded as xls. The deflators are not needed for 17.19.1, but they can still be part of the configuration.
+     4. `exchange_filename` is the name of the **most recent** exchange rates data, including the .xlsx extension. You must save is as xlsx if downloaded as xls.
+5. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`). Change the test_run to FALSE and indicator to “ODA”.
+6. In `update_indicator_main.R` click 'Source' button to run the script (top right corner of the script panel).
 7. Outputs will be saved in the Outputs folder in ODA (which the script will create if it doesn't already exist).  
 8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv tabs in the Indicator files**  
 9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.  

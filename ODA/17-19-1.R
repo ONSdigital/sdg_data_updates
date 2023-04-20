@@ -9,7 +9,7 @@ headline <- data_17191 %>%
 
 gbp_data <- bind_rows(data_17191, 
                       headline) %>% 
-  mutate(Units = "GBP (£ thousands)",
+  mutate(Units = "GBP (thousands)",
          country_income_classification = ifelse(
            grepl("unallocated", country_income_classification)== TRUE |
              country_income_classification == "0",
@@ -38,7 +38,7 @@ apply_exchange_rate <- function(gbp_data, uk_exchange_data) {
   gbp_data %>% 
     dplyr::left_join(uk_exchange_data, by = "year" ) %>% 
     dplyr::mutate(value = value/exchange_rate,
-                  units = "USD ($ thousands)") %>% 
+                  units = "USD (thousands)") %>% 
     dplyr::select(-exchange_rate)
 }
 
@@ -59,9 +59,9 @@ names(usd_data) <- str_to_sentence(names(usd_data))
 csv <- gbp_data %>% 
   bind_rows(usd_data) %>% 
   mutate(Series = "Value of all resources made available to strengthen statistical capacity in developing countries",
-         `Observation status` = "Normal value") %>% 
+         `Observation status` = "Normal value", `Unit multiplier` = "Thousands") %>% 
   select(Year, Series, Country_income_classification,
-         `Observation status`, Units, Value) %>% 
+         `Observation status`,`Unit multiplier`, Units, Value) %>% 
   arrange(Year, Country_income_classification) %>% 
   replace(is.na(.), "") %>% 
   rename(`Country income classification` = Country_income_classification)

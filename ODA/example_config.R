@@ -1,6 +1,7 @@
 # Configurations for all ODA indicators that use the data underlying SID source.
 # If you only want to run a subset of these you can comment out (#) the ones
-# you don't want to run
+# you don't want to run (ensure there is no comma after the last indicator to be run). 
+# To run a single indicator see lines 20-21.
 
 indicators <- c(
   "1-a-1", # net oda
@@ -16,6 +17,9 @@ indicators <- c(
   "17-19-1" # net ODA
 )
 
+# FOR A SINGLE INDICATOR use the format below, but comment out (#) everything from line 5 to 17 above.
+#indicators <- "1-a-1"
+
 # ODA indicators without an automation yet as different data source is used: 10-b-1, 17-2-1, 17-3-1, 15-a-1, 15-b-1
 #-------------------------------------------------------------------------------
 
@@ -26,8 +30,8 @@ output_folder <- "Example_Output"
 filename_newdat <- "dataunderSID-Final2020_example.csv"
 filename_2017 <- "data-underlying-sid-2017_example.csv"
 
-deflators_filename <- "Deflators-base-2020_example.xlsx"
-exchange_filename <- "Exchange-rates_example.xlsx"
+deflators_filename <- "Deflators-base-YYYY_example.xlsx" # Change to latest downloaded file
+exchange_filename <- "Exchange-rates_example.xlsx"       # Change to latest downloaded file     
 
 #-------------------------------------------------------------------------------
 # configs below probably won't need to be edited
@@ -46,7 +50,7 @@ broad_sector_code_8a1 <- 331
 
 crs_code_3b2 <- 12182 
 crs_code_6a1 <-  31140
-crs_codes_7a1 <- c(23210, 23220, 23230, 23240, 23250, 23260, 23270)
+crs_codes_7a1 <- c(23210, 23220, 23230, 23240, 23250, 23260, 23270, 23631, 23410, 23231, 23232)
 crs_code_15a1_15b1 <- 41030
 crs_code_17191 <- 16062
 

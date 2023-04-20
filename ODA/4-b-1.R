@@ -41,15 +41,17 @@ csv <- gbp_data %>%
   mutate(
     Type_of_study = ifelse(
       grepl("Upper Secondary Education", Type_of_study), 
-      "Upper Secondary Education", Type_of_study),
+      "Upper secondary education", Type_of_study),
     Sector = ifelse(
       grepl("OTHER SOCIAL INFRASTRUCTURE AND SERVICES", Sector),
       "Other social infrastructure and services", Sector),
     `Observation status` = "Normal value") %>% 
   rename(`Country income classification` = Country_income_classification,
          `Type of study` = Type_of_study) %>% 
-  select(Year, Series, Sector, `Country income classification`, `Type of study`, 
+  select(Year, Series, `Country income classification`, Sector, `Type of study`, 
          Units, `Observation status`, Value)
+
+csv$Sector <- str_to_sentence(csv$Sector)
 
 rm(by_sector, by_cic, by_education_type, total, chosen_type_of_aid)
 

@@ -30,8 +30,8 @@ output_folder <- "Example_Output"
 filename_newdat <- "dataunderSID-Final2020_example.csv"
 filename_2017 <- "data-underlying-sid-2017_example.csv"
 
-deflators_filename <- "Deflators-base-2020_example.xlsx"
-exchange_filename <- "Exchange-rates_example.xlsx"
+deflators_filename <- "Deflators-base-YYYY_example.xlsx" # Change to latest downloaded file
+exchange_filename <- "Exchange-rates_example.xlsx"       # Change to latest downloaded file     
 
 #-------------------------------------------------------------------------------
 # configs below probably won't need to be edited

@@ -169,11 +169,11 @@ message(paste0("The csv and QA files have been created and saved in '",
                ". It is possible that not all indicators ran successfully -
                please check oda_update_checks.Rmd"))
 
-if ("gni_sdmx" %not_in% objects()) {
+if (("1-a-1" %in% indicators) && ("gni_sdmx" %not_in% objects())) {
   warning("GNI data for 1-a-1 not downloaded, so if you want this indicator, please rerun. If it still doesn't work, try using a different interet connection")
 }
 
-if ("biodiversity_sdmx" %not_in% objects()) {
+if (("15-a-1_15-b-1" %in% indicators) && ("biodiversity_sdmx" %not_in% objects())) {
   warning("OECD biodiversity taxes data for 15-a-1b/15-b-1-b not downloaded, so if you want this series, please rerun. If it still doesn't work, try using a different interet connection")
 }
 # so we end on the same directory as we started before update_indicator_main.R was run:

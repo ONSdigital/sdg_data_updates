@@ -6,7 +6,9 @@
 
 # Because SDGupdater is a local package we install it slightly differently:
 
+
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
+
 # note that to install this package the working directory needs to be
 # sdg_data_updates. Use getwd() to check this is the folder you are in.
 
@@ -15,10 +17,10 @@ rm(list = ls())
 
 test_run <- FALSE # for real updates use FALSE
 
-indicator <- "8-6-1" # name of folder for indicator(s)
+
+indicator <- "ODA" # name of folder for indicator
+
 
 setwd(indicator)
+
 source("compile_tables.R")
-
-
-

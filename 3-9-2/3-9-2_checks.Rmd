@@ -1,0 +1,203 @@
+title: "3-9-2 Checks"
+author: "Michael Nairn"
+date: "21/11/2022"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 3-9-2 update summary
+
+3-9-2 is an indicator that uses a NOMIS API link to provide data. Unless the 
+format of NOMIS API downloads changes, the update_3-9-2 script should not need 
+changing. However, always check before running the update script. 
+
+This file runs some basic checks and gives information about the update.
+  
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-9-2.csv") %>%
+  mutate(`Cause.of.death` = "") %>%
+  mutate(Region = "") %>%
+  mutate(dataset = "old") %>%
+  select(-GeoCode)
+  
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_3-9-2", ".csv")) %>% 
+  mutate(Year = as.integer(Year),
+         dataset = "new")
+ 
+latest_year <- max(new_data$Year)
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) %>%
+  rename(`Cause of death` = `Cause.of.death`,
+         `Observation status` = `Observation.status`,
+         `Unit measure` = `Unit.measure`) %>%
+  select(Year, `Cause of death`, Country, Region, Sex, `Unit measure`,
+          `Observation status`, Value, dataset)
+
+```
+
+## Calculations 
+Number of deaths from unsafe water, unsafe sanitation and lack of hygiene (exposure to unsafe WASH services) in a year, 
+divided by the population, and multiplied by 100,000.
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+    select(Year, `Cause of death`, Country, Region, Sex, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. For example, the UN metadata specification for this indicator
+changed for the March 2023 update, including acute respiratory infections 
+(ICD-10 codes H65-H66, J00-J22, P23, and U04), vastly increasing counts. 
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. For example, the UN metadata specification for this indicator
+changed for the March 2023 update, including acute respiratory infections 
+(ICD-10 codes H65-H66, J00-J22, P23, and U04), vastly increasing counts. 
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots. 
+
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Country by cause of death
+country_headline_plot <- joined_data %>% 
+  filter(Region == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Cause of death` ~ Country) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Country by Cause of death")
+
+
+# Region by cause of death
+region_headline_plot <- joined_data %>% 
+  filter(Region != "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Cause of death` ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Region by Cause of death")
+
+
+
+# Sex by cause of death
+sex_headline_plot <- joined_data %>% 
+  filter(Country == "United Kingdom") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(`Cause of death` ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Sex by Cause of death")
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(country_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_headline_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_headline_plot))
+```
+
+
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

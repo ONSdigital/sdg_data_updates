@@ -44,7 +44,8 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-5-1.csv") %>%
   select(-c(GeoCode, Unit.multiplier, Unit.measure))
 
 old_data <- old_data %>%
-  filter(Deprivation.decile == "")
+  filter(Deprivation.decile == "") %>%
+  filter(!row_number() %in% c(4081)) # random duplication. Won't need in future.
   
 
 date <- Sys.Date()
@@ -81,8 +82,10 @@ comparison <- joined_data %>%
 
 
 comparison <- comparison %>% 
-  mutate(across("old":"new", ~replace(., lengths(.) == 0, "")))
-
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.numeric(new)) %>% 
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
 
 comparison <- comparison %>% 
   mutate(difference = new - old) %>% 
@@ -140,15 +143,15 @@ include the local authorities you wish.
 
 # People in treatment by drug group
 People_in_treatment_headline_plot <- joined_data %>% 
-  filter(`Local authority` == "" & Ethnicity == "" & Sex == "" & Age == "") %>% 
+  filter(Series == "People in treatment" & `Local authority` == "" 
+         & Ethnicity == "" & Sex == "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`People in treatment` ~ `Drug group`) +
+  facet_grid(Series ~ `Drug group`) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
@@ -157,15 +160,15 @@ People_in_treatment_headline_plot <- joined_data %>%
 
 # met need by drug group
 met_need_headline_plot <- joined_data %>% 
-  filter(`Local authority` == "" & Ethnicity == "" & Sex == "") %>% 
+  filter(Series == "Met need (%)" & `Local authority` == "" 
+         & Ethnicity == "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
-  facet_grid(`Met need (%)` ~ `Drug group`) +
+  facet_grid(Series ~ `Drug group`) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
@@ -193,7 +196,6 @@ ethnicity_by_drug_group_plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
   facet_grid(Ethnicity ~ `Drug group`) +
@@ -211,7 +213,6 @@ sex_by_drug_group_plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
   facet_grid(Sex ~ `Drug group`) +
@@ -229,7 +230,6 @@ age_by_drug_group_plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
   facet_grid(Age ~ `Drug group`) +

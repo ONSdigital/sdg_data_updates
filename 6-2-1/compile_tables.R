@@ -19,17 +19,17 @@ library('janitor')
 library('tidyr')
 library('dplyr')
 
-setwd("template") # this line is to run the template only - 
+#setwd("template") # this line is to run the template only - 
                   # do not copy into your code as this is usually found in update_indicator_main.R
 
 source("type_1_config.R") # pulls in all the configurations. Un-comment out code below for real update
-# if (test_run == TRUE) {
-#   source("example_config.R")
-# } else if (test_run == FALSE) {
-#   source("config.R")
-# } else {
-#   stop("test_run must be either TRUE or FALSE")
-# }
+ if (test_run == TRUE) {
+   source("example_config.R")
+ } else if (test_run == FALSE) {
+   source("config.R")
+ } else {
+   stop("test_run must be either TRUE or FALSE")
+ }
 
 source("update_type_1.R") # does the donkey-work of making the csv - 
                           # for real update this might be called e.g. 'update_1-2-1.R' 

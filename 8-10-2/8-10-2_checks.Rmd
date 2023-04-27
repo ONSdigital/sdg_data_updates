@@ -67,7 +67,11 @@ possible to plot the new data over the old data to check for discrepancies.
 Instead, the person QAing this update should download the source data and spot 
 check values the source data against the outputted csv.
 
+Please note that Values less than 0.5 per cent (depicted as "-" in the data source) 
+have been rounded down to 0. There is a note explaining this in the Other Information 
+section of the Sources tab on the platform. 
+
 ### Calculations
 
-No calculations were performed on this data.
+No calculations have been performed on this data during this automation.
 

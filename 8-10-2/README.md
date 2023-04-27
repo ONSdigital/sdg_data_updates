@@ -3,7 +3,7 @@ Date: 25/04/2023
 
 ### 8-10-2 automation
 
-Creates csv data for 8-10-2 (Percentage of adults (16 years and older) with an account at a bank or other financial institution).
+Creates csv data for 8-10-2 (Percentage of adults (16 years and older) with an account at a bank or other financial institution). PLEASE NOTE - this automation only produces the data for the most recent year (not the back series). This means QAing the output is slightly different to usual, please see the QA html output for details.
 
 Fairly simple automation that only involves formatting the data (no calculations). 
 
@@ -21,4 +21,4 @@ Output includes the data in csv format, and an html QA report. Users should stil
 6) Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and set indicator as 8-10-2. Make sure test_run is set to FALSE (so that it sources the correct config file). 
 7) Click 'Source' button to run the script (top right corner of the script panel).  
 8) Outputs will be saved in the Output folder in 8-10-2 (which the script will create if it doesn't already exist).  
-9) An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv.**
+9) An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv.** **IMPORTANT - The output csv only contains the most recent year of data, that needs to be copied and pasted to the bottom of the existing csv in the indicator file (rather than overwrite the existing data)**

@@ -4,12 +4,16 @@
 # Code to automate data update for indicator 8-10-2 (Percentage of adults (16 years 
 # and older) with an account at a bank or other financial institution).
 
+# read and format in data
+
 savings_investments_data <- get_type1_data(header_row, filename, tabname)
 
 savings_investments_main_data <- extract_data(savings_investments_data, header_row)
 
 savings_investments_main_data <- savings_investments_main_data %>% 
   drop_na("Type of savings and investments")
+
+# split data and format
 
 all_adults_data <- savings_investments_main_data[c(2:21),]
 
@@ -35,6 +39,8 @@ male_data <- male_data %>%
 female_data <- female_data %>% 
   mutate(Sex = "Female")
 
+# join data and format 
+
 joined_data <- rbind(all_adults_data,
                      male_data,
                      female_data)
@@ -50,7 +56,9 @@ csv_formatted <- joined_data %>%
            "Unit measure" = "Percentage (%)",
             "Unit multiplier" =  "Units",
             "Observation status" = "Normal value",
-           "Year" = year)
+            "Year" = year)
+
+# output csv
 
 csv_output <- csv_formatted %>%            
 select("Year", "Series", "Bank account category", "Sex", "Age", "Unit measure", "Unit multiplier", "Observation status", "Value")

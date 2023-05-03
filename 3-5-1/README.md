@@ -14,7 +14,7 @@ Source 3 - A further source, [Estimated prevalence of alcohol dependency prior t
 ### Downloading and Sourcing Data  
 1) In folder 3-5-1 create a new folder called ?Input?. 
 2) Go to [Treatment numbers for Local Authorities Source Link] https://www.ndtms.net/ViewIt/Adult. 
-3) Under download data, select "All in treatment", "Numbers in treatment", ""Ethnicity", all reporting periods, all substance categories, all sexes, all age groups. 
+3) Under download data, select "All in treatment", "Numbers in treatment", "Ethnicity", all reporting periods, all substance categories, all sexes, all age groups. 
 4) Save this file in the ?Input? folder as "ViewIt Export Data_England.csv". 
 5) Go back to [Treatment numbers for Local Authorities Source Link] https://www.ndtms.net/ViewIt/Adult. 
 6) Under download data, select "all indicators for all local authorities" download in the top right.
@@ -26,6 +26,7 @@ Source 3 - A further source, [Estimated prevalence of alcohol dependency prior t
 12) Back on [Fingertips API Source Link]  https://fingertips.phe.org.uk/api#!/Data/Data_GetDataFileForOneIndicator in ?indicator id? select 93517.
 13) Click ?Download indicator-data.csv?.
 14) Save this file in the ?Input? folder as well. Rename as unmet_opiates.csv.
+15) Copy and paste the "Estimates_of_Alcohol_Dependent_Adults_in_England_for_R" file from the "Example_Input" folder into the "Input" folder. 
 
 
 

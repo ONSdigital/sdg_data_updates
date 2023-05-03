@@ -1,0 +1,106 @@
+---
+title: "8-1-1 checks"
+author: "Katie Uzzell"
+date: "03/05/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+```{r include= FALSE}
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-1-1.csv")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-1-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 8-1-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_8-1-1", ".csv")` in the 8-1-1 Output folder.  
+    
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+8-1-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+
+**GDP data from UK environmental accounts time series dataset (ONS)**  
+
+GDP data are in the file `r filename`. The time series used for this indicator is N3Y6 (GDP (Average) per head, year on year growth rate CVM SA %) located in column DLH of the source download.  
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`  
+
+The tab used is called
+`r tabname`. 
+
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+new_data <- new_data %>%
+mutate(Year = as.integer(Year),
+         dataset = "new")
+
+new_data$Value <- as.numeric(new_data$Value)
+
+joined_data <- old_data %>%
+  mutate(dataset = "old") %>%
+  bind_rows(new_data)
+
+joined_data$`Industry sector`[joined_data$Industry.sector == ""] <- "Headline"
+ 
+plot <- joined_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+    #scale_x_continuous(breaks = seq(min(year(joined_data$Year)), max(year(joined_data$Year)), by = 3))+
+  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Industry.sector, ncol = 2) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7))
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+```
+
+### Calculations
+
+No calculations were performed on this data.
+

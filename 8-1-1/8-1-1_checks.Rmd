@@ -62,9 +62,7 @@ The tab used is called
 
 
 ### Check data
-The charts below show the new data (just created) plotted on top of the old data,
-which has been downloaded from the live site. If there are unexpected 
-discrepancies in the lines please investigate the reasons for these discrepancies.
+The charts below show the new data (just created) plotted on top of the old data, which has been downloaded from the live site. It is likely there will have been revisions to the backseries, so small discrepancies are expected. If there are unexpected or large discrepancies between the old and new data, please investigate the reasons for these discrepancies.
     
 ```{r, echo=FALSE, fig.width=7, fig.height=15}
 new_data <- new_data %>%

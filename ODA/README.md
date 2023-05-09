@@ -15,7 +15,7 @@ The full list of indicators, and whether they are based on net ODA or amounts ex
 -  4-b-1  
 -  6-a-1  
 -  8-a-1  
--  15-a-1  
+-  15-a-1 NOTE: automation for 15-a-1/15-b-1 is currently not working properly and is under investigation
   
 Additional source data used for these automations are:  
 - exchange rate and deflator data for converting GBP to constant USD (used in several indicators)  
@@ -23,22 +23,24 @@ Additional source data used for these automations are:
 - Biodiversity taxes data from OECD for 15-a-1b (duplicate of 15-b-1b)  
   
 The following ODA indicators are not included in this automation as they use a different source: 10-b-1, 17-2-1, 17-3-1.  
+
+See [troubleshooting](#troubleshooting) for common errors and fixes
   
 ## Instructions  
 For the UK data team, all files and folders mentioned below are in Jemalex > sdg_data_updates 
   
-**IF YOU ARE RUNNING 1-a-1, OR 15-a-1b/15-b-1b USE A NON-ONS INTERNET NETWORK** as the OECD APIs won't work on the ONS network.  
-1. Download and save the ODA, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
+ 
+1. Download and save the ODA data, Deflators, and Exchange rates data in 'Input' in the ODA folder (if the Input folder doesn't exist, make it). See [Data sources](#data-sources) for more information.  
 2. Open the `sdg_data_updates.Rproj` from inside RStudio. 
 3. If it exists, open the `config.R` file in ODA (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). 
 If not, save `example_config.R` as `config.R` in ODA.  
-4. Check that test_run in update_indicator_main is FALSE.
-5. Check the configurations are correct for the files you have saved, and if not correct them and save `config.R`.  
+4. Check the configurations are correct (see bullets below) for the files you have saved, and if not correct them and save the `config.R`: 
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
-     2. `filename_2017` is the name of file (including the .csv extension) containing archived data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. 
-     3. `deflators_filename` is the name of the most recent deflators data, including the .xls extension
-     4. `exchange_filename` is the name of the most recent exchange rates data, including the .xls extension
-6. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and click 'Source' button to run the script (top right corner of the script panel).  
+     2. `filename_2017` is the name of file (including the .csv extension) containing older data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. See [Data sources](#data-sources) for details if the file is not already present. 
+     3. `deflators_filename` is the name of the **most recent** deflators data, including the .xlsx extension. You must save is as xlsx if downloaded as xls. The deflators are not needed for 17.19.1, but they can still be part of the configuration.
+     4. `exchange_filename` is the name of the **most recent** exchange rates data, including the .xlsx extension. You must save is as xlsx if downloaded as xls.
+5. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`). Change the test_run to FALSE and indicator to “ODA”.
+6. In `update_indicator_main.R` click 'Source' button to run the script (top right corner of the script panel).
 7. Outputs will be saved in the Outputs folder in ODA (which the script will create if it doesn't already exist).  
 8. An html file will also be created in the Outputs folder. This contains some basic checks and also shows all plots, which should show up any major issues. **Please check this file before copying to the csv tabs in the Indicator files**  
 9. IMPORTANT: the code does not run any checks on the footnotes - please check the footnotes in the source files for information that may need to be added to the metadata.  
@@ -56,12 +58,12 @@ The main data required for all the indicators in the ODA folder are the same tab
   
 Download the most recent 'final' table and save it in ODA > Input as a **csv**    
   
-The most recent data file probably only goes back to 2017. Pre 2017 data are in data-underlying-sid-2017_110322.csv, which should already be in the Inputfolder. If not, the 'Data underlying the SID publication' should be downloaded from [Statistics on International Development 2017](https://www.gov.uk/government/statistics/statistics-on-international-development-2017) and saved as a csv.  
+The most recent data file probably only goes back to 2017. Pre 2017 data are in data-underlying-sid-2017_110322.csv, which should already be in the Input folder. If not, the 'Data underlying the SID publication' should be downloaded from [Statistics on International Development 2017](https://www.gov.uk/government/statistics/statistics-on-international-development-2017) and saved as a csv. **Make sure you turn the last 3 columns into "Number" format on the csv**, otherwise you will get an error when you run the automation. 
   
 #### Deflators and exchange rates
 Deflators and exchange rates are taken from the [OECD Development finance data page](https://www.oecd.org/dac/financing-sustainable-development/development-finance-data/). The required tables are in the data tables section e.g.:  
--  Deflators for Resource Flows from DAC Countries (2019=100).xls
--  Annual Exchange Rates for DAC Donor Countries from 1960 to 2020.xls
+-  Deflators for Resource Flows from DAC Countries (YYYY=100).xls (the latest year would change with annual updates, so relfect in the indicator's metadata)
+-  Annual Exchange Rates for DAC Donor Countries from 1960 to [latest year available].xls
   
 Download both tables and save them in ODA > Input as **xlsx** files (NOT xls)
   
@@ -100,5 +102,16 @@ manual download
 The API connection to OECD is not working. In tests it did not work on the ONS internet network so try using your home network.  
 If necessary this *could* be changed to a manual download (see the instructions for downloading the data in cource 2 of 15-a-1),
 and the data read in as a csv from the Input folder. 
+
+```
+
+```diff
+- Error in c("x-x-x", "x-x-x", "x-x-x", ) : argument N is empty
+
+"x-x-x" here stands for any of the ODA list idicators. You may get this error if you ran a few indicators in bulk 
+and you commented out the ones you don't want from the indicators variable in the config file. You
+probably left out a comma after the last uncommented indicator. Remove the comma after your last
+indicator. You will also need to reset the working directory before you hit "Source" again 
+by typing `setwd('..')` in the console window. 
 
 ```

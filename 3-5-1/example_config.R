@@ -11,7 +11,7 @@ unmet_alcohol <- "unmet_alcohol.csv"
 alcohol_prevalence <- "Estimates_of_Alcohol_Dependent_Adults_in_England_for_R.csv"
 
 
-input_folder  <- "Input"
-output_folder <- "Output"
+input_folder  <- "Example_Input"
+output_folder <- "Example_Output"
 
 

@@ -250,8 +250,10 @@ alcohol_prevalence_data <- read.csv(paste0(input_folder, "/", alcohol_prevalence
 
 #### England as a LA in prevalence data #### 
 # alcohol prevalence for England overall is only in the dataset from 2015/16
-# Numbers we get doing this are VERY similar to the figure for England (2017/18 is the same, 2015/16 and 2016/7 differs by 3 or 4)
-# so remove the years where and England figure is given and use sum of LAs where England figure is not given
+# Numbers we get doing this are VERY similar to the figure for England 
+  # (2017/18 is the same, 2015/16 and 2016/7 differs by 3 or 4)
+# so remove the years where and England figure is given and 
+  # use sum of LAs where England figure is not given
 England_prevalence_calculation <- alcohol_prevalence_data %>% 
   filter(Local_Authority != "England") %>% 
   group_by(Year) %>% 

@@ -17,6 +17,12 @@ LA_data <- read.csv(paste0(input_folder, "/", treatment_LA)) %>%
 
 #### Select and rename columns from England treatment data ####
 
+# England_clean <- England_data %>%
+#  rename_column()
+ # select(Year, Area, Sex, Age, drug_group,
+  #       Ethnicity_white, Ethnicity_mixed, Ethnicity_asian, 
+   #      Ethnicity_black, Ethnicity_other, Total)
+
 England_clean <- England_data %>%
   rename(Year = ReportingPeriod_Data, Area = Area_Data, Sex = Gender_Data, 
          Age = AgeGroup_Data, Total = Num_InTreatment_AllInTx,
@@ -205,7 +211,7 @@ treatment_alcohol <- treatment_numbers_disaggs %>%
 
 treatment_opiates <- treatment_numbers_disaggs %>%
   filter(`Drug group` == "Opiates" |`Drug group` ==  "Opiate") %>%
-  mutate(`Drug group`= recode(`Drug group`, "Opiates" = "Opiate"))
+  mutate(`Drug group`= recode(`Drug group`, "Opiate" = "Opiates"))
   
   
 treatment_non_opiates <- treatment_numbers_disaggs %>% 
@@ -250,7 +256,7 @@ England_prevalence_calculation <- alcohol_prevalence_data %>%
   filter(Local_Authority != "England") %>% 
   group_by(Year) %>% 
   summarise(Alcohol_dependent = sum(Alcohol_dependent)) %>% 
-  filter(Year != "2018/19" & Year != "2017/18" & Year != "2016/17" & Year!= "2015/16") %>% 
+  filter(Year != "2017/18" & Year != "2016/17" & Year!= "2015/16") %>% 
   mutate(Local_Authority = "England")
 # append to data
 alcohol_prevalence_all <- alcohol_prevalence_data %>% 
@@ -379,7 +385,7 @@ LA_names_check_result
 # number of drinkers in treatment / number estimated to have an alcohol use disorder * 100
 # then bind to the fingertips data from 2018/19 onwards
 
-alcohol_met_need <- alcohol_prevalence_clean %>% 
+alcohol_met_need_pre2018 <- alcohol_prevalence_clean %>% 
   left_join(treatment_final, by = c("Year", "Local authority", "Sex",
                                     "Ethnicity", "Drug group", "Country")) %>% 
   filter(Age.y == "") %>% # can only do calculation for 18 and over as prevalence data is not age disaggregated.
@@ -392,7 +398,7 @@ alcohol_met_need <- alcohol_prevalence_clean %>%
 
 # no need for country as all England
 
-met_need_final <- dplyr::bind_rows(alcohol_met_need,
+met_need_final <- dplyr::bind_rows(alcohol_met_need_pre2018,
                                     met_need_clean)
 
 
@@ -402,7 +408,7 @@ csv_formatted <- dplyr::bind_rows(
   treatment_final,
   met_need_final,
   alcohol_prevalence_clean) %>% 
-  select (-Country)
+  select (-Country) 
 
 
 #### Remove NAs from the csv that will be saved in Outputs ####
@@ -417,7 +423,7 @@ csv_formatted_nas <- csv_formatted %>%
 check_all <- nrow(distinct(csv_formatted_nas)) == nrow(csv_formatted_nas)
 
 csv_formatted_nas <- csv_formatted_nas %>% 
-  mutate(`Observation status` == "Normal value") %>%
+  mutate(`Observation status` = "Normal value") %>%
   select(Year, Series, `Drug group`, `Local authority`, 
          Sex, Age, Ethnicity, Units, `Observation status`, Value) 
 

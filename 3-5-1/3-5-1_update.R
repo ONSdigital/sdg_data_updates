@@ -427,7 +427,9 @@ check_all <- nrow(distinct(csv_formatted_nas)) == nrow(csv_formatted_nas)
 csv_formatted_nas <- csv_formatted_nas %>% 
   mutate(`Observation status` = "Normal value") %>%
   select(Year, Series, `Drug group`, `Local authority`, 
-         Sex, Age, Ethnicity, Units, `Observation status`, Value) 
+         Sex, Age, Ethnicity, Units, `Observation status`, Value) %>%
+  arrange(Year, Series, `Drug group`, `Local authority`,
+          Sex, Age, Ethnicity) 
 
 
 # If false you may need to remove duplicate rows. 

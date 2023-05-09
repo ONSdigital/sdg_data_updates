@@ -7,16 +7,16 @@
 # You should not need to install any packages, but if you do, use the following 
 # code and just replace the name of the package from tidyr to the package you need.
 # install.packages("tidyr", dependencies = TRUE, type = "win.binary")
-
+setwd("D:/coding_repos/sdg_data_updates")
 # Because SDGupdater is a local package we install it slightly differently:
 
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 rm(list = ls())
 
-test_run <- FALSE # for real updates use FALSE
+test_run <- TRUE # for real updates use FALSE
 
-indicator <- "3-1-2" # name of folder for indicator(s)
+indicator <- "3-8-2" # name of folder for indicator(s)
 
 setwd(indicator)
 

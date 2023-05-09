@@ -416,6 +416,11 @@ csv_formatted_nas <- csv_formatted %>%
 # correctly - all rows should be unique, so this should be TRUE
 check_all <- nrow(distinct(csv_formatted_nas)) == nrow(csv_formatted_nas)
 
+csv_formatted_nas <- csv_formatted_nas %>% 
+  mutate(`Observation status` == "Normal value") %>%
+  select(Year, Series, `Drug group`, `Local authority`, 
+         Sex, Age, Ethnicity, Units, `Observation status`, Value) 
+
 
 # If false you may need to remove duplicate rows. 
 csv_output <- unique(csv_formatted_nas)

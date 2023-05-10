@@ -12,7 +12,7 @@ Source 3 - A further source, Estimated prevalence of alcohol dependency prior to
 
 
 ### Downloading and Sourcing Data  
-1) In folder 3-5-1 create a new folder called ?Input?. 
+1) In folder 3-5-1 create a new folder called Input. 
 2) Go to [Treatment numbers for Local Authorities Source Link](https://www.ndtms.net/ViewIt/Adult).
 3) Under download data, select "All in treatment", "Numbers in treatment", "Ethnicity", all reporting periods, all substance categories, all sexes, all age groups. 
 4) Save this file in the ?Input? folder as "ViewIt Export Data_England.csv". 

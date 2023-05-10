@@ -10,7 +10,7 @@ install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 # note that to install this package the working directory needs to be
 # sdg_data_updates. Use getwd() to check this is the folder you are in.
 
-# rm(list = ls())
+rm(list = ls())
 
 test_run <- FALSE # for real updates use FALSE
 

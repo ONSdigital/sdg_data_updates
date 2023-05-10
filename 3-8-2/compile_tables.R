@@ -26,12 +26,12 @@ if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE)
     stop("test_run must be either TRUE or FALSE") }
 
 source("update_3-8-2.R") # does the donkey-work of making the csv - 
-# for real update this might be called e.g. 'update_1-2-1.R' 
+# for real update this might be called e.g. 'update_3-8-2.R' 
 
 
 
 # at this point you should see lots of variables appear in the global environment 
-# pane (top right). These have been created by the update_14-2-1.Rdate_type_1 script.
+# pane (top right). These have been created by the update_3-8-2.R  script.
 
 # create an output file if one does not already exist --------------------------
 existing_files <- list.files()

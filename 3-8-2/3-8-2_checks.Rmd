@@ -25,12 +25,11 @@ library(pander)
 
 ```{r include= FALSE}
 
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-8-2.csv")
-
 date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_3-8-2", ".csv"))
 
 latest_year <- max(new_data$Year)
+rm(new_data)
 
 ```
 

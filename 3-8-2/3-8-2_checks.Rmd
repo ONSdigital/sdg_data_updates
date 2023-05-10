@@ -59,12 +59,12 @@ time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = 
 
 filename_save_time1 <- file.info(paste0(getwd(),"/",input_folder,"/", filename_wb2), 
                                 full.names = TRUE)$ctime[1]
-time_since_data_saved1 <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+time_since_data_saved1 <- round(difftime(Sys.time(), filename_save_time1, units = "days"), 2)
 
 
 filename_save_time2 <- file.info(paste0(getwd(),"/",input_folder,"/", filename_wb4), 
                                 full.names = TRUE)$ctime[1]
-time_since_data_saved2 <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+time_since_data_saved2 <- round(difftime(Sys.time(), filename_save_time2, units = "days"), 2)
 
 
 

@@ -1,20 +1,31 @@
-<<<<<<< HEAD
+---
+title: "README"
+author: "Michael Nairn"
+date: "15/05/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ### 5-a-1 automation
   
-This automation pulls together all relevant occupation codes off NOMIS to display the number of Managers and Proprietors in Agriculture Related Services disaggregated by occupation unit code, country, region and sex. 
+This automation pulls together all relevant occupation codes off NOMIS to display the number of Managers and Proprietors in Agriculture Related Services disaggregated by occupation unit code, country, region and sex.
+The code uses SOC 2020 codes, with data up to and including 2020 using SOC 2010 codes.
   
 ### Instructions to run update ###
 1. *UK SDG data team:* (once this code has been reviewed and is on the main branch) Go to Jemalex > sdg_data_updates.    
    *Others:* Checkout sdg_data_updates main branch to your local repository.     
 2. Open sdg_data_updates.Rproj  
-3. Change indicator folder name (`indicator <- "5-a-1"`)  
-4. If config.R does not exist in the 5-a-1 folder, create it from the example_config.R file  
+3. Change indicator folder name (`indicator <- "5-a-1-SOC2020"`)  
+4. If config.R does not exist in the 5-a-1-SOC2020 folder, create it from the example_config.R file  
 5. Check the configs are correct. The nomis links should not need to be edited, unless you want to add or remove occupation codes. 
 6. Open update_indicator_main.R  
 7. Ensure test_run <- FALSE
 8. Click Source (by default this is in top right of the script window)  
 9. Check for messages in the console. When the script is run a file titled '5-a-1.csv' will be saved in 5-a-1 > Output 
-   Use this file for the Indicator csv.  
+   Append this file to the indicator csv, which will use SOC 2010 codes for years up to and including 2020.
 10. A file called <date>_5-a-1_checks.html will also be in the outputs folder. Read through this as a QA of the csv.  
 
 ### Instructions for metadata ###
@@ -28,12 +39,12 @@ If nomis is being used without an account, the downloaded dataset is cropped at 
 The current nomis links were generated as follows:
 
 #### Mortality rate numbers ####
-From Nomis, select Query > annual population survey - regional - employment by occupation 
+From Nomis, select Query > annual population survey - regional - occupation (SOC2020) by sex by employment type
 
 Selections:  
    Geography: Countries (all), regions (all)  
    Date: 12 months to Dec - All years  
-   Occupation: 121 and all subcodes (currently, as of Jan     	2023, 1211 & 1213)
+   Occupation: 121 and all subcodes (currently, as of May 2023, 1211 & 1212)
    Rate: Count  
    Sex: All persons, Males, Females  
 

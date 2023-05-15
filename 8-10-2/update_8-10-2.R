@@ -58,6 +58,12 @@ csv_formatted <- joined_data %>%
             "Observation status" = "Normal value",
             "Year" = year)
 
+csv_formatted$`Bank account category`[csv_formatted$`Bank account category` == "Any other type of asset [Note 7]"] <- "Any other type of asset"
+csv_formatted$Age[csv_formatted$Age == "All adults"] <- ""
+csv_formatted$Age[csv_formatted$Age == "85+"] <- "85 and over"
+
+csv_formatted <- csv_formatted[order(csv_formatted$"Bank account category"),]
+
 # output csv
 
 csv_output <- csv_formatted %>%            

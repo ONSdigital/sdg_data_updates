@@ -22,7 +22,7 @@ library('dplyr')
 library(SDGupdater)
 
 if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE) { 
-  source("8-10-2_config.R") } else { 
+  source("config.R") } else { 
     stop("test_run must be either TRUE or FALSE") }
 
 source("update_8-10-2.R") # does the donkey-work of making the csv - 

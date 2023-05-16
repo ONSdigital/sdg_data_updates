@@ -83,7 +83,8 @@ comparison <- joined_data %>%
 
 comparison <- comparison %>% 
   mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
-  mutate(new = as.numeric(new)) %>% 
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
   mutate(old = as.character(old)) %>%
   mutate(old = as.numeric(old))
 

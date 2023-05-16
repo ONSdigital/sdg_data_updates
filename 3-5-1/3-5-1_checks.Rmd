@@ -93,9 +93,6 @@ comparison <- comparison %>%
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
-
-
-
 ```
 
 ## Table of discrepancies

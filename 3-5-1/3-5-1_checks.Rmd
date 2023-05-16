@@ -1,0 +1,261 @@
+title: "3-5-1 Checks"
+author: "Michael Nairn"
+date: "12/04/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 3-5-1 update summary
+
+This file runs some basic checks and gives information about the update.
+  
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-5-1.csv") %>%
+  mutate(`Drug group` = "Alcohol") %>%
+  mutate(Series = recode(Series, "Alcohol - People in treatment" = "People in treatment",
+                         "Alcohol - Estimated prevalence" = "Estimated prevalence",
+                         "Alcohol - Met need" = "Met need (%)")) %>%
+  rename(`Local authority` = Local.Authority) %>%
+  mutate(dataset = "old") %>%
+  mutate(Sex = "") %>%
+  mutate(Age = "") %>%
+  mutate(Ethnicity = "") %>%
+  select(-c(GeoCode, Unit.multiplier, Unit.measure))
+
+old_data <- old_data %>%
+  filter(Deprivation.decile == "") %>%
+  filter(!row_number() %in% c(4081)) # random duplication. Won't need in future.
+  
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_3-5-1", ".csv")) %>% 
+  rename(`Local authority` = Local.authority) %>%
+  rename(`Drug group` = Drug.group) %>%
+  mutate(dataset = "new")
+ 
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) %>%
+  select(Year, Series, `Drug group`, `Local authority`, Sex, 
+         Age, Ethnicity, Units, Value, dataset)
+
+
+
+```
+
+## Calculations 
+The calculation for MET need is 100 - unmet need. 
+
+We need to calculate met need for all other available years ourselves as (number in treatment / number estimated to have that substance use disorder) * 100
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+    select(Year, Series, `Drug group`, `Local authority`, Sex, 
+           Age, Ethnicity, Units, Value, dataset) %>% 
+    na.omit(Value) %>% # replace the NULL returns with NA
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. 
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots. 
+
+Notably, selecting specific local authorities by editing the "filter" command to 
+include the local authorities you wish. 
+  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
+                `Local authority` == "Barnsley")
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# People in treatment by drug group
+People_in_treatment_headline_plot <- joined_data %>% 
+  filter(Series == "People in treatment" & `Local authority` == "" 
+         & Ethnicity == "" & Sex == "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by Drug group")
+
+
+# met need by drug group
+met_need_headline_plot <- joined_data %>% 
+  filter(Series == "Met need (%)" & `Local authority` == "" 
+         & Ethnicity == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("met need by Drug group")
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(People_in_treatment_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(met_need_headline_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Ethnicity by drug group
+ethnicity_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Age == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Ethnicity ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by ethnicity and Drug group")
+
+
+# Sex by drug group
+sex_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Age == "" & Ethnicity == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Sex ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by sex and Drug group")
+
+
+# Age by drug group
+age_by_drug_group_plot <- joined_data %>% 
+  filter(Series == "People in treatment" &
+         `Local authority` == "" & Sex == "" & Ethnicity == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Age ~ `Drug group`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("People in treatment by age and Drug group")
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(ethnicity_by_drug_group_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_by_drug_group_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_by_drug_group_plot))
+```
+
+
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

@@ -6,7 +6,6 @@
 
 # Because SDGupdater is a local package we install it slightly differently:
 
-
 install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 # note that to install this package the working directory needs to be
@@ -15,11 +14,9 @@ install.packages("SDGupdater", repos = NULL, type="source", force = TRUE)
 
 rm(list = ls())
 
-test_run <- TRUE # for real updates use FALSE
+test_run <- FALSE # for real updates use FALSE
 
-
-indicator <- "8-10-2" # name of folder for indicator
-
+indicator <- "3-5-1" # name of folder for indicator(s)
 
 setwd(indicator)
 

@@ -45,7 +45,9 @@ joined_data <- rbind(all_adults_data,
                      male_data,
                      female_data)
 
-joined_data["Value"][joined_data["Value"] == '-'] <- '0'
+joined_data["Value"][joined_data["Value"] == '[w]'] <- '0' # true 0
+
+joined_data["Value"][joined_data["Value"] == '[low]'] <- '0' # less than 0.5
 
 joined_data["Age"][joined_data["Age"] == 'All Adults'] <- ''
 

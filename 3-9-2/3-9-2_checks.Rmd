@@ -71,6 +71,13 @@ comparison <- joined_data %>%
     select(Year, `Cause of death`, Country, Region, Sex, Value, dataset) %>% 
   pivot_wider(names_from = dataset,
               values_from = Value)
+              
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
 
 comparison <- comparison %>% 
   mutate(difference = new - old) %>% 

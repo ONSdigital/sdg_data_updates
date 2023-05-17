@@ -31,3 +31,5 @@ Error: Can't subset columns that don't exist.
 x Column `CDID` doesn't exist.
 
 This is due to an issue with the way the data is read in when test_run is set to FALSE in the config file, but it only occurs with certain versions of RStudio. If you get this error, then check if your RStudio needs updating. If no update is available, try running it on an older version (you can change the version in using the settings option in the pop-up that appears when you first open Rstudio).
+
+For information, this automation was written in May 2023, using RStudio version 4.1.3.

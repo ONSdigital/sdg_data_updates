@@ -1,0 +1,736 @@
+time_period,time_identifier,geographic_level,country_code,country_name,characteristic,gender,pt_readta_met_expected_standard,pt_matta_met_expected_standard
+201516,Academic year,National,E92000001,England,Total,Boys,70,72
+201516,Academic year,National,E92000001,England,Total,Girls,78,74
+201516,Academic year,National,E92000001,England,Total,Total,74,73
+201516,Academic year,National,E92000001,England,Disadvantaged,Boys,57,59
+201516,Academic year,National,E92000001,England,Disadvantaged,Girls,67,61
+201516,Academic year,National,E92000001,England,Disadvantaged,Total,62,60
+201516,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,74,76
+201516,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,82,78
+201516,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,78,77
+201516,Academic year,National,E92000001,England,Any other ethnic group,Boys,64,70
+201516,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,70
+201516,Academic year,National,E92000001,England,Any other ethnic group,Total,68,70
+201516,Academic year,National,E92000001,England,Asian,Boys,72,74
+201516,Academic year,National,E92000001,England,Asian,Girls,80,76
+201516,Academic year,National,E92000001,England,Asian,Total,76,75
+201516,Academic year,National,E92000001,England,Black,Boys,71,69
+201516,Academic year,National,E92000001,England,Black,Girls,81,74
+201516,Academic year,National,E92000001,England,Black,Total,76,71
+201516,Academic year,National,E92000001,England,Mixed,Boys,72,72
+201516,Academic year,National,E92000001,England,Mixed,Girls,81,75
+201516,Academic year,National,E92000001,England,Mixed,Total,76,74
+201516,Academic year,National,E92000001,England,Unclassified,Boys,51,54
+201516,Academic year,National,E92000001,England,Unclassified,Girls,59,56
+201516,Academic year,National,E92000001,England,Unclassified,Total,55,55
+201516,Academic year,National,E92000001,England,White,Boys,70,72
+201516,Academic year,National,E92000001,England,White,Girls,78,73
+201516,Academic year,National,E92000001,England,White,Total,74,73
+201516,Academic year,National,E92000001,England,Any other ethnic group,Boys,64,70
+201516,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,70
+201516,Academic year,National,E92000001,England,Any other ethnic group,Total,68,70
+201516,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,73,76
+201516,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,82,80
+201516,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,77,78
+201516,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,71,72
+201516,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,79,75
+201516,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,75,73
+201516,Academic year,National,E92000001,England,Asian - Chinese,Boys,77,88
+201516,Academic year,National,E92000001,England,Asian - Chinese,Girls,83,89
+201516,Academic year,National,E92000001,England,Asian - Chinese,Total,80,88
+201516,Academic year,National,E92000001,England,Asian - Indian,Boys,79,81
+201516,Academic year,National,E92000001,England,Asian - Indian,Girls,86,84
+201516,Academic year,National,E92000001,England,Asian - Indian,Total,83,82
+201516,Academic year,National,E92000001,England,Asian - Pakistani,Boys,67,68
+201516,Academic year,National,E92000001,England,Asian - Pakistani,Girls,75,69
+201516,Academic year,National,E92000001,England,Asian - Pakistani,Total,71,69
+201516,Academic year,National,E92000001,England,Black - Any other Black background,Boys,68,67
+201516,Academic year,National,E92000001,England,Black - Any other Black background,Girls,78,70
+201516,Academic year,National,E92000001,England,Black - Any other Black background,Total,73,68
+201516,Academic year,National,E92000001,England,Black - Black African,Boys,73,71
+201516,Academic year,National,E92000001,England,Black - Black African,Girls,82,76
+201516,Academic year,National,E92000001,England,Black - Black African,Total,77,74
+201516,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,68,65
+201516,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,78,68
+201516,Academic year,National,E92000001,England,Black - Black Caribbean,Total,73,66
+201516,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,72,73
+201516,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,82,76
+201516,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,77,75
+201516,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,77,78
+201516,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,85,80
+201516,Academic year,National,E92000001,England,Mixed - White and Asian,Total,81,79
+201516,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,73,73
+201516,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,80,75
+201516,Academic year,National,E92000001,England,Mixed - White and Black African,Total,77,74
+201516,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,66,66
+201516,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,76,68
+201516,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,71,67
+201516,Academic year,National,E92000001,England,Unclassified,Boys,51,54
+201516,Academic year,National,E92000001,England,Unclassified,Girls,59,56
+201516,Academic year,National,E92000001,England,Unclassified,Total,55,55
+201516,Academic year,National,E92000001,England,White - Any other White background,Boys,64,71
+201516,Academic year,National,E92000001,England,White - Any other White background,Girls,71,72
+201516,Academic year,National,E92000001,England,White - Any other White background,Total,67,71
+201516,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,21,28
+201516,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,30,30
+201516,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,26,29
+201516,Academic year,National,E92000001,England,White - Irish,Boys,72,75
+201516,Academic year,National,E92000001,England,White - Irish,Girls,82,76
+201516,Academic year,National,E92000001,England,White - Irish,Total,77,75
+201516,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,27,32
+201516,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,37,35
+201516,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,32,33
+201516,Academic year,National,E92000001,England,White - White British,Boys,70,72
+201516,Academic year,National,E92000001,England,White - White British,Girls,79,74
+201516,Academic year,National,E92000001,England,White - White British,Total,75,73
+201516,Academic year,National,E92000001,England,First language unclassified,Boys,34,40
+201516,Academic year,National,E92000001,England,First language unclassified,Girls,41,41
+201516,Academic year,National,E92000001,England,First language unclassified,Total,38,40
+201516,Academic year,National,E92000001,England,Known or believed to be English,Boys,71,72
+201516,Academic year,National,E92000001,England,Known or believed to be English,Girls,80,74
+201516,Academic year,National,E92000001,England,Known or believed to be English,Total,75,73
+201516,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,67,71
+201516,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,75,73
+201516,Academic year,National,E92000001,England,Known or believed to be other than English,Total,70,72
+201516,Academic year,National,E92000001,England,FSM eligible,Boys,54,56
+201516,Academic year,National,E92000001,England,FSM eligible,Girls,65,59
+201516,Academic year,National,E92000001,England,FSM eligible,Total,60,58
+201516,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,73,74
+201516,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,81,76
+201516,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,77,75
+201516,Academic year,National,E92000001,England,All SEN,Boys,30,33
+201516,Academic year,National,E92000001,England,All SEN,Girls,28,24
+201516,Academic year,National,E92000001,England,All SEN,Total,30,30
+201516,Academic year,National,E92000001,England,No SEN,Boys,80,82
+201516,Academic year,National,E92000001,England,No SEN,Girls,84,79
+201516,Academic year,National,E92000001,England,No SEN,Total,82,80
+201617,Academic year,National,E92000001,England,Total,Boys,71,74
+201617,Academic year,National,E92000001,England,Total,Girls,80,76
+201617,Academic year,National,E92000001,England,Total,Total,76,75
+201617,Academic year,National,E92000001,England,Disadvantaged,Boys,58,61
+201617,Academic year,National,E92000001,England,Disadvantaged,Girls,69,64
+201617,Academic year,National,E92000001,England,Disadvantaged,Total,63,62
+201617,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,75,78
+201617,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,83,80
+201617,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,79,79
+201617,Academic year,National,E92000001,England,Any other ethnic group,Boys,65,72
+201617,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,72
+201617,Academic year,National,E92000001,England,Any other ethnic group,Total,68,72
+201617,Academic year,National,E92000001,England,Asian,Boys,73,76
+201617,Academic year,National,E92000001,England,Asian,Girls,81,79
+201617,Academic year,National,E92000001,England,Asian,Total,77,78
+201617,Academic year,National,E92000001,England,Black,Boys,72,71
+201617,Academic year,National,E92000001,England,Black,Girls,81,76
+201617,Academic year,National,E92000001,England,Black,Total,77,73
+201617,Academic year,National,E92000001,England,Mixed,Boys,73,74
+201617,Academic year,National,E92000001,England,Mixed,Girls,82,78
+201617,Academic year,National,E92000001,England,Mixed,Total,78,76
+201617,Academic year,National,E92000001,England,Unclassified,Boys,53,58
+201617,Academic year,National,E92000001,England,Unclassified,Girls,60,59
+201617,Academic year,National,E92000001,England,Unclassified,Total,57,58
+201617,Academic year,National,E92000001,England,White,Boys,71,74
+201617,Academic year,National,E92000001,England,White,Girls,80,76
+201617,Academic year,National,E92000001,England,White,Total,76,75
+201617,Academic year,National,E92000001,England,Any other ethnic group,Boys,65,72
+201617,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,72
+201617,Academic year,National,E92000001,England,Any other ethnic group,Total,68,72
+201617,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,74,78
+201617,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,82,81
+201617,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,78,79
+201617,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,70,74
+201617,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,79,77
+201617,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,75,76
+201617,Academic year,National,E92000001,England,Asian - Chinese,Boys,81,90
+201617,Academic year,National,E92000001,England,Asian - Chinese,Girls,87,91
+201617,Academic year,National,E92000001,England,Asian - Chinese,Total,84,91
+201617,Academic year,National,E92000001,England,Asian - Indian,Boys,80,84
+201617,Academic year,National,E92000001,England,Asian - Indian,Girls,87,86
+201617,Academic year,National,E92000001,England,Asian - Indian,Total,83,85
+201617,Academic year,National,E92000001,England,Asian - Pakistani,Boys,68,70
+201617,Academic year,National,E92000001,England,Asian - Pakistani,Girls,77,73
+201617,Academic year,National,E92000001,England,Asian - Pakistani,Total,72,72
+201617,Academic year,National,E92000001,England,Black - Any other Black background,Boys,70,68
+201617,Academic year,National,E92000001,England,Black - Any other Black background,Girls,79,72
+201617,Academic year,National,E92000001,England,Black - Any other Black background,Total,74,70
+201617,Academic year,National,E92000001,England,Black - Black African,Boys,73,73
+201617,Academic year,National,E92000001,England,Black - Black African,Girls,82,77
+201617,Academic year,National,E92000001,England,Black - Black African,Total,78,75
+201617,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,68,66
+201617,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,80,71
+201617,Academic year,National,E92000001,England,Black - Black Caribbean,Total,74,68
+201617,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,74,75
+201617,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,83,79
+201617,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,79,77
+201617,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,77,79
+201617,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,85,82
+201617,Academic year,National,E92000001,England,Mixed - White and Asian,Total,81,80
+201617,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,73,73
+201617,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,82,78
+201617,Academic year,National,E92000001,England,Mixed - White and Black African,Total,77,75
+201617,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,68,69
+201617,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,79,72
+201617,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,73,70
+201617,Academic year,National,E92000001,England,Unclassified,Boys,53,58
+201617,Academic year,National,E92000001,England,Unclassified,Girls,60,59
+201617,Academic year,National,E92000001,England,Unclassified,Total,57,58
+201617,Academic year,National,E92000001,England,White - Any other White background,Boys,66,74
+201617,Academic year,National,E92000001,England,White - Any other White background,Girls,74,75
+201617,Academic year,National,E92000001,England,White - Any other White background,Total,70,75
+201617,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,24,29
+201617,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,31,31
+201617,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,27,30
+201617,Academic year,National,E92000001,England,White - Irish,Boys,74,75
+201617,Academic year,National,E92000001,England,White - Irish,Girls,80,74
+201617,Academic year,National,E92000001,England,White - Irish,Total,77,75
+201617,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,25,32
+201617,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,41,37
+201617,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,33,34
+201617,Academic year,National,E92000001,England,White - White British,Boys,72,74
+201617,Academic year,National,E92000001,England,White - White British,Girls,81,77
+201617,Academic year,National,E92000001,England,White - White British,Total,76,76
+201617,Academic year,National,E92000001,England,First language unclassified,Boys,34,40
+201617,Academic year,National,E92000001,England,First language unclassified,Girls,38,39
+201617,Academic year,National,E92000001,England,First language unclassified,Total,36,40
+201617,Academic year,National,E92000001,England,Known or believed to be English,Boys,73,74
+201617,Academic year,National,E92000001,England,Known or believed to be English,Girls,81,77
+201617,Academic year,National,E92000001,England,Known or believed to be English,Total,77,76
+201617,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,68,73
+201617,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,76,76
+201617,Academic year,National,E92000001,England,Known or believed to be other than English,Total,72,74
+201617,Academic year,National,E92000001,England,FSM eligible,Boys,56,59
+201617,Academic year,National,E92000001,England,FSM eligible,Girls,66,61
+201617,Academic year,National,E92000001,England,FSM eligible,Total,61,60
+201617,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,74,76
+201617,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,82,79
+201617,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,78,78
+201617,Academic year,National,E92000001,England,All SEN,Boys,31,35
+201617,Academic year,National,E92000001,England,All SEN,Girls,29,26
+201617,Academic year,National,E92000001,England,All SEN,Total,31,32
+201617,Academic year,National,E92000001,England,No SEN,Boys,82,84
+201617,Academic year,National,E92000001,England,No SEN,Girls,85,82
+201617,Academic year,National,E92000001,England,No SEN,Total,84,83
+201718,Academic year,National,E92000001,England,Total,Boys,71,75
+201718,Academic year,National,E92000001,England,Total,Girls,80,77
+201718,Academic year,National,E92000001,England,Total,Total,75,76
+201718,Academic year,National,E92000001,England,Disadvantaged,Boys,57,61
+201718,Academic year,National,E92000001,England,Disadvantaged,Girls,68,65
+201718,Academic year,National,E92000001,England,Disadvantaged,Total,62,63
+201718,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,75,79
+201718,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,83,81
+201718,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,79,80
+201718,Academic year,National,E92000001,England,Any other ethnic group,Boys,65,72
+201718,Academic year,National,E92000001,England,Any other ethnic group,Girls,73,73
+201718,Academic year,National,E92000001,England,Any other ethnic group,Total,69,72
+201718,Academic year,National,E92000001,England,Asian,Boys,74,77
+201718,Academic year,National,E92000001,England,Asian,Girls,82,81
+201718,Academic year,National,E92000001,England,Asian,Total,78,79
+201718,Academic year,National,E92000001,England,Black,Boys,72,72
+201718,Academic year,National,E92000001,England,Black,Girls,81,76
+201718,Academic year,National,E92000001,England,Black,Total,77,74
+201718,Academic year,National,E92000001,England,Mixed,Boys,73,75
+201718,Academic year,National,E92000001,England,Mixed,Girls,81,78
+201718,Academic year,National,E92000001,England,Mixed,Total,77,77
+201718,Academic year,National,E92000001,England,Unclassified,Boys,55,59
+201718,Academic year,National,E92000001,England,Unclassified,Girls,62,60
+201718,Academic year,National,E92000001,England,Unclassified,Total,58,59
+201718,Academic year,National,E92000001,England,White,Boys,71,75
+201718,Academic year,National,E92000001,England,White,Girls,80,77
+201718,Academic year,National,E92000001,England,White,Total,75,76
+201718,Academic year,National,E92000001,England,Any other ethnic group,Boys,65,72
+201718,Academic year,National,E92000001,England,Any other ethnic group,Girls,73,73
+201718,Academic year,National,E92000001,England,Any other ethnic group,Total,69,72
+201718,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,75,79
+201718,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,82,82
+201718,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,79,80
+201718,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,72,76
+201718,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,81,80
+201718,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,77,78
+201718,Academic year,National,E92000001,England,Asian - Chinese,Boys,81,90
+201718,Academic year,National,E92000001,England,Asian - Chinese,Girls,87,92
+201718,Academic year,National,E92000001,England,Asian - Chinese,Total,84,91
+201718,Academic year,National,E92000001,England,Asian - Indian,Boys,81,84
+201718,Academic year,National,E92000001,England,Asian - Indian,Girls,88,87
+201718,Academic year,National,E92000001,England,Asian - Indian,Total,84,85
+201718,Academic year,National,E92000001,England,Asian - Pakistani,Boys,68,71
+201718,Academic year,National,E92000001,England,Asian - Pakistani,Girls,78,75
+201718,Academic year,National,E92000001,England,Asian - Pakistani,Total,73,73
+201718,Academic year,National,E92000001,England,Black - Any other Black background,Boys,70,69
+201718,Academic year,National,E92000001,England,Black - Any other Black background,Girls,79,74
+201718,Academic year,National,E92000001,England,Black - Any other Black background,Total,75,71
+201718,Academic year,National,E92000001,England,Black - Black African,Boys,74,74
+201718,Academic year,National,E92000001,England,Black - Black African,Girls,82,78
+201718,Academic year,National,E92000001,England,Black - Black African,Total,78,76
+201718,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,68,66
+201718,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,78,71
+201718,Academic year,National,E92000001,England,Black - Black Caribbean,Total,73,69
+201718,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,75,77
+201718,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,82,78
+201718,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,78,78
+201718,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,78,80
+201718,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,85,82
+201718,Academic year,National,E92000001,England,Mixed - White and Asian,Total,81,81
+201718,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,74,75
+201718,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,82,78
+201718,Academic year,National,E92000001,England,Mixed - White and Black African,Total,78,76
+201718,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,67,69
+201718,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,78,73
+201718,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,72,71
+201718,Academic year,National,E92000001,England,Unclassified,Boys,55,59
+201718,Academic year,National,E92000001,England,Unclassified,Girls,62,60
+201718,Academic year,National,E92000001,England,Unclassified,Total,58,59
+201718,Academic year,National,E92000001,England,White - Any other White background,Boys,67,75
+201718,Academic year,National,E92000001,England,White - Any other White background,Girls,75,76
+201718,Academic year,National,E92000001,England,White - Any other White background,Total,71,75
+201718,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,25,32
+201718,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,33,35
+201718,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,29,34
+201718,Academic year,National,E92000001,England,White - Irish,Boys,72,75
+201718,Academic year,National,E92000001,England,White - Irish,Girls,81,78
+201718,Academic year,National,E92000001,England,White - Irish,Total,77,76
+201718,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,24,36
+201718,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,37,35
+201718,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,31,36
+201718,Academic year,National,E92000001,England,White - White British,Boys,72,75
+201718,Academic year,National,E92000001,England,White - White British,Girls,80,78
+201718,Academic year,National,E92000001,England,White - White British,Total,76,76
+201718,Academic year,National,E92000001,England,First language unclassified,Boys,35,40
+201718,Academic year,National,E92000001,England,First language unclassified,Girls,42,39
+201718,Academic year,National,E92000001,England,First language unclassified,Total,38,39
+201718,Academic year,National,E92000001,England,Known or believed to be English,Boys,72,75
+201718,Academic year,National,E92000001,England,Known or believed to be English,Girls,81,78
+201718,Academic year,National,E92000001,England,Known or believed to be English,Total,76,76
+201718,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,69,74
+201718,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,77,77
+201718,Academic year,National,E92000001,England,Known or believed to be other than English,Total,73,75
+201718,Academic year,National,E92000001,England,FSM eligible,Boys,55,59
+201718,Academic year,National,E92000001,England,FSM eligible,Girls,66,63
+201718,Academic year,National,E92000001,England,FSM eligible,Total,60,61
+201718,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,74,77
+201718,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,82,80
+201718,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,78,78
+201718,Academic year,National,E92000001,England,All SEN,Boys,31,36
+201718,Academic year,National,E92000001,England,All SEN,Girls,30,27
+201718,Academic year,National,E92000001,England,All SEN,Total,30,33
+201718,Academic year,National,E92000001,England,No SEN,Boys,82,85
+201718,Academic year,National,E92000001,England,No SEN,Girls,85,83
+201718,Academic year,National,E92000001,England,No SEN,Total,84,84
+201819,Academic year,National,E92000001,England,Total,Boys,71,75
+201819,Academic year,National,E92000001,England,Total,Girls,79,77
+201819,Academic year,National,E92000001,England,Total,Total,75,76
+201819,Academic year,National,E92000001,England,Disadvantaged,Boys,57,61
+201819,Academic year,National,E92000001,England,Disadvantaged,Girls,67,64
+201819,Academic year,National,E92000001,England,Disadvantaged,Total,62,62
+201819,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,75,78
+201819,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,82,80
+201819,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,78,79
+201819,Academic year,National,E92000001,England,Any other ethnic group,Boys,64,71
+201819,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,72
+201819,Academic year,National,E92000001,England,Any other ethnic group,Total,68,72
+201819,Academic year,National,E92000001,England,Asian,Boys,73,77
+201819,Academic year,National,E92000001,England,Asian,Girls,82,81
+201819,Academic year,National,E92000001,England,Asian,Total,77,79
+201819,Academic year,National,E92000001,England,Black,Boys,70,71
+201819,Academic year,National,E92000001,England,Black,Girls,82,77
+201819,Academic year,National,E92000001,England,Black,Total,76,74
+201819,Academic year,National,E92000001,England,Mixed,Boys,73,75
+201819,Academic year,National,E92000001,England,Mixed,Girls,82,78
+201819,Academic year,National,E92000001,England,Mixed,Total,77,76
+201819,Academic year,National,E92000001,England,Unclassified,Boys,53,58
+201819,Academic year,National,E92000001,England,Unclassified,Girls,60,59
+201819,Academic year,National,E92000001,England,Unclassified,Total,56,58
+201819,Academic year,National,E92000001,England,White,Boys,71,75
+201819,Academic year,National,E92000001,England,White,Girls,79,77
+201819,Academic year,National,E92000001,England,White,Total,75,76
+201819,Academic year,National,E92000001,England,Any other ethnic group,Boys,64,71
+201819,Academic year,National,E92000001,England,Any other ethnic group,Girls,72,72
+201819,Academic year,National,E92000001,England,Any other ethnic group,Total,68,72
+201819,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,73,77
+201819,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,81,81
+201819,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,77,79
+201819,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,71,74
+201819,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,80,79
+201819,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,75,76
+201819,Academic year,National,E92000001,England,Asian - Chinese,Boys,81,90
+201819,Academic year,National,E92000001,England,Asian - Chinese,Girls,88,92
+201819,Academic year,National,E92000001,England,Asian - Chinese,Total,84,91
+201819,Academic year,National,E92000001,England,Asian - Indian,Boys,79,83
+201819,Academic year,National,E92000001,England,Asian - Indian,Girls,87,87
+201819,Academic year,National,E92000001,England,Asian - Indian,Total,83,85
+201819,Academic year,National,E92000001,England,Asian - Pakistani,Boys,67,71
+201819,Academic year,National,E92000001,England,Asian - Pakistani,Girls,78,75
+201819,Academic year,National,E92000001,England,Asian - Pakistani,Total,72,73
+201819,Academic year,National,E92000001,England,Black - Any other Black background,Boys,67,69
+201819,Academic year,National,E92000001,England,Black - Any other Black background,Girls,80,75
+201819,Academic year,National,E92000001,England,Black - Any other Black background,Total,73,72
+201819,Academic year,National,E92000001,England,Black - Black African,Boys,73,73
+201819,Academic year,National,E92000001,England,Black - Black African,Girls,83,79
+201819,Academic year,National,E92000001,England,Black - Black African,Total,78,76
+201819,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,65,65
+201819,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,78,71
+201819,Academic year,National,E92000001,England,Black - Black Caribbean,Total,72,68
+201819,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,74,76
+201819,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,82,78
+201819,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,78,77
+201819,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,79,81
+201819,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,85,83
+201819,Academic year,National,E92000001,England,Mixed - White and Asian,Total,82,82
+201819,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,73,75
+201819,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,81,77
+201819,Academic year,National,E92000001,England,Mixed - White and Black African,Total,77,76
+201819,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,66,69
+201819,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,77,72
+201819,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,72,70
+201819,Academic year,National,E92000001,England,Unclassified,Boys,53,58
+201819,Academic year,National,E92000001,England,Unclassified,Girls,60,59
+201819,Academic year,National,E92000001,England,Unclassified,Total,56,58
+201819,Academic year,National,E92000001,England,White - Any other White background,Boys,67,74
+201819,Academic year,National,E92000001,England,White - Any other White background,Girls,75,76
+201819,Academic year,National,E92000001,England,White - Any other White background,Total,71,75
+201819,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,28,34
+201819,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,32,34
+201819,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,30,34
+201819,Academic year,National,E92000001,England,White - Irish,Boys,76,78
+201819,Academic year,National,E92000001,England,White - Irish,Girls,84,80
+201819,Academic year,National,E92000001,England,White - Irish,Total,80,79
+201819,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,27,34
+201819,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,42,41
+201819,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,35,37
+201819,Academic year,National,E92000001,England,White - White British,Boys,72,75
+201819,Academic year,National,E92000001,England,White - White British,Girls,80,77
+201819,Academic year,National,E92000001,England,White - White British,Total,76,76
+201819,Academic year,National,E92000001,England,First language unclassified,Boys,33,39
+201819,Academic year,National,E92000001,England,First language unclassified,Girls,38,39
+201819,Academic year,National,E92000001,England,First language unclassified,Total,35,39
+201819,Academic year,National,E92000001,England,Known or believed to be English,Boys,72,75
+201819,Academic year,National,E92000001,England,Known or believed to be English,Girls,80,77
+201819,Academic year,National,E92000001,England,Known or believed to be English,Total,76,76
+201819,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,68,74
+201819,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,76,76
+201819,Academic year,National,E92000001,England,Known or believed to be other than English,Total,72,75
+201819,Academic year,National,E92000001,England,FSM eligible,Boys,55,59
+201819,Academic year,National,E92000001,England,FSM eligible,Girls,66,63
+201819,Academic year,National,E92000001,England,FSM eligible,Total,60,61
+201819,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,74,77
+201819,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,82,79
+201819,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,78,78
+201819,Academic year,National,E92000001,England,All SEN,Boys,31,36
+201819,Academic year,National,E92000001,England,All SEN,Girls,29,27
+201819,Academic year,National,E92000001,England,All SEN,Total,30,33
+201819,Academic year,National,E92000001,England,No SEN,Boys,81,85
+201819,Academic year,National,E92000001,England,No SEN,Girls,85,82
+201819,Academic year,National,E92000001,England,No SEN,Total,83,84
+201920,Academic year,National,E92000001,England,Total,Boys,x,x
+201920,Academic year,National,E92000001,England,Total,Girls,x,x
+201920,Academic year,National,E92000001,England,Total,Total,x,x
+201920,Academic year,National,E92000001,England,Disadvantaged,Boys,x,x
+201920,Academic year,National,E92000001,England,Disadvantaged,Girls,x,x
+201920,Academic year,National,E92000001,England,Disadvantaged,Total,x,x
+201920,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,x,x
+201920,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,x,x
+201920,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Boys,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Girls,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Total,x,x
+201920,Academic year,National,E92000001,England,Asian,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian,Total,x,x
+201920,Academic year,National,E92000001,England,Black,Boys,x,x
+201920,Academic year,National,E92000001,England,Black,Girls,x,x
+201920,Academic year,National,E92000001,England,Black,Total,x,x
+201920,Academic year,National,E92000001,England,Mixed,Boys,x,x
+201920,Academic year,National,E92000001,England,Mixed,Girls,x,x
+201920,Academic year,National,E92000001,England,Mixed,Total,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Boys,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Girls,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Total,x,x
+201920,Academic year,National,E92000001,England,White,Boys,x,x
+201920,Academic year,National,E92000001,England,White,Girls,x,x
+201920,Academic year,National,E92000001,England,White,Total,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Boys,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Girls,x,x
+201920,Academic year,National,E92000001,England,Any other ethnic group,Total,x,x
+201920,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,x,x
+201920,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,x,x
+201920,Academic year,National,E92000001,England,Asian - Chinese,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian - Chinese,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian - Chinese,Total,x,x
+201920,Academic year,National,E92000001,England,Asian - Indian,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian - Indian,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian - Indian,Total,x,x
+201920,Academic year,National,E92000001,England,Asian - Pakistani,Boys,x,x
+201920,Academic year,National,E92000001,England,Asian - Pakistani,Girls,x,x
+201920,Academic year,National,E92000001,England,Asian - Pakistani,Total,x,x
+201920,Academic year,National,E92000001,England,Black - Any other Black background,Boys,x,x
+201920,Academic year,National,E92000001,England,Black - Any other Black background,Girls,x,x
+201920,Academic year,National,E92000001,England,Black - Any other Black background,Total,x,x
+201920,Academic year,National,E92000001,England,Black - Black African,Boys,x,x
+201920,Academic year,National,E92000001,England,Black - Black African,Girls,x,x
+201920,Academic year,National,E92000001,England,Black - Black African,Total,x,x
+201920,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,x,x
+201920,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,x,x
+201920,Academic year,National,E92000001,England,Black - Black Caribbean,Total,x,x
+201920,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,x,x
+201920,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,x,x
+201920,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Asian,Total,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black African,Total,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,x,x
+201920,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Boys,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Girls,x,x
+201920,Academic year,National,E92000001,England,Unclassified,Total,x,x
+201920,Academic year,National,E92000001,England,White - Any other White background,Boys,x,x
+201920,Academic year,National,E92000001,England,White - Any other White background,Girls,x,x
+201920,Academic year,National,E92000001,England,White - Any other White background,Total,x,x
+201920,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,x,x
+201920,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,x,x
+201920,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,x,x
+201920,Academic year,National,E92000001,England,White - Irish,Boys,x,x
+201920,Academic year,National,E92000001,England,White - Irish,Girls,x,x
+201920,Academic year,National,E92000001,England,White - Irish,Total,x,x
+201920,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,x,x
+201920,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,x,x
+201920,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,x,x
+201920,Academic year,National,E92000001,England,White - White British,Boys,x,x
+201920,Academic year,National,E92000001,England,White - White British,Girls,x,x
+201920,Academic year,National,E92000001,England,White - White British,Total,x,x
+201920,Academic year,National,E92000001,England,First language unclassified,Boys,x,x
+201920,Academic year,National,E92000001,England,First language unclassified,Girls,x,x
+201920,Academic year,National,E92000001,England,First language unclassified,Total,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be English,Boys,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be English,Girls,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be English,Total,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,x,x
+201920,Academic year,National,E92000001,England,Known or believed to be other than English,Total,x,x
+201920,Academic year,National,E92000001,England,FSM eligible,Boys,x,x
+201920,Academic year,National,E92000001,England,FSM eligible,Girls,x,x
+201920,Academic year,National,E92000001,England,FSM eligible,Total,x,x
+201920,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,x,x
+201920,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,x,x
+201920,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,x,x
+201920,Academic year,National,E92000001,England,All SEN,Boys,x,x
+201920,Academic year,National,E92000001,England,All SEN,Girls,x,x
+201920,Academic year,National,E92000001,England,All SEN,Total,x,x
+201920,Academic year,National,E92000001,England,No SEN,Boys,x,x
+201920,Academic year,National,E92000001,England,No SEN,Girls,x,x
+201920,Academic year,National,E92000001,England,No SEN,Total,x,x
+202021,Academic year,National,E92000001,England,Total,Boys,x,x
+202021,Academic year,National,E92000001,England,Total,Girls,x,x
+202021,Academic year,National,E92000001,England,Total,Total,x,x
+202021,Academic year,National,E92000001,England,Disadvantaged,Boys,x,x
+202021,Academic year,National,E92000001,England,Disadvantaged,Girls,x,x
+202021,Academic year,National,E92000001,England,Disadvantaged,Total,x,x
+202021,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,x,x
+202021,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,x,x
+202021,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Boys,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Girls,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Total,x,x
+202021,Academic year,National,E92000001,England,Asian,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian,Total,x,x
+202021,Academic year,National,E92000001,England,Black,Boys,x,x
+202021,Academic year,National,E92000001,England,Black,Girls,x,x
+202021,Academic year,National,E92000001,England,Black,Total,x,x
+202021,Academic year,National,E92000001,England,Mixed,Boys,x,x
+202021,Academic year,National,E92000001,England,Mixed,Girls,x,x
+202021,Academic year,National,E92000001,England,Mixed,Total,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Boys,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Girls,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Total,x,x
+202021,Academic year,National,E92000001,England,White,Boys,x,x
+202021,Academic year,National,E92000001,England,White,Girls,x,x
+202021,Academic year,National,E92000001,England,White,Total,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Boys,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Girls,x,x
+202021,Academic year,National,E92000001,England,Any other ethnic group,Total,x,x
+202021,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,x,x
+202021,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,x,x
+202021,Academic year,National,E92000001,England,Asian - Chinese,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian - Chinese,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian - Chinese,Total,x,x
+202021,Academic year,National,E92000001,England,Asian - Indian,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian - Indian,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian - Indian,Total,x,x
+202021,Academic year,National,E92000001,England,Asian - Pakistani,Boys,x,x
+202021,Academic year,National,E92000001,England,Asian - Pakistani,Girls,x,x
+202021,Academic year,National,E92000001,England,Asian - Pakistani,Total,x,x
+202021,Academic year,National,E92000001,England,Black - Any other Black background,Boys,x,x
+202021,Academic year,National,E92000001,England,Black - Any other Black background,Girls,x,x
+202021,Academic year,National,E92000001,England,Black - Any other Black background,Total,x,x
+202021,Academic year,National,E92000001,England,Black - Black African,Boys,x,x
+202021,Academic year,National,E92000001,England,Black - Black African,Girls,x,x
+202021,Academic year,National,E92000001,England,Black - Black African,Total,x,x
+202021,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,x,x
+202021,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,x,x
+202021,Academic year,National,E92000001,England,Black - Black Caribbean,Total,x,x
+202021,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,x,x
+202021,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,x,x
+202021,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Asian,Total,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black African,Total,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,x,x
+202021,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Boys,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Girls,x,x
+202021,Academic year,National,E92000001,England,Unclassified,Total,x,x
+202021,Academic year,National,E92000001,England,White - Any other White background,Boys,x,x
+202021,Academic year,National,E92000001,England,White - Any other White background,Girls,x,x
+202021,Academic year,National,E92000001,England,White - Any other White background,Total,x,x
+202021,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,x,x
+202021,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,x,x
+202021,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,x,x
+202021,Academic year,National,E92000001,England,White - Irish,Boys,x,x
+202021,Academic year,National,E92000001,England,White - Irish,Girls,x,x
+202021,Academic year,National,E92000001,England,White - Irish,Total,x,x
+202021,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,x,x
+202021,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,x,x
+202021,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,x,x
+202021,Academic year,National,E92000001,England,White - White British,Boys,x,x
+202021,Academic year,National,E92000001,England,White - White British,Girls,x,x
+202021,Academic year,National,E92000001,England,White - White British,Total,x,x
+202021,Academic year,National,E92000001,England,First language unclassified,Boys,x,x
+202021,Academic year,National,E92000001,England,First language unclassified,Girls,x,x
+202021,Academic year,National,E92000001,England,First language unclassified,Total,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be English,Boys,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be English,Girls,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be English,Total,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,x,x
+202021,Academic year,National,E92000001,England,Known or believed to be other than English,Total,x,x
+202021,Academic year,National,E92000001,England,FSM eligible,Boys,x,x
+202021,Academic year,National,E92000001,England,FSM eligible,Girls,x,x
+202021,Academic year,National,E92000001,England,FSM eligible,Total,x,x
+202021,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,x,x
+202021,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,x,x
+202021,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,x,x
+202021,Academic year,National,E92000001,England,All SEN,Boys,x,x
+202021,Academic year,National,E92000001,England,All SEN,Girls,x,x
+202021,Academic year,National,E92000001,England,All SEN,Total,x,x
+202021,Academic year,National,E92000001,England,No SEN,Boys,x,x
+202021,Academic year,National,E92000001,England,No SEN,Girls,x,x
+202021,Academic year,National,E92000001,England,No SEN,Total,x,x
+202122,Academic year,National,E92000001,England,Total,Boys,63,68
+202122,Academic year,National,E92000001,England,Total,Girls,71,67
+202122,Academic year,National,E92000001,England,Total,Total,67,68
+202122,Academic year,National,E92000001,England,Disadvantaged,Boys,47,52
+202122,Academic year,National,E92000001,England,Disadvantaged,Girls,55,51
+202122,Academic year,National,E92000001,England,Disadvantaged,Total,51,52
+202122,Academic year,National,E92000001,England,Not known to be disadvantaged,Boys,69,74
+202122,Academic year,National,E92000001,England,Not known to be disadvantaged,Girls,76,72
+202122,Academic year,National,E92000001,England,Not known to be disadvantaged,Total,72,73
+202122,Academic year,National,E92000001,England,Any other ethnic group,Boys,56,63
+202122,Academic year,National,E92000001,England,Any other ethnic group,Girls,62,61
+202122,Academic year,National,E92000001,England,Any other ethnic group,Total,59,62
+202122,Academic year,National,E92000001,England,Asian,Boys,65,70
+202122,Academic year,National,E92000001,England,Asian,Girls,73,72
+202122,Academic year,National,E92000001,England,Asian,Total,69,71
+202122,Academic year,National,E92000001,England,Black,Boys,62,62
+202122,Academic year,National,E92000001,England,Black,Girls,73,66
+202122,Academic year,National,E92000001,England,Black,Total,67,64
+202122,Academic year,National,E92000001,England,Mixed,Boys,66,69
+202122,Academic year,National,E92000001,England,Mixed,Girls,74,69
+202122,Academic year,National,E92000001,England,Mixed,Total,70,69
+202122,Academic year,National,E92000001,England,Unclassified,Boys,46,51
+202122,Academic year,National,E92000001,England,Unclassified,Girls,51,49
+202122,Academic year,National,E92000001,England,Unclassified,Total,48,50
+202122,Academic year,National,E92000001,England,White,Boys,64,69
+202122,Academic year,National,E92000001,England,White,Girls,70,67
+202122,Academic year,National,E92000001,England,White,Total,67,68
+202122,Academic year,National,E92000001,England,Any other ethnic group,Boys,56,63
+202122,Academic year,National,E92000001,England,Any other ethnic group,Girls,62,61
+202122,Academic year,National,E92000001,England,Any other ethnic group,Total,59,62
+202122,Academic year,National,E92000001,England,Asian - Any other Asian background,Boys,63,69
+202122,Academic year,National,E92000001,England,Asian - Any other Asian background,Girls,72,71
+202122,Academic year,National,E92000001,England,Asian - Any other Asian background,Total,68,70
+202122,Academic year,National,E92000001,England,Asian - Bangladeshi,Boys,64,67
+202122,Academic year,National,E92000001,England,Asian - Bangladeshi,Girls,73,71
+202122,Academic year,National,E92000001,England,Asian - Bangladeshi,Total,68,69
+202122,Academic year,National,E92000001,England,Asian - Chinese,Boys,75,88
+202122,Academic year,National,E92000001,England,Asian - Chinese,Girls,81,89
+202122,Academic year,National,E92000001,England,Asian - Chinese,Total,78,88
+202122,Academic year,National,E92000001,England,Asian - Indian,Boys,73,77
+202122,Academic year,National,E92000001,England,Asian - Indian,Girls,80,79
+202122,Academic year,National,E92000001,England,Asian - Indian,Total,76,78
+202122,Academic year,National,E92000001,England,Asian - Pakistani,Boys,59,63
+202122,Academic year,National,E92000001,England,Asian - Pakistani,Girls,67,63
+202122,Academic year,National,E92000001,England,Asian - Pakistani,Total,63,63
+202122,Academic year,National,E92000001,England,Black - Any other Black background,Boys,61,59
+202122,Academic year,National,E92000001,England,Black - Any other Black background,Girls,71,65
+202122,Academic year,National,E92000001,England,Black - Any other Black background,Total,65,62
+202122,Academic year,National,E92000001,England,Black - Black African,Boys,63,64
+202122,Academic year,National,E92000001,England,Black - Black African,Girls,74,69
+202122,Academic year,National,E92000001,England,Black - Black African,Total,69,66
+202122,Academic year,National,E92000001,England,Black - Black Caribbean,Boys,58,57
+202122,Academic year,National,E92000001,England,Black - Black Caribbean,Girls,68,58
+202122,Academic year,National,E92000001,England,Black - Black Caribbean,Total,63,58
+202122,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Boys,67,71
+202122,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Girls,75,71
+202122,Academic year,National,E92000001,England,Mixed - Any other Mixed background,Total,71,71
+202122,Academic year,National,E92000001,England,Mixed - White and Asian,Boys,72,75
+202122,Academic year,National,E92000001,England,Mixed - White and Asian,Girls,79,75
+202122,Academic year,National,E92000001,England,Mixed - White and Asian,Total,75,75
+202122,Academic year,National,E92000001,England,Mixed - White and Black African,Boys,65,66
+202122,Academic year,National,E92000001,England,Mixed - White and Black African,Girls,74,68
+202122,Academic year,National,E92000001,England,Mixed - White and Black African,Total,69,67
+202122,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Boys,58,61
+202122,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Girls,65,60
+202122,Academic year,National,E92000001,England,Mixed - White and Black Caribbean,Total,61,60
+202122,Academic year,National,E92000001,England,Unclassified,Boys,46,51
+202122,Academic year,National,E92000001,England,Unclassified,Girls,51,49
+202122,Academic year,National,E92000001,England,Unclassified,Total,48,50
+202122,Academic year,National,E92000001,England,White - Any other White background,Boys,62,69
+202122,Academic year,National,E92000001,England,White - Any other White background,Girls,68,68
+202122,Academic year,National,E92000001,England,White - Any other White background,Total,65,69
+202122,Academic year,National,E92000001,England,White - Gypsy/Roma,Boys,22,27
+202122,Academic year,National,E92000001,England,White - Gypsy/Roma,Girls,25,23
+202122,Academic year,National,E92000001,England,White - Gypsy/Roma,Total,23,25
+202122,Academic year,National,E92000001,England,White - Irish,Boys,66,69
+202122,Academic year,National,E92000001,England,White - Irish,Girls,74,71
+202122,Academic year,National,E92000001,England,White - Irish,Total,70,70
+202122,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Boys,22,31
+202122,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Girls,30,27
+202122,Academic year,National,E92000001,England,White - Traveller of Irish heritage,Total,26,29
+202122,Academic year,National,E92000001,England,White - White British,Boys,64,69
+202122,Academic year,National,E92000001,England,White - White British,Girls,71,67
+202122,Academic year,National,E92000001,England,White - White British,Total,68,68
+202122,Academic year,National,E92000001,England,First language unclassified,Boys,31,37
+202122,Academic year,National,E92000001,England,First language unclassified,Girls,35,35
+202122,Academic year,National,E92000001,England,First language unclassified,Total,33,36
+202122,Academic year,National,E92000001,England,Known or believed to be English,Boys,65,69
+202122,Academic year,National,E92000001,England,Known or believed to be English,Girls,72,68
+202122,Academic year,National,E92000001,England,Known or believed to be English,Total,68,68
+202122,Academic year,National,E92000001,England,Known or believed to be other than English,Boys,60,67
+202122,Academic year,National,E92000001,England,Known or believed to be other than English,Girls,68,67
+202122,Academic year,National,E92000001,England,Known or believed to be other than English,Total,64,67
+202122,Academic year,National,E92000001,England,FSM eligible,Boys,47,52
+202122,Academic year,National,E92000001,England,FSM eligible,Girls,55,51
+202122,Academic year,National,E92000001,England,FSM eligible,Total,51,52
+202122,Academic year,National,E92000001,England,Not known to be FSM eligible,Boys,68,73
+202122,Academic year,National,E92000001,England,Not known to be FSM eligible,Girls,75,72
+202122,Academic year,National,E92000001,England,Not known to be FSM eligible,Total,72,73
+202122,Academic year,National,E92000001,England,All SEN,Boys,27,32
+202122,Academic year,National,E92000001,England,All SEN,Girls,25,23
+202122,Academic year,National,E92000001,England,All SEN,Total,26,29
+202122,Academic year,National,E92000001,England,No SEN,Boys,74,78
+202122,Academic year,National,E92000001,England,No SEN,Girls,76,73
+202122,Academic year,National,E92000001,England,No SEN,Total,75,75

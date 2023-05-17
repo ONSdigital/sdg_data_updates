@@ -14,6 +14,7 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
+library(pander)
 ```
 
 ```{r include= FALSE}
@@ -98,4 +99,9 @@ suppressMessages(print(plot))
 ### Calculations
 
 No calculations were performed on this data.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
 

@@ -22,3 +22,12 @@ Output includes the data in csv format, and an html QA report. Users should stil
 7) Click 'Source' button to run the script (top right corner of the script panel).  
 8) Outputs will be saved in the Output folder in 8-1-1 (which the script will create if it doesn't already exist).  
 9) An html file will also be created in the Outputs folder. This contains some basic checks and also shows new data plotted over old data (i.e., what is on the live site), which should show up any major issues. **Please check this file before copying to the csv.**
+
+### Troubleshooting
+
+Sometimes you might get the following error: 
+
+Error: Can't subset columns that don't exist.
+x Column `CDID` doesn't exist.
+
+This is due to an issue with the way the data is read in when test_run is set to FALSE in the config file, but it only occurs with certain versions of RStudio. If you get this error, then check if your RStudio needs updating. If no update is available, try running it on an older version (you can change the version in using the settings option in the pop-up that appears when you first open Rstudio).

@@ -205,7 +205,8 @@ csv_formatted <- combined_data %>%
   mutate(`Local Authority` = toTitleCase(`Local Authority`),
          Region = toTitleCase(Region)) %>% 
   mutate(`Unit measure` = "Percentage (%)") %>%
-  mutate(`Observation status` = "Normal value") %>%
+  mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
+                                          TRUE ~ "Missing value")) %>%
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
          `Ethnic group`, `Special Educational Needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, `First language`, 
@@ -224,6 +225,7 @@ csv_formatted$Year <- gsub("^(.{4})(.*)$",
                            csv_formatted$Year) 
 
 csv_formatted$Subject <- gsub("Mathematics", "Maths", csv_formatted$Subject)
+csv_formatted$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", csv_formatted$Region)
 csv_formatted$`Special Educational Needs (SEN) status` <- gsub("sen", "SEN", 
                                                                csv_formatted$`Special Educational Needs (SEN) status`)
 

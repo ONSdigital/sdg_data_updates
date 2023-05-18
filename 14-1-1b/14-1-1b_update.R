@@ -1,5 +1,6 @@
 # Author: Emma Wood
 # Date of original script: June 2022
+# Script updated: Heather White May 2023
 # Purpose: 1. To create tables for publication (originally ad-hoc, but to go in 
 #             NatCap accounts in the future)
 #          2. To create csv for SDG website
@@ -14,11 +15,11 @@ main_clean <- original_data %>%
   mutate(across(where(is.character), str_squish)) %>% 
   janitor::clean_names() %>% 
   mutate(date = as.Date(date_of_survey, format = "%d/%m/%Y"),
-         last_cleaned = as.Date(date_beach_was_last_cleaned, format = "%d/%m/%Y"),
+         last_cleaned = as.Date(date_of_survey, format = "%d/%m/%Y"),
          # time_survey_starts = strptime(time_survey_starts, "%H:%M"),#
-         total_volunteer_hours = as.numeric(total_volunteer_hours),
-         total_volunteer_count = as.numeric(total_volunteer_count),
-         length_surveyed = as.numeric(length_surveyed))
+         total_volunteer_hours = as.numeric(volunteer_hours),
+         total_volunteer_count = as.numeric(number_of_volunteers),
+         length_surveyed = as.numeric(length_surveyed_metres))
 
 # Retain the original format of the sources data for use in the table output
 sources_data_original <- read.csv(paste0(input_folder, "/", filename_sources)) 
@@ -57,8 +58,7 @@ UK_data <- main_clean %>%
   filter(remove == FALSE)
 
 GBBC_from_2008 <- UK_data %>% 
-  filter(survey_window == "gbbc" &
-           year >= 2008 & 
+  filter(year >= 2008 & 
            length_surveyed == 100)
 
 # we don't want to include unidentified small plastic pieces (under 2.5cm), 
@@ -69,9 +69,9 @@ small_pieces_name <- names(GBBC_from_2008)[which(grepl("plastic", names(GBBC_fro
                                              grepl("0_2_5cm", names(GBBC_from_2008)))]
 
 plastics <- GBBC_from_2008 %>% 
-  select(year, survey_id, beach_id_new, beach_id_old, beach_region, beach_country, date,
+  select(year, organiser_id, beach_id, beach_region, beach_country, date,
          time_survey_starts, total_volunteer_hours, total_volunteer_count,
-         length_surveyed, average_width_of_surveyed_beach, survey_duration,
+         length_surveyed, survey_time_hours,
          last_cleaned,
          contains(plastic_keywords),
          -!!small_pieces_name) 
@@ -90,13 +90,13 @@ columns_removed <- setdiff(names(GBBC_from_2008), names(plastics))
 # later the date, time, number of volunteers etc will all be the same, but one
 # entry will have lower litter counts)
 cleans_count <- plastics %>% 
-  group_by(beach_id_new, date, time_survey_starts, last_cleaned) %>% 
+  group_by(beach_id, date, time_survey_starts, last_cleaned) %>% 
   count() 
 
 multi_cleans <- filter(cleans_count, n > 1)
 
 possible_repeats <- multi_cleans %>% 
-  left_join(plastics, by = c("beach_id_new", "date", 
+  left_join(plastics, by = c("beach_id", "date", 
                              "time_survey_starts", "last_cleaned"))
 
 # join specific cleans to be a single entry ------------------------------------
@@ -108,8 +108,8 @@ litter_columns <- str_subset(names(plastics), "plastic|rubber|sanitary|medical|f
 litter_count_columns <- litter_columns[-grep("desc", litter_columns)]
 
 cleans_to_merge <- plastics %>%
-  filter(survey_id %in% surveys_to_sum) %>%
-  group_by(year, beach_id_new) 
+  filter(organiser_id %in% surveys_to_sum) %>%
+  group_by(year, beach_id) 
 
 cols_not_summed <- cleans_to_merge %>%
   select(-c(all_of(litter_columns))) %>%
@@ -122,12 +122,12 @@ counts_summed <- cleans_to_merge %>%
                    ~ paste0(., collapse = ", ")),
             across(!!litter_columns & where(is.numeric), 
                    sum)) %>% 
-  left_join(cols_not_summed, by = c("year", "beach_id_new"))
+  left_join(cols_not_summed, by = c("year", "beach_id"))
 
 # all other entries need to be kept as they are, and then the summed counts 
 # joined back on
 multi_cleans_removed <- plastics %>% 
-  filter(survey_id %not_in% c(surveys_to_sum)) %>% 
+  filter(organiser_id %not_in% c(surveys_to_sum)) %>% 
   bind_rows(counts_summed)
 
 # remove all but the first clean for each beach in each year--------------------
@@ -143,7 +143,7 @@ multi_cleans_removed <- plastics %>%
 extra_cleans_removed <- multi_cleans_removed %>% 
   arrange(across(everything())) %>% 
   arrange(date, time_survey_starts) %>%
-  group_by(year, beach_id_new) %>%
+  group_by(year, beach_id) %>%
   filter(row_number() == 1) %>% 
   ungroup()
 
@@ -176,7 +176,7 @@ types_classified_by_source <- tidy_data %>%
 #   mutate(beach_country = "england")
 
 beach_count_country <- tidy_data %>% 
-  distinct(year, beach_id_new, beach_country) %>% 
+  distinct(year, beach_id, beach_country) %>% 
   group_by(year, beach_country) %>% 
   count() 
 
@@ -190,7 +190,7 @@ beach_count <- bind_rows(#beach_count_region,
 
 # Calculations -----------------------------------------------------------------
 count_by_beach <- tidy_data %>% 
-  group_by(year, beach_id_new, beach_region, total_volunteer_count, 
+  group_by(year, beach_id, beach_region, total_volunteer_count, 
            date, last_cleaned) %>% 
   summarise(item_count = sum(litter_count, na.rm = TRUE)) 
 
@@ -199,7 +199,7 @@ headline_counts <- count_by_beach %>%
   mutate(source = "all sources")
 
 count_by_beach_by_source <- tidy_data %>% 
-  group_by(year, beach_id_new, beach_region, source) %>%
+  group_by(year, beach_id, beach_region, source) %>%
   summarise(item_count = sum(litter_count, na.rm = TRUE))
 
 source_counts <- count_by_beach_by_source %>% 
@@ -231,12 +231,12 @@ all_tables <- output_data %>%
          median_count,
          country) %>% 
 
-  mutate(
-    year = case_when(
-    year == 2020 ~ "2020 [note 1]",
-    year == 2021 ~ "2021 [note 2]",
-    TRUE ~ as.character(year)
-    )) %>% 
+  #mutate(
+    #i_year = case_when(
+    #i_year == 2020 ~ "2020 [note 1]",
+    #i_year == 2021 ~ "2021 [note 2]",
+    #TRUE ~ as.character(i_year)) 
+   #)%>% 
   arrange(source, country, year) %>% 
   rename(`Suspected source [note 3]` = source,
          `Median count over 100m` = median_count)
@@ -304,9 +304,7 @@ wales <- all_tables %>%
 csv_output_all <- output_data %>% 
   mutate(
     `Observation status` = case_when(
-      `Number of beaches` < 35 & year != 2020 ~ "Low reliability",
-      year == 2020 & `Number of beaches` >= 35~ "Time series break",
-      `Number of beaches` < 35 & year == 2020 ~ "Low reliability; Time series break",
+      `Number of beaches` < 35 ~ "Low reliability",
       TRUE ~ "Normal value"),
     Series = "Plastic beach litter density",
     source = case_when(

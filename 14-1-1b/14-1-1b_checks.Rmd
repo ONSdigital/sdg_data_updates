@@ -31,7 +31,7 @@ volunteers is very different to a 'normal' year? If so, data will need further
 scrutiny and a time series break and footnote may be needed.  
 2. Are there any duplicate entries that need merging into a single entry?  
 3. Have any litter types been dropped that should be included?  
-4. Are all litter types in the main data are matched to a litter type in the 
+4. Are all litter types in the main data matched to a litter type in the 
 sources data?  
 6. Do trends look sensible given previous figures?  
    
@@ -43,7 +43,7 @@ this line, we may not want to use the data for that year:
 ```{r, echo=FALSE}
 # box plot of volunteer numbers by year.
 GBBC_from_2008 %>% 
-  distinct(year, survey_id, total_volunteer_count) %>% 
+  distinct(year, organiser_id, total_volunteer_count) %>% 
   ggplot(.,
        aes(x = as.numeric(year),
            y = total_volunteer_count)) +

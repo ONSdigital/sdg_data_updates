@@ -226,7 +226,7 @@ csv_formatted$Year <- gsub("^(.{4})(.*)$",
 
 csv_formatted$Subject <- gsub("Mathematics", "Maths", csv_formatted$Subject)
 csv_formatted$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", csv_formatted$Region)
-csv_formatted$`Special Educational Needs (SEN) status` <- gsub("sen", "SEN", 
+csv_formatted$`Special educational needs (SEN) status` <- gsub("sen", "SEN", 
                                                                csv_formatted$`Special educational needs (SEN) status`)
 
 #### Remove NAs from the csv that will be saved in Outputs ####

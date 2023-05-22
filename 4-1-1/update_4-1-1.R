@@ -75,7 +75,7 @@ ks1_LAs_and_ks2_disaggs <- ks1_LAs_and_ks2_small %>%
          (characteristic == "Fsm eligible" |
              characteristic == "Not known to be fsm eligible"  ~ characteristic,
            TRUE ~ "")) %>% 
-  mutate(`Special Educational Needs (SEN) status` = case_when
+  mutate(`Special educational needs (SEN) status` = case_when
          (characteristic == "All sen" |
              characteristic == "No sen" ~ characteristic,
            TRUE ~ "")) %>%
@@ -99,7 +99,7 @@ ks1_LAs_and_ks2_maths <- ks1_LAs_and_ks2_disaggs %>%
 
 ks1_LAs_and_ks2_clean <- dplyr::bind_rows(ks1_LAs_and_ks2_maths, ks1_LAs_and_ks2_reading) %>% 
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special Educational Needs (SEN) status`,
+         `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value) %>%
   mutate(Value = as.numeric(Value))
@@ -136,7 +136,7 @@ ks1_England_disaggs <- ks1_England_small %>%
          (characteristic == "Fsm eligible" |
           characteristic == "Not known to be fsm eligible"  ~ characteristic,
            TRUE ~ "")) %>% 
-  mutate(`Special Educational Needs (SEN) status` = case_when
+  mutate(`Special educational needs (SEN) status` = case_when
          (characteristic == "All sen" |
           characteristic == "No sen" ~ characteristic,
            TRUE ~ "")) %>%
@@ -160,7 +160,7 @@ ks1_England_maths <- ks1_England_disaggs %>%
 
 ks1_England_clean <- dplyr::bind_rows(ks1_England_maths, ks1_England_reading) %>% 
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special Educational Needs (SEN) status`,
+         `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value) %>%
   mutate(Value = as.numeric(Value))
@@ -179,11 +179,11 @@ ks4_clean <- ks4_data %>%
   mutate(`Disadvantaged status` = "") %>%
   mutate(`First language` = "") %>%
   mutate(`Free school meal status` = "") %>%
-  mutate(`Special Educational Needs (SEN) status` = "") %>%
+  mutate(`Special educational needs (SEN) status` = "") %>%
   mutate(Region = "") %>%
   mutate(`Local Authority` = "") %>%
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special Educational Needs (SEN) status`,
+         `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value)
 
@@ -207,8 +207,8 @@ csv_formatted <- combined_data %>%
   mutate(`Unit measure` = "Percentage (%)") %>%
   mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
                                           TRUE ~ "Missing value")) %>%
-  select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special Educational Needs (SEN) status`,
+  select(Year, Series, Subject, Region, `Local Authority`, Sex,
+         `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, `First language`, 
          `Unit measure`, `Observation status`, Value)
 
@@ -219,9 +219,9 @@ csv_formatted$Sex <- gsub("Boys", "Male", csv_formatted$Sex)
 csv_formatted$Sex <- gsub("Girls", "Female", csv_formatted$Sex)
 
 
-# reformat the years by subbing in " to " after the fourth value in the strin
+# reformat the years by subbing in " to 20" after the fourth value in the string
 csv_formatted$Year <- gsub("^(.{4})(.*)$",         
-                           "\\1 to \\2",
+                           "\\1 to 20\\2",
                            csv_formatted$Year) 
 
 csv_formatted$Subject <- gsub("Mathematics", "Maths", csv_formatted$Subject)

@@ -47,6 +47,11 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/4-1-1.csv") %>%
          `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, `First language`,
           Value, dataset)
+
+# reformat the years by subbing in " to 20" after the fourth value in the string
+old_data$Year <- gsub("^(.{4})(.*)$",         
+                           "\\1 to 20\\2",
+                           old_data$Year) 
   
 
 date <- Sys.Date()

@@ -347,24 +347,6 @@ Age_11_maths_SEN_plot <- joined_data %>%
   ggtitle("Maths attainment at age 11 by SEN")
 
 
-# Maths attainment at age 16 by SEN
-Age_16_maths_SEN_plot <- joined_data %>% 
-  filter(Series == "Attainment at age 16" & Region == "" & `Local Authority` == "" 
-         & `Ethnic group` == "" & `Disadvantaged status` == "" &
-        Sex == "" & `First language` == "" &
-          `Free school meal status` == "" & Subject == "Maths") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Series ~ `Special educational needs (SEN) status`) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Maths attainment at age 16 by SEN")
-
 
 ```
 
@@ -374,10 +356,6 @@ suppressMessages(print(Age_7_maths_SEN_plot))
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
 suppressMessages(print(Age_11_maths_SEN_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(Age_16_maths_SEN_plot))
 ```
 
 

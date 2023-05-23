@@ -369,7 +369,7 @@ Age_16_maths_SEN_plot <- joined_data %>%
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(Age_7_maths_sEN_plot))
+suppressMessages(print(Age_7_maths_SEN_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}

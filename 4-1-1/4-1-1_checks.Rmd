@@ -52,6 +52,9 @@ old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/4-1-1.csv") %>%
 old_data$Year <- gsub("^(.{4})(.*)$",         
                            "\\1 to 20\\2",
                            old_data$Year) 
+
+# remove the / from the year
+old_data$Year <- gsub("/", "",old_data$Year)
   
 
 date <- Sys.Date()
@@ -127,7 +130,7 @@ datatable(comparison,
 
 
 
-## Plots
+## Headline Plots
 Please check the plots below for any differences between the live and new data.
 Live data will appear over the top of new data, so if you don't see points for
 the new data on dates where there is also live data this is a good thing. 
@@ -135,16 +138,6 @@ the new data on dates where there is also live data this is a good thing.
 For the May 2023 update there are a number of new disaggregations not previously 
 available on the live site. Therefore, there will be a lot of incomparable 
 data points on the charts. 
-
-There are too many possible time series to plot here 
-but below are a few examples you can amend if there seems to be a discrepancy. In 
-particular for any discrepancies shown in the table. 
-You may need to change the filters in the plots. 
-
-Notably, selecting specific local authorities by editing the "filter" command to 
-include the local authorities you wish. 
-  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
-                `Local authority` == "Barnsley")
 
 
 
@@ -222,15 +215,34 @@ suppressMessages(print(Age_16_headline_plot))
 ```
 
 
+## Disaggregation Plots
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots.
+
+For example, changing the Subject == "Maths" filter. 
+
+For example, removing the `Free school meal status` == "" filter to investigate 
+free school meals data. Note, you will have to include the Sex == "" filter, 
+as with the headline plots above. 
+
+For example, selecting specific local authorities by editing the "filter" command to 
+include the local authorities you wish to compare. 
+  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
+                `Local authority` == "Barnsley")
+
+
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Attainment at age 7 by Sex
-Age_7_sex_plot <- joined_data %>% 
+# Maths attainment at age 7 by Sex
+Age_7_maths_sex_plot <- joined_data %>% 
   filter(Series == "Attainment at age 7" & Region == "" & `Local Authority` == "" 
          & `Ethnic group` == "" & `Disadvantaged status` == "" &
         `Special educational needs (SEN) status` == "" & `First language` == "" &
-          `Free school meal status` == "") %>% 
+          `Free school meal status` == "" & Subject == "Maths") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -241,15 +253,15 @@ Age_7_sex_plot <- joined_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Attainment at age 7 by sex")
+  ggtitle("Maths attainment at age 7 by sex")
 
 
-# Attainment at age 11 by subject
-Age_11_sex_plot <- joined_data %>% 
+# Maths attainment at age 11 by sex
+Age_11_maths_sex_plot <- joined_data %>% 
   filter(Series == "Attainment at age 11" & Region == "" & `Local Authority` == "" 
          & `Ethnic group` == "" & `Disadvantaged status` == "" &
         `Special educational needs (SEN) status` == "" & `First language` == "" &
-          `Free school meal status` == "") %>% 
+          `Free school meal status` == ""  & Subject == "Maths") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -260,15 +272,15 @@ Age_11_sex_plot <- joined_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Attainment at age 11 by sex")
+  ggtitle("Maths attainment at age 11 by sex")
 
 
-# Attainment at age 16 by subject
-Age_16_sex_plot <- joined_data %>% 
+# Maths attainment at age 16 by sex
+Age_16_maths_sex_plot <- joined_data %>% 
   filter(Series == "Attainment at age 16" & Region == "" & `Local Authority` == "" 
          & `Ethnic group` == "" & `Disadvantaged status` == "" &
         `Special educational needs (SEN) status` == "" & `First language` == "" &
-          `Free school meal status` == "") %>% 
+          `Free school meal status` == "" & Subject == "Maths") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
@@ -279,23 +291,94 @@ Age_16_sex_plot <- joined_data %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Attainment at age 16 by sex")
+  ggtitle("Maths attainment at age 16 by sex")
 
 
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(Age_7_sex_plot))
+suppressMessages(print(Age_7_maths_sex_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(Age_11_sex_plot))
+suppressMessages(print(Age_11_maths_sex_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(Age_16_sex_plot))
+suppressMessages(print(Age_16_maths_sex_plot))
 ```
 
+```{r, echo = FALSE, fig.width=10}
+
+# Maths attainment at age 7 by SEN
+Age_7_maths_SEN_plot <- joined_data %>% 
+  filter(Series == "Attainment at age 7" & Region == "" & `Local Authority` == "" 
+         & `Ethnic group` == "" & `Disadvantaged status` == "" & Sex == "" & 
+        `First language` == "" & `Free school meal status` == "" & Subject == "Maths") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ `Special educational needs (SEN) status`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Maths attainment at age 7 by SEN")
+
+
+# Maths attainment at age 11 by SEN
+Age_11_maths_SEN_plot <- joined_data %>% 
+  filter(Series == "Attainment at age 11" & Region == "" & `Local Authority` == "" 
+         & `Ethnic group` == "" & `Disadvantaged status` == "" &
+        Sex == "" & `First language` == "" &
+          `Free school meal status` == ""  & Subject == "Maths") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ `Special educational needs (SEN) status`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Maths attainment at age 11 by SEN")
+
+
+# Maths attainment at age 16 by SEN
+Age_16_maths_SEN_plot <- joined_data %>% 
+  filter(Series == "Attainment at age 16" & Region == "" & `Local Authority` == "" 
+         & `Ethnic group` == "" & `Disadvantaged status` == "" &
+        Sex == "" & `First language` == "" &
+          `Free school meal status` == "" & Subject == "Maths") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ `Special educational needs (SEN) status`) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Maths attainment at age 16 by SEN")
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(Age_7_maths_sEN_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(Age_11_maths_SEN_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(Age_16_maths_SEN_plot))
+```
 
 
 

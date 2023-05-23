@@ -68,6 +68,7 @@ ks1_LAs_and_ks2_disaggs <- ks1_LAs_and_ks2_small %>%
            TRUE ~ "")) %>%
   mutate(`First language` = case_when
          (characteristic == "First language unclassified" |
+             characteristic == "Language unclassified" |
              characteristic == "Known or believed to be english" | 
              characteristic == "Known or believed to be other than english" ~ characteristic,
            TRUE ~ "")) %>%

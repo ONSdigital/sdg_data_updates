@@ -5,12 +5,11 @@ Date: 18/05/2023
 
 Creates csv data for 4-1-1 (Proportion of children and young people - (a) in grades 2/3; (b) at the end of primary; and (c) at the end of lower secondary achieving at least a minimum proficiency level in (i) reading and (ii) mathematics, by sex). PLEASE NOTE - this automation produces Key Stage 1 (Age 7) data starting in 2015 to 2016, Key Stage 2 (Age 11) data starting in 2018 to 2019, and Key Stage 4 (Age 16) data starting in 2009 to 2010. Key Stage 2 (Age 11) data prior to 2018 to 2019 is sourced from https://www.gov.uk/government/collections/statistics-key-stage-2 (Source 4 on Jemalex) and is already in the Jemalex csv sheet. 
 
-It is a fairly simple automation that only involves formatting the data (no calculations). However, there are a lot of disaggregations and data points (nearly 100,000 by 2021 to 2022.
+It is a fairly simple automation that only involves formatting the data (no calculations). However, there are a lot of disaggregations and data points (nearly 100,000 by 2021 to 2022).
 
 
 Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs for anything that needs to be manually changed in the csv output (e.g., if any figures are estimated) or caveats that need to be included in the metadata. 
 
-OR "Key stage 1 attainment by region and local authority", 
 
 ### 4-1-1 sourcing data instructions
 

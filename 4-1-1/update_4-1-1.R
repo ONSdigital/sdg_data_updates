@@ -230,6 +230,13 @@ csv_formatted$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humb
 csv_formatted$`Special educational needs (SEN) status` <- gsub("sen", "SEN", 
                                                                csv_formatted$`Special educational needs (SEN) status`)
 
+csv_formatted$`Free school meal status` <- gsub("Fsm eligible", "FSM eligible", 
+                                                csv_formatted$`Free school meal status`)
+csv_formatted$`Free school meal status` <- gsub("Not known to be Fsm eligible", 
+                                                "Not known to be FSM eligible", 
+                                                csv_formatted$`Free school meal status`)
+
+
 #### Remove NAs from the csv that will be saved in Outputs ####
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file

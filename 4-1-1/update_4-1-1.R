@@ -232,7 +232,7 @@ csv_formatted$`Special educational needs (SEN) status` <- gsub("sen", "SEN",
 
 csv_formatted$`Free school meal status` <- gsub("Fsm eligible", "FSM eligible", 
                                                 csv_formatted$`Free school meal status`)
-csv_formatted$`Free school meal status` <- gsub("Not known to be Fsm eligible", 
+csv_formatted$`Free school meal status` <- gsub("Not known to be fsm eligible", 
                                                 "Not known to be FSM eligible", 
                                                 csv_formatted$`Free school meal status`)
 

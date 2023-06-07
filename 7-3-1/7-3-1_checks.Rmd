@@ -70,12 +70,7 @@ discrepancies in the lines please investigate the reasons for these discrepancie
 new_data <- new_data %>%
 mutate(Year = as.integer(Year),
          dataset = "new")
-
-# colnames(old_data)[3] <- "Industry sector"
-# colnames(old_data)[4] <- "Unit measure"
-# colnames(old_data)[5] <- "Unit multiplier"
-# colnames(old_data)[6] <- "Observation status"
-
+         
 new_data$Value <- as.numeric(new_data$Value)
 
 joined_data <- old_data %>%
@@ -89,14 +84,12 @@ plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-    #scale_x_continuous(breaks = seq(min(year(joined_data$Year)), max(year(joined_data$Year)), by = 3))+
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
-  geom_point() +
-  geom_line() +
-  facet_wrap(~Industry.sector, ncol = 2) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7))
+             geom_point() +
+             geom_line() +
+             facet_wrap(~Industry.sector, ncol = 2) +
+             theme_bw() +
+             theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+             theme(axis.text.y = element_text(size = 7))
 
 ```
 

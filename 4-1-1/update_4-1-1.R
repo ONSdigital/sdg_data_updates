@@ -9,25 +9,25 @@
 
 
 #### Read in data ####
-ks1_England_data <- read.csv(ks1_England) %>% 
+ks1_England_data <- read_csv(ks1_England) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 7")
 
-ks1_LAs_data <- read.csv(ks1_LAs) %>% 
+ks1_LAs_data <- read_csv(ks1_LAs) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 7")
 
-ks2_data <- read.csv(ks2) %>% 
+ks2_data <- read_csv(ks2) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 11")
 
-ks4_data <- read.csv(ks4) %>% 
+ks4_data <- read_csv(ks4) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%

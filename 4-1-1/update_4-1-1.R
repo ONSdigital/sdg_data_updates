@@ -9,25 +9,25 @@
 
 
 #### Read in data ####
-ks1_England_data <- read_csv(ks1_England) %>% 
+ks1_England_data <- get_type1_data(header_row, ks1_England, data-key-stage-1-and-phonics-sc) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 7")
 
-ks1_LAs_data <- read_csv(ks1_LAs) %>% 
+ks1_LAs_data <- get_type1_data(header_row, ks1_LAs, data-key-stage-1-and-phonics-sc) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 7")
 
-ks2_data <- read_csv(ks2) %>% 
+ks2_data <- get_type1_data(header_row, ks2, data-key-stage-2-attainment) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
   mutate(Series = "Attainment at age 11")
 
-ks4_data <- read_csv(ks4) %>% 
+ks4_data <- get_type1_data(header_row, ks4, data-key-stage-4-attainment) %>% 
   mutate(across(where(is.factor), as.character)) %>% 
   mutate(across(where(is.character), str_to_sentence)) %>% 
   mutate(across(where(is.character), str_squish)) %>%
@@ -97,6 +97,8 @@ ks1_LAs_and_ks2_reading <- ks1_LAs_and_ks2_disaggs %>%
 ks1_LAs_and_ks2_maths <- ks1_LAs_and_ks2_disaggs %>%
   mutate(Subject = "Maths") %>% 
   rename(Value = Maths)
+
+round()
 
 ks1_LAs_and_ks2_clean <- dplyr::bind_rows(ks1_LAs_and_ks2_maths, ks1_LAs_and_ks2_reading) %>% 
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,

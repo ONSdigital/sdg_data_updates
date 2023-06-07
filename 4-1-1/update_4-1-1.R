@@ -98,7 +98,6 @@ ks1_LAs_and_ks2_maths <- ks1_LAs_and_ks2_disaggs %>%
   mutate(Subject = "Maths") %>% 
   rename(Value = Maths)
 
-round()
 
 ks1_LAs_and_ks2_clean <- dplyr::bind_rows(ks1_LAs_and_ks2_maths, ks1_LAs_and_ks2_reading) %>% 
   select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,

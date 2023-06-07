@@ -8,6 +8,7 @@ ks2 <- "ks2-example.csv"
 
 ks4 <- "ks4-example.csv"
 
+header_row <- 1
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

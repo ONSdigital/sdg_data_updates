@@ -1,7 +1,7 @@
 ---
 title: "9-b-1 checks"
 author: "Katie Uzzell"
-date: "03/05/2023"
+date: "14/06/2023"
 output: html_document
 ---
 
@@ -14,6 +14,8 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(kableExtra)
+library(DT)
+library(pander)
 ```
 
 ```{r include= FALSE}
@@ -49,9 +51,9 @@ time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = 
 
 ```
 
-**Energy intensity data from Environmental accounts (ONS)**  
+**GDP output approach - low-level aggregates dataset (ONS)**  
 
-Energy intensity data are in the file `r filename`.   
+GDP low-level aggregate data are in the file `r filename`.   
 
 This file was saved at `r filename_save_time`: It has been 
 `r time_since_data_saved` days since the file was saved in 
@@ -62,9 +64,7 @@ The tab used is called
 
 
 ### Check data
-The charts below show the new data (just created) plotted on top of the old data,
-which has been downloaded from the live site. If there are unexpected 
-discrepancies in the lines please investigate the reasons for these discrepancies.
+The charts below show the new data (just created) plotted on top of the old data, which has been downloaded from the live site. If there are unexpected discrepancies in the lines please investigate the reasons for these discrepancies.
     
 ```{r, echo=FALSE, fig.width=7, fig.height=15}
 new_data <- new_data %>%
@@ -82,14 +82,13 @@ plot <- joined_data %>%
          aes(x = Year,
              y = Value,
              colour = dataset)) +
-    #scale_x_continuous(breaks = seq(min(year(joined_data$Year)), max(year(joined_data$Year)), by = 3))+
-  scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
+scale_x_continuous (breaks=min (joined_data$Year):max (joined_data$Year)) +
   geom_point() +
   geom_line() +
+  facet_wrap(~Manufacturing.industry, ncol = 2) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7))
-
 ```
 
 
@@ -99,5 +98,12 @@ suppressMessages(print(plot))
 
 ### Calculations
 
-No calculations were performed on this data.
+The value added by each industrial breakdown is expressed as a percentage of the total value added by manufacturing. This was calculated by dividing the total for each manufacturing industry by the total for all manufacturing industries and multiplying this figure by 100. For example, the proportion of chemicals and chemical products manufacturing value added in total value added is calculated as:
+
+Chemicals and chemical products / Manufacturing total * 100
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
 

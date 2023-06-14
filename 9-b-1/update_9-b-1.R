@@ -43,21 +43,21 @@ gdp_main_data <- gdp_main_data %>%
 
 gdp_main_data <- gdp_main_data %>% 
   mutate("Chemicals and chemical products" = KL5Q/KL8V*100,
-         "Pharmaceutical products and pharmaceutical preparations" = KL5Q/KL5X*100,
-         "Weapons and ammunition" = KL5Q/KL68*100,
-         "Computer, electronic and optical products" = KL5Q/KL6A*100,
-         "Electrical equipment" = KL5Q/KL6B*100,
-         "Machinery and equipment n.e.c." = KL5Q/KL6C*100,
-         "Motor vehicles, trailers and semi-trailers" = KL5Q/KL6D*100,
-         "Air, spacecraft and related machinery" = KL5Q/KL6G*100,
-         "Other" = KL5Q/KL6H*100,
+         "Basic pharmaceutical products and pharmaceutical preparations" = KL5X/KL8V*100,
+         "Weapons and ammunition" = KL68/KL8V*100,
+         "Computer, electronic and optical products" = KL6A/KL8V*100,
+         "Electrical equipment" = KL6B/KL8V*100,
+         "Machinery and equipment n.e.c." = KL6C/KL8V*100,
+         "Motor vehicles, trailers and semi-trailers" = KL6D/KL8V*100,
+         "Air, spacecraft and related machinery" = KL6G/KL8V*100,
+         "Other" = KL6H/KL8V*100,
          "Total (%)" = Total/KL8V*100)
 
 #select wanted columns
   
 gdp_main_data <- select(gdp_main_data, c("Year",
                                          "Chemicals and chemical products", 
-                                         "Pharmaceutical products and pharmaceutical preparations", 
+                                         "Basic pharmaceutical products and pharmaceutical preparations", 
                                          "Weapons and ammunition", 
                                          "Computer, electronic and optical products", 
                                          "Electrical equipment", 

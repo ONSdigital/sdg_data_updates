@@ -1,0 +1,79 @@
+time_period,time_identifier,geographic_level,country_code,country_name,gender,subject,grade,percentage_achieving
+200910,Academic year,National,E92000001,England,Boys,English,94AstarC,63.1
+200910,Academic year,National,E92000001,England,Girls,English,94AstarC,76.5
+200910,Academic year,National,E92000001,England,Total,English,94AstarC,69.8
+200910,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,64.5
+200910,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,64.8
+200910,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,64.6
+201011,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,66.8
+201011,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,67.3
+201011,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,67
+201011,Academic year,National,E92000001,England,Boys,English,94AstarC,65.8
+201011,Academic year,National,E92000001,England,Girls,English,94AstarC,78.8
+201011,Academic year,National,E92000001,England,Total,English,94AstarC,72.3
+201112,Academic year,National,E92000001,England,Boys,English,94AstarC,62.2
+201112,Academic year,National,E92000001,England,Girls,English,94AstarC,76.5
+201112,Academic year,National,E92000001,England,Total,English,94AstarC,69.3
+201112,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,70.6
+201112,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,71.2
+201112,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,70.9
+201213,Academic year,National,E92000001,England,Boys,English,94AstarC,63.4
+201213,Academic year,National,E92000001,England,Girls,English,94AstarC,78
+201213,Academic year,National,E92000001,England,Total,English,94AstarC,70.7
+201213,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,72.3
+201213,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,73.2
+201213,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,72.8
+201314,Academic year,National,E92000001,England,Boys,English,94AstarC,64.7
+201314,Academic year,National,E92000001,England,Girls,English,94AstarC,79.8
+201314,Academic year,National,E92000001,England,Total,English,94AstarC,72.4
+201314,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,67.3
+201314,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,68.7
+201314,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,68
+201415,Academic year,National,E92000001,England,Boys,English,94AstarC,67.2
+201415,Academic year,National,E92000001,England,Girls,English,94AstarC,82
+201415,Academic year,National,E92000001,England,Total,English,94AstarC,74.8
+201415,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,69.8
+201415,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,70.7
+201415,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,70.2
+201516,Academic year,National,E92000001,England,Boys,English,94AstarC,65
+201516,Academic year,National,E92000001,England,Girls,English,94AstarC,80.2
+201516,Academic year,National,E92000001,England,Total,English,94AstarC,72.8
+201516,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,70.8
+201516,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,72.6
+201516,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,71.7
+201617,Academic year,National,E92000001,England,Boys,English,94AstarC,62.7
+201617,Academic year,National,E92000001,England,Girls,English,94AstarC,79
+201617,Academic year,National,E92000001,England,Total,English,94AstarC,70.8
+201617,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,70.4
+201617,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,71.1
+201617,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,70.7
+201718,Academic year,National,E92000001,England,Boys,English,94AstarC,62.6
+201718,Academic year,National,E92000001,England,Girls,English,94AstarC,77.8
+201718,Academic year,National,E92000001,England,Total,English,94AstarC,70.1
+201718,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,70
+201718,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,71.5
+201718,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,70.8
+201819,Academic year,National,E92000001,England,Boys,English Language,94AstarC,63
+201819,Academic year,National,E92000001,England,Girls,English Language,94AstarC,78.2
+201819,Academic year,National,E92000001,England,Total,English Language,94AstarC,70.5
+201819,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,70.7
+201819,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,71.9
+201819,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,71.3
+201920,Academic year,National,E92000001,England,Boys,English Language,94AstarC,73.9
+201920,Academic year,National,E92000001,England,Girls,English Language,94AstarC,86
+201920,Academic year,National,E92000001,England,Total,English Language,94AstarC,79.9
+201920,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,75.8
+201920,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,78.2
+201920,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,77
+202021,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,76.7
+202021,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,78.6
+202021,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,77.6
+202021,Academic year,National,E92000001,England,Boys,English Language,94AstarC,75.4
+202021,Academic year,National,E92000001,England,Girls,English Language,94AstarC,85.9
+202021,Academic year,National,E92000001,England,Total,English Language,94AstarC,80.6
+202122,Academic year,National,E92000001,England,Boys,English Language,94AstarC,71.1
+202122,Academic year,National,E92000001,England,Girls,English Language,94AstarC,81.7
+202122,Academic year,National,E92000001,England,Total,English Language,94AstarC,76.4
+202122,Academic year,National,E92000001,England,Boys,Mathematics,94AstarC,74.1
+202122,Academic year,National,E92000001,England,Girls,Mathematics,94AstarC,74.9
+202122,Academic year,National,E92000001,England,Total,Mathematics,94AstarC,74.5

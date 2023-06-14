@@ -1,16 +1,10 @@
-# configurations for type 1 data
+# configurations for 7-3-1 example update
 
 filename <- "energyintensitybyindustryexample.xlsx"
-# # If you are using csv data make sure numbers are formatted as numbers in Excel 
-# # and DO NOT include the thousands separator
-# # tabname will not be needed if you are using csv data
-# filename <- "type_1_metadata_included.csv"
-# filename <- "type_1_no_metadata.csv"
 
-# tabname <- "no_metadata"
 tabname <- "Energy intensity (TJ)"
 
-# header_row <- 1
+
 header_row <- 4
 
 input_folder  <- "Example_Input"

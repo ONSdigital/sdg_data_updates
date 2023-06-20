@@ -39,6 +39,7 @@ Data for `r latest_year` have been created and saved as `r paste0(date, "_3-8-2"
 in the 3-8-2 Output folder.  
 
 
+
 ### Check configurations
 Please check that the information below is as you expect. In particular, pay 
 attention to the time since data were saved, to check that previously 
@@ -90,13 +91,13 @@ This file for **workbook 4** was saved at `r filename_save_time2`: It has been
 `r input_folder`.
 
 The tabs used are called
-**`r wb1_1_tabname`,
-`r wb1_2_tabname`,
-`r wb1_3_tabname`,
-`r wb1_4_tabname`,
-`r wb1_5_tabname`,
-`r wb4_tabname`,
-`r wb2_tabname `**. 
+**`r household_expd_data`,
+`r Age_group_data`,
+`r percentage_total_expd_data`,
+`r income_decile_group_data`,
+`r percent_total_expd_decile_group_data`,
+`r household_expd_tenure_data`,
+`r household_expd_socioeconomic_data`**. 
 
 
 
@@ -107,8 +108,16 @@ possible to plot the new data over the old data to check for discrepancies.
 Instead, the person QAing this update should download the source data and spot 
 check values the source data against the outputted csv.
 
+### Note
+Zero values are greater than 0 but round to 0.
  
 
 ### Calculations
 
 No calculations have been performed on this data during this automation.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

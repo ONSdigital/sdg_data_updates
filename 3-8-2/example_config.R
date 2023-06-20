@@ -9,14 +9,20 @@ filename_wb4 <- "Example_WB4.xlsx"
 
 
 # tabnames
-wb1_1_tabname <- "A1"
-wb1_2_tabname <- "A11"
-wb1_3_tabname <- "4.2"
-wb1_4_tabname <- "3.1"
-wb1_5_tabname <- "3.2"
-wb2_tabname <- "A32"
-wb4_tabname <- "A22"
 
+household_expd_data <- "A1"
+
+Age_group_data <- "A11"
+
+percentage_total_expd_data <- "4.2"
+
+income_decile_group_data <- "3.1"
+
+percent_total_expd_decile_group_data <- "3.2"
+
+household_expd_tenure_data <- "A32"
+
+household_expd_socioeconomic_data <- "A22"
 
 # Header row (same across all tabs)
 header_row <- 6

@@ -19,9 +19,18 @@ get_year <- function(df) {
   return(year)
 }
 
+# function to retun main header list
+g_header <- function(){
+  
+  mheader = c("Year","Series","Age","Disposable income decile","Health product or service",
+              "Health product or service category", "Health product or service sub-category",
+              "Tenure category","Tenure sub-category","Occupation category",
+              "Observation status","Unit multiplier","Units","Value") 
+  return(mheader)
+  }
 
 # get data from workbook 4 tabname A22, process and format it
-data_wb4_A22 <- get_type1_data(header_row, filename_wb4, wb4_tabname)
+data_wb4_A22 <- get_type1_data(header_row, filename_wb4, household_expd_socioeconomic_data)
 year <- get_year(data_wb4_A22)
 
 data_A22 = data_wb4_A22[data_wb4_A22$`X2` == 'Health',] %>% drop_na()
@@ -59,27 +68,14 @@ data_A22<- data_A22  %>%
          "Observation status" = "Normal value",
          "Unit multiplier" = "Units",
          "Units" = "GBP (£)") %>% 
-                      select("Year",
-                             "Series",
-                             "Age",
-                             "Disposable income decile",
-                             "Health product or service",
-                             "Health product or service category",
-                             "Health product or service sub-category",
-                             "Tenure category",
-                             "Tenure sub-category",
-                             "Occupation category",
-                             "Observation status",
-                             "Unit multiplier",
-                             "Units",
-                             "Value") 
+                      select(g_header()) 
 
 # Remove unnecessary data from global environment
 rm(data_wb4_A22)
 
 
 # get data for workbook 1 and Tabname A11, process and format it
-data_wb1_A11 <- get_type1_data(header_row, filename_wb1, wb1_2_tabname)         
+data_wb1_A11 <- get_type1_data(header_row, filename_wb1, Age_group_data)         
 year_A11 <- get_year(data_wb1_A11)       
 
 data_wb1_A11 <- data_wb1_A11  %>% drop_na(X4)
@@ -129,20 +125,7 @@ data_A11<- data_wb1_A11  %>%
 
 data_A11$Value  <- gsub("\\[|\\]", "",data_A11$Value)
 
-data_A11<- data_A11  %>% select("Year",
-                                "Series",
-                                "Age",
-                                "Disposable income decile",
-                                "Health product or service",
-                                "Health product or service category",
-                                "Health product or service sub-category",
-                                "Tenure category",
-                                "Tenure sub-category",
-                                "Occupation category",
-                                "Observation status",
-                                "Unit multiplier",
-                                "Units",
-                                "Value") 
+data_A11<- data_A11  %>% select(g_header()) 
 
 # Remove unnecessary data from global environment
 rm(data_wb1_A11)
@@ -150,7 +133,7 @@ rm(data_wb1_A11)
 
 
 # Get data from tab 4.2 workbook 1, process and format it
-data_wb1_42 <- get_type1_data(header_row, filename_wb1, wb1_3_tabname)         
+data_wb1_42 <- get_type1_data(header_row, filename_wb1, percentage_total_expd_data)         
 
 data_wb1_42 = data_wb1_42[data_wb1_42$`X2` == 'Health',] %>% drop_na()
 
@@ -170,20 +153,7 @@ data_42 <- data_wb1_42 %>%
        "Observation status" = "Normal value",
        "Unit multiplier" = "Units",
        "Units" = "Percentage of total expenditure (%)") %>%
-        select("Year",
-             "Series",
-             "Age",
-             "Disposable income decile",
-             "Health product or service",
-             "Health product or service category",
-             "Health product or service sub-category",
-             "Tenure category",
-             "Tenure sub-category",
-             "Occupation category",
-             "Observation status",
-             "Unit multiplier",
-             "Units",
-             "Value") 
+        select(g_header()) 
 
 # Remove unnecessary data from global environment
 rm(data_wb1_42)
@@ -192,7 +162,7 @@ rm(data_wb1_42)
 
 # get data for tab 3.1 WB1
 
-data_wb1_31<- get_type1_data(header_row, filename_wb1, wb1_4_tabname) 
+data_wb1_31<- get_type1_data(header_row, filename_wb1, income_decile_group_data) 
 
 
 data_wb1_31 <- data_wb1_31  %>% drop_na(X4)
@@ -213,7 +183,7 @@ data_wb1_31$`X3`  <- gsub("etc.","",data_wb1_31$`X3`)
 data_wb1_31$`X2`  <- gsub("Health","",data_wb1_31$`X2`)
 
 
-colnames(data_wb1_31) [4] <- "Lowest ten"
+colnames(data_wb1_31) [4] <- "Lowest ten percent"
 colnames(data_wb1_31) [5] <- "Second"
 colnames(data_wb1_31) [6] <- "Third"
 colnames(data_wb1_31) [7] <- "Fourth"
@@ -222,7 +192,7 @@ colnames(data_wb1_31) [9] <- "Sixth"
 colnames(data_wb1_31) [10] <- "Seventh"
 colnames(data_wb1_31) [11] <- "Eighth"
 colnames(data_wb1_31) [12] <- "Ninth"
-colnames(data_wb1_31) [13] <- "Highest ten"
+colnames(data_wb1_31) [13] <- "Highest ten percent"
 
 data_wb1_31 <- within(data_wb1_31, rm("X1", "X14"))
  
@@ -249,20 +219,7 @@ data_31<- data_wb1_31  %>%
          "Observation status" = "Normal value",
          "Unit multiplier" = "Units",
          "Units" = "GBP (£)") %>% 
-                         select("Year",
-                                "Series",
-                                "Age",
-                                "Disposable income decile",
-                                "Health product or service",
-                                "Health product or service category",
-                                "Health product or service sub-category",
-                                "Tenure category",
-                                "Tenure sub-category",
-                                "Occupation category",
-                                "Observation status",
-                                "Unit multiplier",
-                                "Units",
-                                "Value")
+                         select(g_header())
 
 # Remove unnecessary data from global environment
 rm(data_wb1_31)
@@ -270,7 +227,7 @@ rm(data_wb1_31)
 
 # get data for tab 3.2 WB1, process and format it
 
-data_wb1_32<- get_type1_data(header_row, filename_wb1, wb1_5_tabname) 
+data_wb1_32<- get_type1_data(header_row, filename_wb1, percent_total_expd_decile_group_data) 
 
 data_wb1_32 <- data_wb1_32  %>% drop_na(X4)
 
@@ -287,7 +244,7 @@ data_wb1_32$`X3`  <- gsub(",","",data_wb1_32$`X3`)
 data_wb1_32$`X3`  <- gsub("etc.","",data_wb1_32$`X3`)
 data_wb1_32$`X2`  <- gsub("Health","",data_wb1_32$`X2`)
 
-colnames(data_wb1_32) [4] <- "Lowest ten"
+colnames(data_wb1_32) [4] <- "Lowest ten percent percent"
 colnames(data_wb1_32) [5] <- "Second"
 colnames(data_wb1_32) [6] <- "Third"
 colnames(data_wb1_32) [7] <- "Fourth"
@@ -296,7 +253,7 @@ colnames(data_wb1_32) [9] <- "Sixth"
 colnames(data_wb1_32) [10] <- "Seventh"
 colnames(data_wb1_32) [11] <- "Eighth"
 colnames(data_wb1_32) [12] <- "Ninth"
-colnames(data_wb1_32) [13] <- "Highest ten"
+colnames(data_wb1_32) [13] <- "Highest ten percent"
 
 data_wb1_32 <- within(data_wb1_32, rm("X1", "X14"))
 
@@ -324,20 +281,7 @@ data_32<- data_wb1_32  %>%
          "Observation status" = "Normal value",
          "Unit multiplier" = "Units",
          "Units" = "Percentage of total expenditure (%)") %>% 
-                        select("Year",
-                              "Series",
-                              "Age",
-                              "Disposable income decile",
-                              "Health product or service",
-                              "Health product or service category",
-                              "Health product or service sub-category",
-                              "Tenure category",
-                              "Tenure sub-category",
-                              "Occupation category",
-                              "Observation status",
-                              "Unit multiplier",
-                              "Units",
-                              "Value")
+                        select(g_header())
 
 # Remove unnecessary data from global environment
 rm(data_wb1_32)
@@ -345,7 +289,7 @@ rm(data_wb1_32)
 
 
 # Get data from Wb1 tab name A1, process and format it
-data_wb1_A1<- get_type1_data(header_row, filename_wb1, wb1_1_tabname) 
+data_wb1_A1<- get_type1_data(header_row, filename_wb1, household_expd_data) 
 
 data_wb1_A1 = data_wb1_A1[data_wb1_A1$`X2` == 'Health'|
                             data_wb1_A1$`X2` == 'Medical products, appliances and equipment'|
@@ -471,20 +415,7 @@ data_A1<- data_wb1_A1  %>%
          "Observation status" = "Normal value",
          "Unit multiplier" = "Units",
          "Units" = "GBP (£)") %>% 
-                      select("Year",
-                              "Series",
-                              "Age",
-                              "Disposable income decile",
-                              "Health product or service",
-                              "Health product or service category",
-                              "Health product or service sub-category",
-                              "Tenure category",
-                              "Tenure sub-category",
-                              "Occupation category",
-                              "Observation status",
-                              "Unit multiplier",
-                              "Units",
-                              "Value")
+                      select(g_header())
 
 # Remove unnecessary data from global environment
 rm(data_wb1_A1)
@@ -493,7 +424,7 @@ rm(data_wb1_A1)
 
 
 # Get data from Wb2 tabname A32, process and format it
-data_wb2_A32<- get_type1_data(header_row, filename_wb2, wb2_tabname) 
+data_wb2_A32<- get_type1_data(header_row, filename_wb2, household_expd_tenure_data) 
 
 data_wb2_A32 = data_wb2_A32[data_wb2_A32$`X2` == 'Health',]
 
@@ -541,39 +472,46 @@ data_A32<- data_wb2_A32  %>%
          "Observation status" = "Normal value",
          "Unit multiplier" = "Units",
          "Units" = "GBP (£)")  %>% 
-                       select("Year",
-                              "Series",
-                              "Age",
-                              "Disposable income decile",
-                              "Health product or service",
-                              "Health product or service category",
-                              "Health product or service sub-category",
-                              "Tenure category",
-                              "Tenure sub-category",
-                              "Occupation category",
-                              "Observation status",
-                              "Unit multiplier",
-                              "Units",
-                              "Value")
+                       select(g_header())
 
 # Remove unnecessary data from global environment
 rm(data_wb2_A32)
 
 
 
-
 # Combine all data into single table with identical columns
 
-csv_output <- rbind(data_A1,
-                        data_A32,
-                        data_A22,
-                        data_A11,
-                        data_31,
-                        data_32,
-                        data_42)
+csv_output <- rbind(data_A1,data_A32, data_A22, data_A11,
+                        data_31, data_32, data_42)
+
+# final formatting
+csv_output$`Observation status`[grepl("[", csv_output$Value, fixed = TRUE)] <- "Low reliability"
+
+
+csv_output$Value <- gsub("\\[|\\]", "", csv_output$Value)
+# Running Confirm
+csv_output$`Health product or service category` <-gsub(
+   "Medicines prescriptions and healthcare products",
+   "Medicines, prescriptions and healthcare products",
+   csv_output$`Health product or service category` )
+
+ csv_output$`Health product or service category` <-gsub(
+   "Medicines prescriptions healthcare products",
+   "Medicines, prescriptions and healthcare products",
+   csv_output$`Health product or service category` )
+
+ csv_output$`Health product or service sub-category` <-gsub(
+   "optical dental","optical, dental",
+   csv_output$`Health product or service sub-category`)
+
+
+csv_output$Value <- gsub("~", "", csv_output$Value)
 
 csv_output <- csv_output %>%
-  mutate(across(everything(), ~ replace(.x, is.na(.x), "")))
+  mutate(across(everything(), ~ replace(.x, is.na(.x), ""))) 
+  
+
+
 
 
 

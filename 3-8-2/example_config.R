@@ -3,9 +3,9 @@
 
 # filename for workbooks(wb1, wb2, and wb4)
 
-filename_wb1 <- "Example_WB1.xlsx"
-filename_wb2 <- "Example_WB2.xlsx"
-filename_wb4 <- "Example_WB4.xlsx"
+filename_wb1 <- "workbook1detailedexpenditureandtrends - 2021.xlsx"
+filename_wb2 <- "workbook2expenditurebyincome - 2021.xlsx"
+filename_wb4 <- "workbook4expenditurebyhouseholdcharacteristicsfye21 - 2021.xlsx"
 
 
 # tabnames

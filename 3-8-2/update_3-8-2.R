@@ -244,7 +244,7 @@ data_wb1_32$`X3`  <- gsub(",","",data_wb1_32$`X3`)
 data_wb1_32$`X3`  <- gsub("etc.","",data_wb1_32$`X3`)
 data_wb1_32$`X2`  <- gsub("Health","",data_wb1_32$`X2`)
 
-colnames(data_wb1_32) [4] <- "Lowest ten percent percent"
+colnames(data_wb1_32) [4] <- "Lowest ten percent"
 colnames(data_wb1_32) [5] <- "Second"
 colnames(data_wb1_32) [6] <- "Third"
 colnames(data_wb1_32) [7] <- "Fourth"

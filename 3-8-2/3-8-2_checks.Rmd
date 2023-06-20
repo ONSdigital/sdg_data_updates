@@ -1,0 +1,123 @@
+
+```{r include=FALSE}
+      today <-Sys.Date() 
+      
+      # today <- as.Date(today, "%d/%m/%Y")
+```
+---
+title: "3-8-2 checks"
+author: "Abhishek Singh"
+date: "**`r format(today, format="%d-%B-%Y")`**"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(pander)
+```
+
+```{r include= FALSE}
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_3-8-2", ".csv"))
+
+latest_year <- max(new_data$Year)
+rm(new_data)
+
+```
+
+## 3-8-2 update summary
+
+Data for `r latest_year` have been created and saved as `r paste0(date, "_3-8-2", ".csv")` 
+in the 3-8-2 Output folder.  
+
+
+
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+3-8-2/`r input_folder`. 
+
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename_wb1), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+
+filename_save_time1 <- file.info(paste0(getwd(),"/",input_folder,"/", filename_wb2), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved1 <- round(difftime(Sys.time(), filename_save_time1, units = "days"), 2)
+
+
+filename_save_time2 <- file.info(paste0(getwd(),"/",input_folder,"/", filename_wb4), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved2 <- round(difftime(Sys.time(), filename_save_time2, units = "days"), 2)
+
+
+
+
+```
+
+
+**Total household expenditure or income-data  **  
+
+Total household expenditure or income data are in the files **`r filename_wb1`,
+`r filename_wb2`,
+`r filename_wb4`**.   
+
+This file for **workbook 1** was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`.
+
+This file for **workbook 2** was saved at `r filename_save_time1`: It has been 
+`r time_since_data_saved1` days since the file was saved in 
+`r input_folder`.
+
+This file for **workbook 4** was saved at `r filename_save_time2`: It has been 
+`r time_since_data_saved2` days since the file was saved in 
+`r input_folder`.
+
+The tabs used are called
+**`r household_expd_data`,
+`r Age_group_data`,
+`r percentage_total_expd_data`,
+`r income_decile_group_data`,
+`r percent_total_expd_decile_group_data`,
+`r household_expd_tenure_data`,
+`r household_expd_socioeconomic_data`**. 
+
+
+
+### Check data
+
+Because this automation only produces the data for the latest year, it is not 
+possible to plot the new data over the old data to check for discrepancies. 
+Instead, the person QAing this update should download the source data and spot 
+check values the source data against the outputted csv.
+
+### Note
+Zero values are greater than 0 but round to 0.
+ 
+
+### Calculations
+
+No calculations have been performed on this data during this automation.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

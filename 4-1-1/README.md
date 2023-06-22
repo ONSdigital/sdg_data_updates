@@ -82,14 +82,7 @@ Under Step 6 select "Table in CSV format" and Download table.
 
 ### 4-1-1 Troubleshooting
 
-Despite being in the right directory, and the file existing, the following messafe can occur:
-	"Error in file(file, "rt") : cannot open the connection
-	In addition: Warning message:
-	In file(file, "rt") : cannot open file 'ks1.csv': No such 	file or directory"
-
-As a workaround, the file read in can be hardcoded in one of two ways.
-	1. Change the lines in the update_4-1-1.R script to e.g.	"read.csv(“Input/ks1.csv”)". 
-	2. Change the lines in the config.R file to e.g. 	"Input/ks1.csv".
+Possible changes to ethnicity and ethnic group columns may be required in the future, to align with updated ONS classification. 
 
 
 

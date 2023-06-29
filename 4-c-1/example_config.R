@@ -1,6 +1,6 @@
 # configurations for 4-c-1
 
-x <- "blah.csv"
+raw_data <- "workforce_teacher_characteristics_2010_2022_nat_reg_la.csv"
 
 header_row <- 1
 

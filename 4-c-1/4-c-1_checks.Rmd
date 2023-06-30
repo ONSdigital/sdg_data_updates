@@ -225,7 +225,7 @@ primary_by_sex_and_region_plot <- joined_data %>%
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_grid(Sex ~ Region) +
+  facet_grid(Region ~ Sex) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +

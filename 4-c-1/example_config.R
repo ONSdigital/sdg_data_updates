@@ -1,6 +1,6 @@
 # configurations for 4-c-1
 
-raw_data <- "workforce_teacher_characteristics_2010_2022_nat_reg_la.csv"
+source_data <- "example_input_4-c-1.csv"
 
 header_row <- 1
 

@@ -16,46 +16,7 @@ source_washdash <- readr::read_csv('sdg_data_updates/6-2-1/example_Input/washdas
 #source_data1 <- get_type1_data(header_row = 1, filename = filename1)
 # clean the data and get yer and country info from above the headers -----------
 
-# clean_strings() has remove_ss (stands for remove_superscripts) as an argument. 
-# The default is TRUE. IMPORTANT: Set to FALSE if there strings of letters that 
-# end in a number that you want to keep. Where a number falls at the end of an 
-# alphanumeric code, it will  not be interpreted as a superscript and will not 
-# be removed. However, if the ONLY number in an alphanumeric code is at the end, 
-# the number will be seen as a superscript. 
 
-clean_data <- clean_strings(source_data, remove_ss = TRUE)
-
-metadata <- extract_metadata(clean_data, header_row)
-
-main_data <- extract_data(clean_data, header_row)
-
-# if you import a csv, numbers will now be read as characters - you can rectify this here
-# NOTE: check that data types are what you expect after running th
-if (header_row > 1){
-  main_data <-  main_data %>% 
-    type.convert(as.is = TRUE) 
-}
-
-# remove superscripts from column names
-# DO NOT use if there are column names containing words that end 
-#   in a number: It won't usually remove a number from the end of an alphanumeric code, 
-#   but will do so if the ONLY number is at the end)
-names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-
-# clean up the column names (snake case, lowercase, no trailing dots etc.)
-main_data <- clean_names(main_data)
-
-# remove footnotes -------------------------------------------------------------
-# this assumes that:
-# footnotes are in the first 2 (or whatever number you use as the 
-#   check_columns argument) columns of the datafame.
-#   If there is text in the same row as the footnotes in 
-#   columns beyond check_columns, these rows will not be dropped (see ?remove_footnotes)
-# if the data are likely to have non-footnote data in the first column(s) but NAs
-#   in all other columns DO NOT use this function as it will likely remove more 
-#   than just footnotes
-
-main_data <- remove_footnotes(main_data)
 
 # make column names consistent across years ------------------------------------
 
@@ -79,24 +40,6 @@ renamed_main <- main_data %>%
                 new_name = "all_households_000s") %>% 
   rename_column(primary = c("sample", "size"), alternate = "count", 
                 new_name = "sample_size") #%>%
-  # # the following isn't something we want to do here, but to show how you
-  # # match multiple potential patterns using the OR operator:
-  # rename_column(primary = "type", not_pattern = "a|b|c|other",
-  #               new_name = "d")
-  
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# Join dataframes, do relevant calculations etc
-
-# some useful dplyr functions:
-# left_join(), right_join, 
-# add_row(), filter(), select(), group_by(), summarise()
-# pivot_longer(), pivot_wider()
-
-# If, like in type_1_data, you have multiple columns with values, e.g. where each
-# holds the values for a level of a disaggregation, pivot_longer is your friend
 
 tidy_data <- renamed_main %>% 
   pivot_longer(
@@ -105,31 +48,7 @@ tidy_data <- renamed_main %>%
     values_to = "value"
   )
 
-# # for doing calculations, you may rather want values in separate columns, but the same row.
-# # The reverse of pivot_longer is pivot wider. e.g. if I wanted to add types a and b
-# # and the data were already tidy (one value per row)
-# calculation_example <- tidy_data %>% 
-#   pivot_wider(names_from = "type",
-#               values_from = "value") %>% 
-#   mutate(type_a_plus_b = as.numeric(type_a) + as.numeric(type_b))
-# 
-# # then back to tidy:
-# example_tidied <- calculation_example %>% 
-#   pivot_longer(
-#     cols = c(contains("type"), all_households_000s),
-#     names_to = "type",
-#     values_to = "value"
-#   )
 
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# finalise csv -----------------------------------------------------------------
-
-# make column names sentence case
-
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
 
 # order of disaggregations depend on order they appear. In some cases this won't 
 # be alphanumeric order, so specify the order here and arrange by this fake column 

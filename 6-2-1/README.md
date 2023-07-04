@@ -10,11 +10,28 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 ### 6-2-1 sourcing data instructions
 
-1) To download the latest School workforce in England data go to https://explore-education-statistics.service.gov.uk/data-tables/school-workforce-in-england .
-2) Under Step 2 select the "Teacher characteristics" dataset. 
-3) Under "What would you like to do?" click "Download full data set (ZIP)"
-4) In your downloads folder, open the zip folder. It will be named something like "school-workforce-in-england_2022.zip".
-5) In the data subfolder copy the csv file into the Input folder within 4-c-1. It will be called something like "workforce_teacher_characteristics_2010_2022_nat_reg_la.csv" . 
+You will need to download three similar csv files. These analyse the sanitation
+data by service level, facility type, and safely managed criteria.
+1) To download the latest wash data School workforce in England data go to https://washdata.org/data/household#!/gbr .
+2) Click "View data table"
+3) Under measure, select "Sanitation".
+4) Under Inequality select "Total", "Rural", and "Urban".
+5) Under Time period select the full range. Currently this is 2000 to 2020. 
+6) Under Ladder type select "Analyse by service level".
+7) Download as csv.
+8) Go to your downloads folder and copy the csv file into the Input folder within 
+6-2-1. Rename it as "washdash_service_level.csv". 
+9) Under Ladder type select "Analyse by facility type".
+10) Download as csv.
+11) Go to your downloads folder and copy the csv file into the Input folder within 
+6-2-1. Rename it as "washdash_facility_type.csv". 
+12) Under Ladder type select "Analyse by safely managed criteria".
+13) Download as csv.
+14) Go to your downloads folder and copy the csv file into the Input folder within 
+6-2-1. Rename it as "washdash_criteria.csv".
+
+15) you should have three files in the 6-2-1/Input folder. "washdash_facility_type.csv",
+"washdash_criteria.csv", and "washdash_service_level.csv". 
 
 
 

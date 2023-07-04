@@ -1,0 +1,234 @@
+title: "6-2-1 Checks"
+author: "Michael Nairn and Tom McNulty
+date: "04/07/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 6-2-1 update summary
+
+This file runs some basic checks and gives information about the update.
+
+Before putting the csv in the indicator file please check if the most recent figures are provisional. Check this in the source data. If they are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/6-2-1.csv") %>% 
+  rename(`Local Authority` = `Local.Authority`) %>%
+  rename(`Unit measure` = "Units") %>%
+  rename(`Observation status` = Observation.status) %>%
+  mutate(dataset = "old") %>%
+  select(Year, Series, Region, `Local Authority`, Sex,
+         `Unit measure`, `Observation status`, Value, dataset)
+
+# reformat the series 
+old_data$Series <- gsub("[(%)]", "" , old_data$Series)
+old_data$Series <- str_trim(old_data$Series, "right")
+
+
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_6-2-1", ".csv")) %>% 
+  rename(`Local Authority` = `Local.Authority`) %>%
+  rename(`Unit measure` = "Unit.measure") %>%
+  rename(`Observation status` = Observation.status) %>%
+  mutate(dataset = "new") %>%
+    select(Year, Series, Region, `Local Authority`, Sex,
+         `Unit measure`, `Observation status`, Value, dataset)
+
+ 
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) 
+
+
+
+```
+
+
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  na.omit(Value) %>% # replace the NULL returns with NA
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. This is particularly the case for June/July 2023, when the source has 
+changed. 
+
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Headline Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+For the June 2023 update there are a number of new disaggregations not previously 
+available on the live site. Therefore, there will be a lot of incomparable 
+data points on the charts. 
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Headline
+headline_plot <- joined_data %>% 
+  filter(Series == "All publicly funded schools" & Region == "" & `Local Authority` == "" 
+        & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Headline")
+
+
+# All school types by region
+region_plot <- joined_data %>% 
+  filter(`Local Authority` == ""  & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("All school types by region")
+
+# All school types by sex
+sex_plot <- joined_data %>% 
+  filter(`Local Authority` == ""  & Region == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Series ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("All school types by sex")
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_plot))
+```
+
+
+## Disaggregation Plots
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots.
+
+For example, selecting specific local authorities by editing the "filter" command to 
+include the local authorities you wish to compare. 
+  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
+                `Local authority` == "Barnsley")
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Primary by Sex and Region
+primary_by_sex_and_region_plot <- joined_data %>% 
+  filter(Series == "Primary"& `Local Authority` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Primary by Sex and Region")
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(primary_by_sex_and_region_plot))
+```
+
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```

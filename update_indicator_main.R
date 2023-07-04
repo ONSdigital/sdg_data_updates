@@ -14,6 +14,5 @@
 
 test_run <- FALSE # for real updates use FALSE
 
-
-indicator <- "3-9-2" # name of folder for indicator(s)
+indicator <- "6-2-1" # name of folder for indicator(s)
 

@@ -1,24 +1,30 @@
-# configurations for type 1 data
+# configurations for 6-2-1 data
 
-# filename <- "type_1_data.xlsx"
-# # If you are using csv data make sure numbers are formatted as numbers in Excel 
-# # and DO NOT include the thousands separator
-# # tabname will not be needed if you are using csv data
-# filename <- "type_1_metadata_included.csv"
-filename_facility <- "facility_type.csv"
-filename_safe <- "safeley_managed_criteria.csv"
-filename_service <- "service_level.csv"
+# There should be three files in the 6-2-1/Input folder. 
+  # washdash_facility_type.csv
+  # washdash_criteria.csv
+  # washdash_service_level.csv
 
- tabname <- "washdash-download"
 
- 
- # tabname <- "metadata_included"
+# The following three lines call these files.
+filename_facility <- "washdash_facility_type.csv"
 
+filename_safe <- "washdash_criteria.csv"
+
+filename_service <- "washdash_service_level.csv"
+
+
+# This line calls the tab within each of these files. 
+tabname <- "washdash-download"
+
+
+# This line states the row that the clumn names are given
  header_row <- 1
-# header_row <- 3
 
-input_folder  <- "Example_input"
-output_folder <- "Example_output"
+
+# Define the names of the input and output folders.
+input_folder  <- "Example_Input"
+output_folder <- "Example_Output"
 
 
 

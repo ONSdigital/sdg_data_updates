@@ -6,7 +6,6 @@
   # (b) a hand-washing facility with soap and water
 
 
-
 #### Read in data ####
 
 source_data_facility <- readr::read_csv(file = paste0(input_folder, "/", filename_facility))
@@ -25,25 +24,22 @@ data_facility <- source_data_facility %>%
 
 # can you do for the other two data sets? 
   # Use https://sdgdata.gov.uk/6-2-1/ dropdowns to guide you
+
 # data_safe <- 
 
 # data_service <- 
 
 
-data_safe <- source_data_safe %>% 
-  mutate(Series = "Safely managed element")
-
-data_service <- source_data_service %>%
-  mutate(Series = "Service level")
-
-
 
 #### Combine the three datasets ####
-# will need to use the full join function, details for functions seen by using ?
+# will need to use the full join function, details for functions seen by using 
 ?full_join 
 
+# I have combined two of the three datasets. 
+  # Can you join the new dataset I have made with the third one (data_service)?
+
 data_part1 <- full_join(data_facility, data_safe)
-combined_data <- full_join(data_part1, data_service)
+
 
 
 #### Rename and select relevant columns ####
@@ -60,36 +56,35 @@ combined_data <- full_join(data_part1, data_service)
   # select()
 
 
-clean_data <- combined_data %>%
-  rename(`Urban or rural` = `Residence Type`,
-         Value = Coverage) %>% 
-  select(Year, Series, `Safely managed element`, `Service level`,
-         `Facility type`, `Urban or rural`, Value)
-
-
 #### Tidy and reformat the dataframe ####
+# This is vital for publication on platform
 
 # Replace character NAs with blanks in Safely managed element, 
   # Service level, and Facility type columns 
 clean_data  <- clean_data %>% 
   mutate_at(c("Safely managed element", "Service level", "Facility type"), ~replace_na(.,"")) 
 
-# Ensure urban/rural column is in sentence case
+# this is a little more complex, so I have done for you. Run below line for details
+?mutate_at
+
+# Ensure urban/rural column is in title case
 clean_data  <- clean_data %>%  
   mutate(`Urban or rural` = toTitleCase(`Urban or rural`))
            
            
 # In a similar way, can you ensure the value column is numeric
 ?as.numeric
-csv_formatted  <- clean_data %>%  
-  mutate(Value = as.numeric(Value)) 
+# csv_formatted <- clean_data 
+  # mutate()
 
 
 # reformat the Urban or rural column so "total" is replaced by a blank
-csv_formatted$`Urban or rural` <- gsub("Total", "", csv_formatted$`Urban or rural`)
+   # use gsub function
+# csv_formatted$`Urban or rural` <- gsub()
 
 
-# Add in the extra metadata columns
+# Add in the extra metadata columns for platform
+  # I have done this 
 csv_formatted  <- csv_formatted %>%
   mutate(`Unit measure` = "Percentage (%)") %>%
   mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",

@@ -29,28 +29,28 @@ Before putting the csv in the indicator file please check if the most recent fig
 
 
 ```{r include= FALSE}
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/6-2-1.csv") %>% 
-  rename(`Local Authority` = `Local.Authority`) %>%
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/6-2-1.csv") 
+
+old_data <- old_data %>% 
   rename(`Unit measure` = "Units") %>%
   rename(`Observation status` = Observation.status) %>%
+  rename(`Urban.or.rural` = Residence.type) %>% 
   mutate(dataset = "old") %>%
-  select(Year, Series, Region, `Local Authority`, Sex,
-         `Unit measure`, `Observation status`, Value, dataset)
-
-# reformat the series 
-old_data$Series <- gsub("[(%)]", "" , old_data$Series)
-old_data$Series <- str_trim(old_data$Series, "right")
-
+  select(Year, Series, `Safely.managed.element`, `Service.level`,
+         `Facility.type`, `Urban.or.rural`, `Unit measure`, 
+         `Observation status`, Value, dataset)
 
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_6-2-1", ".csv")) %>% 
-  rename(`Local Authority` = `Local.Authority`) %>%
+new_data <- read.csv(paste0("Example_Output/", date, "_6-2-1", ".csv")) 
+
+new_data <- new_data %>% 
   rename(`Unit measure` = "Unit.measure") %>%
   rename(`Observation status` = Observation.status) %>%
   mutate(dataset = "new") %>%
-    select(Year, Series, Region, `Local Authority`, Sex,
-         `Unit measure`, `Observation status`, Value, dataset)
+  select(Year, Series, `Safely.managed.element`, `Service.level`,
+         `Facility.type`, `Urban.or.rural`, `Unit measure`, 
+         `Observation status`, Value, dataset)
 
  
 
@@ -58,10 +58,7 @@ new_data <- read.csv(paste0("Output/", date, "_6-2-1", ".csv")) %>%
 joined_data <- old_data %>% 
   bind_rows(new_data) 
 
-
-
 ```
-
 
 
 
@@ -95,8 +92,7 @@ be sorted in other ways using the arrows at the top.
 
 If there are differences, visible in the table and plots below, please investigate these.
 It is possible the data source has update its back time series, so the difference
-could be genuine. This is particularly the case for June/July 2023, when the source has 
-changed. 
+could be genuine. 
 
 
 
@@ -126,65 +122,43 @@ data points on the charts.
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Headline
-headline_plot <- joined_data %>% 
-  filter(Series == "All publicly funded schools" & Region == "" & `Local Authority` == "" 
-        & Sex == "") %>% 
+# Safely managed v urban or rural
+safely_managed_element_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Service.level == "" & Facility.type == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_grid() +
+  facet_grid(Urban.or.rural ~ Safely.managed.element) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Headline")
+  ggtitle("Safely managed element versus urban or rural")
 
 
-# All school types by region
-region_plot <- joined_data %>% 
-  filter(`Local Authority` == ""  & Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Series ~ Region) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("All school types by region")
+### can you do the same, but for service level?
 
-# All school types by sex
-sex_plot <- joined_data %>% 
-  filter(`Local Authority` == ""  & Region == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Series ~ Sex) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("All school types by sex")
+
+# and for facility type?
+
+# Can you make the plots more visually accessible/useful? The functions within
+  # ggplot can be used, some examples above. 
+
+# In bottom right window, click the home. This takes you to R resources.
+  # In here look into the RStudio Cheat Sheets, and find the data 
+  # visualistaion with ggplot 2 cheat sheet. 
+    # Lots of other useful cheat sheets here too. 
+
+
+# remember to include the "print plot" chunk below.
+
 
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(headline_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(region_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_plot))
+suppressMessages(print(safely_managed_element_versus_urban_or_rural_plot))
 ```
 
 
@@ -195,35 +169,24 @@ but below are a few examples you can amend if there seems to be a discrepancy. I
 particular for any discrepancies shown in the table. 
 You may need to change the filters in the plots.
 
-For example, selecting specific local authorities by editing the "filter" command to 
-include the local authorities you wish to compare. 
-  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
-                `Local authority` == "Barnsley")
+For example, selecting specific service levels by editing the "filter" command to 
+include the services you wish to compare. # | is or.
+  E.g.   filter(Service.level == "Open defecation" | 
+                Service.level == "Basic service" | 
+                Service.level == "Limited service")
 
 
 
 ```{r, echo = FALSE, fig.width=10}
 
-# Primary by Sex and Region
-primary_by_sex_and_region_plot <- joined_data %>% 
-  filter(Series == "Primary"& `Local Authority` == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Region ~ Sex) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("Primary by Sex and Region")
+# make these plots in here...
+
 
 
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(primary_by_sex_and_region_plot))
+suppressMessages(print(XXXXXXXXXXXXXXXX_plot))
 ```
 
 

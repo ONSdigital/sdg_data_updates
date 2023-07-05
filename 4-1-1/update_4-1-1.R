@@ -54,10 +54,10 @@ ks1_LAs_and_ks2_small <- ks1_LAs_and_ks2 %>%
          Sex = gender,
          Country = country_name,
          Region = region_name,
-         `Local Authority` = la_name,
+         `Local authority` = la_name,
          Reading = pt_read_met_expected_standard,
          Maths = pt_mat_met_expected_standard) %>%
-  select(Year, Series, Country, Region, `Local Authority`,
+  select(Year, Series, Country, Region, `Local authority`,
          characteristic, Sex, Reading, Maths)
 
 # split out characteristics into disaggregations
@@ -80,13 +80,13 @@ ks1_LAs_and_ks2_disaggs <- ks1_LAs_and_ks2_small %>%
          (characteristic == "All sen" |
              characteristic == "No sen" ~ characteristic,
            TRUE ~ "")) %>%
-  mutate(`Ethnic group` = case_when
+  mutate(`Ethnicity` = case_when
          (characteristic == "Asian" | 
              characteristic == "Black" | 
              characteristic == "White" | 
              characteristic == "Mixed" | 
              characteristic == "Unclassified" |
-             characteristic == "Any other ethnic group" ~ characteristic,
+             characteristic == "Any other ethnic group" ~ "Other ethnic group",
            TRUE ~ ""))
 
 # split out Reading and Maths
@@ -100,8 +100,8 @@ ks1_LAs_and_ks2_maths <- ks1_LAs_and_ks2_disaggs %>%
 
 
 ks1_LAs_and_ks2_clean <- dplyr::bind_rows(ks1_LAs_and_ks2_maths, ks1_LAs_and_ks2_reading) %>% 
-  select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special educational needs (SEN) status`,
+  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
+         `Ethnicity`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value) %>%
   mutate(Value = as.numeric(Value))
@@ -119,8 +119,8 @@ ks1_England_small <- ks1_England_data %>%
          Reading = pt_readta_met_expected_standard,
          Maths = pt_matta_met_expected_standard) %>%
   mutate(Region = "") %>%
-  mutate(`Local Authority` = "") %>%
-  select(Year, Series, Country, Region, `Local Authority`,
+  mutate(`Local authority` = "") %>%
+  select(Year, Series, Country, Region, `Local authority`,
          characteristic, Sex, Reading, Maths)
 
 # split out characteristics into disaggregations
@@ -142,13 +142,13 @@ ks1_England_disaggs <- ks1_England_small %>%
          (characteristic == "All sen" |
           characteristic == "No sen" ~ characteristic,
            TRUE ~ "")) %>%
-  mutate(`Ethnic group` = case_when
+  mutate(`Ethnicity` = case_when
          (characteristic == "Asian" | 
              characteristic == "Black" | 
              characteristic == "White" | 
              characteristic == "Mixed" | 
              characteristic == "Unclassified" |
-             characteristic == "Any other ethnic group" ~ characteristic,
+             characteristic == "Any other ethnic group" ~ "Other ethnic group",
            TRUE ~ ""))
 
 # split out Reading and Maths
@@ -161,8 +161,8 @@ ks1_England_maths <- ks1_England_disaggs %>%
   rename(Value = Maths)
 
 ks1_England_clean <- dplyr::bind_rows(ks1_England_maths, ks1_England_reading) %>% 
-  select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special educational needs (SEN) status`,
+  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
+         `Ethnicity`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value) %>%
   mutate(Value = as.numeric(Value))
@@ -177,15 +177,14 @@ ks4_clean <- ks4_data %>%
          Value = percentage_achieving,
          Subject = subject) %>%
   mutate(Ethnicity = "") %>% 
-  mutate(`Ethnic group` = "") %>%
   mutate(`Disadvantaged status` = "") %>%
   mutate(`First language` = "") %>%
   mutate(`Free school meal status` = "") %>%
   mutate(`Special educational needs (SEN) status` = "") %>%
   mutate(Region = "") %>%
-  mutate(`Local Authority` = "") %>%
-  select(Year, Series, Subject, Country, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special educational needs (SEN) status`,
+  mutate(`Local authority` = "") %>%
+  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
+         Ethnicity, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, 
          `Free school meal status`, `First language`, Value)
 
@@ -204,13 +203,14 @@ combined_data <- dplyr::bind_rows(ks4_clean, ks1_England_clean,
 
 # add in the extra metadata columns
 csv_formatted <- combined_data %>%
-  mutate(`Local Authority` = toTitleCase(`Local Authority`),
+  mutate(`Local authority` = toTitleCase(`Local authority`),
          Region = toTitleCase(Region)) %>% 
   mutate(`Unit measure` = "Percentage (%)") %>%
+  mutate(`Ethnic group` = "") %>%
   mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
                                           TRUE ~ "Missing value")) %>%
-  select(Year, Series, Subject, Region, `Local Authority`, Sex,
-         `Ethnic group`, `Special educational needs (SEN) status`,
+  select(Year, Series, Subject, Region, `Local authority`, Sex,
+         Ethnicity, `Ethnic group`, `Special educational needs (SEN) status`,
          `Disadvantaged status`, `Free school meal status`, `First language`, 
          `Unit measure`, `Observation status`, Value)
 

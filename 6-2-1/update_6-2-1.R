@@ -22,13 +22,14 @@ data_facility <- source_data_facility %>%
   # "data facility is source data facility, and then
   # mutate a column called Series, populated with "Facility type""
 
-# can you do for the other two data sets? 
+ #can you do for the other two data sets? 
   # Use https://sdgdata.gov.uk/6-2-1/ dropdowns to guide you
 
-# data_safe <- 
+ data_safe <- source_data-safe %>%
+  mutate(Series = "Safeley managed element")
 
-# data_service <- 
-
+ data_service <- source_data_service %>%
+  mutate(Series = "Service level")
 
 
 #### Combine the three datasets ####
@@ -39,7 +40,7 @@ data_facility <- source_data_facility %>%
   # Can you join the new dataset I have made with the third one (data_service)?
 
 data_part1 <- full_join(data_facility, data_safe)
-
+source_data<- full_join(data_part1, data_service)
 
 
 #### Rename and select relevant columns ####
@@ -81,6 +82,7 @@ clean_data  <- clean_data %>%
 # reformat the Urban or rural column so "total" is replaced by a blank
    # use gsub function
 # csv_formatted$`Urban or rural` <- gsub()
+?gsub
 
 
 # Add in the extra metadata columns for platform

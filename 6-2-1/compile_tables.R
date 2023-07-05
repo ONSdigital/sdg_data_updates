@@ -27,7 +27,7 @@ library(pander)
 
 library(SDGupdater)
 
-if (test_run == TRUE) { source("example_config.R") } else if (test_run == FALSE) { 
+if (test_run == TRUE) { source("Example_config.R") } else if (test_run == FALSE) { 
    source("config.R") } else { 
       stop("test_run must be either TRUE or FALSE") }
 

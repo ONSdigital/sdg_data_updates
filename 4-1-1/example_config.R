@@ -10,5 +10,5 @@ ks4 <- "ks4-example.csv"
 
 header_row <- 1
 
-input_folder  <- "Example_Input"
+input_folder  <- "Example Input"
 output_folder <- "Example_Output"

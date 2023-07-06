@@ -46,6 +46,9 @@ csv_formatted <- energy_csv %>%
             "Unit multiplier" =  "Units",
             "Observation status" = "Normal value")
 
+# The below line may or may not be necessary in future releases
+# csv_formatted$Year <- gsub("2020 2", "2020", csv_formatted$Year)
+
 csv_formatted <- csv_formatted %>%            
 select("Year", "Series", "Industry sector", "Unit measure", "Unit multiplier", "Observation status", "Value")
 

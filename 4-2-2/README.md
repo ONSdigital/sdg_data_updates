@@ -7,7 +7,6 @@ Creates csv data for 4-2-2 (Participation rate in organized learning (one year b
 
 PLEASE NOTE - this automation produces data from 2018 onwards. Data prior to 2018 is already in the Jemalex csv sheet. 
 
-It is a fairly simple automation that only involves formatting the data (no calculations). However, there are a lot of disaggregations and data points (nearly 100,000 by 2021 to 2022).
 
 
 Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs for anything that needs to be manually changed in the csv output (e.g., if any figures are estimated) or caveats that need to be included in the metadata. 
@@ -18,6 +17,8 @@ Output includes the data in csv format, and an html QA report. Users should stil
 1) Download the latest Education provision: children under 5 years of age data from: https://explore-education-statistics.service.gov.uk/find-statistics/education-provision-children-under-5. 
 2) Click "Download all data (zip) 
 3) From your downloads folder, move all excel file within the zip file into the 'Input' folder in 4-2-2.  If this doesn't exist, make it inside the 4-2-2 folder.
+4) Please note that beyond age, region, and local authority the breakdowns give the percentage of registered children that are in that breakdown, as opposed to the percentage of eligible children in that breakdown that are registered. Therefore, only data from table 1 provide data for the percentage of eligible children registered. 
+
 
 
 

@@ -1,230 +1,58 @@
 # author: Michael Nairn
 # date: 18/05/2023
 
-# Code to automate data update for indicator 4-1-1 
-  # (Proportion of children and young people - 
-  # (a) in grades 2/3; (b) at the end of primary; 
-  # and (c) at the end of lower secondary achieving at least a 
-  # minimum proficiency level in (i) reading and (ii) mathematics, by sex).
+# Code to automate data update for indicator 4-2-2 
+  # Participation rate in organized learning 
+  # (one year before the official primary entry age), by sex) 
+
 
 
 #### Read in data ####
 
 source_data_region <- readr::read_csv(file = paste0(input_folder, "/", region_file))
-source_data_disadvantaged <- readr::read_csv(file = paste0(input_folder, "/", disadvantaged_file))
-source_data_ethnicity_sen <- readr::read_csv(file = paste0(input_folder, "/", ethnicity_sen_file))      
+# source_data_disadvantaged <- readr::read_csv(file = paste0(input_folder, "/", disadvantaged_file))
+# source_data_ethnicity_sen <- readr::read_csv(file = paste0(input_folder, "/", ethnicity_sen_file))      
 
 
+#### Rename and select relevant columns ####
 
-
-#### Combine ks1_LAs and ks2 dataframes as in same format ####
-
-# remove "ta" from percentage met columns of ks1_LAs 
-ks1_LAs_data <- ks1_LAs_data %>%
-  rename(pt_read_met_expected_standard = pt_readta_met_expected_standard,
-         pt_mat_met_expected_standard = pt_matta_met_expected_standard)
-
-ks1_LAs_and_ks2 <- rbind(ks1_LAs_data, 
-                         ks2_data)
-
-
-#### Manipulate ks1_LAs and ks2 data ####
-
-# select and rename relevant columns
-ks1_LAs_and_ks2_small <- ks1_LAs_and_ks2 %>%
+clean_data <- source_data_region  %>%
   rename(Year = time_period,
-         Sex = gender,
-         Country = country_name,
          Region = region_name,
          `Local authority` = la_name,
-         Reading = pt_read_met_expected_standard,
-         Maths = pt_mat_met_expected_standard) %>%
-  select(Year, Series, Country, Region, `Local authority`,
-         characteristic, Sex, Reading, Maths)
-
-# split out characteristics into disaggregations
-ks1_LAs_and_ks2_disaggs <- ks1_LAs_and_ks2_small %>%
-  mutate(`Disadvantaged status` = case_when
-         (characteristic == "Disadvantaged" | 
-             characteristic == "Not known to be disadvantaged" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`First language` = case_when
-         (characteristic == "First language unclassified" |
-             characteristic == "Language unclassified" |
-             characteristic == "Known or believed to be english" | 
-             characteristic == "Known or believed to be other than english" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`Free school meal status` = case_when
-         (characteristic == "Fsm eligible" |
-             characteristic == "Not known to be fsm eligible"  ~ characteristic,
-           TRUE ~ "")) %>% 
-  mutate(`Special educational needs (SEN) status` = case_when
-         (characteristic == "All sen" |
-             characteristic == "No sen" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`Ethnicity` = case_when
-         (characteristic == "Asian" | 
-             characteristic == "Black" | 
-             characteristic == "White" | 
-             characteristic == "Mixed" | 
-             characteristic == "Unclassified" |
-             characteristic == "Any other ethnic group" ~ "Other ethnic group",
-           TRUE ~ ""))
-
-# split out Reading and Maths
-ks1_LAs_and_ks2_reading <- ks1_LAs_and_ks2_disaggs %>%
-  mutate(Subject = "Reading") %>% 
-  rename(Value = Reading)
-
-ks1_LAs_and_ks2_maths <- ks1_LAs_and_ks2_disaggs %>%
-  mutate(Subject = "Maths") %>% 
-  rename(Value = Maths)
-
-
-ks1_LAs_and_ks2_clean <- dplyr::bind_rows(ks1_LAs_and_ks2_maths, ks1_LAs_and_ks2_reading) %>% 
-  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
-         `Ethnicity`, `Special educational needs (SEN) status`,
-         `Disadvantaged status`, `Free school meal status`, 
-         `Free school meal status`, `First language`, Value) %>%
-  mutate(Value = as.numeric(Value))
-
-
-
-
-#### Manipulate ks1_England data ####
-
-# select and rename relevant columns
-ks1_England_small <- ks1_England_data %>%
-  rename(Year = time_period,
-         Sex = gender,
-         Country = country_name,
-         Reading = pt_readta_met_expected_standard,
-         Maths = pt_matta_met_expected_standard) %>%
-  mutate(Region = "") %>%
-  mutate(`Local authority` = "") %>%
-  select(Year, Series, Country, Region, `Local authority`,
-         characteristic, Sex, Reading, Maths)
-
-# split out characteristics into disaggregations
-ks1_England_disaggs <- ks1_England_small %>%
-  mutate(`Disadvantaged status` = case_when
-         (characteristic == "Disadvantaged" | 
-          characteristic == "Not known to be disadvantaged" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`First language` = case_when
-         (characteristic == "First language unclassified" |
-          characteristic == "Known or believed to be english" | 
-          characteristic == "Known or believed to be other than english" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`Free school meal status` = case_when
-         (characteristic == "Fsm eligible" |
-          characteristic == "Not known to be fsm eligible"  ~ characteristic,
-           TRUE ~ "")) %>% 
-  mutate(`Special educational needs (SEN) status` = case_when
-         (characteristic == "All sen" |
-          characteristic == "No sen" ~ characteristic,
-           TRUE ~ "")) %>%
-  mutate(`Ethnicity` = case_when
-         (characteristic == "Asian" | 
-             characteristic == "Black" | 
-             characteristic == "White" | 
-             characteristic == "Mixed" | 
-             characteristic == "Unclassified" |
-             characteristic == "Any other ethnic group" ~ "Other ethnic group",
-           TRUE ~ ""))
-
-# split out Reading and Maths
-ks1_England_reading <- ks1_England_disaggs %>%
-  mutate(Subject = "Reading") %>% 
-  rename(Value = Reading)
-
-ks1_England_maths <- ks1_England_disaggs %>%
-  mutate(Subject = "Maths") %>% 
-  rename(Value = Maths)
-
-ks1_England_clean <- dplyr::bind_rows(ks1_England_maths, ks1_England_reading) %>% 
-  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
-         `Ethnicity`, `Special educational needs (SEN) status`,
-         `Disadvantaged status`, `Free school meal status`, 
-         `Free school meal status`, `First language`, Value) %>%
-  mutate(Value = as.numeric(Value))
-  
-       
-           
-#### Manipulate ks4 data ####
-ks4_clean <- ks4_data %>%
-  rename(Year = time_period,
-         Sex = gender,
-         Country = country_name,
-         Value = percentage_achieving,
-         Subject = subject) %>%
-  mutate(Ethnicity = "") %>% 
-  mutate(`Disadvantaged status` = "") %>%
-  mutate(`First language` = "") %>%
-  mutate(`Free school meal status` = "") %>%
-  mutate(`Special educational needs (SEN) status` = "") %>%
-  mutate(Region = "") %>%
-  mutate(`Local authority` = "") %>%
-  select(Year, Series, Subject, Country, Region, `Local authority`, Sex,
-         Ethnicity, `Special educational needs (SEN) status`,
-         `Disadvantaged status`, `Free school meal status`, 
-         `Free school meal status`, `First language`, Value)
-
-ks4_clean$Subject <- gsub(" language", "", ks4_clean$Subject)
-
-
-
-
-
-#### Bind all three datasets together ####
-combined_data <- dplyr::bind_rows(ks4_clean, ks1_England_clean,
-                                  ks1_LAs_and_ks2_clean) 
+         Age = age,
+         Value = percentage_eligible_children) %>%
+  select(Year, Region, `Local authority`, Value)
 
 
 #### Formatting the dataframe ####
 
 # add in the extra metadata columns
-csv_formatted <- combined_data %>%
+csv_formatted <- clean_data %>%
   mutate(`Local authority` = toTitleCase(`Local authority`),
          Region = toTitleCase(Region)) %>% 
   mutate(`Unit measure` = "Percentage (%)") %>%
-  mutate(`Ethnic group` = "") %>%
-  mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
-                                          TRUE ~ "Missing value")) %>%
-  select(Year, Series, Subject, Region, `Local authority`, Sex,
-         Ethnicity, `Ethnic group`, `Special educational needs (SEN) status`,
-         `Disadvantaged status`, `Free school meal status`, `First language`, 
-         `Unit measure`, `Observation status`, Value)
+  mutate(`Observation status` = case_when(Value == "u" ~ "Missing data; low reliability",
+                                          TRUE ~ "Normal value")) %>%
+  select(Year, Age, Region, `Local authority`, `Unit measure`, `Observation status`, Value)
 
 
-# reformat the Sex column
-csv_formatted$Sex <- gsub("Total", "", csv_formatted$Sex)
-csv_formatted$Sex <- gsub("Boys", "Male", csv_formatted$Sex)
-csv_formatted$Sex <- gsub("Girls", "Female", csv_formatted$Sex)
+# reformat the Age column
+csv_formatted$Age <- gsub("2-year-olds", "2", csv_formatted$Age)
+csv_formatted$Age <- gsub("3-year-olds", "3", csv_formatted$Age)
+csv_formatted$Age <- gsub("4-year-olds", "4", csv_formatted$Age)
+csv_formatted$Age <- gsub("3 and 4-year-olds", "3 and 4", csv_formatted$Age)
+csv_formatted$Age <- gsub("Total", "", csv_formatted$Age)
 
-
-# reformat the years by subbing in " to 20" after the fourth value in the string
-csv_formatted$Year <- gsub("^(.{4})(.*)$",         
-                           "\\1 to 20\\2",
-                           csv_formatted$Year) 
-
-csv_formatted$Subject <- gsub("Mathematics", "Maths", csv_formatted$Subject)
-csv_formatted$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", csv_formatted$Region)
-csv_formatted$`Special educational needs (SEN) status` <- gsub("sen", "SEN", 
-                                                               csv_formatted$`Special educational needs (SEN) status`)
-
-csv_formatted$`Free school meal status` <- gsub("Fsm eligible", "FSM eligible", 
-                                                csv_formatted$`Free school meal status`)
-csv_formatted$`Free school meal status` <- gsub("Not known to be fsm eligible", 
-                                                "Not known to be FSM eligible", 
-                                                csv_formatted$`Free school meal status`)
+csv_formatted$Value <- gsub("u", "", csv_formatted$Value)
 
 
 #### Remove NAs from the csv that will be saved in Outputs ####
 # this changes Value to a character so will still use csv_formatted in the 
 # R markdown QA file
 csv_formatted_nas <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value)) 
+  mutate(Region = ifelse(is.na(Region), "", Region)) %>%
+  mutate(`Local authority` = ifelse(is.na(`Local authority`), "", `Local authority`)) 
 
 
 # This is a line that you can run to check that you have filtered and selected 

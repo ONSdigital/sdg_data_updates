@@ -8,5 +8,5 @@ ethnicity_sen_file <- "4_early_years_provision_ethnicity_sen_2018_2023.csv"
 
 header_row <- 1
 
-input_folder  <- "Example Input"
+input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

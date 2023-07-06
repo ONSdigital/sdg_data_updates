@@ -9,29 +9,11 @@
 
 
 #### Read in data ####
-ks1_England_data <- get_type1_data(header_row, ks1_England, data-key-stage-1-and-phonics-sc) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) %>%
-  mutate(Series = "Attainment at age 7")
 
-ks1_LAs_data <- get_type1_data(header_row, ks1_LAs, data-key-stage-1-and-phonics-sc) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) %>%
-  mutate(Series = "Attainment at age 7")
+source_data_region <- readr::read_csv(file = paste0(input_folder, "/", region_file))
+source_data_disadvantaged <- readr::read_csv(file = paste0(input_folder, "/", disadvantaged_file))
+source_data_ethnicity_sen <- readr::read_csv(file = paste0(input_folder, "/", ethnicity_sen_file))      
 
-ks2_data <- get_type1_data(header_row, ks2, data-key-stage-2-attainment) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) %>%
-  mutate(Series = "Attainment at age 11")
-
-ks4_data <- get_type1_data(header_row, ks4, data-key-stage-4-attainment) %>% 
-  mutate(across(where(is.factor), as.character)) %>% 
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  mutate(across(where(is.character), str_squish)) %>%
-  mutate(Series = "Attainment at age 16")
 
 
 

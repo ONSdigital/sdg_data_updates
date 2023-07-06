@@ -1,12 +1,10 @@
-# configurations for 4-1-1
+# configurations for 4-2-2
 
-ks1_England <- "ks1-example.csv"
+region_file <- "1_early_years_provision_children_registered_2018_2023.csv"
 
-ks1_LAs <- "ks1-las-example.csv"
+disadvantaged_file <- "3_early_years_provision_children_registered_2018_2023.csv"
 
-ks2 <- "ks2-example.csv"
-
-ks4 <- "ks4-example.csv"
+ethnicity_sen_file <- "4_early_years_provision_ethnicity_sen_2018_2023.csv"
 
 header_row <- 1
 

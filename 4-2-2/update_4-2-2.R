@@ -5,7 +5,7 @@
   # Participation rate in organized learning 
   # (one year before the official primary entry age), by sex) 
 
-
+# use 4-1-1 as a starting point if further disaggs can be added in future
 
 #### Read in data ####
 
@@ -22,7 +22,7 @@ clean_data <- source_data_region  %>%
          `Local authority` = la_name,
          Age = age,
          Value = percentage_eligible_children) %>%
-  select(Year, Region, `Local authority`, Value)
+  select(Year, Age, Region, `Local authority`, Value)
 
 
 #### Formatting the dataframe ####
@@ -45,6 +45,8 @@ csv_formatted$Age <- gsub("3 and 4-year-olds", "3 and 4", csv_formatted$Age)
 csv_formatted$Age <- gsub("Total", "", csv_formatted$Age)
 
 csv_formatted$Value <- gsub("u", "", csv_formatted$Value)
+
+csv_formatted$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", csv_formatted$Region)
 
 
 #### Remove NAs from the csv that will be saved in Outputs ####

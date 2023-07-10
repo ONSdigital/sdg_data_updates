@@ -56,7 +56,7 @@ old_data$Year <- gsub("2019", "2018 to 2019" , old_data$Year)
 
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_4-c-1", ".csv")) %>% 
+new_data <- read.csv(paste0(output_folder, "/", date, "_4-c-1", ".csv")) %>% 
   rename(`Local Authority` = `Local.Authority`) %>%
   rename(`Unit measure` = "Unit.measure") %>%
   rename(`Observation status` = Observation.status) %>%
@@ -69,7 +69,6 @@ new_data <- read.csv(paste0("Output/", date, "_4-c-1", ".csv")) %>%
 # join to the new data
 joined_data <- old_data %>% 
   bind_rows(new_data) 
-
 
 
 ```

@@ -25,7 +25,7 @@ data_facility <- source_data_facility %>%
  #can you do for the other two data sets? 
   # Use https://sdgdata.gov.uk/6-2-1/ dropdowns to guide you
 
- data_safe <- source_data-safe %>%
+ data_safe <- source_data_safe %>%
   mutate(Series = "Safeley managed element")
 
  data_service <- source_data_service %>%
@@ -47,11 +47,13 @@ source_data<- full_join(data_part1, data_service)
 # some columns need renamed for the platform (e.g. Coverage to value)
    # use the rename function
 ?rename
+source_data <- rename(source_data, Value = Coverage)
+
 # some columns are unnecessary to go onto the platform (e.g. ISO3)
    # use the select function to select columns we do need
     # this also orders the columns
 ?select
-
+source_data <- select()
 # clean_data <- source_data %>% 
   # rename() %>% 
   # select()

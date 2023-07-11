@@ -5,10 +5,6 @@ Date: 29/06/2023
 
 Creates csv data for 4-c-1 (Proportion of teachers with the minimum required qualifications, by education level).
 
-PLEASE NOTE - this automation produces 
-It is a fairly simple automation that only involves formatting the data (no calculations). However, there are a lot of disaggregations and data points (nearly 100,000 by 2021 to 2022).
-
-
 Output includes the data in csv format, and an html QA report. Users should still look at the source data and check footnotes and information tabs for anything that needs to be manually changed in the csv output (e.g., if any figures are estimated) or caveats that need to be included in the metadata. 
 
 

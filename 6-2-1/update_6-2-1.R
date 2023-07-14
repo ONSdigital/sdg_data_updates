@@ -47,13 +47,16 @@ source_data<- full_join(data_part1, data_service)
 # some columns need renamed for the platform (e.g. Coverage to value)
    # use the rename function
 ?rename
-source_data <- rename(source_data, Value = Coverage)
+source_data <- rename(source_data, "Value" = "Coverage")
+
+source_data <- rename(source_data, "Urban or rural" = "Residence Type")
 
 # some columns are unnecessary to go onto the platform (e.g. ISO3)
    # use the select function to select columns we do need
     # this also orders the columns
 ?select
-source_data <- select()
+clean_data <- source_data %>%
+  select("Year", "Series", "Safely managed element", "Service level", "Facility type", "Urban or rural", "Value")
 # clean_data <- source_data %>% 
   # rename() %>% 
   # select()
@@ -64,7 +67,7 @@ source_data <- select()
 
 # Replace character NAs with blanks in Safely managed element, 
   # Service level, and Facility type columns 
-clean_data  <- clean_data %>% 
+clean_data  <- clean_data %>%
   mutate_at(c("Safely managed element", "Service level", "Facility type"), ~replace_na(.,"")) 
 
 # this is a little more complex, so I have done for you. Run below line for details
@@ -77,14 +80,17 @@ clean_data  <- clean_data %>%
            
 # In a similar way, can you ensure the value column is numeric
 ?as.numeric
-# csv_formatted <- clean_data 
-  # mutate()
+csv_formatted <- clean_data%>% 
+  mutate(as.numeric(Value))
 
 
 # reformat the Urban or rural column so "total" is replaced by a blank
    # use gsub function
-# csv_formatted$`Urban or rural` <- gsub()
+ csv_formatted$"Urban or rural" <- gsub("Total"," ",csv_formatted$"Urban or rural")
+
 ?gsub
+
+
 
 
 # Add in the extra metadata columns for platform

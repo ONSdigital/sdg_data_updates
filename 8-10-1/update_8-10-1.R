@@ -28,6 +28,49 @@ pop_ests_by_country_main <- extract_data(pop_ests_by_country_source, pop_ests_he
 pop_ests_by_region_main <- extract_data(pop_ests_by_region_source, pop_ests_header_row)
 pop_ests_by_la_main <- extract_data(pop_ests_by_la_source, pop_ests_header_row)
 
+# remove blank rows and rows with footnotes
+
+banks_by_country_main <- banks_by_country_main[complete.cases(banks_by_country_main), ]
+banks_by_region_main <- banks_by_region_main[complete.cases(banks_by_region_main), ]
+banks_by_la_main <- banks_by_la_main[complete.cases(banks_by_la_main), ]
+bs_by_country_main <- bs_by_country_main[complete.cases(bs_by_country_main), ]
+bs_by_region_main <- bs_by_region_main[complete.cases(bs_by_region_main), ]
+bs_by_la_main <- bs_by_la_main[complete.cases(bs_by_la_main), ]
+
+# combine country data
+
+banks_by_country_main <- banks_by_country_main %>% 
+  pivot_longer(-c("Date"), names_to = "Country", values_to = "Banks")
+bs_by_country_main <- bs_by_country_main %>% 
+  pivot_longer(-c("Date"), names_to = "Country", values_to = "Building Societies")
+pop_ests_by_country_main <- pop_ests_by_country_main %>% 
+  pivot_longer(-c("Date"), names_to = "Country", values_to = "Population Estimate")
+
+country_data <- full_join(banks_by_country_main, bs_by_country_main, by = c("Date", "Country"))
+
+country_data <- full_join(country_data, pop_ests_by_country_main, by = c("Date", "Country"))
+
+country_data <- country_data %>% 
+  rename("Year" = Date)
+
+# combine region data
+
+banks_by_region_main <- banks_by_region_main %>% 
+  pivot_longer(-c("Date"), names_to = "Region", values_to = "Banks")
+bs_by_region_main <- bs_by_region_main %>% 
+  pivot_longer(-c("Date"), names_to = "Region", values_to = "Building Societies")
+pop_ests_by_region_main <- pop_ests_by_region_main %>% 
+  pivot_longer(-c("Date"), names_to = "Region", values_to = "Population Estimate")
+
+region_data <- full_join(banks_by_region_main, bs_by_region_main, by = c("Date", "Region"))
+
+region_data <- full_join(region_data, pop_ests_by_region_main, by = c("Date", "Region"))
+
+region_data <- region_data %>% 
+  rename("Year" = Date)
+
+# combine local authority data
+
 banks_by_la_main <- banks_by_la_main %>%  
   rename("Local Authority" = "local authority: district / unitary (as of April 2021)")
 bs_by_la_main <- bs_by_la_main %>%  
@@ -48,43 +91,59 @@ pop_ests_by_la_main <- pop_ests_by_la_main %>%
 
 la_data <- full_join(banks_by_la_main, bs_by_la_main, by = c("Local Authority", "Year"))
 
-la_data <- full_join(la_data, pop_ests_by_la_main, by = c("Local Authority", "Year"))
+la_data <- full_join(la_data, pop_ests_by_la_main, by = c("Year", "Local Authority"))
+
+la_data <- la_data %>% 
+  select("Year", "Local Authority", "Banks", "Building Societies", "Population Estimate")
+
+# do calculations
+
+country_data$`Banks` <- as.numeric(as.character(country_data$`Banks`))
+country_data$`Building Societies` <- as.numeric(as.character(country_data$`Building Societies`))
+country_data$`Population Estimate` <- as.numeric(as.character(country_data$`Population Estimate`))
+
+country_data <- country_data %>% 
+  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
+
+country_data <- country_data %>% 
+  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
+  
+region_data$`Banks` <- as.numeric(as.character(region_data$`Banks`))
+region_data$`Building Societies` <- as.numeric(as.character(region_data$`Building Societies`))
+region_data$`Population Estimate` <- as.numeric(as.character(region_data$`Population Estimate`))
+
+region_data <- region_data %>% 
+  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
+
+region_data <- region_data %>% 
+  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
+
+la_data <- la_data %>% 
+  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
+
+la_data <- la_data %>% 
+  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
+
+# join data
+
+
+
+# format data
+
+joined_data <- joined_data %>% 
+  mutate("Series" = "Number of commercial bank branches and building societies per 100,000 adults",
+         "Unit measure" = "Number per 100,000 adults",
+         "Unit multiplier" =  "Units",
+         "Observation status" = "Normal value")
+
+csv_output <- joined_data %>%            
+  select("Year", "Series", "Country", "Region", "Local Authority", "Unit measure", "Unit multiplier", "Observation status", "Value")
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-# select wanted columns and rows
-
-gdp_main_data <- gdp_main_data %>% 
-  select(c("CDID","N3Y6"))
-
-gdp_main_data <- gdp_main_data[gdp_main_data$CDID >= 2000 & gdp_main_data$CDID <= latest_year, ]
-
-gdp_main_data <- gdp_main_data[!grepl("Q", gdp_main_data$CDID),]
-
-# format
-
-gdp_main_data <- gdp_main_data %>% 
-  rename("Year" = CDID, "Value" = N3Y6)
-
-csv_formatted <- gdp_main_data %>% 
-         mutate("Series" = "Annual growth rate of real GDP per capita",
-           "Unit measure" = "Percentage (%)",
-            "Unit multiplier" =  "Units",
-            "Observation status" = "Normal value")
-
-csv_output <- csv_formatted %>%            
-select("Year", "Series", "Unit measure", "Unit multiplier", "Observation status", "Value")
 
 
 

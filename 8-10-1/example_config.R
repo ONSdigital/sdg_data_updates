@@ -9,6 +9,8 @@ bs_la <- "bs_by_LA.xlsx"
 pop_ests_country <- "pop_ests_country.xlsx"
 pop_ests_region <- "pop_ests_region.xlsx"
 pop_ests_la <- "pop_ests_LA.xlsx"
+geocode_lookup <- "gss_codes.csv"
+
   
 tabname <- "Data"
 

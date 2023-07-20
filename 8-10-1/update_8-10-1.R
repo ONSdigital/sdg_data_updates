@@ -16,6 +16,7 @@ pop_ests_by_country_source <- get_type1_data(pop_ests_header_row, pop_ests_count
 pop_ests_by_region_source <- get_type1_data(pop_ests_header_row, pop_ests_region, tabname)
 pop_ests_by_la_source <- get_type1_data(pop_ests_header_row, pop_ests_la, tabname)
 
+
 # remove cells above column names
 
 banks_by_country_main <- extract_data(banks_by_country_source, banks_bs_header_row)
@@ -53,6 +54,12 @@ country_data <- full_join(country_data, pop_ests_by_country_main, by = c("Date",
 country_data <- country_data %>% 
   rename("Year" = Date)
 
+country_data <- country_data %>% 
+  filter(Country != "Great Britain")
+
+country_data <- country_data %>% 
+  filter(Country != "England and Wales")
+
 # combine region data
 
 banks_by_region_main <- banks_by_region_main %>% 
@@ -68,6 +75,9 @@ region_data <- full_join(region_data, pop_ests_by_region_main, by = c("Date", "R
 
 region_data <- region_data %>% 
   rename("Year" = Date)
+
+region_data <- region_data %>% 
+  filter(Region != c("Wales", "Scotland", "Northern Ireland"))
 
 # combine local authority data
 
@@ -126,9 +136,41 @@ la_data <- la_data %>%
 
 # join data
 
+joined_data <- full_join(country_data, region_data, by = c("Year", 
+                                                           "Banks", 
+                                                           "Building Societies", 
+                                                           "Population Estimate",
+                                                           "Banks and Building Societies",
+                                                           "Rate"))
 
+joined_data <- full_join(joined_data, la_data, by = c("Year", 
+                                                           "Banks", 
+                                                           "Building Societies", 
+                                                           "Population Estimate",
+                                                           "Banks and Building Societies",
+                                                           "Rate"))
+
+joined_data <- joined_data %>% 
+  select("Year", "Country", "Region", "Local Authority", "Rate")
+
+joined_data <- joined_data %>% drop_na("Rate")
+
+# match GeoCodes
+
+setwd(input_folder)
+geocode_lookup <- read.csv(geocode_lookup)
+
+geocode_lookup <- geocode_lookup %>% 
+  select("AREACD", "AREANM") %>% 
+   rename("GeoCode" = "AREACD",
+          "Area" = "AREANM") 
+
+# match geocodes to joined data
 
 # format data
+
+joined_data <- joined_data %>% 
+  rename("Value" = "Rate")
 
 joined_data <- joined_data %>% 
   mutate("Series" = "Number of commercial bank branches and building societies per 100,000 adults",

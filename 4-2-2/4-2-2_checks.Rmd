@@ -1,0 +1,228 @@
+title: "4-2-2 Checks"
+author: "Michael Nairn"
+date: "06/07/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 4-2-2 update summary
+
+This file runs some basic checks and gives information about the update.
+
+PLEASE NOTE - this automation produces data from 2018 onwards. Data prior to 2018 is already in the Jemalex csv sheet. 
+Therefore, ensure this data in the csv sheet of the indicator file is not overwritten when adding the automation generated csv output. 
+  
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/4-2-2.csv") %>% 
+  mutate(dataset = "old") %>%
+  select(Year, Age, Region, Value, dataset)
+
+
+date <- Sys.Date()
+
+new_data <- read.csv(paste0(output_folder, "/", date, "_4-2-2", ".csv")) %>% 
+  mutate(dataset = "new") %>%
+    select(Year, Age, Region, Local.authority, Value, dataset)
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) 
+
+# remove NAs from the LA column
+joined_data <- joined_data %>% 
+  mutate(Local.authority = ifelse(is.na(Local.authority), "", Local.authority)) 
+
+
+```
+
+
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  na.omit(Value) %>% # replace the NULL returns with NA
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. 
+
+## July 2023 update: 
+Previously figures have only been reported as integers, whereas values are now available to 1 decimal place. This explains most discrepancies, when 0.5 or less. 
+
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Headline Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+For the May 2023 update there are a number of new disaggregations not previously 
+available on the live site. Therefore, there will be a lot of incomparable 
+data points on the charts. 
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Headline plot
+headline_plot <- joined_data %>% 
+  filter(Age == "" & Region == "" & `Local.authority` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  facet_grid() +
+  geom_line() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Headline")
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(headline_plot))
+```
+
+
+## Disaggregation Plots
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots.
+
+For example, changing the Age == "2" filter. 
+
+For example, selecting specific regions or local authorities by editing the
+"filter" command to include the local authorities you wish to compare. 
+  E.g.   filter(Region == "Inner London")
+  E.g.   filter(`Local.authority` == "Barking and Dagenham" | 
+                `Local.authority` == "Barnsley")
+
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Region plot
+region_plot <- joined_data %>% 
+  filter(`Local.authority` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Age ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("region")
+
+# Age plot
+age_plot <- joined_data %>% 
+  filter(Region == "" & `Local.authority` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Age ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Age headline")
+
+# Age 2 plot
+age_2_plot <- joined_data %>% 
+  filter(Age == "2" & `Local.authority` == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Age ~ Region) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Aged 2")
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(region_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_2_plot))
+```
+
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

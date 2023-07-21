@@ -9,14 +9,14 @@
 
 #### Read in data ####
 
-source_data_region <- readr::read_csv(file = paste0(input_folder, "/", region_file))
+source_data_registered <- readr::read_csv(file = paste0(input_folder, "/", registered_file))
 # source_data_disadvantaged <- readr::read_csv(file = paste0(input_folder, "/", disadvantaged_file))
 # source_data_ethnicity_sen <- readr::read_csv(file = paste0(input_folder, "/", ethnicity_sen_file))      
 
 
 #### Rename and select relevant columns ####
 
-clean_data <- source_data_region  %>%
+clean_data <- source_data_registered  %>%
   rename(Year = time_period,
          Region = region_name,
          `Local authority` = la_name,
@@ -63,7 +63,8 @@ check_all <- nrow(distinct(csv_formatted_nas)) == nrow(csv_formatted_nas)
 
 
 # If false you may need to remove duplicate rows. 
-csv_output <- unique(csv_formatted_nas) 
+csv_output <- unique(csv_formatted_nas) %>%
+  arrange(Year, Age, Region, `Local authority`)
 
 
 

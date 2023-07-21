@@ -1,12 +1,13 @@
 # configurations for 4-2-2
 
-# Please note that beyond age, region, and local authority the breakdowns give
-  # the percentage of registered children that are in that breakdown, 
-  # as opposed to the percentage of eligible children in that breakdown that
-  # are registered. Therefore, only data from table 1 provide data for the
-  # percentage of eligible children registered. 
+# Please note that only the "1_early_years_provision_children_registered_2018_2023.csv"
+  # file gives the percentage of eligible children registered, as required for the indicator.
+  # The other csv files provide the percentage of registered children 
+  # that have the relevant personal characteristics.
+  # Therefore, the only breakdowns available are age, region, and local authority.
 
-region_file <- "example_data.csv"
+
+registered_file <- "example_data.csv"
 
 # disadvantaged_file <- "3_early_years_provision_children_registered_2018_2023.csv"
 

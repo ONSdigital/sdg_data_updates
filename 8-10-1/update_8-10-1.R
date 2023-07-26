@@ -155,18 +155,6 @@ joined_data <- joined_data %>%
 
 joined_data <- joined_data %>% drop_na("Rate")
 
-# match GeoCodes
-
-setwd(input_folder)
-geocode_lookup <- read.csv(geocode_lookup)
-
-geocode_lookup <- geocode_lookup %>% 
-  select("AREACD", "AREANM") %>% 
-   rename("GeoCode" = "AREACD",
-          "Area" = "AREANM") 
-
-# match geocodes to joined data
-
 # format data
 
 joined_data <- joined_data %>% 
@@ -177,6 +165,11 @@ joined_data <- joined_data %>%
          "Unit measure" = "Number per 100,000 adults",
          "Unit multiplier" =  "Units",
          "Observation status" = "Normal value")
+
+joined_data["Country"][joined_data["Country"] == 'United Kingdom'] <- ''
+
+joined_data <- joined_data %>% 
+  replace(is.na(.), "")
 
 csv_output <- joined_data %>%            
   select("Year", "Series", "Country", "Region", "Local Authority", "Unit measure", "Unit multiplier", "Observation status", "Value")

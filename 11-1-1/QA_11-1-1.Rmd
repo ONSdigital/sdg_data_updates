@@ -79,7 +79,7 @@ the code.
 
 ```{r, fig.width=10}
 
-live_data <- read.csv('https://raw.githubusercontent.com/ONSdigital/sdg-data/master/data/indicator_11-1-1.csv') %>% 
+live_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/11-1-1.csv") %>% 
   janitor::clean_names() 
 
 new_data <- csv_data %>% 

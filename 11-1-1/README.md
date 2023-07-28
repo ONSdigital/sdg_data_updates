@@ -33,7 +33,8 @@ Save household and dwelling spreadsheets as **xlsx** files in Jemalex/code for u
 5) Change `indicator` to '11-1-1' (Dashes NOT dots).  
 6) Set `test_run` to 'FALSE'.  
 7) If there is no file called config.R, save the example_config.R file as config.R. Check that all configurations are correct. Ensure `areas_filename` and `households_filename` in config.R match the filenames of your downloads in step 1. `input_folder` must be 'Input', not 'example_input'.    
-> The `header_row` settings refer to the row number of the main column names (the row number on which the headings 'non-decent', 'repair' etc are found).  
+> The `header_row` settings refer to the row number of the main column names (the row number on which the headings 'non-decent', 'repair' etc are found).
+> You will likely have to add the newest year into tabnames. 
 8) Go back to update_indicator_main.R and click the 'source' button (in the top right of the top left window). This will run the code.  
 9) csv and html (QA) files will be exported to the output folder in 11-1-1.  
 10) If an error occurs (see troubleshooting section below), you will need to run the following code in the console: `setwd('./..')` before repeating step 7.  

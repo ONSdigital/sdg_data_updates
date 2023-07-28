@@ -1,6 +1,6 @@
-title: "3-5-1 Checks"
+title: "3-4-2 Checks"
 author: "Michael Nairn"
-date: "12/04/2023"
+date: "28/07/2023"
 output: html_document
 
 ```{r setup, include=FALSE}
@@ -20,7 +20,7 @@ library(pander)
 
 
    
-## 3-5-1 update summary
+## 3-4-2 update summary
 
 This file runs some basic checks and gives information about the update.
   
@@ -31,7 +31,7 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 
 
 ```{r include= FALSE}
-old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-5-1.csv") %>%
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-4-2.csv") %>%
   mutate(`Drug group` = "Alcohol") %>%
   mutate(Series = recode(Series, "Alcohol - People in treatment" = "People in treatment",
                          "Alcohol - Estimated prevalence" = "Estimated prevalence",
@@ -64,11 +64,6 @@ joined_data <- old_data %>%
 
 
 ```
-
-## Calculations 
-The calculation for MET need is 100 - unmet need. 
-
-We need to calculate met need for all other available years ourselves as (number in treatment / number estimated to have that substance use disorder) * 100
 
 
 
@@ -130,10 +125,6 @@ but below are a few examples you can amend if there seems to be a discrepancy. I
 particular for any discrepancies shown in the table. 
 You may need to change the filters in the plots. 
 
-Notably, selecting specific local authorities by editing the "filter" command to 
-include the local authorities you wish. 
-  E.g.   filter(`Local authority` == "Barking and Dagenham" | 
-                `Local authority` == "Barnsley")
 
 
 
@@ -182,76 +173,6 @@ suppressMessages(print(People_in_treatment_headline_plot))
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
 suppressMessages(print(met_need_headline_plot))
 ```
-
-
-```{r, echo = FALSE, fig.width=10}
-
-# Ethnicity by drug group
-ethnicity_by_drug_group_plot <- joined_data %>% 
-  filter(Series == "People in treatment" &
-         `Local authority` == "" & Age == "" & Sex == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Ethnicity ~ `Drug group`) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("People in treatment by ethnicity and Drug group")
-
-
-# Sex by drug group
-sex_by_drug_group_plot <- joined_data %>% 
-  filter(Series == "People in treatment" &
-         `Local authority` == "" & Age == "" & Ethnicity == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Sex ~ `Drug group`) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("People in treatment by sex and Drug group")
-
-
-# Age by drug group
-age_by_drug_group_plot <- joined_data %>% 
-  filter(Series == "People in treatment" &
-         `Local authority` == "" & Sex == "" & Ethnicity == "") %>% 
-  ggplot(.,
-         aes(x = Year,
-             y = Value,
-             colour = dataset)) +
-  geom_point() +
-  geom_line() +
-  facet_grid(Age ~ `Drug group`) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
-  theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("People in treatment by age and Drug group")
-
-
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(ethnicity_by_drug_group_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(sex_by_drug_group_plot))
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(age_by_drug_group_plot))
-```
-
-
 
 
 ## Session Info

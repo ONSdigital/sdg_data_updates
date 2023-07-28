@@ -1,15 +1,24 @@
-# Michael Nairn 12/04/2023
+# Michael Nairn 28/07/2023
 
-# configurations for Indicator update 3-5-1
+# configurations for Indicator update 3-4-2
 
-treatment_England <- "ViewIt Export Data_England.csv"
-treatment_LA <- "ViewIt Export Data_LAs.csv"
+filename <- "mainaccessible.xlsx"
 
-unmet_opiates <- "unmet_opiates.csv"
-unmet_alcohol <- "unmet_alcohol.csv"
+#same format, can combine
+tabname_EandW <- "Table_1"
+tabname_England <- "Table_2"
+tabname_Wales <- "Table_3"
 
-alcohol_prevalence <- "Estimates_of_Alcohol_Dependent_Adults_in_England_for_R.csv"
+tabname_region <- "Table_4" # years go across here, instead of down.
 
+#same format, can combine
+tabname_age_EandW <- "Table_5"
+tabname_age_England <- "Table_6"
+tabname_age_Wales <- "Table_7"
+
+
+
+header_row <- 4
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

@@ -2,7 +2,7 @@
 
 # configurations for Indicator update 3-4-2
 
-filename <- "mainaccessible.xlsx"
+filename <- paste0(input_folder, "/", "mainaccessible.xlsx")
 
 #same format, can combine
 tabname_EandW <- "Table_1"
@@ -17,8 +17,8 @@ tabname_age_England <- "Table_6"
 tabname_age_Wales <- "Table_7"
 
 
-
 header_row <- 4
+
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

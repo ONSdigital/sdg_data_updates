@@ -10,7 +10,7 @@ library('SDGupdater') # this needs to come before install absent_packages as tha
 # list the packages used in this automation - you may need to delete/add some, 
 # depending on what you add to the code
 packages <- c('tidyr', 'dplyr', 'stringr', 'tibble',
-              'tools', 'ggplot2', 'DT', 'pander')
+              'tools', 'ggplot2', 'DT', 'pander', 'readxl')
 
 install_absent_packages(packages)
 
@@ -24,6 +24,7 @@ library(stringr)
 library(tools)
 library(DT)
 library(pander)
+library(readxl)
 
 
 if (test_run == TRUE) {

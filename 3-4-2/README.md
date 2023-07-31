@@ -5,6 +5,8 @@
 Data for 3.4.2 is sourced from multiple sheets within the [Suicides in England and Wales Source Link] (https://www.ons.gov.uk/peoplepopulationandcommunity/birthsdeathsandmarriages/deaths/datasets/suicidesintheunitedkingdomreferencetables) dataset.
 
 
+This automation only updates Source 1. Source 2 is discontinued so is not updated by this automation. Make sure not to overwrite source 2 data when putting the automated csv file into csv sheet of indicator file.
+
 
 
 ### Downloading and Sourcing Data  

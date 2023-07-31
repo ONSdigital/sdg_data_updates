@@ -23,7 +23,9 @@ library(pander)
 ## 3-4-2 update summary
 
 This file runs some basic checks and gives information about the update.
-  
+
+This automation only updates Source 1. Source 2 is discontinued so is not updated by this automation. Make sure not to overwrite source 2 data when putting the automated csv file into csv sheet of indicator file.
+
 Before putting the csv in the indicator file please check if the most recent 
 figures are provisional. Check this in the source data. If they 
 are, in the indicator csv file change the observation status to 'Provisional'.
@@ -32,46 +34,29 @@ are, in the indicator csv file change the observation status to 'Provisional'.
 
 ```{r include= FALSE}
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-4-2.csv") %>%
-  mutate(`Drug group` = "Alcohol") %>%
-  mutate(Series = recode(Series, "Alcohol - People in treatment" = "People in treatment",
-                         "Alcohol - Estimated prevalence" = "Estimated prevalence",
-                         "Alcohol - Met need" = "Met need (%)")) %>%
-  rename(`Local authority` = Local.Authority) %>%
-  mutate(dataset = "old") %>%
-  mutate(Sex = "") %>%
-  mutate(Age = "") %>%
-  mutate(Ethnicity = "") %>%
-  select(-c(GeoCode, Unit.multiplier, Unit.measure))
+  rename(Units = Unit.measure) %>%
+    mutate(dataset = "old") %>%
+    select(Year, Country, Region, Sex, Age, Units, Value, dataset)
 
-old_data <- old_data %>%
-  filter(Deprivation.decile == "") %>%
-  filter(!row_number() %in% c(4081)) # random duplication. Won't need in future.
-  
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_3-5-1", ".csv")) %>% 
-  rename(`Local authority` = Local.authority) %>%
-  rename(`Drug group` = Drug.group) %>%
-  mutate(dataset = "new")
+new_data <- read.csv(paste0("Output/", date, "_3-4-2", ".csv")) %>% 
+  mutate(dataset = "new") %>%
+  mutate(Value = as.numeric(Value)) %>%
+  select(Year, Country, Region, Sex, Age, Units, Value, dataset)
  
 
 # join to the new data
 joined_data <- old_data %>% 
-  bind_rows(new_data) %>%
-  select(Year, Series, `Drug group`, `Local authority`, Sex, 
-         Age, Ethnicity, Units, Value, dataset)
-
-
+  bind_rows(new_data)
 
 ```
 
 
 
 ```{r, , echo = FALSE}
-comparison <- joined_data %>% 
-    select(Year, Series, `Drug group`, `Local authority`, Sex, 
-           Age, Ethnicity, Units, Value, dataset) %>% 
-    na.omit(Value) %>% # replace the NULL returns with NA
+comparison <- joined_data %>%
+  na.omit(Value) %>% # replace the NULL returns with NA
   pivot_wider(names_from = dataset,
               values_from = Value)
 
@@ -98,7 +83,8 @@ be sorted in other ways using the arrows at the top.
 
 If there are differences, visible in the table and plots below, please investigate these.
 It is possible the data source has update its back time series, so the difference
-could be genuine. 
+could be genuine. Please see source notes, suicide details can be reassigned
+as polics investigations proceed.
 
 
 ```{r, echo = FALSE}
@@ -127,51 +113,92 @@ You may need to change the filters in the plots.
 
 
 
+```{r, echo = FALSE, fig.width=10}
+
+# Sex headline plot
+sex_headline_plot <- joined_data %>% 
+  filter(Region == "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by Country and sex")
+
+# Age headline plot
+age_headline_plot <- joined_data %>% 
+  filter(Region == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by Country and age")
+
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_headline_plot))
+```
 
 ```{r, echo = FALSE, fig.width=10}
 
-# People in treatment by drug group
-People_in_treatment_headline_plot <- joined_data %>% 
-  filter(Series == "People in treatment" & `Local authority` == "" 
-         & Ethnicity == "" & Sex == "" & Age == "") %>% 
+# Sex headline plot
+sex_region_plot <- joined_data %>% 
+  filter(Region != "" & Age == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_grid(Series ~ `Drug group`) +
+  facet_grid(Region ~ Sex) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("People in treatment by Drug group")
+  ggtitle("Suicides by Region and sex")
 
-
-# met need by drug group
-met_need_headline_plot <- joined_data %>% 
-  filter(Series == "Met need (%)" & `Local authority` == "" 
-         & Ethnicity == "" & Sex == "") %>% 
+# Age headline plot
+age_region_plot <- joined_data %>% 
+  filter(Region != "" & Sex == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_grid(Series ~ `Drug group`) +
+  facet_grid(Region ~ Age) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("met need by Drug group")
+  ggtitle("Suicides by region and age")
+
 
 
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(People_in_treatment_headline_plot))
+suppressMessages(print(sex_region_plot))
 ```
 
 ```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(met_need_headline_plot))
+suppressMessages(print(age_region_plot))
 ```
 
 

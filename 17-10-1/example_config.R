@@ -1,11 +1,12 @@
-# configurations for 7-3-1 example update
+# configurations for 17-10-1 example update
 
-filename <- "energyintensitybyindustryexample.xlsx"
-
-tabname <- "Energy intensity (TJ)"
+Jan_data <- "BDSPref2201.csv"
 
 
-header_row <- 4
+Jan_tabname <- "BDSPref2201"
+
+
+header_row <- 1
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

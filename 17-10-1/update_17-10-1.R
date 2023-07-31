@@ -1,11 +1,11 @@
 # author: Katie Uzzell
 # date: 12/01/2023
 
-# Code to automate data update for indicator 7-3-1 (Energy intensity measured in terms of primary energy and GDP)
+# Code to automate data update for indicator 17-10-1 (Energy intensity measured in terms of primary energy and GDP)
 
 # read in data 
 
-energy_source_data <- get_type1_data(header_row, filename, tabname)
+Jan_data <- get_type1_data(header_row, Jan_data, Jan_tabname)
 
 # remove cells above column names
 

@@ -15,6 +15,8 @@ tabname <- "Data"
 banks_bs_header_row <- 8
 pop_ests_header_row <- 7
 
+la_lookup <- "Local_Authority_District_to_Region_Lookup_England.csv"
+
 latest_year <- 2021
 
 input_folder  <- "Example_Input"

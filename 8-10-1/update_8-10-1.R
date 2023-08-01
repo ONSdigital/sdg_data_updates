@@ -54,12 +54,6 @@ country_data <- full_join(country_data, pop_ests_by_country_main, by = c("Date",
 country_data <- country_data %>% 
   rename("Year" = Date)
 
-country_data <- country_data %>% 
-  filter(Country != "Great Britain")
-
-country_data <- country_data %>% 
-  filter(Country != "England and Wales")
-
 # combine region data
 
 banks_by_region_main <- banks_by_region_main %>% 
@@ -75,9 +69,6 @@ region_data <- full_join(region_data, pop_ests_by_region_main, by = c("Date", "R
 
 region_data <- region_data %>% 
   rename("Year" = Date)
-
-region_data <- region_data %>% 
-  filter(Region != c("Wales", "Scotland", "Northern Ireland"))
 
 # combine local authority data
 
@@ -162,7 +153,7 @@ joined_data <- joined_data %>%
 
 joined_data <- joined_data %>% 
   mutate("Series" = "Number of commercial bank branches and building societies per 100,000 adults",
-         "Unit measure" = "Number per 100,000 adults",
+         "Units" = "Number per 100,000 adults",
          "Unit multiplier" =  "Units",
          "Observation status" = "Normal value")
 
@@ -172,9 +163,14 @@ joined_data <- joined_data %>%
   replace(is.na(.), "")
 
 csv_output <- joined_data %>%            
-  select("Year", "Series", "Country", "Region", "Local Authority", "Unit measure", "Unit multiplier", "Observation status", "Value")
+  select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
 
+setwd(input_folder)
 
+la_lookup <- read.csv(la_lookup)
+
+csv_output1 <- csv_output %>% 
+  mutate(Country = case_when(csv_output1$`Local Authority` == la_lookup&LAD22NM ~ la_lookup$RGN22NM))
 
 
 

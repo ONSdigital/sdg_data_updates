@@ -19,7 +19,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Banks by country** 
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
-- Geography = Countries > tick all
+- Geography = Countries > tick all and deselect 'Great Britain' and 'England and Wales'
 - Date = All years
 - Employment Size Band = Total
 - Industry = 64191 : Banks
@@ -30,7 +30,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 **Banks by region**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
-- Geography = Regions > tick all
+- Geography = Regions > tick all and deselect 'Northern Ireland', 'Scotland' and ' Wales'
 - Date = All years
 - Employment Size Band = Total
 - Industry = 64191 : Banks
@@ -50,7 +50,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Building societies by country**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
-- Geography = Countries > tick all
+- Geography = Countries > tick all and deselect 'Great Britain' and 'England and Wales'
 - Date = All years
 - Employment Size Band = Total
 - Industry = 64192 : Building societies
@@ -60,7 +60,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Building societies by region**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
-- Geography = Regions > tick all
+- Geography = Regions > tick all and deselect 'Northern Ireland', 'Scotland' and ' Wales'
 - Date = All years
 - Employment Size Band = Total
 - Industry = 64192 : Building societies
@@ -80,7 +80,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Population estimates by country**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=2002
-- Geography = Countries > tick all
+- Geography = Countries > tick all and deselect 'Great Britain' and 'England and Wales'
 - Date = select all years from 2010 to latest year
 - Age = Aged 16+
 - Sex = Total
@@ -89,7 +89,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Population estimates by region**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=2002
-- Geography = Regions > tick all
+- Geography = Regions > tick all and deselect 'Northern Ireland', 'Scotland' and ' Wales'
 - Date = select all years from 2010 to latest year
 - Age = Aged 16+
 - Sex = Total

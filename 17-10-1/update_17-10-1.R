@@ -6,6 +6,22 @@
 # read in data 
 
 Jan_data <- get_type1_data(header_row, Jan_data, Jan_tabname)
+Feb_data <- get_type1_data(header_row, Feb_data, Feb_tabname)
+Mar_data <- get_type1_data(header_row, Mar_data, Mar_tabname)
+Apr_data <- get_type1_data(header_row, Apr_data, Apr_tabname)
+May_data <- get_type1_data(header_row, May_data, May_tabname)
+Jun_data <- get_type1_data(header_row, Jun_data, Jun_tabname)
+Jul_data <- get_type1_data(header_row, Jul_data, Jul_tabname)
+Aug_data <- get_type1_data(header_row, Aug_data, Aug_tabname)
+Sep_data <- get_type1_data(header_row, Sep_data, Sep_tabname)
+Oct_data <- get_type1_data(header_row, Oct_data, Oct_tabname)
+Nov_data <- get_type1_data(header_row, Nov_data, Nov_tabname)
+Dec_data <- get_type1_data(header_row, Dec_data, Dec_tabname)
+
+#joining datasets together 
+
+all_data <- full_join(Jan_data, Feb_data, by = c("Date", "Country"))
+
 
 # remove cells above column names
 

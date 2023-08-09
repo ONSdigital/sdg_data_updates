@@ -60,9 +60,6 @@ comparison <- comparison %>%
   # put the largest differences at the top
   arrange(desc(abs(difference)))
 
-
-```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot))
 ```
 
 ### Calculations

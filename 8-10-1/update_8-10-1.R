@@ -162,19 +162,61 @@ joined_data["Country"][joined_data["Country"] == 'United Kingdom'] <- ''
 joined_data <- joined_data %>% 
   replace(is.na(.), "")
 
-csv_output <- joined_data %>%            
+joined_data <- joined_data %>%            
   select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
 
 setwd(input_folder)
 
 la_lookup <- read.csv(la_lookup)
 
-csv_output1 <- csv_output %>% 
-  mutate(Country = case_when(csv_output1$`Local Authority` == la_lookup&LAD22NM ~ la_lookup$RGN22NM))
+colnames(la_lookup)[1] <- "Local Authority"
+colnames(la_lookup)[2] <- "Region"
 
+joined_data <- joined_data %>%
+  left_join(la_lookup, by = 'Local Authority')
 
+joined_data <- joined_data %>%
+  replace(is.na(.), "")
 
+joined_data$Region <- paste(joined_data$Region.x, joined_data$Region.y, sep="")
 
+joined_data <- joined_data %>%            
+  select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
+
+joined_data <- joined_data %>% 
+  mutate(Country.x = case_when(
+    (`Region` %in% c("East", "East Midlands", "London", "North East", "North West", 
+                     "South East", "South West", "West Midlands", "Yorkshire and The Humber")) ~ "England",
+    (`Local Authority` %in% c("Blaenau Gwent", "Bridgend", "Caerphilly", "Cardiff", 
+                              "Carmarthenshire", "Ceredigion", "Conwy", "Denbighshire", 
+                              "Flintshire", "Gwynedd", "Isle of Anglesey", "Merthyr Tydfil", 
+                              "Monmouthshire", "Neath Port Talbot", "Newport", "Pembrokeshire", 
+                              "Powys", "Rhondda Cynon Taff", "Swansea", "Torfaen", 
+                              "Vale of Glamorgan", "Wrexham")) ~ "Wales",
+    (`Local Authority` %in% c("Aberdeen City", "Aberdeenshire", "Angus", "Argyll and Bute", 
+                              "City of Edinburgh", "Clackmannanshire", "Dumfries and Galloway", 
+                              "Dundee City", "East Ayrshire", "East Dunbartonshire", 
+                              "East Lothian", "East Renfrewshire", "Falkirk", "Fife", 
+                              "Glasgow City", "Highland", "Inverclyde", "Midlothian", "Moray", 
+                              "Na h-Eileanan Siar", "North Ayrshire", "North Lanarkshire", 
+                              "Orkney Islands", "Perth and Kinross", "Renfrewshire", 
+                              "Scottish Borders", "Shetland Islands", "South Ayrshire", 
+                              "South Lanarkshire", "Stirling", "West Dunbartonshire", 
+                              "West Lothian")) ~ "Scotland",
+    (`Local Authority` %in% c("Antrim and Newtownabbey", "Ards and North Down", 
+                              "Armagh City, Banbridge and Craigavon", "Belfast", 
+                              "Causeway Coast and Glens", "Derry City and Strabane", 
+                              "Fermanagh and Omagh", "Lisburn and Castlereagh", 
+                              "Mid and East Antrim", "Mid Ulster", "Newry, Mourne and Down")) ~ "Northern Ireland",
+    TRUE ~ ""))
+
+joined_data$Country2 <- paste(joined_data$Country, joined_data$Country.x, sep="")
+
+csv_output <- joined_data %>%            
+  select("Year", "Series", "Country2", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
+
+csv_output <- csv_output %>%
+  rename("Country" = "Country2")
 
 
 

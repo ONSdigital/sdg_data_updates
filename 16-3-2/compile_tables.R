@@ -1,7 +1,7 @@
 library('SDGupdater')
 
 packages <- c('tidyr', 'dplyr', 'unpivotr', 'tidyxl', 'stringr',
-              'ggplot2', 'kableExtra', 'pander')
+              'ggplot2', 'kableExtra', 'pander', 'DT')
 
 install_absent_packages(packages)
 
@@ -10,6 +10,9 @@ library('tidyr')
 library('unpivotr')
 library('stringr')
 library('tidyxl')
+library('DT')
+library('kableExtra')
+library('pander')
 
 if (test_run == TRUE) {
   source("example_config.R")

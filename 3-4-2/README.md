@@ -25,7 +25,7 @@ The code manipulates the multiple sheets within the source.
 2. Open sdg_data_updates.Rproj
 3. Change indicator folder name (indicator <- "3-4-2")
 4. If config.R does not exist in the 3-4-2 folder, create it from the example_config.R file
-5. Check the configs are correct. In particular, check the input and output folders are as required, check header_row is the row number where the main table starts, and check the tabs match the variable names.
+5. Check the configs are correct. In particular, check the input and output folders are as required, check header_row is the row number where the main table starts, and check the tabnames match the variable names required.
 6. Open update_indicator_main.R .
 7. Ensure test_run <- FALSE.
 8. Click Source (by default this is in top right of the script window)

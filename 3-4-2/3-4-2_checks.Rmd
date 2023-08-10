@@ -1,0 +1,209 @@
+title: "3-4-2 Checks"
+author: "Michael Nairn"
+date: "28/07/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+```
+
+
+
+   
+## 3-4-2 update summary
+
+This file runs some basic checks and gives information about the update.
+
+This automation only updates Source 1. Source 2 is discontinued so is not updated by this automation. Make sure not to overwrite source 2 data when putting the automated csv file into csv sheet of indicator file.
+
+Before putting the csv in the indicator file please check if the most recent 
+figures are provisional. Check this in the source data. If they 
+are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/3-4-2.csv") %>%
+  rename(Units = Unit.measure) %>%
+    mutate(dataset = "old") %>%
+    select(Year, Country, Region, Sex, Age, Units, Value, dataset)
+
+
+date <- Sys.Date()
+new_data <- read.csv(paste0("Output/", date, "_3-4-2", ".csv")) %>% 
+  mutate(dataset = "new") %>%
+  mutate(Value = as.numeric(Value)) %>%
+  select(Year, Country, Region, Sex, Age, Units, Value, dataset)
+ 
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data)
+
+```
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>%
+  na.omit(Value) %>% # replace the NULL returns with NA
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. Please see source notes, suicide details can be reassigned
+as polics investigations proceed.
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots. 
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Sex headline plot
+sex_headline_plot <- joined_data %>% 
+  filter(Region == "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by Country and sex")
+
+# Age headline plot
+age_headline_plot <- joined_data %>% 
+  filter(Region == "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Country ~ Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by Country and age")
+
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_headline_plot))
+```
+
+```{r, echo = FALSE, fig.width=10}
+
+# Sex headline plot
+sex_region_plot <- joined_data %>% 
+  filter(Region != "" & Age == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Sex) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by Region and sex")
+
+# Age headline plot
+age_region_plot <- joined_data %>% 
+  filter(Region != "" & Sex == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Region ~ Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Suicides by region and age")
+
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(sex_region_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(age_region_plot))
+```
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

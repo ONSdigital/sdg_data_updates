@@ -1,5 +1,5 @@
 # author: Katie Uzzell
-# date: 04/07/2023
+# date: 10/08/2023
 
 # Code to automate data update for indicator 8-10-1 
 # (Part (a) only - Number of commercial bank branches per 100,000 adults).
@@ -152,7 +152,7 @@ joined_data <- joined_data %>%
   rename("Value" = "Rate")
 
 joined_data <- joined_data %>% 
-  mutate("Series" = "Number of commercial bank branches and building societies per 100,000 adults",
+  mutate("Series" = "(a) Number of commercial bank branches and building societies per 100,000 adults",
          "Units" = "Number per 100,000 adults",
          "Unit multiplier" =  "Units",
          "Observation status" = "Normal value")
@@ -168,6 +168,8 @@ joined_data <- joined_data %>%
 setwd(input_folder)
 
 la_lookup <- read.csv(la_lookup)
+
+setwd("..")
 
 colnames(la_lookup)[1] <- "Local Authority"
 colnames(la_lookup)[2] <- "Region"

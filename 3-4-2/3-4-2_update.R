@@ -183,10 +183,10 @@ csv_formatted <- clean_data %>%
   mutate(`Observation status` = case_when(
     Value == "[x]" ~ "Missing value",
     TRUE ~ "Normal value")) %>% 
-  select(Year, Country, Region, Age, Sex, Units, `Observation status`, Value)
+  select(Year, Country, Region, Sex, Age, Units, `Observation status`, Value)
 
 #### Alphabetically order ####
-csv_formatted[with(csv_formatted, order(, Sex)), ]
+csv_formatted <- csv_formatted[order(csv_formatted$Sex), ]
 
 
 #### Final checks ####

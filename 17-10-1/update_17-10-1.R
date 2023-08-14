@@ -1,5 +1,5 @@
-# author: Katie Uzzell
-# date: 12/01/2023
+# author: Katie Gummer
+# date: 14/08/2023
 
 # Code to automate data update for indicator 17-10-1 (Energy intensity measured in terms of primary energy and GDP)
 
@@ -21,7 +21,7 @@ trade_data$Series[trade_data$Series == 'TM_TAX_WMFN'] <- 'Most favoured nation s
 trade_data$Series[trade_data$Series == 'TM_TAX_WMPS'] <- 'Preferential status'
 
 trade_data$`Type of product`[trade_data$`Type of product` == 'ARM'] <- 'Arms'
-trade_data$`Type of product`[trade_data$`Type of product` == 'AGR'] <- 'Agriculture'
+trade_data$`Type of product`[trade_data$`Type of product` == 'AGR'] <- 'Agricultural products'
 trade_data$`Type of product`[trade_data$`Type of product` == 'ALP'] <- 'Total or no breakdown'
 trade_data$`Type of product`[trade_data$`Type of product` == 'TEX'] <- 'Textiles'
 trade_data$`Type of product`[trade_data$`Type of product` == 'OIL'] <- 'Oil'

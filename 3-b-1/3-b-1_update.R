@@ -1,218 +1,239 @@
-# Ali Campbell 05/04/2023
+# Date: 15/08/2023
+# Author: Michael Nairn
 
-# NHS
-# read in data -----------------------------------------------------------------
-nhs_source_data <- readr::read_csv(paste0(input_folder, "/", nhs_filename))
-
-# select relevant data ---------------------------------------------------------
-
-nhs_tidy_data <- nhs_source_data %>%
-  SDGupdater::clean_strings() %>% # redundant but will leave in as future-proofing
-  janitor::clean_names() %>%
-  #rename_column(primary = "total", new_name = "total")
-  
+# 3-b-1 update script
 
 
-  rename_column(primary = c("nhs"), not_pattern = "non", new_name = "nhs") %>%
-  rename_column(primary = c("non", "nhs"), new_name = "non_nhs")
+#### Child vaccination ####
 
-# Unaccounted for: MenC pri + boost, Hib pri (no longer in dataset)
-
-# What we want from the NHS ChilVaccStat_2020-21:
-#' (1) 1st birthday: DTaP_IPV_Hib_12m, PCV_12m, Rota_12m, MenB_12m
-#' (2) 2nd birthday: DTaP_IPV_Hib_24m, MMR_24m, Hip_MenC_24m, PCV_24m,
-#' MenB_booster_24m
-#' (3) 5th birthday: DtaP_IPV_Hib_5y, MMR1_5y, MMR2_5y, Hib_MenC_5y,
-#' DTaP_IPV_5y
+#### Read in and select country data ####
+Age_1_data <- read_excel(filename_vaccines, tabname_country_age1, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 1st birthday (%)") %>%
+  rename(Country = ...1,
+         Value = `Percentage vaccinated`) %>%
+  select(Country, Series, Value)
 
 
+Age_2_data <- read_excel(filename_vaccines, tabname_country_age2, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 2nd birthday (%)") %>%
+  rename(Country = ...1,
+         Value = `Percentage vaccinated by their 2nd birthday`) %>%
+  select(Country, Series, Value)
+
+Age_5_data <- read_excel(filename_vaccines, tabname_country_age5, skip = 11)%>%
+  mutate(Series = "Proportion of children vaccinated by 5th birthday (%)") %>%
+  rename(Country = ...1,
+         Value = `Percentage vaccinated by their 5th birthday`) %>%
+  select(Country, Series, Value)
 
 
-#' HSA: See highlighted cells in ods file
-#' HPV: (4) proportion of girls vaccinated against HPV: 
-#' (5) Proportion of boys vaccinated against HPV: 
+#### Bind datasets and remove NA rows ####
+country_data <- rbind(Age_1_data, 
+                      Age_2_data,
+                      Age_5_data) %>%
+  drop_na(Country | Value)
 
-# clean the data and get yer and country info from above the headers -----------
 
-# clean_strings() has remove_ss (stands for remove_superscripts) as an argument. 
-# The default is TRUE. IMPORTANT: Set to FALSE if there strings of letters that 
-# end in a number that you want to keep. Where a number falls at the end of an 
-# alphanumeric code, it will  not be interpreted as a superscript and will not 
-# be removed. However, if the ONLY number in an alphanumeric code is at the end, 
-# the number will be seen as a superscript. 
 
-clean_data <- clean_strings(source_data, remove_ss = TRUE)
+#### Read in and select Region/LA data ####
 
-metadata <- extract_metadata(clean_data, header_row)
 
-main_data <- extract_data(clean_data, header_row)
 
-# if you import a csv, numbers will now be read as characters - you can rectify this here
-# NOTE: check that data types are what you expect after running th
-if (header_row > 1){
-  main_data <-  main_data %>% 
-    type.convert(as.is = TRUE) 
-}
-
-# remove superscripts from column names
-# DO NOT use if there are column names containing words that end 
-#   in a number: It won't usually remove a number from the end of an alphanumeric code, 
-#   but will do so if the ONLY number is at the end)
-names(main_data) <- SDGupdater::remove_superscripts(names(main_data)) 
-
-# clean up the column names (snake case, lowercase, no trailing dots etc.)
-main_data <- clean_names(main_data)
-
-# remove footnotes -------------------------------------------------------------
-# this assumes that:
-# footnotes are in the first 2 (or whatever number you use as the 
-#   check_columns argument) columns of the datafame.
-#   If there is text in the same row as the footnotes in 
-#   columns beyond check_columns, these rows will not be dropped (see ?remove_footnotes)
-# if the data are likely to have non-footnote data in the first column(s) but NAs
-#   in all other columns DO NOT use this function as it will likely remove more 
-#   than just footnotes
-
-main_data <- remove_footnotes(main_data)
-
-# make column names consistent across years ------------------------------------
-
-# If you know a column name may change year to year you can rename these columns
-# so that the code will always work regardless of the name.
-# You can use the rename_column function to rename them based on patterns that 
-# are always present in the column name. See below for some examples of usage.
-#
-# You can then use the new name to refer to the columns through the 
-# rest of the code.
-
-# If there aren't too many columns that you are going to use you could do this 
-# step for all columns but be careful you don't introduce errors!
-
-renamed_main <- main_data %>% 
-  rename_column(primary = "year", new_name = "year") %>% 
-  rename_column(primary = "sex", new_name = "sex") %>% 
-  rename_column(primary = "age", new_name = "age") %>% 
-  rename_column(primary = "all_households", 
-                not_pattern = "sample",
-                new_name = "all_households_000s") %>% 
-  rename_column(primary = c("sample", "size"), alternate = "count", 
-                new_name = "sample_size") #%>%
-  # # the following isn't something we want to do here, but to show how you
-  # # match multiple potential patterns using the OR operator:
-  # rename_column(primary = "type", not_pattern = "a|b|c|other",
-  #               new_name = "d")
-  
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# Join dataframes, do relevant calculations etc
-
-# some useful dplyr functions:
-# left_join(), right_join, 
-# add_row(), filter(), select(), group_by(), summarise()
-# pivot_longer(), pivot_wider()
-
-# If, like in type_1_data, you have multiple columns with values, e.g. where each
-# holds the values for a level of a disaggregation, pivot_longer is your friend
-
-tidy_data <- renamed_main %>% 
-  pivot_longer(
-    cols = c(contains("type"), all_households_000s),
-    names_to = "type",
-    values_to = "value"
-  )
-
-# # for doing calculations, you may rather want values in separate columns, but the same row.
-# # The reverse of pivot_longer is pivot wider. e.g. if I wanted to add types a and b
-# # and the data were already tidy (one value per row)
-# calculation_example <- tidy_data %>% 
-#   pivot_wider(names_from = "type",
-#               values_from = "value") %>% 
-#   mutate(type_a_plus_b = as.numeric(type_a) + as.numeric(type_b))
-# 
-# # then back to tidy:
-# example_tidied <- calculation_example %>% 
-#   pivot_longer(
-#     cols = c(contains("type"), all_households_000s),
-#     names_to = "type",
-#     values_to = "value"
-#   )
-
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-# finalise csv -----------------------------------------------------------------
-
-# make column names sentence case
-
-# add extra columns for SDMX, rename levels of disaggregations, 
-# put columns in correct order etc 
-
-# order of disaggregations depend on order they appear. In some cases this won't 
-# be alphanumeric order, so specify the order here and arrange by this fake column 
-# instead of the real one
-age_order <- data.frame(age = c("Under 66", "Over 65",  ""),
-                        age_order = c(1:3))
-
-csv_formatted <- tidy_data %>% 
-  # rename columns that need renaming
-  rename(`housing type` = type) %>%
-  # you might want to use the country and year we got from extract_metadata above.
-  # These are in a list called metadata. Make sure there is only ONE country / ONE 
-  # year given. If so, they can be accessed like this:
-  mutate(country = metadata$country) %>% 
-  # Correct the names of levels of disaggregations, e.g total/UK will nearly always be replaced 
-  # with a blank (""). Use case_when() if there are lots of options, or ifelse if there is just one
-  mutate(age = 
-           case_when(
-             age == "all" ~ "",
-             age == "< 66" ~ "Under 66",
-             age == "> 65" ~ "Over 65",
-             # this last line says 'for all other cases, keep Age the way it is
-             TRUE ~ as.character(age)),
-         sex = ifelse(sex == "All", "", sex),
-         # totals should be blank, not e.g. 'all'
-         `housing type` = ifelse(`housing type` == "all_households_000s", "", `housing type`),
-         sex = ifelse(sex == "all", "", sex),
-         country = ifelse(country == "UK", "", country),
-         # If value is NA give a reason for why it is blank (as below) or...
-         `observation status` = ifelse(is.na(value), "Missing value", "Normal value")
-         ) %>% 
-  # you can also use pattern matching to change level names, e.g. removing the 
-  # word 'type' fromthe housing types column
-  mutate(`housing type` = stringr::str_replace(`housing type`,"type_|_types",  "")) %>% 
-  # add columns that don't exist yet (e.g. for SDMX)
-  # (you need backticks if the column name has spaces)
-  mutate(units = "Number",
-         `unit multiplier` = "Thousands") %>% 
-  # ... or remove it using filter() as the commented line below
-  # filter(!is.na(Value)) %>%
-  # we changed everything to lowercase at the top of the script, 
-  # so now we need to change them back to the correct case
-  mutate(across(where(is.character), str_to_sentence)) %>% 
-  # if you then have to change country as well:
-  # mutate(Country = str_to_title(Country)) %>% 
-
-  # order of disaggregations depend on order they appear, so sort these now
-  # arrange will put them in alphanumeric order, so if you dont want these follow the age example here
-  left_join(age_order, by = "age") %>% 
-  arrange(year, age_order, sex) %>% 
-  # Put columns in the order we want them.
-  # this also gets rid of the column age_order which has served its purpose and is no longer needed
-  select(year, `housing type`, age, sex, 
-         `observation status`, `units`, `unit multiplier`,
-         value)
-
-# put the column names in sentence case
-names(csv_formatted) <- str_to_sentence(names(csv_formatted))
-
-# remove NAs from the csv that will be saved in Outputs
-# this changes Value to a character so will still use csv_formatted in the 
-# R markdown QA file
-csv_output <- csv_formatted %>% 
-  mutate(Value = ifelse(is.na(Value), "", Value))
+Age_2_LA_data <- read_excel(filename_vaccines, tabname_LA_age2, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 2nd birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(Region = ...1,
+         `Local Authority` = ...2,
+         Value = `Percentage vaccinated by their 2nd birthday`) %>%
+  select(Country, Region, `Local Authority`, Series, Value)
 
 
 
 
+
+#### Select and rename relevant columns in country data ####
+
+colnames(country_data)
+
+country_data_small <- country_data %>% 
+  rename(Country = `Area of usual residence \r\n[note 2]`,
+         Year = `Year of death registration \r\n[note 3]`,
+         Persons = `Persons \r\nRate per 100,000 \r\n[note 4]`,
+         Male = `Males \r\nRate per 100,000 \r\n[note 4]`,
+         Female = `Females \r\nRate per 100,000 \r\n[note 4]`) %>%
+  mutate(Region = "") %>%
+  mutate(Age = "")
+
+
+
+# combine the three the sex columns
+
+country_data_clean <- country_data_small %>%
+  pivot_longer(cols = c(Persons, Male, Female),
+               names_to = "Sex",
+               values_to = "Value") %>%
+  select(Year, Country, Region, Age, Sex, Value)
+
+
+country_data_clean$Sex <- gsub("Persons", "", country_data_clean$Sex)
+
+# ?pivot_longer
+
+#### Read in Age data ####
+England_and_Wales_age_data <- read_excel(filename, tabname_age_EandW, skip = 3)
+England_age_data <- read_excel(filename, tabname_age_England, skip = 3)
+Wales_age_data <- read_excel(filename, tabname_age_Wales, skip = 3)
+
+age_data <- rbind(England_and_Wales_age_data, 
+                  England_age_data,
+                  Wales_age_data) 
+
+
+#### Select and rename relevant columns in age data ####
+
+colnames(age_data)
+
+age_data_small <- age_data %>% 
+  rename(Country = `Area of usual residence \r\n[note 2]`,
+         Year = `Year of death registration \r\n[note 3]`) %>%
+  mutate(Region = "")
+
+
+#### Combine the age columns ####
+
+# note for reviewer - probably an elegant way to do this using REGEX
+age_data_clean <- age_data_small %>%
+  pivot_longer(cols = c(`10 to 14 \r\nRate per 100,000 \r\n[note 5]`,
+                        `15 to 19 \r\nRate per 100,000 \r\n[note 5]`,
+                        `20 to 24 \r\nRate per 100,000 \r\n[note 5]`,
+                        `25 to 29 \r\nRate per 100,000 \r\n[note 5]`,
+                        `30 to 34 \r\nRate per 100,000 \r\n[note 5]`,
+                        `35 to 39 \r\nRate per 100,000 \r\n[note 5]`,
+                        `40 to 44 \r\nRate per 100,000 \r\n[note 5]`,
+                        `45 to 49 \r\nRate per 100,000 \r\n[note 5]`,
+                        `50 to 54 \r\nRate per 100,000 \r\n[note 5]`,
+                        `55 to 59 \r\nRate per 100,000 \r\n[note 5]`,
+                        `60 to 64 \r\nRate per 100,000 \r\n[note 5]`,
+                        `65 to 69 \r\nRate per 100,000 \r\n[note 5]`,
+                        `70 to 74 \r\nRate per 100,000 \r\n[note 5]`,
+                        `75 to 79 \r\nRate per 100,000 \r\n[note 5]`,
+                        `80 to 84 \r\nRate per 100,000 \r\n[note 5]`,
+                        `85 to 89 \r\nRate per 100,000 \r\n[note 5]`,
+                        `90+ \r\nRate per 100,000 \r\n[note 5]`),
+               names_to = "Age",
+               values_to = "Value") %>%
+  select(Year, Country, Region, Age, Sex, Value)
+
+# tidy up the age column
+age_data_clean$Age <- gsub("Rate per 100", "", age_data_clean$Age)
+age_data_clean$Age  <- gsub("\\\r\n", "", age_data_clean$Age)
+age_data_clean$Age  <- gsub("\\[|\\]|,", "", age_data_clean$Age)
+age_data_clean$Age  <- gsub("note 5", "", age_data_clean$Age)
+age_data_clean$Age  <- gsub(" 000 ", "", age_data_clean$Age)
+
+age_data_clean$Age  <- gsub("\\+", " and over", age_data_clean$Age)
+
+head(age_data_clean)
+
+
+#### Read in region data ####
+region_data <- read_excel(filename, tabname_region, skip = 3)
+
+colnames(region_data)
+
+region_data_small <- region_data %>%
+  rename(Region = `Area of usual residence \r\n[note 2]`) %>%
+  mutate(Country = "England") %>%
+  mutate(Age = "")
+
+colnames(region_data_small)
+
+
+#### Combine the Year columns ####
+
+# note for reviewer - probably an elegant way to do this using REGEX
+region_data_clean <- region_data_small %>%
+  pivot_longer(cols = c(`2021 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2020 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2019 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2018 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2017 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2016 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2015 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2014 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2013 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2012 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2011 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2010 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2009 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2008 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2007 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2006 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2005 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2004 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2003 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2002 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2001 \r\nRate per 100,000 \r\n[note 4]`,
+                        `2000 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1999 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1998 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1997 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1996 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1995 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1994 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1993 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1992 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1991 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1990 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1989 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1988 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1987 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1986 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1985 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1984 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1983 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1982 \r\nRate per 100,000 \r\n[note 4]`,
+                        `1981 \r\nRate per 100,000 \r\n[note 4]`),
+               names_to = "Year",
+               values_to = "Value") %>%
+  select(Year, Country, Region, Age, Sex, Value)
+
+
+# tidy up the year and sex columns
+region_data_clean$Year <- gsub("Rate per 100", "", region_data_clean$Year)
+region_data_clean$Year  <- gsub("\\\r\n", "", region_data_clean$Year)
+region_data_clean$Year  <- gsub("\\[|\\]|,", "", region_data_clean$Year)
+region_data_clean$Year  <- gsub(" 000 note 4", "", region_data_clean$Year)
+
+
+#### Bind all data together ####
+clean_data <- rbind(country_data_clean, 
+                    age_data_clean,
+                    region_data_clean)
+
+clean_data$Sex <- gsub("Persons", "", clean_data$Sex)
+clean_data$Sex <- gsub("Males", "Male", clean_data$Sex)
+clean_data$Sex <- gsub("Females", "Female", clean_data$Sex)
+
+
+#### Add in extra columns - Units and Observation status ####
+csv_formatted <- clean_data %>%
+  mutate(Units = "Rate per 100,000 population") %>%
+  mutate(`Observation status` = case_when(
+    Value == "[x]" ~ "Missing value",
+    TRUE ~ "Normal value")) %>% 
+  select(Year, Country, Region, Sex, Age, Units, `Observation status`, Value)
+
+#### Alphabetically order ####
+csv_formatted <- csv_formatted[order(csv_formatted$Sex), ]
+
+
+#### Final checks ####
+
+# This is a line that you can run to check that you have filtered and selected 
+# correctly - all rows should be unique, so this should be TRUE
+check_all <- nrow(distinct(csv_formatted)) == nrow(csv_formatted)
+
+# If false you may need to remove duplicate rows. 
+# if true, run anyway
+csv_output <- unique(csv_formatted)

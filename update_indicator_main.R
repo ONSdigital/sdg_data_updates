@@ -14,7 +14,7 @@ rm(list = ls())
 
 test_run <- FALSE # for real updates use FALSE
 
-indicator <- "321" # name of folder for indicator(s)
+indicator <- "3-b-1" # name of folder for indicator(s)
 
 #setwd(indicator)
 

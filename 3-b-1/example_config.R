@@ -7,22 +7,24 @@ input_folder  <- "Example_Input"
 output_folder <- "Example_Output"
 
 
-filename <- paste0(input_folder, "/", "mainaccessible.xlsx")
+filename_HPV <- paste0(input_folder, "/", "HPV-data-tables-2021-2022.xlsx")
+
+tabname_HPV_LA <- "Local_authority"
+tabname_HPV_region <- "UKHSA_regions"
+tabname_HPV_UK <- "United_Kingdom"
+
+
+filename_vaccines <- paste0(input_folder, "/", "Childhood Vaccination Statistics - Main Tables - 2021-22.xlsx")
 
 #same format, can combine
-tabname_EandW <- "Table_1"
-tabname_England <- "Table_2"
-tabname_Wales <- "Table_3"
+tabname_LA_age1 <- "Table 8b"
+tabname_LA_age2 <- "Table 9b"
+tabname_LA_age5 <- "Table 10b"
 
-tabname_region <- "Table_4" # years go across here, instead of down.
+tabname_country_age1 <- "Table 5a"
+tabname_country_age2 <- "Table 5b"
+tabname_country_age5 <- "Table 5c"
 
-#same format, can combine
-tabname_age_EandW <- "Table_5"
-tabname_age_England <- "Table_6"
-tabname_age_Wales <- "Table_7"
-
-
-header_row <- 4
 
 
 

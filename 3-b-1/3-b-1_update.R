@@ -31,98 +31,90 @@ Age_5_data <- read_excel(filename_vaccines, tabname_country_age5, skip = 11)%>%
 country_data <- rbind(Age_1_data, 
                       Age_2_data,
                       Age_5_data) %>%
-  drop_na(Country | Value)
+  drop_na(Country | Value) %>%
+  mutate(Region = "",
+         `Local Authority` = "") %>%
+  select(Series, Country, Region, `Local Authority`, Value)
+
+
+#### Read in and select region data ####
+
+Age_1_region_data <- read_excel(filename_vaccines, tabname_region_age1, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 1st birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(Region = ...1,
+         Value = `Percentage vaccinated`) %>%
+  select(Country, Region, Series, Value)
+
+Age_2_region_data <- read_excel(filename_vaccines, tabname_region_age2, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 2nd birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(Region = ...1,
+         Value = `Percentage vaccinated by their 2nd birthday`) %>%
+  select(Country, Region, Series, Value)
+
+Age_5_region_data <- read_excel(filename_vaccines, tabname_region_age5, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 5th birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(Region = ...1,
+         Value = `Percentage vaccinated by their 5th birthday`) %>%
+  select(Country, Region, Series, Value)
+
+
+region_data <- rbind(Age_1_region_data, 
+                 Age_2_region_data,
+                 Age_5_region_data) %>%
+  mutate(`Local Authority` = "") %>% 
+  drop_na(Region | Value) %>%
+  select(Series, Country, Region, `Local Authority`, Value)
 
 
 
-#### Read in and select Region/LA data ####
+#### Read in and select LA data ####
 
-
+Age_1_LA_data <- read_excel(filename_vaccines, tabname_LA_age1, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 1st birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(`Local Authority` = ...2,
+         Value = `Percentage vaccinated`) %>%
+  select(Series, Country, `Local Authority`, Value)
 
 Age_2_LA_data <- read_excel(filename_vaccines, tabname_LA_age2, skip = 11) %>%
   mutate(Series = "Proportion of children vaccinated by 2nd birthday (%)") %>%
   mutate(Country = "England") %>%
-  rename(Region = ...1,
-         `Local Authority` = ...2,
+  rename(`Local Authority` = ...2,
          Value = `Percentage vaccinated by their 2nd birthday`) %>%
-  select(Country, Region, `Local Authority`, Series, Value)
+  select(Series, Country, `Local Authority`, Value)
+
+Age_5_LA_data <- read_excel(filename_vaccines, tabname_LA_age5, skip = 11) %>%
+  mutate(Series = "Proportion of children vaccinated by 5th birthday (%)") %>%
+  mutate(Country = "England") %>%
+  rename(`Local Authority` = ...2,
+         Value = `Percentage vaccinated by their 5th birthday`) %>%
+  select(Series, Country, `Local Authority`, Value)
 
 
 
-
-
-#### Select and rename relevant columns in country data ####
-
-colnames(country_data)
-
-country_data_small <- country_data %>% 
-  rename(Country = `Area of usual residence \r\n[note 2]`,
-         Year = `Year of death registration \r\n[note 3]`,
-         Persons = `Persons \r\nRate per 100,000 \r\n[note 4]`,
-         Male = `Males \r\nRate per 100,000 \r\n[note 4]`,
-         Female = `Females \r\nRate per 100,000 \r\n[note 4]`) %>%
+#### Bind datasets and remove NA rows ####
+LA_data <- rbind(Age_1_LA_data, 
+                      Age_2_LA_data,
+                      Age_5_LA_data) %>%
+  drop_na(`Local Authority` | Value) %>%
   mutate(Region = "") %>%
-  mutate(Age = "")
+  select(Series, Country, Region, `Local Authority`, Value)
+
+
+vaccination_data <- rbind(country_data,
+                          region_data,
+                          LA_data) %>%
+  mutate(Year = data_year) %>%
+  select(Year, Series, Country, Region, `Local Authority`, Value)
 
 
 
-# combine the three the sex columns
-
-country_data_clean <- country_data_small %>%
-  pivot_longer(cols = c(Persons, Male, Female),
-               names_to = "Sex",
-               values_to = "Value") %>%
-  select(Year, Country, Region, Age, Sex, Value)
 
 
-country_data_clean$Sex <- gsub("Persons", "", country_data_clean$Sex)
 
-# ?pivot_longer
-
-#### Read in Age data ####
-England_and_Wales_age_data <- read_excel(filename, tabname_age_EandW, skip = 3)
-England_age_data <- read_excel(filename, tabname_age_England, skip = 3)
-Wales_age_data <- read_excel(filename, tabname_age_Wales, skip = 3)
-
-age_data <- rbind(England_and_Wales_age_data, 
-                  England_age_data,
-                  Wales_age_data) 
-
-
-#### Select and rename relevant columns in age data ####
-
-colnames(age_data)
-
-age_data_small <- age_data %>% 
-  rename(Country = `Area of usual residence \r\n[note 2]`,
-         Year = `Year of death registration \r\n[note 3]`) %>%
-  mutate(Region = "")
-
-
-#### Combine the age columns ####
-
-# note for reviewer - probably an elegant way to do this using REGEX
-age_data_clean <- age_data_small %>%
-  pivot_longer(cols = c(`10 to 14 \r\nRate per 100,000 \r\n[note 5]`,
-                        `15 to 19 \r\nRate per 100,000 \r\n[note 5]`,
-                        `20 to 24 \r\nRate per 100,000 \r\n[note 5]`,
-                        `25 to 29 \r\nRate per 100,000 \r\n[note 5]`,
-                        `30 to 34 \r\nRate per 100,000 \r\n[note 5]`,
-                        `35 to 39 \r\nRate per 100,000 \r\n[note 5]`,
-                        `40 to 44 \r\nRate per 100,000 \r\n[note 5]`,
-                        `45 to 49 \r\nRate per 100,000 \r\n[note 5]`,
-                        `50 to 54 \r\nRate per 100,000 \r\n[note 5]`,
-                        `55 to 59 \r\nRate per 100,000 \r\n[note 5]`,
-                        `60 to 64 \r\nRate per 100,000 \r\n[note 5]`,
-                        `65 to 69 \r\nRate per 100,000 \r\n[note 5]`,
-                        `70 to 74 \r\nRate per 100,000 \r\n[note 5]`,
-                        `75 to 79 \r\nRate per 100,000 \r\n[note 5]`,
-                        `80 to 84 \r\nRate per 100,000 \r\n[note 5]`,
-                        `85 to 89 \r\nRate per 100,000 \r\n[note 5]`,
-                        `90+ \r\nRate per 100,000 \r\n[note 5]`),
-               names_to = "Age",
-               values_to = "Value") %>%
-  select(Year, Country, Region, Age, Sex, Value)
 
 # tidy up the age column
 age_data_clean$Age <- gsub("Rate per 100", "", age_data_clean$Age)

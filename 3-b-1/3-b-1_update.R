@@ -112,83 +112,16 @@ vaccination_data <- rbind(country_data,
 
 
 
+#### Adolescent HPV vaccnations ####
+
+#### Read in and select data ####
+HPV_LA_data <- read_excel(filename_HPV, tabname_HPV_LA, skip = 4)
+HPV_region_data <- read_excel(filename_HPV, tabname_HPV_region, skip = 3)
+HPV_country_data <- read_excel(filename_HPV, tabname_HPV_UK, skip = 7)
 
 
 
 
-# tidy up the age column
-age_data_clean$Age <- gsub("Rate per 100", "", age_data_clean$Age)
-age_data_clean$Age  <- gsub("\\\r\n", "", age_data_clean$Age)
-age_data_clean$Age  <- gsub("\\[|\\]|,", "", age_data_clean$Age)
-age_data_clean$Age  <- gsub("note 5", "", age_data_clean$Age)
-age_data_clean$Age  <- gsub(" 000 ", "", age_data_clean$Age)
-
-age_data_clean$Age  <- gsub("\\+", " and over", age_data_clean$Age)
-
-head(age_data_clean)
-
-
-#### Read in region data ####
-region_data <- read_excel(filename, tabname_region, skip = 3)
-
-colnames(region_data)
-
-region_data_small <- region_data %>%
-  rename(Region = `Area of usual residence \r\n[note 2]`) %>%
-  mutate(Country = "England") %>%
-  mutate(Age = "")
-
-colnames(region_data_small)
-
-
-#### Combine the Year columns ####
-
-# note for reviewer - probably an elegant way to do this using REGEX
-region_data_clean <- region_data_small %>%
-  pivot_longer(cols = c(`2021 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2020 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2019 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2018 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2017 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2016 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2015 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2014 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2013 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2012 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2011 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2010 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2009 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2008 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2007 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2006 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2005 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2004 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2003 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2002 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2001 \r\nRate per 100,000 \r\n[note 4]`,
-                        `2000 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1999 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1998 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1997 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1996 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1995 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1994 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1993 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1992 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1991 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1990 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1989 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1988 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1987 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1986 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1985 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1984 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1983 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1982 \r\nRate per 100,000 \r\n[note 4]`,
-                        `1981 \r\nRate per 100,000 \r\n[note 4]`),
-               names_to = "Year",
-               values_to = "Value") %>%
-  select(Year, Country, Region, Age, Sex, Value)
 
 
 # tidy up the year and sex columns

@@ -15,6 +15,7 @@ library(ggplot2)
 library(kableExtra)
 library(DT)
 library(pander)
+
 ```
 
 
@@ -139,8 +140,19 @@ safely_managed_element_versus_urban_or_rural_plot <- joined_data %>%
 
 
 ### can you do the same, but for service level?
-
-
+service_level_versus_facility_type <- joined_data %>%
+  filter(Safely.managed.element == ""& Urban.or.rural == "") %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Facility.type ~ service.level) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("service level versus facility type")
 # and for facility type?
 
 # Can you make the plots more visually accessible/useful? The functions within

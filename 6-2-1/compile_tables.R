@@ -6,7 +6,7 @@
 # depending on what you add to the code
 packages <- c("stringr", "dplyr", "openxlsx", "tidyr", "janitor", "readr",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "kableExtra")
+              "ggplot2", "kableExtra", "sass")
 # install any packages that are not already installed
 install.packages(setdiff(packages, rownames(installed.packages())),
                  dependencies = TRUE, 
@@ -23,7 +23,7 @@ library(dplyr)
 library(tools)
 library(DT)
 library(pander)
-
+library(sass)
 
 library(SDGupdater)
 
@@ -68,3 +68,5 @@ message(paste0("The csv and QA file have been created and saved in '",
 
 # so we end on the same directory as we started before update_indicator_main.R was run:
 setwd("..")
+
+

@@ -17,14 +17,6 @@ source_data_service <- readr::read_csv(file = paste0(input_folder, "/", filename
 data_facility <- source_data_facility %>%
   mutate(Series = "Facility type") 
 
-# The %>% is called a "pipe". Think of it as "and then do this"
-  # the above line can therefore be read as:
-  # "data facility is source data facility, and then
-  # mutate a column called Series, populated with "Facility type""
-
- #can you do for the other two data sets? 
-  # Use https://sdgdata.gov.uk/6-2-1/ dropdowns to guide you
-
  data_safe <- source_data_safe %>%
   mutate(Series = "Safeley managed element")
 

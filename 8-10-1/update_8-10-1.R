@@ -171,6 +171,8 @@ la_lookup <- read.csv(la_lookup)
 
 setwd("..")
 
+# check column index for LA and region
+
 colnames(la_lookup)[2] <- "Local Authority"
 colnames(la_lookup)[4] <- "Region"
 

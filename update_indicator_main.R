@@ -21,3 +21,4 @@ indicator <- "17-10-1" # name of folder for indicator
 setwd(indicator)
 
 source("compile_tables.R")
+

@@ -13,8 +13,8 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 ### 17-10-1 update instructions
 
-1) Download the latest data from: https://unstats.un.org/sdgs/dataportal/database. Select 17.10.1 under 'Data series'. Under 'Geographic Areas' deselect the default options and search for 'United Kingdom'.
-2) Save the file as an xlsx file in the 'Input' folder in 17-10-1 (if this doesn't exist, make it inside the 17-10-1 folder).  
+1) Download the latest data from: https://unstats.un.org/sdgs/dataportal/database. Select 17.10.1 under 'Data series'. Under 'Geographic Areas' deselect the default options and search for 'United Kingdom of Great Britain and Northern Ireland'. Click download (dark cloud icon). 
+2) Save the file as 17-10-1_SDG_database.xlsx in the 'Input' folder in 17-10-1 (if this doesn't exist, make it inside the 17-10-1 folder).  
 3) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it. 
 4) If it exists, open the `config.R` file in 17-10-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as `config.R` in 17-10-1.
 5) Check the configurations (e.g. filename and tab names) are correct, and if not correct them and save. For example, if you have had to save example_config.R as config.R, make sure 'Example_Input' and 'Example_Output' are changed to 'Input' and 'Output' and the file name is correct.    

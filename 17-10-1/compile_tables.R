@@ -6,7 +6,7 @@
 # depending on what you add to the code
 packages <- c("stringr", "dplyr", "openxlsx", "tidyr", "janitor",
               # packages used in the Rmarkdown script (library called there):
-              "ggplot2", "kableExtra")
+              "ggplot2", "kableExtra", "DT")
 # install any packages that are not already installed
 install.packages(setdiff(packages, rownames(installed.packages())),
                  dependencies = TRUE, 

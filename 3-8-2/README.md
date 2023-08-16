@@ -12,7 +12,7 @@ Output includes the data in csv format, and an html QA report. Users should stil
 Please note that for June 2023 there are two years of data to update. Therefore, this automation will need to be run twice, once for “FYE 2021 edition of this dataset” and once for “FYE 2022 edition of this dataset”. For future years (e.g. FYE 2023 edition of this dataset), the automated update will only need to be run once.
 
 ### 3-8-2 update instructions
-1) Data for this indicator comes from three workbooks, all of which can be downloaded from [link] (“https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/expenditure/bulletins/familyspendingintheuk/april2019tomarch2020/relateddata”). Make sure to download the latest workbooks, all from the same year (latest year).
+1) Data for this indicator comes from three workbooks, all of which can be downloaded from [link] (https://www.ons.gov.uk/peoplepopulationandcommunity/personalandhouseholdfinances/expenditure/bulletins/familyspendingintheuk/april2019tomarch2020/relateddata). Make sure to download the latest workbooks, all from the same year (latest year).
 -   	a - Family spending workbook 1: detailed expenditure and trends, 
 -   	b - Family spending workbook 2: expenditure by income,  
 -   	c - Family spending workbook 4: expenditure by household characteristic

@@ -58,9 +58,9 @@ old_data$Year <- gsub("/", "",old_data$Year)
   
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Output/", date, "_4-1-1", ".csv")) %>% 
+new_data <- read.csv(paste0(output_folder, "/", date, "_4-1-1", ".csv")) %>% 
   mutate(dataset = "new") %>%
-  rename(`Local Authority` = `Local.Authority`) %>%
+  rename(`Local Authority` = `Local.authority`) %>%
   rename(`Special educational needs (SEN) status` = Special.educational.needs..SEN..status) %>%
   rename(`Free school meal status` = Free.school.meal.status) %>%
   rename(`Ethnic group` = Ethnic.group) %>% 

@@ -29,7 +29,6 @@ Output includes the data in csv format, and an html QA report. Users should stil
 
 **Banks by region**
 - Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
-- Go to https://www.nomisweb.co.uk/query/construct/summary.asp?mode=construct&version=0&dataset=141 
 - Geography = Regions > tick all and deselect 'Northern Ireland', 'Scotland' and ' Wales'
 - Date = All years
 - Employment Size Band = Total
@@ -105,16 +104,23 @@ Output includes the data in csv format, and an html QA report. Users should stil
 - Download Data > Download data for Excel 2007 (.xlsx) 
 - Save in Input folder as pop_ests_LA.xlsx 
 
-2) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj. It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it. 
+2) Download the region to LAs lookup file and save as a csv file in the 'Input' folder in 8-10-1.
 
-3) If it exists, open the `config.R` file in 8-10-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as `config.R` in 8-10-1.
+## Instructions for downloading the region to LAs lookup file
 
-4) Check the configurations (e.g. filename and tab names) are correct, and if not correct them and save. For example, if you have had to save example_config.R as config.R, make sure 'Example_Input' and 'Example_Output' are changed to 'Input' and 'Output' and the file name is correct. **Make sure the latest year config is correct - if you are updating this indicator, it is likely you will have to edit this**  
+- Go to https://geoportal.statistics.gov.uk/datasets/ons::local-authority-district-to-region-december-2022-lookup-in-england/explore
+- Download as csv file and save in 'Input' folder in 8-10-1.
 
-5) Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and set indicator as 8-10-1. Make sure test_run is set to FALSE (so that it sources the correct config file). 
+3) In RStudio, go to File > Open Project, and open sdg_data_updates.Rproj from Jemalex (not local drive). It may take a few minutes to load, please be patient. Update_indicator_main.R should open. If it doesn't go to File > Open File, and open it. 
 
-6) Click 'Source' button to run the script (top right corner of the script panel).  
+4) If it exists, open the `config.R` file in 8-10-1 (you can do this in the 'Files' panel in RStudio (usually a tab in the bottom right panel). If not, save example_config.R as `config.R` in 8-10-1.
 
-7) Outputs will be saved in the Output folder in 8-10-1 (which the script will create if it doesn't already exist). 
+5) Check the configurations (e.g. filename and tab names) are correct, and if not correct them and save. For example, if you have had to save example_config.R as config.R, make sure 'Example_Input' and 'Example_Output' are changed to 'Input' and 'Output' and the file name is correct. **Make sure the latest year config is correct - if you are updating this indicator, it is likely you will have to edit this**  
 
-8) An html file will also be created in the Outputs folder. This contains some basic checks and also shows new data plotted over old data (i.e., what is on the live site), which should show up any major issues. **Please check this file before copying to the csv.**
+6) Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`) and set indicator as 8-10-1. Make sure test_run is set to FALSE (so that it sources the correct config file). 
+
+7) Click 'Source' button to run the script (top right corner of the script panel).  
+
+8) Outputs will be saved in the Output folder in 8-10-1 (which the script will create if it doesn't already exist). 
+
+9) An html file will also be created in the Outputs folder. This contains some basic checks and also shows new data plotted over old data (i.e., what is on the live site), which should show up any major issues. **Please check this file before copying to the csv.**

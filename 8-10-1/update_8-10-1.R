@@ -171,8 +171,11 @@ la_lookup <- read.csv(la_lookup)
 
 setwd("..")
 
-colnames(la_lookup)[1] <- "Local Authority"
-colnames(la_lookup)[2] <- "Region"
+colnames(la_lookup)[2] <- "Local Authority"
+colnames(la_lookup)[4] <- "Region"
+
+la_lookup <- la_lookup %>% 
+  select("Local Authority", "Region")
 
 joined_data <- joined_data %>%
   left_join(la_lookup, by = 'Local Authority')
@@ -219,6 +222,11 @@ csv_output <- joined_data %>%
 
 csv_output <- csv_output %>%
   rename("Country" = "Country2")
+
+csv_output$Region[csv_output$Region == "East of England"] <- "East"
+
+
+
 
 
 

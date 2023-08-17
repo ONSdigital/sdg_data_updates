@@ -15,6 +15,7 @@ library(dplyr)
 library(ggplot2)
 library(kableExtra)
 library(pander)
+library(DT)
 ```
 
 ```{r include= FALSE}
@@ -87,9 +88,40 @@ plot <- joined_data %>%
              geom_point() +
              geom_line() +
              facet_wrap(~Technology, ncol = 2) +
-             theme_bw() 
+             theme_bw() +
+  ggtitle("Proportion of the UK covered by a mobile network")
           
+#### If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. ####
 
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Technology, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference))) 
+```
+ 
+#### The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top. ####
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+	         filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
 
             
 

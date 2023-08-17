@@ -18,6 +18,7 @@ library('stringr')
 library('janitor')
 library('tidyr')
 library('dplyr')
+library('DT')
 
 library(SDGupdater)
 

@@ -22,6 +22,7 @@ library(DT)
 
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/17-10-1.csv")
 
+
 date <- Sys.Date()
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_17-10-1", ".csv"))
 
@@ -70,10 +71,13 @@ discrepancies in the lines please investigate the reasons for these discrepancie
     
 ```{r, echo=FALSE, fig.width=7, fig.height=15}
 new_data <- new_data %>%
-mutate(Year = as.integer(Year),
-         dataset = "new")
+	mutate(Year = as.integer(Year)) %>%
+	mutate(dataset = "new")
          
 new_data$Value <- as.numeric(new_data$Value)
+
+old_data <- old_data %>%
+	mutate(Year = as.integer(Year))
 
 joined_data <- old_data %>%
   mutate(dataset = "old") %>%

@@ -1,0 +1,140 @@
+---
+title: "9-c-1 checks"
+author: "Katie Gummer"
+date: "15/08/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(pander)
+library(DT)
+```
+
+```{r include= FALSE}
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/9-c-1.csv")
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_9-c-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 9-c-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_9-c-1", ".csv")` in the 9-c-1 Output folder.  
+    
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`.
+    
+Files used to create the new data were downloaded and saved in 
+9-c-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", filename), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+
+**Coverage data from UN SDG Database**  
+
+Coverage data are in the file `r filename`.   
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`.  
+
+The tab used is called
+`r tabname`. 
+
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are differences visible in the tables below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. **Please also check that the observation status in the csv output is correct, compared to the source data. For example, are there any estimated values and are these reflected in the csv output?**
+    
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+new_data <- new_data %>%
+mutate(Year = as.integer(Year),
+         dataset = "new")
+         
+new_data$Value <- as.numeric(new_data$Value)
+
+joined_data <- old_data %>%
+  mutate(dataset = "old") %>%
+  bind_rows(new_data)
+
+ 
+plot <- joined_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+             geom_point() +
+             geom_line() +
+             facet_wrap(~Technology, ncol = 2) +
+             theme_bw() +
+  ggtitle("Proportion of the UK covered by a mobile network")
+```
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  select(Year, Technology, Value, dataset) %>% 
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference))) 
+```
+
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+
+``` 
+
+
+The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+	         filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+
+### Calculations
+
+No calculations were performed on this data.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```

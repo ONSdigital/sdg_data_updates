@@ -39,7 +39,7 @@ Please check that the information below is as you expect. In particular, pay
 attention to the time since data were saved, to check that previously 
 downloaded data have not accidentally been used.
     
-These settings can all be adjusted in `config.R`
+These settings can all be adjusted in `config.R`.
     
 Files used to create the new data were downloaded and saved in 
 9-c-1/`r input_folder`.  
@@ -57,7 +57,7 @@ Coverage data are in the file `r filename`.
 
 This file was saved at `r filename_save_time`: It has been 
 `r time_since_data_saved` days since the file was saved in 
-`r input_folder`  
+`r input_folder`.  
 
 The tab used is called
 `r tabname`. 
@@ -65,8 +65,7 @@ The tab used is called
 
 ### Check data
 The charts below show the new data (just created) plotted on top of the old data,
-which has been downloaded from the live site. If there are unexpected 
-discrepancies in the lines please investigate the reasons for these discrepancies.
+which has been downloaded from the live site.If there are differences visible in the tables below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. ** Please also check that the observation status in the csv output is correct, compared to the source data. For example, are there any estimated values and are these reflected in the csv output?**
     
 ```{r, echo=FALSE, fig.width=7, fig.height=15}
 new_data <- new_data %>%
@@ -90,9 +89,7 @@ plot <- joined_data %>%
              facet_wrap(~Technology, ncol = 2) +
              theme_bw() +
   ggtitle("Proportion of the UK covered by a mobile network")
-          
-#### If there are differences, visible in the table below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. ####
-
+```
 ```{r, , echo = FALSE}
 comparison <- joined_data %>% 
   select(Year, Technology, Value, dataset) %>% 
@@ -112,7 +109,7 @@ comparison <- comparison %>%
   arrange(desc(abs(difference))) 
 ```
  
-#### The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top. ####
+The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
 ```{r, echo = FALSE}
 datatable(comparison, 
           rownames = FALSE, 
@@ -125,7 +122,6 @@ datatable(comparison,
 
             
 
-```
 
 
 ```{r, echo = FALSE, fig.height = 8, fig.width = 10}

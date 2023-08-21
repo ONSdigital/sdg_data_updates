@@ -65,7 +65,7 @@ The tab used is called
 
 ### Check data
 The charts below show the new data (just created) plotted on top of the old data,
-which has been downloaded from the live site.If there are differences visible in the tables below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. ** Please also check that the observation status in the csv output is correct, compared to the source data. For example, are there any estimated values and are these reflected in the csv output?**
+which has been downloaded from the live site. If there are differences visible in the tables below and plots, please investigate these. It is possible the data source has updated its back time series, so the difference could be genuine. **Please also check that the observation status in the csv output is correct, compared to the source data. For example, are there any estimated values and are these reflected in the csv output?**
     
 ```{r, echo=FALSE, fig.width=7, fig.height=15}
 new_data <- new_data %>%
@@ -108,8 +108,17 @@ comparison <- comparison %>%
   # put the largest differences at the top
   arrange(desc(abs(difference))) 
 ```
- 
+
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(plot))
+
+``` 
+
+
 The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
+
 ```{r, echo = FALSE}
 datatable(comparison, 
           rownames = FALSE, 
@@ -120,14 +129,6 @@ datatable(comparison,
                            className = 'dt-center', targets = 0:3))))
 ```
 
-            
-
-
-
-```{r, echo = FALSE, fig.height = 8, fig.width = 10}
-suppressMessages(print(plot))
-
-```
 
 ### Calculations
 

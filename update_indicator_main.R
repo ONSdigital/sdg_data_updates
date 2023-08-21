@@ -18,6 +18,7 @@ test_run <- TRUE # for real updates use FALSE
 
 indicator <- "9-C-1" # name of folder for indicator
 
+
 setwd(indicator)
 
 source("compile_tables.R")

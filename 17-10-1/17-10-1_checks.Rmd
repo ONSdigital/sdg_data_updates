@@ -1,0 +1,166 @@
+---
+title: "17-10-1 checks"
+author: "Katie Gummer"
+date: "14/08/2023"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(pander)
+library(DT)
+```
+
+```{r include= FALSE}
+
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/17-10-1.csv")
+
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_update_17-10-1", ".csv"))
+
+latest_year <- max(new_data$Year)
+
+```
+
+## 17-10-1 update summary
+
+Data for `r min(new_data$Year)` to `r latest_year` have been created and 
+saved as `r paste0(date, "_17-10-1", ".csv")` in the 17-10-1 Output folder.  
+    
+### Check configurations
+Please check that the information below is as you expect. In particular, pay 
+attention to the time since data were saved, to check that previously 
+downloaded data have not accidentally been used.
+    
+These settings can all be adjusted in `config.R`
+    
+Files used to create the new data were downloaded and saved in 
+17-10-1/`r input_folder`.  
+  
+```{r include= FALSE}
+filename_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", source_data), 
+                                full.names = TRUE)$ctime[1]
+time_since_data_saved <- round(difftime(Sys.time(), filename_save_time, units = "days"), 2)
+
+```
+
+**Trade tariffs data from UN SDG Database**  
+
+Trade tariffs data are in the file `r source_data`.   
+
+This file was saved at `r filename_save_time`: It has been 
+`r time_since_data_saved` days since the file was saved in 
+`r input_folder`  
+
+The tab used is called
+`r tabname`. 
+
+
+### Check data
+The charts below show the new data (just created) plotted on top of the old data,
+which has been downloaded from the live site. If there are unexpected 
+discrepancies in the lines please investigate the reasons for these discrepancies.
+    
+```{r, echo=FALSE, fig.width=7, fig.height=15}
+new_data <- new_data %>%
+	mutate(Year = as.integer(Year)) %>%
+	mutate(dataset = "new")
+         
+new_data$Value <- as.numeric(new_data$Value)
+
+old_data <- old_data %>%
+	mutate(Year = as.integer(Year))
+
+joined_data <- old_data %>%
+  mutate(dataset = "old") %>%
+  bind_rows(new_data) 
+
+ 
+pref_status_plot <- joined_data %>%
+  filter(Series =="Preferential status")
+
+
+pref_status_plot <- pref_status_plot %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+             geom_point() +
+             geom_line() +
+             facet_wrap(~Type.of.product, ncol = 2) +
+             theme_bw() +
+  ggtitle("Preferential status")
+          
+
+mfn_status_plot <- joined_data %>%
+  filter(Series =="Most favoured nation status")
+
+mfn_status_plot <- mfn_status_plot %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+             geom_point() +
+             geom_line() +
+             facet_wrap(~Type.of.product, ncol = 2) +
+             theme_bw() +
+  ggtitle("Most favoured nation status")
+            
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+suppressMessages(print(pref_status_plot))
+suppressMessages(print(mfn_status_plot))
+
+```
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+	 select(Year, Series, `Type.of.product`, Value, dataset) %>% 
+	 pivot_wider(names_from = dataset,
+              values_from = Value)
+
+comparison <- comparison %>%
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))  
+```
+  
+The table below shows all instances where the old value does not match the new value. It is sorted so the largest absolute differences appear first, but can be sorted in other ways using the arrows at the top.
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+
+
+### Calculations
+
+No calculations were performed on this data.
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```
+

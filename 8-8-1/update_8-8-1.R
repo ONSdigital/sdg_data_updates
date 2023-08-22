@@ -35,10 +35,43 @@ fatal_inj_headline_main <- fatal_inj_headline_main[ , grepl('Year|Industry|Rate 
 fatal_inj_headline_main <- fatal_inj_headline_main %>% 
   select(-contains("Industry classification"))
 
+colnames(fatal_inj_headline_main) [1] <- "Year"
+colnames(fatal_inj_headline_main) [2] <- "Industry sector"
+colnames(fatal_inj_headline_main) [3] <- "Value"
 
+fatal_inj_headline_main <- fatal_inj_headline_main %>% 
+  filter(!Year %in% c("1974",
+                      "1975",
+                      "1976",
+                      "1977",
+                      "1978",
+                      "1979",
+                      "1980",
+                      "1981",
+                      "1982",
+                      "1983",
+                      "1984",
+                      "1985",
+                      "1986/87 ",
+                      "1987/88",
+                      "1988/89",
+                      "1989/90",
+                      "1990/91",
+                      "1991/92",
+                      "1992/93",
+                      "1993/94",
+                      "1994/95",
+                      "1995/96",
+                      "1996/97 ",
+                      "1997/98",
+                      "1998/99",
+                      "1999/00",
+                      "2000/01",
+                      "2001/02"))
 
+fatal_inj_headline_main$`Industry sector`[fatal_inj_headline_main$`Industry sector` == "All industries"] <- ""
 
-
+# Need to figure out how to get rid of notes
 
 # fatal injuries region
 
@@ -47,10 +80,112 @@ fatal_inj_region_main <- fatal_inj_region_main[ , grepl('Year|Area|Rate of fatal
 fatal_inj_region_main <- fatal_inj_region_main %>% 
   select(-contains("Area code"))
 
+colnames(fatal_inj_region_main) [1] <- "Year"
+colnames(fatal_inj_region_main) [2] <- "Region"
+colnames(fatal_inj_region_main) [3] <- "Value"
 
-# fatal injuries region
+fatal_inj_region_main <- fatal_inj_region_main %>% 
+  filter(Region %in% c("ENGLAND AND WALES",
+                      "ENGLAND",
+                      "WALES",
+                      "SCOTLAND",
+                      "NORTH EAST",
+                      "NORTH WEST",
+                      "YORKSHIRE AND THE HUMBER",
+                      "EAST MIDLANDS",
+                      "WEST MIDLANDS",
+                      "EAST",
+                      "LONDON",
+                      "SOUTH EAST",
+                      "SOUTH WEST"))
 
-fatal_inj_age_sex_main <- fatal_inj_age_sex_main[ , grepl('Year|Main Industry|Gender|Age group|Rate of fatal injury per 100,000 workers', names(fatal_inj_age_sex_main))]
+fatal_inj_region_main <- fatal_inj_region_main %>%
+  mutate(Country = case_when(
+    Region == "ENGLAND AND WALES" ~ "England and Wales",
+    Region == "WALES" ~ "Wales",
+    Region == "SCOTLAND" ~ "Scotland",
+    Region == "ENGLAND" ~ "England",
+    Region == "NORTH EAST" ~ "England",
+    Region == "NORTH WEST" ~ "England",
+    Region == "YORKSHIRE AND THE HUMBER" ~ "England",
+    Region == "EAST MIDLANDS" ~ "England",
+    Region == "WEST MIDLANDS" ~ "England",
+    Region == "EAST" ~ "England",
+    Region == "LONDON" ~ "England",
+    Region == "SOUTH EAST" ~ "England",
+    Region == "SOUTH WEST" ~ "England"))
+
+
+fatal_inj_region_main <- fatal_inj_region_main %>%
+  mutate(Region = case_when(
+    Region == "ENGLAND AND WALES" ~ "",
+    Region == "WALES" ~ "",
+    Region == "SCOTLAND" ~ "",
+    Region == "ENGLAND" ~ "",
+    Region == "NORTH EAST" ~ "North East",
+    Region == "NORTH WEST" ~ "North West",
+    Region == "YORKSHIRE AND THE HUMBER" ~ "Yorkshire and The Humber",
+    Region == "EAST MIDLANDS" ~ "East Midlands",
+    Region == "WEST MIDLANDS" ~ "West Midlands",
+    Region == "EAST" ~ "East",
+    Region == "LONDON" ~ "London",
+    Region == "SOUTH EAST" ~ "South East",
+    Region == "SOUTH WEST" ~ "South West"))
+
+fatal_inj_region_main <- fatal_inj_region_main %>%
+  select("Year", "Country", "Region", "Value")
+
+# Need to figure out how to get rid of notes
+
+# fatal injuries age and sex
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main[ , grepl('Year|Main Industry|Gender|Age|Rate of fatal injury per 100,000 workers', names(fatal_inj_age_sex_main))]
+
+colnames(fatal_inj_age_sex_main) [1] <- "Year"
+colnames(fatal_inj_age_sex_main) [2] <- "Industry sector"
+colnames(fatal_inj_age_sex_main) [3] <- "Sex"
+colnames(fatal_inj_age_sex_main) [4] <- "Age"
+colnames(fatal_inj_age_sex_main) [5] <- "Value"
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>% 
+  filter(!Age %in% c("Unknown"))
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main[fatal_inj_age_sex_main$`Industry sector` == "All industry", ]
+
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
+  mutate(Age = case_when(
+    Age == "All" ~ "",
+    Age == "Under 16" ~ "Under 16",
+    Age == "16-19" ~ "16 to 24",
+    Age == "20-24" ~ "20 to 24",
+    Age == "25-34" ~ "25 to 34",
+    Age == "35-44" ~ "35 to 44",
+    Age == "45-54" ~ "45 to 54",
+    Age == "55-59" ~ "55 to 59",
+    Age == "60-64" ~ "60 to 64",
+    Age == "65+" ~ "65 and over"))
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>% 
+  filter(!Sex %in% c("Unknown"))
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
+  mutate(Sex = case_when(
+    Sex == "All" ~ "",
+    Sex == "Male" ~ "Male",
+    Sex == "Female" ~ "Female"))
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
+  mutate("Industry sector" = "")
+
+# Need to remove rows with all blank disaggs
+
+# Need to figure out how to get rid of notes
+
+# Then join fatal data
+
+
+# Non-fatal data
 
 
 
@@ -59,105 +194,8 @@ fatal_inj_age_sex_main <- fatal_inj_age_sex_main[ , grepl('Year|Main Industry|Ge
 
 
 
+# OLD CODE IN CASE ITS USFEUL WHILE I WRITE
 
-
-
-
-# remove blank rows and rows with footnotes
-
-banks_by_country_main <- banks_by_country_main[complete.cases(banks_by_country_main), ]
-banks_by_region_main <- banks_by_region_main[complete.cases(banks_by_region_main), ]
-banks_by_la_main <- banks_by_la_main[complete.cases(banks_by_la_main), ]
-bs_by_country_main <- bs_by_country_main[complete.cases(bs_by_country_main), ]
-bs_by_region_main <- bs_by_region_main[complete.cases(bs_by_region_main), ]
-bs_by_la_main <- bs_by_la_main[complete.cases(bs_by_la_main), ]
-
-# combine country data
-
-banks_by_country_main <- banks_by_country_main %>% 
-  pivot_longer(-c("Date"), names_to = "Country", values_to = "Banks")
-bs_by_country_main <- bs_by_country_main %>% 
-  pivot_longer(-c("Date"), names_to = "Country", values_to = "Building Societies")
-pop_ests_by_country_main <- pop_ests_by_country_main %>% 
-  pivot_longer(-c("Date"), names_to = "Country", values_to = "Population Estimate")
-
-country_data <- full_join(banks_by_country_main, bs_by_country_main, by = c("Date", "Country"))
-
-country_data <- full_join(country_data, pop_ests_by_country_main, by = c("Date", "Country"))
-
-country_data <- country_data %>% 
-  rename("Year" = Date)
-
-# combine region data
-
-banks_by_region_main <- banks_by_region_main %>% 
-  pivot_longer(-c("Date"), names_to = "Region", values_to = "Banks")
-bs_by_region_main <- bs_by_region_main %>% 
-  pivot_longer(-c("Date"), names_to = "Region", values_to = "Building Societies")
-pop_ests_by_region_main <- pop_ests_by_region_main %>% 
-  pivot_longer(-c("Date"), names_to = "Region", values_to = "Population Estimate")
-
-region_data <- full_join(banks_by_region_main, bs_by_region_main, by = c("Date", "Region"))
-
-region_data <- full_join(region_data, pop_ests_by_region_main, by = c("Date", "Region"))
-
-region_data <- region_data %>% 
-  rename("Year" = Date)
-
-# combine local authority data
-
-banks_by_la_main <- banks_by_la_main %>%  
-  rename("Local Authority" = "local authority: district / unitary (as of April 2021)")
-bs_by_la_main <- bs_by_la_main %>%  
-  rename("Local Authority" = "local authority: district / unitary (as of April 2021)")
-pop_ests_by_la_main <- pop_ests_by_la_main %>%  
-  rename("Local Authority" = "local authority: district / unitary (as of April 2021)")
-
-banks_by_la_main$`2010` <- as.numeric(as.character(banks_by_la_main$`2010`))
-bs_by_la_main$`2010` <- as.numeric(as.character(bs_by_la_main$`2010`))
-pop_ests_by_la_main$`2010` <- as.numeric(as.character(pop_ests_by_la_main$`2010`))
-
-banks_by_la_main <- banks_by_la_main %>% 
-  pivot_longer(-c("Local Authority"), names_to = "Year", values_to = "Banks")
-bs_by_la_main <- bs_by_la_main %>% 
-  pivot_longer(-c("Local Authority"), names_to = "Year", values_to = "Building Societies")
-pop_ests_by_la_main <- pop_ests_by_la_main %>% 
-  pivot_longer(-c("Local Authority"), names_to = "Year", values_to = "Population Estimate")
-
-la_data <- full_join(banks_by_la_main, bs_by_la_main, by = c("Local Authority", "Year"))
-
-la_data <- full_join(la_data, pop_ests_by_la_main, by = c("Year", "Local Authority"))
-
-la_data <- la_data %>% 
-  select("Year", "Local Authority", "Banks", "Building Societies", "Population Estimate")
-
-# do calculations
-
-country_data$`Banks` <- as.numeric(as.character(country_data$`Banks`))
-country_data$`Building Societies` <- as.numeric(as.character(country_data$`Building Societies`))
-country_data$`Population Estimate` <- as.numeric(as.character(country_data$`Population Estimate`))
-
-country_data <- country_data %>% 
-  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
-
-country_data <- country_data %>% 
-  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
-  
-region_data$`Banks` <- as.numeric(as.character(region_data$`Banks`))
-region_data$`Building Societies` <- as.numeric(as.character(region_data$`Building Societies`))
-region_data$`Population Estimate` <- as.numeric(as.character(region_data$`Population Estimate`))
-
-region_data <- region_data %>% 
-  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
-
-region_data <- region_data %>% 
-  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
-
-la_data <- la_data %>% 
-  mutate("Banks and Building Societies" = `Banks` + `Building Societies`)
-
-la_data <- la_data %>% 
-  mutate("Rate" = `Banks and Building Societies` / `Population Estimate` * 100000)
 
 # join data
 
@@ -198,74 +236,5 @@ joined_data <- joined_data %>%
 
 joined_data <- joined_data %>%            
   select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
-
-setwd(input_folder)
-
-la_lookup <- read.csv(la_lookup)
-
-setwd("..")
-
-# check column index for LA and region
-
-colnames(la_lookup)[2] <- "Local Authority"
-colnames(la_lookup)[4] <- "Region"
-
-la_lookup <- la_lookup %>% 
-  select("Local Authority", "Region")
-
-joined_data <- joined_data %>%
-  left_join(la_lookup, by = 'Local Authority')
-
-joined_data <- joined_data %>%
-  replace(is.na(.), "")
-
-joined_data$Region <- paste(joined_data$Region.x, joined_data$Region.y, sep="")
-
-joined_data <- joined_data %>%            
-  select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
-
-joined_data <- joined_data %>% 
-  mutate(Country.x = case_when(
-    (`Region` %in% c("East", "East Midlands", "London", "North East", "North West", 
-                     "South East", "South West", "West Midlands", "Yorkshire and The Humber")) ~ "England",
-    (`Local Authority` %in% c("Blaenau Gwent", "Bridgend", "Caerphilly", "Cardiff", 
-                              "Carmarthenshire", "Ceredigion", "Conwy", "Denbighshire", 
-                              "Flintshire", "Gwynedd", "Isle of Anglesey", "Merthyr Tydfil", 
-                              "Monmouthshire", "Neath Port Talbot", "Newport", "Pembrokeshire", 
-                              "Powys", "Rhondda Cynon Taff", "Swansea", "Torfaen", 
-                              "Vale of Glamorgan", "Wrexham")) ~ "Wales",
-    (`Local Authority` %in% c("Aberdeen City", "Aberdeenshire", "Angus", "Argyll and Bute", 
-                              "City of Edinburgh", "Clackmannanshire", "Dumfries and Galloway", 
-                              "Dundee City", "East Ayrshire", "East Dunbartonshire", 
-                              "East Lothian", "East Renfrewshire", "Falkirk", "Fife", 
-                              "Glasgow City", "Highland", "Inverclyde", "Midlothian", "Moray", 
-                              "Na h-Eileanan Siar", "North Ayrshire", "North Lanarkshire", 
-                              "Orkney Islands", "Perth and Kinross", "Renfrewshire", 
-                              "Scottish Borders", "Shetland Islands", "South Ayrshire", 
-                              "South Lanarkshire", "Stirling", "West Dunbartonshire", 
-                              "West Lothian")) ~ "Scotland",
-    (`Local Authority` %in% c("Antrim and Newtownabbey", "Ards and North Down", 
-                              "Armagh City, Banbridge and Craigavon", "Belfast", 
-                              "Causeway Coast and Glens", "Derry City and Strabane", 
-                              "Fermanagh and Omagh", "Lisburn and Castlereagh", 
-                              "Mid and East Antrim", "Mid Ulster", "Newry, Mourne and Down")) ~ "Northern Ireland",
-    TRUE ~ ""))
-
-joined_data$Country2 <- paste(joined_data$Country, joined_data$Country.x, sep="")
-
-csv_output <- joined_data %>%            
-  select("Year", "Series", "Country2", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
-
-csv_output <- csv_output %>%
-  rename("Country" = "Country2")
-
-csv_output$Region[csv_output$Region == "East of England"] <- "East"
-
-
-
-
-
-
-
 
 

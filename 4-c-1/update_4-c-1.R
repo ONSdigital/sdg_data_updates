@@ -54,7 +54,7 @@ non_primary_schools <- filtered_data %>%
   rename(Value = percent) %>%
   filter(qts_status == "Qualified") %>%
   mutate(Series = case_when(
-    school_type == "Total state-funded schools" ~ "All publicly funded schools",
+    school_type == "Total state-funded schools" ~ "All state-funded schools",
     school_type == "La maintained nursery" ~ "Nursery",
     school_type == "State-funded secondary" ~ "Secondary")) %>%
   filter(Series == "Nursery" | 

@@ -14,9 +14,8 @@ nonfatal_tabname <- "Table-1"
 fatal_tabname <- "Table 1"
 
 nonfatal_header_row <- 6
-fatal_inj_headline_header_row <- 8
-fatal_inj_region_header_row <- 8
-fatal_inj_age_sex_header_row <- 9
+fatal_inj_header_row <- 8
+
 
 input_folder  <- "Example_Input"
 output_folder <- "Example_Output"

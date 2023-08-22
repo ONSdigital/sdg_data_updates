@@ -6,28 +6,62 @@
 
 # read in data 
 
-banks_by_country_source <- get_type1_data(banks_bs_header_row, banks_country, tabname)
-banks_by_region_source <- get_type1_data(banks_bs_header_row, banks_region, tabname)
-banks_by_la_source <- get_type1_data(banks_bs_header_row, banks_la, tabname)
-bs_by_country_source <- get_type1_data(banks_bs_header_row, bs_country, tabname)
-bs_by_region_source <- get_type1_data(banks_bs_header_row, bs_region, tabname)
-bs_by_la_source <- get_type1_data(banks_bs_header_row, bs_la, tabname)
-pop_ests_by_country_source <- get_type1_data(pop_ests_header_row, pop_ests_country, tabname)
-pop_ests_by_region_source <- get_type1_data(pop_ests_header_row, pop_ests_region, tabname)
-pop_ests_by_la_source <- get_type1_data(pop_ests_header_row, pop_ests_la, tabname)
+fatal_inj_headline_source <- get_type1_data(fatal_inj_header_row, fatal_inj_headline, fatal_tabname)
+fatal_inj_region_source <- get_type1_data(fatal_inj_header_row, fatal_inj_region, fatal_tabname)
+fatal_inj_age_sex_source <- get_type1_data(fatal_inj_header_row, fatal_inj_age_sex, fatal_tabname)
+nonfatal_inj_summary_source <- get_type1_data(nonfatal_header_row, nonfatal_inj_summary, nonfatal_tabname)
+nonfatal_inj_region_source <- get_type1_data(nonfatal_header_row, nonfatal_inj_region, nonfatal_tabname)
+nonfatal_inj_age_source <- get_type1_data(nonfatal_header_row, nonfatal_inj_age, nonfatal_tabname)
+nonfatal_inj_ind_source <- get_type1_data(nonfatal_header_row, nonfatal_inj_ind, nonfatal_tabname)
+nonfatal_inj_occ_source <- get_type1_data(nonfatal_header_row, nonfatal_inj_occ, nonfatal_tabname)
 
 
 # remove cells above column names
 
-banks_by_country_main <- extract_data(banks_by_country_source, banks_bs_header_row)
-banks_by_region_main <- extract_data(banks_by_region_source, banks_bs_header_row)
-banks_by_la_main <- extract_data(banks_by_la_source, banks_bs_header_row)
-bs_by_country_main <- extract_data(bs_by_country_source, banks_bs_header_row)
-bs_by_region_main <- extract_data(bs_by_region_source, banks_bs_header_row)
-bs_by_la_main <- extract_data(bs_by_la_source, banks_bs_header_row)
-pop_ests_by_country_main <- extract_data(pop_ests_by_country_source, pop_ests_header_row)
-pop_ests_by_region_main <- extract_data(pop_ests_by_region_source, pop_ests_header_row)
-pop_ests_by_la_main <- extract_data(pop_ests_by_la_source, pop_ests_header_row)
+fatal_inj_headline_main <- extract_data(fatal_inj_headline_source, fatal_inj_header_row)
+fatal_inj_region_main <- extract_data(fatal_inj_region_source, fatal_inj_header_row)
+fatal_inj_age_sex_main <- extract_data(fatal_inj_age_sex_source, fatal_inj_header_row)
+nonfatal_inj_summary_main <- extract_data(nonfatal_inj_summary_source, nonfatal_header_row)
+nonfatal_inj_region_main <- extract_data(nonfatal_inj_region_source, nonfatal_header_row)
+nonfatal_inj_age_main <- extract_data(nonfatal_inj_age_source, nonfatal_header_row)
+nonfatal_inj_ind_main <- extract_data(nonfatal_inj_ind_source, nonfatal_header_row)
+nonfatal_inj_occ_main <- extract_data(nonfatal_inj_occ_source, nonfatal_header_row)
+
+
+# fatal injuries headline
+
+fatal_inj_headline_main <- fatal_inj_headline_main[ , grepl('Year|Industry|Rate of fatal injury per 100,000 workers', names(fatal_inj_headline_main))]
+
+fatal_inj_headline_main <- fatal_inj_headline_main %>% 
+  select(-contains("Industry classification"))
+
+
+
+
+
+
+# fatal injuries region
+
+fatal_inj_region_main <- fatal_inj_region_main[ , grepl('Year|Area|Rate of fatal injury per 100,000 workers', names(fatal_inj_region_main))]
+
+fatal_inj_region_main <- fatal_inj_region_main %>% 
+  select(-contains("Area code"))
+
+
+# fatal injuries region
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main[ , grepl('Year|Main Industry|Gender|Age group|Rate of fatal injury per 100,000 workers', names(fatal_inj_age_sex_main))]
+
+
+
+
+
+
+
+
+
+
+
 
 # remove blank rows and rows with footnotes
 

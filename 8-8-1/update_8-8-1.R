@@ -143,7 +143,13 @@ fatal_inj_region_main <- fatal_inj_region_main %>%
 fatal_inj_region_main <- fatal_inj_region_main %>%
   select("Year", "Country", "Region", "Value")
 
-# Need to figure out how to get rid of notes
+# Need to find a future proof way to replace Notes and r/p
+
+fatal_inj_region_main$`Year`[fatal_inj_region_main$`Year` == "2019/20 [Note 7]"] <- "2019/20"
+
+fatal_inj_region_main$`Year`[fatal_inj_region_main$`Year` == "2020/21r [Note 7] [Note 8]"] <- "2020/21"
+
+fatal_inj_region_main$`Year`[fatal_inj_region_main$`Year` == "2021/22p [Note 7] [Note 8]"] <- "2021/22"
 
 # fatal injuries age and sex
 
@@ -186,14 +192,121 @@ fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
 fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
   mutate("Industry sector" = "")
 
-# Need to remove rows with all blank disaggs
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main[fatal_inj_age_sex_main$`Industry sector`!="" | fatal_inj_age_sex_main$`Sex`!="" | fatal_inj_age_sex_main$`Age`!="", ]
 
-# Need to figure out how to get rid of notes
+# Need to find a future proof way to replace Notes and r/p
+
+fatal_inj_age_sex_main$`Year`[fatal_inj_age_sex_main$`Year` == "2019/20 [Note 9]"] <- "2019/20"
+
+fatal_inj_age_sex_main$`Year`[fatal_inj_age_sex_main$`Year` == "2020/21r [Note 9] [Note 10]"] <- "2020/21"
+
+fatal_inj_age_sex_main$`Year`[fatal_inj_age_sex_main$`Year` == "2021/22p [Note 9] [Note 10]"] <- "2021/22"
 
 # Then join fatal data
 
+fatal_joined_data <- full_join(fatal_inj_headline_main, fatal_inj_region_main, by = c("Year", 
+                                                                                      "Value")) 
+                                                           
+
+fatal_joined_data <- full_join(fatal_joined_data, fatal_inj_age_sex_main, by = c("Year", 
+                                                                                 "Industry sector",
+                                                                                  "Value")) 
+
+fatal_joined_data <- fatal_joined_data %>% 
+  replace(is.na(.), "")
+
+fatal_joined_data <- fatal_joined_data %>% 
+  select("Year", "Industry sector", "Country", "Region", "Sex", "Age", "Value")
 
 # Non-fatal data
+
+# non-fatal summary
+
+nonfatal_inj_summary_main <- nonfatal_inj_summary_main %>% 
+  select("Year", "Rate per 100,000 workers")
+
+nonfatal_inj_summary_main <- nonfatal_inj_summary_main[-c(1, 2, 3, 4), ]
+
+colnames(nonfatal_inj_summary_main) [2] <- "Value"
+
+# Need to find a future proof way to replace Notes 
+
+nonfatal_inj_summary_main$`Year`[nonfatal_inj_summary_main$`Year` == "2019/20 (Note A, Note B)"] <- "2019/20"
+
+nonfatal_inj_summary_main$`Year`[nonfatal_inj_summary_main$`Year` == "2020/21 (Note A, Note B)"] <- "2020/21"
+
+nonfatal_inj_summary_main$`Year`[nonfatal_inj_summary_main$`Year` == "2021/22 (Note A, Note B)"] <- "2021/22"
+
+# non-fatal region
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>% 
+  select("Year", "Usual country and region of residence", "Averaged rate per 100,000 workers")
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main[-c(1, 2, 3, 4), ]
+
+colnames(nonfatal_inj_region_main) [2] <- "Region"
+colnames(nonfatal_inj_region_main) [3] <- "Value"
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>% 
+  filter(Region %in% c("England",
+                       "Wales",
+                       "Scotland",
+                       "North East",
+                       "North West",
+                       "Yorkshire and The Humber",
+                       "East Midlands",
+                       "West Midlands",
+                       "East",
+                       "London",
+                       "South East",
+                       "South West"))
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
+  mutate(Country = case_when(
+    Region == "Wales" ~ "Wales",
+    Region == "Scotland" ~ "Scotland",
+    Region == "England" ~ "England",
+    Region == "North East" ~ "England",
+    Region == "North West" ~ "England",
+    Region == "Yorkshire and The Humber" ~ "England",
+    Region == "East Midlands" ~ "England",
+    Region == "West Midlands" ~ "England",
+    Region == "East" ~ "England",
+    Region == "London" ~ "England",
+    Region == "South East" ~ "England",
+    Region == "South West" ~ "England"))
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
+  mutate(Region = case_when(
+    Region == "Wales" ~ "",
+    Region == "Scotland" ~ "",
+    Region == "England" ~ "",
+    Region == "North East" ~ "North East",
+    Region == "North West" ~ "North West",
+    Region == "Yorkshire and The Humber" ~ "Yorkshire and The Humber",
+    Region == "East Midlands" ~ "East Midlands",
+    Region == "West Midlands" ~ "West Midlands",
+    Region == "East" ~ "East",
+    Region == "London" ~ "London",
+    Region == "South East" ~ "South East",
+    Region == "South West" ~ "South West"))
+
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
+  select("Year", "Country", "Region", "Value")
+
+# Need to find a future proof way to replace Notes 
+
+nonfatal_inj_region_main$`Year`[nonfatal_inj_region_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
+
+# non-fatal age
+
+# non-fatal industry
+
+# non-fatal occ
+
+
+
+
 
 
 

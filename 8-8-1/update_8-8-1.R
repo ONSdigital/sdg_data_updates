@@ -71,7 +71,15 @@ fatal_inj_headline_main <- fatal_inj_headline_main %>%
 
 fatal_inj_headline_main$`Industry sector`[fatal_inj_headline_main$`Industry sector` == "All industries"] <- ""
 
-# Need to figure out how to get rid of notes
+# Need to find a future proof way to replace Notes and r/p 
+
+fatal_inj_headline_main$`Industry sector`[fatal_inj_headline_main$`Industry sector` == "Agriculture, forestry and fishing [Note 8]"] <- "Agriculture, forestry and fishing"
+
+fatal_inj_headline_main$`Year`[fatal_inj_headline_main$`Year` == "2019/20 [Note 16]"] <- "2019/20"
+
+fatal_inj_headline_main$`Year`[fatal_inj_headline_main$`Year` == "2020/21r [Note 16] [Note 17]"] <- "2020/21"
+
+fatal_inj_headline_main$`Year`[fatal_inj_headline_main$`Year` == "2021/22p [Note 16] [Note 17]"] <- "2021/22"
 
 # fatal injuries region
 

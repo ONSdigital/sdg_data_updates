@@ -216,7 +216,15 @@ fatal_joined_data <- fatal_joined_data %>%
   replace(is.na(.), "")
 
 fatal_joined_data <- fatal_joined_data %>% 
-  select("Year", "Industry sector", "Country", "Region", "Sex", "Age", "Value")
+  mutate("Series" = "Fatal injury",
+         "Units" = "Rate per 100,000 workers",
+         "Unit multiplier" =  "Units",
+         "Observation status" = "Normal value",
+         "Occupation" = "")
+
+fatal_joined_data <- fatal_joined_data %>% 
+  select("Year", "Series", "Age", "Sex", "Country", "Region", "Industry sector", "Occupation", "Units", "Unit multiplier", "Observation status", "Value")
+
 
 # Non-fatal data
 
@@ -300,62 +308,150 @@ nonfatal_inj_region_main$`Year`[nonfatal_inj_region_main$`Year` == "2019/20-2021
 
 # non-fatal age
 
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
+  select("Year", "Age group and gender", "Averaged rate per 100,000 workers")
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main[-c(1, 2, 3, 4), ]
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
+  mutate(Sex = case_when(
+    `Age group and gender` %in% c("Male", "Male - 16-24", "Male - 25-34", "Male - 35-44", "Male - 45-54", "Male - 55+") ~ "Male", 
+    `Age group and gender` %in% c("Female", "Female - 16-24", "Female - 25-34", "Female - 35-44", "Female - 45-54", "Female - 55+") ~ "Female", 
+    TRUE ~ ""))
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
+  rename("Age" = "Age group and gender")
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
+  rename("Value" = "Averaged rate per 100,000 workers")
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
+  mutate(Age = case_when(
+    Age == "All persons" ~ "",
+    Age == "Male" ~ "",
+    Age == "Female" ~ "",
+    Age == "16-24" ~ "16 to 24", 
+    Age == "25-34" ~ "25 to 34", 
+    Age == "35-44" ~ "35 to 44", 
+    Age == "45-54" ~ "45 to 54", 
+    Age == "55+" ~ "55 and over",
+    Age == "Male - 16-24" ~ "16 to 24", 
+    Age == "Male - 25-34" ~ "25 to 34", 
+    Age == "Male - 35-44" ~ "35 to 44", 
+    Age == "Male - 45-54" ~ "45 to 54", 
+    Age == "Male - 55+" ~ "55 and over",
+    Age == "Female - 16-24" ~ "16 to 24", 
+    Age == "Female - 25-34" ~ "25 to 34", 
+    Age == "Female - 35-44" ~ "35 to 44", 
+    Age == "Female - 45-54" ~ "45 to 54", 
+    Age == "Female - 55+" ~ "55 and over")) 
+
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
+  select("Year", "Age", "Sex", "Value")
+
+# Need to find a future proof way to replace Notes 
+
+nonfatal_inj_age_main$`Year`[nonfatal_inj_age_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
+
 # non-fatal industry
+
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main[c(6, 8, 12)]
+
+colnames(nonfatal_inj_ind_main) [3] <- "Value"
+
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main[-c(1, 2, 3, 4, 5), ]
+
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>% 
+  subset(Industry %in% c("Accommodation and food service activities",
+         "Administrative and support service activities",
+         "Agriculture, forestry and fishing",
+         "Arts, entertainment and recreation",
+         "Construction",
+         "Education",
+         "Human health and social work activities",
+         "Manufacturing",
+         "Other service activities",
+         "Professional, scientific and technical activities",
+         "Public administration and defence; compulsory social security",
+         "Transportation and storage",
+         "Wholesale and retail trade; repair of motor vehicles and motorcycles"))
+
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>% 
+  rename("Industry sector" = "Industry")
+
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>% 
+  select("Year", "Industry sector", "Value")
+
+# Need to find a future proof way to replace Notes 
+
+nonfatal_inj_ind_main$`Year`[nonfatal_inj_ind_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
 
 # non-fatal occ
 
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main[c(6, 8, 12)]
+
+colnames(nonfatal_inj_occ_main) [3] <- "Value"
+
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main[-c(1, 2, 3, 4, 5), ]
 
 
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>% 
+  subset(Occupation %in% c("Administrative and secretarial occupations",
+                         "Associate professional and technical occupations",
+                         "Caring, leisure and other service occupations",
+                         "Elementary occupations",
+                         "Managers, directors and senior officials",
+                         "Education",
+                         "Process, plant and machine operatives",
+                         "Professional occupations",
+                         "Sales and customer service occupations",
+                         "Skilled trades occupations"))
+
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>% 
+  select("Year", "Occupation", "Value")
+
+# Then join non-fatal data
+
+nonfatal_joined_data <- full_join(nonfatal_inj_summary_main, nonfatal_inj_region_main, by = c("Year", 
+                                                                                      "Value")) 
 
 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_age_main, by = c("Year",
+                                                                                 "Value")) 
 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_ind_main, by = c("Year",
+                                                                                      "Value")) 
 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_occ_main, by = c("Year",
+                                                                                      "Value")) 
 
-
-
-
-
-# OLD CODE IN CASE ITS USFEUL WHILE I WRITE
-
-
-# join data
-
-joined_data <- full_join(country_data, region_data, by = c("Year", 
-                                                           "Banks", 
-                                                           "Building Societies", 
-                                                           "Population Estimate",
-                                                           "Banks and Building Societies",
-                                                           "Rate"))
-
-joined_data <- full_join(joined_data, la_data, by = c("Year", 
-                                                           "Banks", 
-                                                           "Building Societies", 
-                                                           "Population Estimate",
-                                                           "Banks and Building Societies",
-                                                           "Rate"))
-
-joined_data <- joined_data %>% 
-  select("Year", "Country", "Region", "Local Authority", "Rate")
-
-joined_data <- joined_data %>% drop_na("Rate")
-
-# format data
-
-joined_data <- joined_data %>% 
-  rename("Value" = "Rate")
-
-joined_data <- joined_data %>% 
-  mutate("Series" = "(a) Number of commercial bank branches and building societies per 100,000 adults",
-         "Units" = "Number per 100,000 adults",
-         "Unit multiplier" =  "Units",
-         "Observation status" = "Normal value")
-
-joined_data["Country"][joined_data["Country"] == 'United Kingdom'] <- ''
-
-joined_data <- joined_data %>% 
+nonfatal_joined_data <- nonfatal_joined_data %>% 
   replace(is.na(.), "")
 
-joined_data <- joined_data %>%            
-  select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
+# nonfatal_joined_data <- nonfatal_joined_data %>% 
+#   mutate(Units = case_when(
+#     Year %in% c("2000/01", "2001/02", "2002/03", "2003/04", "2004/05", "2005/06", 
+#                 "2006/07", "2007/08", "2008/09", "2009/10", "2010/11", "2011/12", 
+#                 "2012/13", "2013/14", "2014/15", "2015/16", "2016/17", "2017/18",
+#                 "2018/19", "2019/20", "2020/21", "2021/22") ~ "Rate per 100,000 workers"
+#     TRUE ~ "Rate per 100,000 (3 year average)"))
+# 
+# nonfatal_joined_data <- nonfatal_joined_data %>% 
+#   mutate("Observation status" = case_when(
+#     Year %in% c("2000/01", "2001/02", "2002/03", "2003/04", "2004/05", "2005/06", 
+#                 "2006/07", "2007/08", "2008/09", "2009/10", "2010/11", "2011/12", 
+#                 "2012/13", "2013/14", "2014/15", "2015/16", "2016/17", "2017/18",
+#                 "2018/19", "2019/20", "2020/21", "2021/22") ~ "Normal value"
+#     TRUE ~ "Estimated value"))
+
+
+nonfatal_joined_data <- nonfatal_joined_data %>% 
+  mutate("Series" = "Non-fatal injury",
+         "Unit multiplier" =  "Units")
+
+fatal_joined_data <- fatal_joined_data %>% 
+  select("Year", "Series", "Age", "Sex", "Country", "Region", "Industry sector", "Occupation", "Units", "Unit multiplier", "Observation status", "Value")
+
+
 
 

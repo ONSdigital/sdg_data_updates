@@ -104,21 +104,86 @@ LA_data <- rbind(Age_1_LA_data,
   select(Series, Country, Region, `Local Authority`, Value)
 
 
+
+# need to remove rows that have "primary" in value column
+# e.g. when it says Regiob in region column
 vaccination_data <- rbind(country_data,
                           region_data,
                           LA_data) %>%
   mutate(Year = data_year) %>%
+  filter(!str_detect(Value, "primary")) %>%
+  filter(!str_detect(Region, "Region")) %>%
   select(Year, Series, Country, Region, `Local Authority`, Value)
+
+vaccination_data$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", vaccination_data$Region)
+vaccination_data$Region <- gsub("East of England", "East", vaccination_data$Region)
+
+
+# need to remove ("digit") from the Local authority column
+vaccination_data$`Local Authority` <- gsub('[[:digit:] ]+',' ',vaccination_data$`Local Authority`)
+vaccination_data$`Local Authority` <- gsub('\\(',' ',vaccination_data$`Local Authority`)
+vaccination_data$`Local Authority` <- gsub('\\)',' ',vaccination_data$`Local Authority`)
+
+# remove "England", but not East of England"
+vaccination_data <- vaccination_data %>%
+  filter(!str_detect(Region, "England"))
+
 
 
 
 #### Adolescent HPV vaccnations ####
 
 #### Read in and select data ####
-HPV_LA_data <- read_excel(filename_HPV, tabname_HPV_LA, skip = 4)
-HPV_region_data <- read_excel(filename_HPV, tabname_HPV_region, skip = 3)
-HPV_country_data <- read_excel(filename_HPV, tabname_HPV_UK, skip = 7)
 
+HPV_LA_data <- read_excel(filename_HPV, tabname_HPV_LA, skip = 4) %>% 
+  mutate(Country = "England") %>%
+  mutate(Region = "") %>%
+  rename(`Local authority` = ...1)
+  
+
+HPV_country_data <- read_excel(filename_HPV, tabname_HPV_UK, skip = 7) %>%
+  mutate(`Local authority` = "") %>%
+  mutate(Region = "") %>%
+  rename(Country = ...1)
+
+
+
+HPV_region_data <- read_excel(filename_HPV, tabname_HPV_region, skip = 3) %>%
+  mutate(Country = "England") %>%
+  mutate(`Local authority` = "") %>%
+  rename(Region = ...1)
+
+
+#### Bind and rename columns ####
+HPV_data <- rbind(HPV_LA_data,
+                          HPV_region_data,
+                          HPV_LA_data) %>%
+  mutate(Year = data_year) %>%
+  rename(`Age 12 to 13, female, dose 1` = ...4,
+         `Age 12 to 13, female, dose 2` = ...6,
+         `Age 12 to 13, male, dose 1` = ...9,
+         `Age 12 to 13, male, dose 2` = ...11,
+         `Age 13 to 14, female, dose 1` = ...14,
+         `Age 13 to 14, female, dose 2` = ...16,
+         `Age 13 to 14, male, dose 1` = ...19,
+         `Age 13 to 14, male, dose 2` = ...21,
+         `Age 14 to 15, female, dose 1` = ...24,
+         `Age 14 to 15, female, dose 2` = ...26,
+         `Age 14 to 15, male, dose 1` = ...29,
+         `Age 14 to 15, male, dose 2` = ...31) %>%
+  select(Country, Region, `Local authority`,
+         `Age 12 to 13, female, dose 1`,
+         `Age 12 to 13, female, dose 2`,
+         `Age 12 to 13, male, dose 1`,
+         `Age 12 to 13, male, dose 2`,
+         `Age 13 to 14, female, dose 1`,
+         `Age 13 to 14, female, dose 2`,
+         `Age 13 to 14, male, dose 1`,
+         `Age 13 to 14, male, dose 2`,
+         `Age 14 to 15, female, dose 1`,
+         `Age 14 to 15, female, dose 2`,
+         `Age 14 to 15, male, dose 1`,
+         `Age 14 to 15, male, dose 2`)
 
 
 

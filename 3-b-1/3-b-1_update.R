@@ -106,14 +106,16 @@ LA_data <- rbind(Age_1_LA_data,
 
 
 # need to remove rows that have "primary" in value column
-# e.g. when it says Regiob in region column
+# e.g. when it says Region in region column
 vaccination_data <- rbind(country_data,
                           region_data,
                           LA_data) %>%
   mutate(Year = data_year) %>%
+  mutate(Age = "") %>%
+  mutate(Sex = "") %>%
   filter(!str_detect(Value, "primary")) %>%
   filter(!str_detect(Region, "Region")) %>%
-  select(Year, Series, Country, Region, `Local Authority`, Value)
+  select(Year, Series, Country, Region, `Local Authority`, Sex, Age, Value)
 
 vaccination_data$Region <- gsub("Yorkshire and the Humber", "Yorkshire and The Humber", vaccination_data$Region)
 vaccination_data$Region <- gsub("East of England", "East", vaccination_data$Region)
@@ -186,24 +188,18 @@ HPV_data <- rbind(HPV_LA_data,
          `Age 14 to 15, male, dose 2`)
 
 
+# need to split out age, sex, Series (dose 1/2)
 
 
+HPV_age <- HPV_data %>%
+  pivot_longer(cols = c(`Age 12 to 13, female, dose 1`,
+                        `Age 12 to 13, female, dose 2`,
+                        `Age 12 to 13, male, dose 1`,
+                        `Age 12 to 13, male, dose 2`),
+               names_to = "Age",
+               values_to = "Value")
 
-# tidy up the year and sex columns
-region_data_clean$Year <- gsub("Rate per 100", "", region_data_clean$Year)
-region_data_clean$Year  <- gsub("\\\r\n", "", region_data_clean$Year)
-region_data_clean$Year  <- gsub("\\[|\\]|,", "", region_data_clean$Year)
-region_data_clean$Year  <- gsub(" 000 note 4", "", region_data_clean$Year)
 
-
-#### Bind all data together ####
-clean_data <- rbind(country_data_clean, 
-                    age_data_clean,
-                    region_data_clean)
-
-clean_data$Sex <- gsub("Persons", "", clean_data$Sex)
-clean_data$Sex <- gsub("Males", "Male", clean_data$Sex)
-clean_data$Sex <- gsub("Females", "Female", clean_data$Sex)
 
 
 #### Add in extra columns - Units and Observation status ####

@@ -78,7 +78,7 @@ csv_formatted <- clean_data%>%
 
 # reformat the Urban or rural column so "total" is replaced by a blank
    # use gsub function
- csv_formatted$"Urban or rural" <- gsub("Total"," ",csv_formatted$"Urban or rural")
+ csv_formatted$"Urban or rural" <- gsub("Total","",csv_formatted$"Urban or rural")
 
 ?gsub
 

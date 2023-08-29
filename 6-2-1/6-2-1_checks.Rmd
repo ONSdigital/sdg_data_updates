@@ -138,20 +138,55 @@ safely_managed_element_versus_urban_or_rural_plot <- joined_data %>%
 
 
 ### can you do the same, but for service level?
-service_level_versus_facility_type <- joined_data %>%
-  filter(Safely.managed.element == ""& Urban.or.rural == "") %>%
+service_level_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Safely.managed.element == "" & Facility.type == "") %>% 
   ggplot(.,
          aes(x = Year,
              y = Value,
              colour = dataset)) +
   geom_point() +
   geom_line() +
-  facet_grid(Facility.type ~ service.level) +
+  facet_grid(Urban.or.rural ~ Service.level) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
   theme(axis.text.y = element_text(size = 7)) +
-  ggtitle("service level versus facility type")
-# and for facility type?
+  ggtitle("Service level versus urban or rural")
+
+# And for facility type
+
+### can you do the same, but for service level?
+facility_type_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Safely.managed.element == "" & Service.level == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Facility.type) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Facility type versus urban or rural")
+
+
+
+### check for when service level is a safely managed service?
+safely_managed_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Service.level == "Safely managed service") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Service.level) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Safley managed services versus urban or rural")
+
+
 
 # Can you make the plots more visually accessible/useful? The functions within
   # ggplot can be used, some examples above. 
@@ -171,6 +206,18 @@ service_level_versus_facility_type <- joined_data %>%
 suppressMessages(print(safely_managed_element_versus_urban_or_rural_plot))
 ```
 
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(service_level_versus_urban_or_rural_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(facility_type_versus_urban_or_rural_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(safely_managed_versus_urban_or_rural_plot))
+```
 
 ## Disaggregation Plots
 

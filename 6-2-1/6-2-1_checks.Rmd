@@ -43,7 +43,7 @@ old_data <- old_data %>%
 
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("Example_Output/", date, "_6-2-1", ".csv")) 
+new_data <- read.csv(paste0("output_folder, "/", date, "_6-2-1", ".csv")) 
 
 new_data <- new_data %>% 
   rename(`Unit measure` = "Unit.measure") %>%
@@ -186,20 +186,6 @@ include the services you wish to compare. # | is or.
   E.g.   filter(Service.level == "Open defecation" | 
                 Service.level == "Basic service" | 
                 Service.level == "Limited service")
-
-
-
-```{r, echo = FALSE, fig.width=10}
-
-# make these plots in here...
-
-
-
-```
-
-```{r, echo = FALSE, fig.width=10, fig.height = 10}
-suppressMessages(print(XXXXXXXXXXXXXXXX_plot))
-```
 
 
 

@@ -18,7 +18,7 @@ data_facility <- source_data_facility %>%
   mutate(Series = "Facility type") 
 
  data_safe <- source_data_safe %>%
-  mutate(Series = "Safeley managed element")
+  mutate(Series = "Safely managed element")
 
  data_service <- source_data_service %>%
   mutate(Series = "Service level")
@@ -88,11 +88,12 @@ csv_formatted <- clean_data%>%
 # Add in the extra metadata columns for platform
   # I have done this 
 csv_formatted  <- csv_formatted %>%
-  mutate(`Unit measure` = "Percentage (%)") %>%
+  mutate(`Units` = "Percentage (%)") %>%
+  mutate(`Unit multiplier` = "Units") %>%
   mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
                                           TRUE ~ "Missing value")) %>%
   select(Year, Series, `Safely managed element`, `Service level`,
-         `Facility type`, `Urban or rural`, `Unit measure`, 
+         `Facility type`, `Urban or rural`, `Units`, `Unit measure`,
          `Observation status`, Value) %>%
   arrange(Year, Series, `Safely managed element`, `Service level`,
           `Facility type`, `Urban or rural`)

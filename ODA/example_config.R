@@ -1,7 +1,7 @@
 # Configurations for all ODA indicators that use the data underlying SID source.
 # If you only want to run a subset of these you can comment out (#) the ones
 # you don't want to run (ensure there is no comma after the last indicator to be run). 
-# To run a single indicator see lines 20-21.
+# To run a single indicator see lines 21-22.
 
 indicators <- c(
   "1-a-1", # net oda
@@ -14,7 +14,8 @@ indicators <- c(
   "9-a-1", # net ODA
   "15-a-1_15-b-1", # amounts extended (aka gross oda) - duplicate indicator
   "17-9-1", # net ODA
-  "17-19-1" # net ODA
+  "17-19-1", # net ODA
+  "17-7-1" #net ODA
 )
 
 # FOR A SINGLE INDICATOR use the format below, but comment out (#) everything from line 5 to 17 above.
@@ -27,6 +28,8 @@ input_folder <- "Example_Input"
 output_folder <- "Example_Output"
 
 # filenames of the ODA data (data underlying SID). 
+# Ensure when saving as csv from the original ods files you extend to at least 4 decimal places
+# and format the value columns as number
 filename_newdat <- "dataunderSID-Final2020_example.csv"
 filename_2017 <- "data-underlying-sid-2017_example.csv"
 
@@ -57,4 +60,14 @@ crs_code_17191 <- 16062
 type_of_aid_code_4b1 <- "E01"
 
 sid_sector_9a1 <- "economic infrastructure" # capitalisation not important
+
+#Environmentally Sound Technologies (EST) key words for extraction from ODA datasets for 17-7-1
+EST <- c("low carbon", "low-carbon", "clean technology", "environmental technology", 
+         "green technology", "cleantech", "renewable energy", "wastewater management", 
+         "wastewater treatment", "energy storage", "energy distribution", "water remediation",
+         "bioenergy", "solar", "climate friendly","geothermal", "climate smart", "sustainable energy",
+         "air pollution", "carbon footprint", "global emissions", "clean energy",
+         "offshore wind", "wind energy", "wave energy", "hydropower", "sustainable sanitation", 
+         "nuclear power", "biofuel", "atmospheric pollution", "biogas", "bio-energy", "photovoltaic", 
+         "carbon reduction", "energy efficient", "biomass energy", "nanogrid", "nano-grid")
 

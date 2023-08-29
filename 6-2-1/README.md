@@ -16,7 +16,7 @@ data by service level, facility type, and safely managed criteria.
 2) Click "View data table"
 3) Under measure, select "Sanitation".
 4) Under Inequality select "Total", "Rural", and "Urban".
-5) Under Time period select the full range. Currently this is 2000 to 2020. 
+5) Under Time period select the full range. Currently this is 2000 to 2022. 
 6) Under Ladder type select "Analyse by service level".
 7) Download as csv.
 8) Go to your downloads folder and copy the csv file into the Input folder within 

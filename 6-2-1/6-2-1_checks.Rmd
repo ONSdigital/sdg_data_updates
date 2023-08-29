@@ -33,24 +33,22 @@ Before putting the csv in the indicator file please check if the most recent fig
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/6-2-1.csv") 
 
 old_data <- old_data %>% 
-  rename(`Unit measure` = "Units") %>%
   rename(`Observation status` = Observation.status) %>%
   rename(`Urban.or.rural` = Residence.type) %>% 
   mutate(dataset = "old") %>%
   select(Year, Series, `Safely.managed.element`, `Service.level`,
-         `Facility.type`, `Urban.or.rural`, `Unit measure`, 
+         `Facility.type`, `Urban.or.rural`, `Units`, 
          `Observation status`, Value, dataset)
 
 
 date <- Sys.Date()
-new_data <- read.csv(paste0("output_folder, "/", date, "_6-2-1", ".csv")) 
+new_data <- read.csv(paste0(output_folder, "/", date, "_6-2-1", ".csv")) 
 
 new_data <- new_data %>% 
-  rename(`Unit measure` = "Unit.measure") %>%
   rename(`Observation status` = Observation.status) %>%
   mutate(dataset = "new") %>%
   select(Year, Series, `Safely.managed.element`, `Service.level`,
-         `Facility.type`, `Urban.or.rural`, `Unit measure`, 
+         `Facility.type`, `Urban.or.rural`, `Units`, 
          `Observation status`, Value, dataset)
 
  

@@ -93,7 +93,7 @@ csv_formatted  <- csv_formatted %>%
   mutate(`Observation status` = case_when(Value != "NA" ~ "Normal value",
                                           TRUE ~ "Missing value")) %>%
   select(Year, Series, `Safely managed element`, `Service level`,
-         `Facility type`, `Urban or rural`, `Units`, `Unit measure`,
+         `Facility type`, `Urban or rural`, `Units`, `Unit multiplier`,
          `Observation status`, Value) %>%
   arrange(Year, Series, `Safely managed element`, `Service level`,
           `Facility type`, `Urban or rural`)

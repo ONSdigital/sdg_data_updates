@@ -14,14 +14,11 @@ source_data_service <- readr::read_csv(file = paste0(input_folder, "/", filename
 
 
 #### Add a new column into each dataframe called Series ####
-data_facility <- source_data_facility %>%
-  mutate(Series = "Facility type") 
+data_facility <- source_data_facility
 
- data_safe <- source_data_safe %>%
-  mutate(Series = "Safely managed element")
+data_safe <- source_data_safe
 
- data_service <- source_data_service %>%
-  mutate(Series = "Service level")
+data_service <- source_data_service 
 
 
 #### Combine the three datasets ####
@@ -48,6 +45,7 @@ source_data <- rename(source_data, "Urban or rural" = "Residence Type")
     # this also orders the columns
 ?select
 clean_data <- source_data %>%
+  mutate(Series = "Proportion of population using safely managed sanitation services (%)") %>%
   select("Year", "Series", "Safely managed element", "Service level", "Facility type", "Urban or rural", "Value")
 # clean_data <- source_data %>% 
   # rename() %>% 

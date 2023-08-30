@@ -14,9 +14,6 @@ filename_safe <- "washdash_criteria.csv"
 filename_service <- "washdash_service_level.csv"
 
 
-# This line calls the tab within each of these files. 
-tabname <- "washdash_download"
-
 
 # This line states the row that the column names are given
  header_row <- 1

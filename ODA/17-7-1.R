@@ -9,49 +9,42 @@
 
 # example datasets SID files: #USE ODA renamed
 
-data_underlying_SID_1 <- read.csv("D:\\SDG general\\SDG_updates\\dataunderSID-Final2020.csv",header=T)
-data_underlying_SID_2 <- read.csv("D:\\SDG general\\SDG_updates\\data-underlying-sid-2017.csv",header=T)
+#data_underlying_SID_1 <- read.csv("D:\\SDG general\\SDG_updates\\dataunderSID-Final2020.csv",header=T)
+#data_underlying_SID_2 <- read.csv("D:\\SDG general\\SDG_updates\\data-underlying-sid-2017.csv",header=T)
 
 
-ODA_17.7.1 <- function(data_underlying_SID_1,data_underlying_SID_2){
-  ODA_datasets <- list(data_underlying_SID_1, data_underlying_SID_2)
-  library(stringr)
+#ODA_17.7.1 <- function(data_underlying_SID_1,data_underlying_SID_2){
+  #oda_renamed <- list(data_underlying_SID_1, data_underlying_SID_2)
+  #library(stringr)
   
-  EST <- c("low carbon", "low-carbon", "clean technology", "environmental technology", 
-           "green technology", "cleantech", "renewable energy", "wastewater management", 
-           "wastewater treatment", "energy storage", "energy distribution", "water remediation",
-           "bioenergy", "solar", "climate friendly","geothermal", "climate smart", "sustainable energy",
-           "air pollution", "carbon footprint", "global emissions", "clean energy",
-           "offshore wind", "wind energy", "wave energy", "hydropower", "sustainable sanitation", 
-           "nuclear power", "biofuel", "atmospheric pollution", "biogas", "bio-energy", "photovoltaic", 
-           "carbon reduction", "energy efficient", "biomass energy", "nanogrid", "nano-grid")
+  
   
   
   #creating some empty lists that will be populated in the loop below
-  SID_filtered <- vector(mode = "list", length = length(ODA_datasets))
-  EST_funding <- vector(mode = "list", length = length(ODA_datasets))
+  SID_filtered <- vector(mode = "list", length = length(oda_renamed))
+  EST_funding <- vector(mode = "list", length = length(oda_renamed))
   
-  for(i in 1:length(ODA_datasets)){
-    colnames(ODA_datasets[[i]])[ncol(ODA_datasets[[i]])] <- "ODA"
+#  for(i in 1:length(oda_renamed)){
+ #   colnames(oda_renamed[[i]])[ncol(oda_renamed[[i]])] <- "ODA"
   
-    ODA_datasets[[i]]$LongDescription <- tolower(ODA_datasets[[i]]$LongDescription)
-    ODA_datasets[[i]]$ProjectTitle <- tolower(ODA_datasets[[i]]$ProjectTitle)
+  #  oda_renamed[[i]]$LongDescription <- tolower(oda_renamed[[i]]$LongDescription)
+   # oda_renamed[[i]]$ProjectTitle <- tolower(oda_renamed[[i]]$ProjectTitle)
   
-    ODA_datasets[[i]]$EST_ProjectTitle <- sapply(str_extract_all(ODA_datasets[[i]]$ProjectTitle, paste("\\b", EST, "\\b", sep="", collapse="|")), paste, collapse=",")
-    ODA_datasets[[i]]$EST_LongDesc <- sapply(str_extract_all(ODA_datasets[[i]]$LongDescription, paste("\\b", EST, "\\b", sep="", collapse="|")), paste, collapse=",")
+    oda_renamed$EST_ProjectTitle <- sapply(str_extract_all(oda_renamed$projecttitle, paste("\\b", EST, "\\b", sep="", collapse="|")), paste, collapse=",")
+    oda_renamed$EST_LongDesc <- sapply(str_extract_all(oda_renamed$longdescription, paste("\\b", EST, "\\b", sep="", collapse="|")), paste, collapse=",")
   
-    SID_filtered[[i]] <- ODA_datasets[[i]][ODA_datasets[[i]]$EST_ProjectTitle != "" | ODA_datasets[[i]]$EST_LongDesc != "", ]
+    oda_renamed <- oda_renamed[oda_renamed$EST_ProjectTitle != "" | oda_renamed$EST_LongDesc != "", ]
   
-    EST_funding[[i]] <- aggregate(SID_filtered[[i]]$ODA,
-                           by = list(Year = SID_filtered[[i]]$Year),
+    EST_funding <- aggregate(oda_renamed$net_oda,
+                           by = list(Year = oda_renamed$year),
                            FUN = sum)
   
-    colnames(EST_funding[[i]])[2] <- "Value"
-  }
+    colnames(EST_funding)[2] <- "Value"
+  #}
   EST_funding <- do.call("rbind", EST_funding)
   EST_funding <- EST_funding[order(EST_funding$Year),]
   return(EST_funding)
-}
+#}
 
 #example call
 EST_funding <- ODA_17.7.1(data_underlying_SID_1, data_underlying_SID_2)

@@ -116,7 +116,7 @@ for (i in 1:length(indicators)) {
   for (pre_or_post_2017_counter in 1:2) {
     
     oda_renamed <- oda_renamed_list[[pre_or_post_2017_counter]]
-    
+    #HERE WE GO TO THE MAIN SCRIPT FOR CALCS AND oda_renamed is created
     try(
       source(script_name)
     )

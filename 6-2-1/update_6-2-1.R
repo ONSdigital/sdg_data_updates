@@ -18,18 +18,23 @@ data_facility <- source_data_facility
 
 data_safe <- source_data_safe
 
-data_service <- source_data_service 
+data_service <- source_data_service %>%
+  mutate(`Safely managed element` = "") %>%
+  mutate(`Facility type` = "")
 
 
 #### Combine the three datasets ####
-# will need to use the full join function, details for functions seen by using 
-?full_join 
 
 # I have combined two of the three datasets. 
   # Can you join the new dataset I have made with the third one (data_service)?
 
-data_part1 <- full_join(data_facility, data_safe)
-source_data<- full_join(data_part1, data_service)
+data_part1 <- full_join(data_facility, data_safe) %>%
+  mutate(`Service level` = "")
+
+source_data <- rbind(data_part1,
+                     data_service)
+
+
 
 
 #### Rename and select relevant columns ####
@@ -76,7 +81,7 @@ csv_formatted <- clean_data%>%
 
 # reformat the Urban or rural column so "total" is replaced by a blank
    # use gsub function
- csv_formatted$"Urban or rural" <- gsub("Total","",csv_formatted$"Urban or rural")
+csv_formatted$"Urban or rural" <- gsub("Total","",csv_formatted$"Urban or rural")
 
 ?gsub
 

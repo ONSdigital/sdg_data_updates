@@ -1,0 +1,240 @@
+title: "6-2-1 Checks"
+author: "Michael Nairn and Tom McNulty
+date: "04/07/2023"
+output: html_document
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r load-packages, include=FALSE}
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(DT)
+library(pander)
+
+```
+
+
+
+   
+## 6-2-1 update summary
+
+This file runs some basic checks and gives information about the update.
+
+Before putting the csv in the indicator file please check if the most recent figures are provisional. Check this in the source data. If they are, in the indicator csv file change the observation status to 'Provisional'.
+
+
+
+```{r include= FALSE}
+old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/6-2-1.csv") 
+
+old_data <- old_data %>% 
+  rename(`Observation status` = Observation.status) %>%
+  rename(`Urban.or.rural` = Residence.type) %>% 
+  mutate(dataset = "old") %>%
+  select(Year, Series, `Safely.managed.element`, `Service.level`,
+         `Facility.type`, `Urban.or.rural`, `Units`, 
+         `Observation status`, Value, dataset)
+
+
+date <- Sys.Date()
+new_data <- read.csv(paste0(output_folder, "/", date, "_6-2-1", ".csv")) 
+
+new_data <- new_data %>% 
+  rename(`Observation status` = Observation.status) %>%
+  mutate(dataset = "new") %>%
+  select(Year, Series, `Safely.managed.element`, `Service.level`,
+         `Facility.type`, `Urban.or.rural`, `Units`, 
+         `Observation status`, Value, dataset)
+
+ 
+
+# join to the new data
+joined_data <- old_data %>% 
+  bind_rows(new_data) 
+
+```
+
+
+
+
+```{r, , echo = FALSE}
+comparison <- joined_data %>% 
+  na.omit(Value) %>% # replace the NULL returns with NA
+  pivot_wider(names_from = dataset,
+              values_from = Value)
+
+
+comparison <- comparison %>% 
+  mutate(across("old":"new", ~replace(., lengths(.) == 0, ""))) %>%
+  mutate(new = as.character(new)) %>%
+  mutate(new = as.numeric(new)) %>%
+  mutate(old = as.character(old)) %>%
+  mutate(old = as.numeric(old))
+
+comparison <- comparison %>% 
+  mutate(difference = new - old) %>% 
+  filter(difference != 0) %>% 
+  # put the largest differences at the top
+  arrange(desc(abs(difference)))
+
+```
+
+## Table of discrepancies
+The table below shows all instances where the old value does not match the new 
+value. It is sorted so the largest absolute differences appear first, but can
+be sorted in other ways using the arrows at the top.
+
+If there are differences, visible in the table and plots below, please investigate these.
+It is possible the data source has update its back time series, so the difference
+could be genuine. 
+
+
+
+```{r, echo = FALSE}
+datatable(comparison, 
+          rownames = FALSE, 
+          filter = "top",
+          options = list(dom = 'tp', 
+                         pageLength = 10,
+                         columnDefs = list(list(
+                           className = 'dt-center', targets = 0:3))))
+```
+  
+
+
+
+## Headline Plots
+Please check the plots below for any differences between the live and new data.
+Live data will appear over the top of new data, so if you don't see points for
+the new data on dates where there is also live data this is a good thing. 
+
+For the June 2023 update there are a number of new disaggregations not previously 
+available on the live site. Therefore, there will be a lot of incomparable 
+data points on the charts. 
+
+
+
+```{r, echo = FALSE, fig.width=10}
+
+# Safely managed v urban or rural
+safely_managed_element_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Service.level == "" & Facility.type == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Safely.managed.element) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Safely managed element versus urban or rural")
+
+
+### can you do the same, but for service level?
+service_level_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Safely.managed.element == "" & Facility.type == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Service.level) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Service level versus urban or rural")
+
+# And for facility type
+
+### can you do the same, but for service level?
+facility_type_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Safely.managed.element == "" & Service.level == "") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Facility.type) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Facility type versus urban or rural")
+
+
+
+### check for when service level is a safely managed service?
+safely_managed_versus_urban_or_rural_plot <- joined_data %>% 
+  filter(Service.level == "Safely managed service") %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Urban.or.rural ~ Service.level) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Safley managed services versus urban or rural")
+
+
+
+# Can you make the plots more visually accessible/useful? The functions within
+  # ggplot can be used, some examples above. 
+
+# In bottom right window, click the home. This takes you to R resources.
+  # In here look into the RStudio Cheat Sheets, and find the data 
+  # visualistaion with ggplot 2 cheat sheet. 
+    # Lots of other useful cheat sheets here too. 
+
+
+# remember to include the "print plot" chunk below.
+
+
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(safely_managed_element_versus_urban_or_rural_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(service_level_versus_urban_or_rural_plot))
+```
+
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(facility_type_versus_urban_or_rural_plot))
+```
+
+```{r, echo = FALSE, fig.width=10, fig.height = 10}
+suppressMessages(print(safely_managed_versus_urban_or_rural_plot))
+```
+
+## Disaggregation Plots
+
+There are too many possible time series to plot here 
+but below are a few examples you can amend if there seems to be a discrepancy. In 
+particular for any discrepancies shown in the table. 
+You may need to change the filters in the plots.
+
+For example, selecting specific service levels by editing the "filter" command to 
+include the services you wish to compare. # | is or.
+  E.g.   filter(Service.level == "Open defecation" | 
+                Service.level == "Basic service" | 
+                Service.level == "Limited service")
+
+
+
+## Session Info
+```{r}
+pander(sessionInfo())
+```

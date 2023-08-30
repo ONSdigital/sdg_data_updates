@@ -1,0 +1,781 @@
+ReportingPeriod_Data,Area_Data,DrugGroup_Data,Gender_Data,AgeGroup_Data,Num_InTreatment_AllInTx,Eth_White_AllInTx,Eth_Mixed_AllInTx,Eth_Asian_AllInTx,Eth_Black_AllInTx,Eth_Other_AllInTx
+2009/10,England,Total,Total,Total,311668,272788,5458,9136,7214,2127
+2009/10,England,Total,Total,18-29,85310,74336,1965,3043,1892,597
+2009/10,England,Total,Total,30-49,189694,165663,3164,5391,4625,1282
+2009/10,England,Total,Total,50+,36664,32789,329,702,697,248
+2009/10,England,Total,M,Total,218933,188955,3819,8278,5500,1722
+2009/10,England,Total,M,18-29,58396,50126,1327,2717,1416,488
+2009/10,England,Total,M,30-49,136060,117286,2255,4911,3533,1047
+2009/10,England,Total,M,50+,24477,21543,237,650,551,187
+2009/10,England,Total,F,Total,92735,83833,1639,858,1714,405
+2009/10,England,Total,F,18-29,26914,24210,638,326,476,109
+2009/10,England,Total,F,30-49,53634,48377,909,480,1092,235
+2009/10,England,Total,F,50+,12187,11246,92,52,146,61
+2009/10,England,opiates,Total,Total,170032,147714,2919,6179,2909,1419
+2009/10,England,opiates,Total,18-29,47650,41572,877,2163,499,401
+2009/10,England,opiates,Total,30-49,112835,98032,1902,3737,2153,879
+2009/10,England,opiates,Total,50+,9547,8110,140,279,257,139
+2009/10,England,opiates,M,Total,123629,105510,2103,5781,2364,1213
+2009/10,England,opiates,M,18-29,31239,26608,541,1970,368,337
+2009/10,England,opiates,M,30-49,85174,72895,1453,3543,1769,754
+2009/10,England,opiates,M,50+,7216,6007,109,268,227,122
+2009/10,England,opiates,F,Total,46403,42204,816,398,545,206
+2009/10,England,opiates,F,18-29,16411,14964,336,193,131,64
+2009/10,England,opiates,F,30-49,27661,25137,449,194,384,125
+2009/10,England,opiates,F,50+,2331,2103,31,11,30,17
+2009/10,England,non-opiates only,Total,Total,24557,19898,914,747,1936,205
+2009/10,England,non-opiates only,Total,18-29,13267,11005,539,420,824,94
+2009/10,England,non-opiates only,Total,30-49,10181,8053,340,316,970,95
+2009/10,England,non-opiates only,Total,50+,1109,840,35,11,142,16
+2009/10,England,non-opiates only,M,Total,18595,14913,692,666,1534,154
+2009/10,England,non-opiates only,M,18-29,10361,8527,425,378,662,76
+2009/10,England,non-opiates only,M,30-49,7482,5838,242,278,752,71
+2009/10,England,non-opiates only,M,50+,752,548,25,10,120,7
+2009/10,England,non-opiates only,F,Total,5962,4985,222,81,402,51
+2009/10,England,non-opiates only,F,18-29,2906,2478,114,42,162,18
+2009/10,England,non-opiates only,F,30-49,2699,2215,98,38,218,24
+2009/10,England,non-opiates only,F,50+,357,292,10,1,22,9
+2009/10,England,alcohol only,Total,Total,88087,80303,848,1687,1142,364
+2009/10,England,alcohol only,Total,18-29,12559,11424,176,220,175,52
+2009/10,England,alcohol only,Total,30-49,51575,46790,546,1076,765,229
+2009/10,England,alcohol only,Total,50+,23953,22089,126,391,202,83
+2009/10,England,alcohol only,M,Total,55570,50414,490,1391,680,249
+2009/10,England,alcohol only,M,18-29,8177,7441,100,171,101,38
+2009/10,England,alcohol only,M,30-49,32362,29234,310,865,454,160
+2009/10,England,alcohol only,M,50+,15031,13739,80,355,125,51
+2009/10,England,alcohol only,F,Total,32517,29889,358,296,462,115
+2009/10,England,alcohol only,F,18-29,4382,3983,76,49,74,14
+2009/10,England,alcohol only,F,30-49,19213,17556,236,211,311,69
+2009/10,England,alcohol only,F,50+,8922,8350,46,36,77,32
+2009/10,England,alcohol & non-opiates,Total,Total,28992,24873,777,523,1227,139
+2009/10,England,alcohol & non-opiates,Total,18-29,11834,10335,373,240,394,50
+2009/10,England,alcohol & non-opiates,Total,30-49,15103,12788,376,262,737,79
+2009/10,England,alcohol & non-opiates,Total,50+,2055,1750,28,21,96,10
+2009/10,England,alcohol & non-opiates,M,Total,21139,18118,534,440,922,106
+2009/10,England,alcohol & non-opiates,M,18-29,8619,7550,261,198,285,37
+2009/10,England,alcohol & non-opiates,M,30-49,11042,9319,250,225,558,62
+2009/10,England,alcohol & non-opiates,M,50+,1478,1249,23,17,79,7
+2009/10,England,alcohol & non-opiates,F,Total,7853,6755,243,83,305,33
+2009/10,England,alcohol & non-opiates,F,18-29,3215,2785,112,42,109,13
+2009/10,England,alcohol & non-opiates,F,30-49,4061,3469,126,37,179,17
+2009/10,England,alcohol & non-opiates,F,50+,577,501,5,4,17,3
+2010/11,England,Total,Total,Total,309000,269874,5508,9417,7121,2170
+2010/11,England,Total,Total,18-29,77320,67187,1905,2780,1809,585
+2010/11,England,Total,Total,30-49,192836,168070,3226,5806,4550,1343
+2010/11,England,Total,Total,50+,38844,34617,377,831,762,242
+2010/11,England,Total,M,Total,216873,186623,3855,8519,5522,1794
+2010/11,England,Total,M,18-29,52774,45100,1308,2462,1404,466
+2010/11,England,Total,M,30-49,138068,118707,2289,5293,3503,1134
+2010/11,England,Total,M,50+,26031,22816,258,764,615,194
+2010/11,England,Total,F,Total,92127,83251,1653,898,1599,376
+2010/11,England,Total,F,18-29,24546,22087,597,318,405,119
+2010/11,England,Total,F,30-49,54768,49363,937,513,1047,209
+2010/11,England,Total,F,50+,12813,11801,119,67,147,48
+2010/11,England,opiates,Total,Total,169144,147171,2892,6193,2829,1383
+2010/11,England,opiates,Total,18-29,41314,36104,780,1854,418,361
+2010/11,England,opiates,Total,30-49,117169,101981,1949,4035,2127,875
+2010/11,England,opiates,Total,50+,10661,9086,163,304,284,147
+2010/11,England,opiates,M,Total,122966,105082,2087,5767,2316,1220
+2010/11,England,opiates,M,18-29,26615,22681,493,1663,303,299
+2010/11,England,opiates,M,30-49,88275,75661,1467,3813,1759,787
+2010/11,England,opiates,M,50+,8076,6740,127,291,254,134
+2010/11,England,opiates,F,Total,46178,42089,805,426,513,163
+2010/11,England,opiates,F,18-29,14699,13423,287,191,115,62
+2010/11,England,opiates,F,30-49,28894,26320,482,222,368,88
+2010/11,England,opiates,F,50+,2585,2346,36,13,30,13
+2010/11,England,non-opiates only,Total,Total,23613,19112,917,797,1829,219
+2010/11,England,non-opiates only,Total,18-29,12959,10671,557,451,787,107
+2010/11,England,non-opiates only,Total,30-49,9600,7632,332,330,897,100
+2010/11,England,non-opiates only,Total,50+,1054,809,28,16,145,12
+2010/11,England,non-opiates only,M,Total,18002,14366,693,713,1511,167
+2010/11,England,non-opiates only,M,18-29,10224,8309,444,412,686,81
+2010/11,England,non-opiates only,M,30-49,7089,5556,230,286,708,80
+2010/11,England,non-opiates only,M,50+,689,501,19,15,117,6
+2010/11,England,non-opiates only,F,Total,5611,4746,224,84,318,52
+2010/11,England,non-opiates only,F,18-29,2735,2362,113,39,101,26
+2010/11,England,non-opiates only,F,30-49,2511,2076,102,44,189,20
+2010/11,England,non-opiates only,F,50+,365,308,9,1,28,6
+2010/11,England,alcohol only,Total,Total,88020,79567,920,1816,1211,405
+2010/11,England,alcohol only,Total,18-29,11819,10661,202,196,211,61
+2010/11,England,alcohol only,Total,30-49,51192,45945,570,1145,784,274
+2010/11,England,alcohol only,Total,50+,25009,22961,148,475,216,70
+2010/11,England,alcohol only,M,Total,55307,49647,558,1523,742,275
+2010/11,England,alcohol only,M,18-29,7703,6942,130,154,125,40
+2010/11,England,alcohol only,M,30-49,31880,28401,342,942,472,190
+2010/11,England,alcohol only,M,50+,15724,14304,86,427,145,45
+2010/11,England,alcohol only,F,Total,32713,29920,362,293,469,130
+2010/11,England,alcohol only,F,18-29,4116,3719,72,42,86,21
+2010/11,England,alcohol only,F,30-49,19312,17544,228,203,312,84
+2010/11,England,alcohol only,F,50+,9285,8657,62,48,71,25
+2010/11,England,alcohol & non-opiates,Total,Total,28223,24024,779,611,1252,163
+2010/11,England,alcohol & non-opiates,Total,18-29,11228,9751,366,279,393,56
+2010/11,England,alcohol & non-opiates,Total,30-49,14875,12512,375,296,742,94
+2010/11,England,alcohol & non-opiates,Total,50+,2120,1761,38,36,117,13
+2010/11,England,alcohol & non-opiates,M,Total,20598,17528,517,516,953,132
+2010/11,England,alcohol & non-opiates,M,18-29,8232,7168,241,233,290,46
+2010/11,England,alcohol & non-opiates,M,30-49,10824,9089,250,252,564,77
+2010/11,England,alcohol & non-opiates,M,50+,1542,1271,26,31,99,9
+2010/11,England,alcohol & non-opiates,F,Total,7625,6496,262,95,299,31
+2010/11,England,alcohol & non-opiates,F,18-29,2996,2583,125,46,103,10
+2010/11,England,alcohol & non-opiates,F,30-49,4051,3423,125,44,178,17
+2010/11,England,alcohol & non-opiates,F,50+,578,490,12,5,18,4
+2011/12,England,Total,Total,Total,299565,262738,5353,9161,6735,2075
+2011/12,England,Total,Total,18-29,68381,59552,1844,2302,1638,537
+2011/12,England,Total,Total,30-49,190562,166889,3132,6003,4265,1274
+2011/12,England,Total,Total,50+,40622,36297,377,856,832,264
+2011/12,England,Total,M,Total,209386,180775,3749,8309,5217,1734
+2011/12,England,Total,M,18-29,46360,39702,1239,2035,1246,433
+2011/12,England,Total,M,30-49,135709,117094,2242,5493,3294,1088
+2011/12,England,Total,M,50+,27317,23979,268,781,677,213
+2011/12,England,Total,F,Total,90179,81963,1604,852,1518,341
+2011/12,England,Total,F,18-29,22021,19850,605,267,392,104
+2011/12,England,Total,F,30-49,54853,49795,890,510,971,186
+2011/12,England,Total,F,50+,13305,12318,109,75,155,51
+2011/12,England,opiates,Total,Total,162435,142285,2742,5896,2613,1329
+2011/12,England,opiates,Total,18-29,33890,29861,677,1412,339,332
+2011/12,England,opiates,Total,30-49,116736,102306,1896,4161,1922,840
+2011/12,England,opiates,Total,50+,11809,10118,169,323,352,157
+2011/12,England,opiates,M,Total,117946,101439,1979,5518,2157,1169
+2011/12,England,opiates,M,18-29,21390,18387,418,1265,234,269
+2011/12,England,opiates,M,30-49,87529,75476,1425,3945,1598,762
+2011/12,England,opiates,M,50+,9027,7576,136,308,325,138
+2011/12,England,opiates,F,Total,44489,40846,763,378,456,160
+2011/12,England,opiates,F,18-29,12500,11474,259,147,105,63
+2011/12,England,opiates,F,30-49,29207,26830,471,216,324,78
+2011/12,England,opiates,F,50+,2782,2542,33,15,27,19
+2011/12,England,non-opiates only,Total,Total,22982,18517,910,842,1774,202
+2011/12,England,non-opiates only,Total,18-29,12554,10293,575,450,757,92
+2011/12,England,non-opiates only,Total,30-49,9353,7393,312,374,870,99
+2011/12,England,non-opiates only,Total,50+,1075,831,23,18,147,11
+2011/12,England,non-opiates only,M,Total,17590,13953,686,750,1474,155
+2011/12,England,non-opiates only,M,18-29,9892,8014,440,413,640,78
+2011/12,England,non-opiates only,M,30-49,6957,5392,226,324,710,73
+2011/12,England,non-opiates only,M,50+,741,547,20,13,124,4
+2011/12,England,non-opiates only,F,Total,5392,4564,224,92,300,47
+2011/12,England,non-opiates only,F,18-29,2662,2279,135,37,117,14
+2011/12,England,non-opiates only,F,30-49,2396,2001,86,50,160,26
+2011/12,England,non-opiates only,F,50+,334,284,3,5,23,7
+2011/12,England,alcohol only,Total,Total,86416,78219,931,1806,1181,396
+2011/12,England,alcohol only,Total,18-29,11017,9916,219,179,180,61
+2011/12,England,alcohol only,Total,30-49,49789,44764,558,1147,774,251
+2011/12,England,alcohol only,Total,50+,25610,23539,154,480,227,84
+2011/12,England,alcohol only,M,Total,53403,47945,556,1516,687,284
+2011/12,England,alcohol only,M,18-29,7018,6321,123,139,100,42
+2011/12,England,alcohol only,M,30-49,30444,27140,338,947,446,180
+2011/12,England,alcohol only,M,50+,15941,14484,95,430,141,62
+2011/12,England,alcohol only,F,Total,33013,30274,375,290,494,112
+2011/12,England,alcohol only,F,18-29,3999,3595,96,40,80,19
+2011/12,England,alcohol only,F,30-49,19345,17624,220,200,328,71
+2011/12,England,alcohol only,F,50+,9669,9055,59,50,86,22
+2011/12,England,alcohol & non-opiates,Total,Total,27732,23717,770,617,1167,148
+2011/12,England,alcohol & non-opiates,Total,18-29,10920,9482,373,261,362,52
+2011/12,England,alcohol & non-opiates,Total,30-49,14684,12426,366,321,699,84
+2011/12,England,alcohol & non-opiates,Total,50+,2128,1809,31,35,106,12
+2011/12,England,alcohol & non-opiates,M,Total,20447,17438,528,525,899,126
+2011/12,England,alcohol & non-opiates,M,18-29,8060,6980,258,218,272,44
+2011/12,England,alcohol & non-opiates,M,30-49,10779,9086,253,277,540,73
+2011/12,England,alcohol & non-opiates,M,50+,1608,1372,17,30,87,9
+2011/12,England,alcohol & non-opiates,F,Total,7285,6279,242,92,268,22
+2011/12,England,alcohol & non-opiates,F,18-29,2860,2502,115,43,90,8
+2011/12,England,alcohol & non-opiates,F,30-49,3905,3340,113,44,159,11
+2011/12,England,alcohol & non-opiates,F,50+,520,437,14,5,19,3
+2012/13,England,Total,Total,Total,297105,260701,5317,9167,6648,2109
+2012/13,England,Total,Total,18-29,62326,54145,1685,2078,1600,519
+2012/13,England,Total,Total,30-49,190958,167421,3190,6187,4107,1322
+2012/13,England,Total,Total,50+,43821,39135,442,902,941,268
+2012/13,England,Total,M,Total,208103,179763,3706,8353,5146,1762
+2012/13,England,Total,M,18-29,42261,36043,1120,1874,1217,419
+2012/13,England,Total,M,30-49,136352,117798,2267,5658,3173,1131
+2012/13,England,Total,M,50+,29490,25922,319,821,756,212
+2012/13,England,Total,F,Total,89002,80938,1611,814,1502,347
+2012/13,England,Total,F,18-29,20065,18102,565,204,383,100
+2012/13,England,Total,F,30-49,54606,49623,923,529,934,191
+2012/13,England,Total,F,50+,14331,13213,123,81,185,56
+2012/13,England,opiates,Total,Total,157959,138413,2677,5751,2483,1294
+2012/13,England,opiates,Total,18-29,28407,25046,559,1158,263,281
+2012/13,England,opiates,Total,30-49,116467,102179,1921,4257,1817,844
+2012/13,England,opiates,Total,50+,13085,11188,197,336,403,169
+2012/13,England,opiates,M,Total,114907,98874,1939,5411,2038,1149
+2012/13,England,opiates,M,18-29,17796,15290,343,1063,171,231
+2012/13,England,opiates,M,30-49,87127,75214,1438,4025,1497,777
+2012/13,England,opiates,M,50+,9984,8370,158,323,370,141
+2012/13,England,opiates,F,Total,43052,39539,738,340,445,145
+2012/13,England,opiates,F,18-29,10611,9756,216,95,92,50
+2012/13,England,opiates,F,30-49,29340,26965,483,232,320,67
+2012/13,England,opiates,F,50+,3101,2818,39,13,33,28
+2012/13,England,non-opiates only,Total,Total,23975,19420,926,930,1665,213
+2012/13,England,non-opiates only,Total,18-29,13057,10697,578,485,727,115
+2012/13,England,non-opiates only,Total,30-49,9803,7854,321,422,790,91
+2012/13,England,non-opiates only,Total,50+,1115,869,27,23,148,7
+2012/13,England,non-opiates only,M,Total,18360,14636,680,841,1382,163
+2012/13,England,non-opiates only,M,18-29,10263,8296,427,449,614,92
+2012/13,England,non-opiates only,M,30-49,7384,5819,231,375,642,68
+2012/13,England,non-opiates only,M,50+,713,521,22,17,126,3
+2012/13,England,non-opiates only,F,Total,5615,4784,246,89,283,50
+2012/13,England,non-opiates only,F,18-29,2794,2401,151,36,113,23
+2012/13,England,non-opiates only,F,30-49,2419,2035,90,47,148,23
+2012/13,England,non-opiates only,F,50+,402,348,5,6,22,4
+2012/13,England,alcohol only,Total,Total,87544,79202,964,1896,1277,430
+2012/13,England,alcohol only,Total,18-29,10321,9267,202,197,212,56
+2012/13,England,alcohol only,Total,30-49,49909,44841,585,1183,790,294
+2012/13,England,alcohol only,Total,50+,27314,25094,177,516,275,80
+2012/13,England,alcohol only,M,Total,54350,48725,579,1595,784,303
+2012/13,England,alcohol only,M,18-29,6443,5750,114,158,133,35
+2012/13,England,alcohol only,M,30-49,30853,27452,351,976,483,210
+2012/13,England,alcohol only,M,50+,17054,15523,114,461,168,58
+2012/13,England,alcohol only,F,Total,33194,30477,385,301,493,127
+2012/13,England,alcohol only,F,18-29,3878,3517,88,39,79,21
+2012/13,England,alcohol only,F,30-49,19056,17389,234,207,307,84
+2012/13,England,alcohol only,F,50+,10260,9571,63,55,107,22
+2012/13,England,alcohol & non-opiates,Total,Total,27627,23666,750,590,1223,172
+2012/13,England,alcohol & non-opiates,Total,18-29,10541,9135,346,238,398,67
+2012/13,England,alcohol & non-opiates,Total,30-49,14779,12547,363,325,710,93
+2012/13,England,alcohol & non-opiates,Total,50+,2307,1984,41,27,115,12
+2012/13,England,alcohol & non-opiates,M,Total,20486,17528,508,506,942,147
+2012/13,England,alcohol & non-opiates,M,18-29,7759,6707,236,204,299,61
+2012/13,England,alcohol & non-opiates,M,30-49,10988,9313,247,282,551,76
+2012/13,England,alcohol & non-opiates,M,50+,1739,1508,25,20,92,10
+2012/13,England,alcohol & non-opiates,F,Total,7141,6138,242,84,281,25
+2012/13,England,alcohol & non-opiates,F,18-29,2782,2428,110,34,99,6
+2012/13,England,alcohol & non-opiates,F,30-49,3791,3234,116,43,159,17
+2012/13,England,alcohol & non-opiates,F,50+,568,476,16,7,23,2
+2013/14,England,Total,Total,Total,301944,265458,5548,9599,6896,2240
+2013/14,England,Total,Total,18-29,58562,50880,1651,1986,1559,505
+2013/14,England,Total,Total,30-49,194143,170521,3379,6597,4228,1421
+2013/14,England,Total,Total,50+,49239,44057,518,1016,1109,314
+2013/14,England,Total,M,Total,211542,182997,3943,8763,5308,1865
+2013/14,England,Total,M,18-29,39685,33873,1149,1773,1163,409
+2013/14,England,Total,M,30-49,138601,119899,2415,6047,3245,1211
+2013/14,England,Total,M,50+,33256,29225,379,943,900,245
+2013/14,England,Total,F,Total,90402,82461,1605,836,1588,375
+2013/14,England,Total,F,18-29,18877,17007,502,213,396,96
+2013/14,England,Total,F,30-49,55542,50622,964,550,983,210
+2013/14,England,Total,F,50+,15983,14832,139,73,209,69
+2013/14,England,opiates,Total,Total,155852,136776,2714,5861,2463,1332
+2013/14,England,opiates,Total,18-29,24277,21508,482,984,199,263
+2013/14,England,opiates,Total,30-49,116736,102584,1987,4501,1780,884
+2013/14,England,opiates,Total,50+,14839,12684,245,376,484,185
+2013/14,England,opiates,M,Total,113890,98096,2016,5538,2031,1184
+2013/14,England,opiates,M,18-29,15096,12988,312,905,133,221
+2013/14,England,opiates,M,30-49,87395,75565,1504,4266,1454,806
+2013/14,England,opiates,M,50+,11399,9543,200,367,444,157
+2013/14,England,opiates,F,Total,41962,38680,698,323,432,148
+2013/14,England,opiates,F,18-29,9181,8520,170,79,66,42
+2013/14,England,opiates,F,30-49,29341,27019,483,235,326,78
+2013/14,England,opiates,F,50+,3440,3141,45,9,40,28
+2013/14,England,non-opiates only,Total,Total,25570,20807,982,1012,1689,220
+2013/14,England,non-opiates only,Total,18-29,13617,11237,608,538,701,103
+2013/14,England,non-opiates only,Total,30-49,10696,8560,356,454,829,110
+2013/14,England,non-opiates only,Total,50+,1257,1010,18,20,159,7
+2013/14,England,non-opiates only,M,Total,19579,15661,745,927,1403,182
+2013/14,England,non-opiates only,M,18-29,10650,8680,463,500,593,84
+2013/14,England,non-opiates only,M,30-49,8090,6342,270,408,679,94
+2013/14,England,non-opiates only,M,50+,839,639,12,19,131,4
+2013/14,England,non-opiates only,F,Total,5991,5146,237,85,286,38
+2013/14,England,non-opiates only,F,18-29,2967,2557,145,38,108,19
+2013/14,England,non-opiates only,F,30-49,2606,2218,86,46,150,16
+2013/14,England,non-opiates only,F,50+,418,371,6,1,28,3
+2013/14,England,alcohol only,Total,Total,91651,82943,1057,2106,1491,511
+2013/14,England,alcohol only,Total,18-29,10173,9065,202,203,234,66
+2013/14,England,alcohol only,Total,30-49,50997,45821,645,1306,930,335
+2013/14,England,alcohol only,Total,50+,30481,28057,210,597,327,110
+2013/14,England,alcohol only,M,Total,56747,50872,632,1770,904,360
+2013/14,England,alcohol only,M,18-29,6292,5614,123,152,117,43
+2013/14,England,alcohol only,M,30-49,31434,27944,371,1081,576,241
+2013/14,England,alcohol only,M,50+,19021,17314,138,537,211,76
+2013/14,England,alcohol only,F,Total,34904,32071,425,336,587,151
+2013/14,England,alcohol only,F,18-29,3881,3451,79,51,117,23
+2013/14,England,alcohol only,F,30-49,19563,17877,274,225,354,94
+2013/14,England,alcohol only,F,50+,11460,10743,72,60,116,34
+2013/14,England,alcohol & non-opiates,Total,Total,28871,24932,795,620,1253,177
+2013/14,England,alcohol & non-opiates,Total,18-29,10495,9070,359,261,425,73
+2013/14,England,alcohol & non-opiates,Total,30-49,15714,13556,391,336,689,92
+2013/14,England,alcohol & non-opiates,Total,50+,2662,2306,45,23,139,12
+2013/14,England,alcohol & non-opiates,M,Total,21326,18368,550,528,970,139
+2013/14,England,alcohol & non-opiates,M,18-29,7647,6591,251,216,320,61
+2013/14,England,alcohol & non-opiates,M,30-49,11682,10048,270,292,536,70
+2013/14,England,alcohol & non-opiates,M,50+,1997,1729,29,20,114,8
+2013/14,England,alcohol & non-opiates,F,Total,7545,6564,245,92,283,38
+2013/14,England,alcohol & non-opiates,F,18-29,2848,2479,108,45,105,12
+2013/14,England,alcohol & non-opiates,F,30-49,4032,3508,121,44,153,22
+2013/14,England,alcohol & non-opiates,F,50+,665,577,16,3,25,4
+2014/15,England,Total,Total,Total,295224,259251,5399,9486,6735,2226
+2014/15,England,Total,Total,18-29,53231,46249,1513,1776,1447,462
+2014/15,England,Total,Total,30-49,189622,166351,3280,6648,4007,1416
+2014/15,England,Total,Total,50+,52371,46651,606,1062,1281,348
+2014/15,England,Total,M,Total,206298,178218,3765,8689,5178,1853
+2014/15,England,Total,M,18-29,35953,30752,1030,1581,1059,368
+2014/15,England,Total,M,30-49,134776,116362,2288,6125,3081,1207
+2014/15,England,Total,M,50+,35569,31104,447,983,1038,278
+2014/15,England,Total,F,Total,88926,81033,1634,797,1557,373
+2014/15,England,Total,F,18-29,17278,15497,483,195,388,94
+2014/15,England,Total,F,30-49,54846,49989,992,523,926,209
+2014/15,England,Total,F,50+,16802,15547,159,79,243,70
+2014/15,England,opiates,Total,Total,152964,134078,2706,5908,2466,1305
+2014/15,England,opiates,Total,18-29,20946,18517,422,889,157,239
+2014/15,England,opiates,Total,30-49,115205,101155,2008,4608,1729,863
+2014/15,England,opiates,Total,50+,16813,14406,276,411,580,203
+2014/15,England,opiates,M,Total,111779,96102,1992,5585,2051,1170
+2014/15,England,opiates,M,18-29,13024,11177,267,821,106,200
+2014/15,England,opiates,M,30-49,85848,74086,1501,4368,1418,791
+2014/15,England,opiates,M,50+,12907,10839,224,396,527,179
+2014/15,England,opiates,F,Total,41185,37976,714,323,415,135
+2014/15,England,opiates,F,18-29,7922,7340,155,68,51,39
+2014/15,England,opiates,F,30-49,29357,27069,507,240,311,72
+2014/15,England,opiates,F,50+,3906,3567,52,15,53,24
+2014/15,England,non-opiates only,Total,Total,25025,20561,894,913,1567,224
+2014/15,England,non-opiates only,Total,18-29,13095,10900,532,465,675,103
+2014/15,England,non-opiates only,Total,30-49,10488,8509,332,422,732,107
+2014/15,England,non-opiates only,Total,50+,1442,1152,30,26,160,14
+2014/15,England,non-opiates only,M,Total,18867,15230,653,834,1303,174
+2014/15,England,non-opiates only,M,18-29,10072,8302,393,425,553,83
+2014/15,England,non-opiates only,M,30-49,7860,6220,241,384,616,87
+2014/15,England,non-opiates only,M,50+,935,708,19,25,134,4
+2014/15,England,non-opiates only,F,Total,6158,5331,241,79,264,50
+2014/15,England,non-opiates only,F,18-29,3023,2598,139,40,122,20
+2014/15,England,non-opiates only,F,30-49,2628,2289,91,38,116,20
+2014/15,England,non-opiates only,F,50+,507,444,11,1,26,10
+2014/15,England,alcohol only,Total,Total,89107,80294,1013,2066,1512,511
+2014/15,England,alcohol only,Total,18-29,9088,8052,195,189,215,58
+2014/15,England,alcohol only,Total,30-49,48624,43482,570,1280,897,335
+2014/15,England,alcohol only,Total,50+,31395,28760,248,597,400,118
+2014/15,England,alcohol only,M,Total,54973,49058,571,1752,931,357
+2014/15,England,alcohol only,M,18-29,5583,4966,106,147,118,36
+2014/15,England,alcohol only,M,30-49,29729,26293,301,1071,549,238
+2014/15,England,alcohol only,M,50+,19661,17799,164,534,264,83
+2014/15,England,alcohol only,F,Total,34134,31236,442,314,581,154
+2014/15,England,alcohol only,F,18-29,3505,3086,89,42,97,22
+2014/15,England,alcohol only,F,30-49,18895,17189,269,209,348,97
+2014/15,England,alcohol only,F,50+,11734,10961,84,63,136,35
+2014/15,England,alcohol & non-opiates,Total,Total,28128,24318,786,599,1190,186
+2014/15,England,alcohol & non-opiates,Total,18-29,10102,8780,364,233,400,62
+2014/15,England,alcohol & non-opiates,Total,30-49,15305,13205,370,338,649,111
+2014/15,England,alcohol & non-opiates,Total,50+,2721,2333,52,28,141,13
+2014/15,England,alcohol & non-opiates,M,Total,20679,17828,549,518,893,152
+2014/15,England,alcohol & non-opiates,M,18-29,7274,6307,264,188,282,49
+2014/15,England,alcohol & non-opiates,M,30-49,11339,9763,245,302,498,91
+2014/15,England,alcohol & non-opiates,M,50+,2066,1758,40,28,113,12
+2014/15,England,alcohol & non-opiates,F,Total,7449,6490,237,81,297,34
+2014/15,England,alcohol & non-opiates,F,18-29,2828,2473,100,45,118,13
+2014/15,England,alcohol & non-opiates,F,30-49,3966,3442,125,36,151,20
+2014/15,England,alcohol & non-opiates,F,50+,655,575,12,0,28,1
+2015/16,England,Total,Total,Total,288843,253078,5414,9518,6692,2204
+2015/16,England,Total,Total,18-29,49127,42546,1449,1587,1360,440
+2015/16,England,Total,Total,30-49,185403,162442,3327,6786,3828,1429
+2015/16,England,Total,Total,50+,54313,48090,638,1145,1504,335
+2015/16,England,Total,M,Total,201215,173425,3682,8695,5114,1846
+2015/16,England,Total,M,18-29,33217,28343,949,1404,1000,357
+2015/16,England,Total,M,30-49,131357,113280,2275,6243,2893,1222
+2015/16,England,Total,M,50+,36641,31802,458,1048,1221,267
+2015/16,England,Total,F,Total,87628,79653,1732,823,1578,358
+2015/16,England,Total,F,18-29,15910,14203,500,183,360,83
+2015/16,England,Total,F,30-49,54046,49162,1052,543,935,207
+2015/16,England,Total,F,50+,17672,16288,180,97,283,68
+2015/16,England,opiates,Total,Total,149807,131273,2718,5846,2461,1280
+2015/16,England,opiates,Total,18-29,18038,15924,383,733,151,222
+2015/16,England,opiates,Total,30-49,112897,99205,2023,4645,1612,862
+2015/16,England,opiates,Total,50+,18872,16144,312,468,698,196
+2015/16,England,opiates,M,Total,109366,93945,2003,5550,2041,1139
+2015/16,England,opiates,M,18-29,11157,9562,248,679,100,183
+2015/16,England,opiates,M,30-49,83693,72225,1506,4419,1309,784
+2015/16,England,opiates,M,50+,14516,12158,249,452,632,172
+2015/16,England,opiates,F,Total,40441,37328,715,296,420,141
+2015/16,England,opiates,F,18-29,6881,6362,135,54,51,39
+2015/16,England,opiates,F,30-49,29204,26980,517,226,303,78
+2015/16,England,opiates,F,50+,4356,3986,63,16,66,24
+2015/16,England,non-opiates only,Total,Total,25814,21406,861,909,1457,262
+2015/16,England,non-opiates only,Total,18-29,13087,10999,512,412,627,112
+2015/16,England,non-opiates only,Total,30-49,10993,8993,313,473,651,132
+2015/16,England,non-opiates only,Total,50+,1734,1414,36,24,179,18
+2015/16,England,non-opiates only,M,Total,19184,15685,600,790,1210,198
+2015/16,England,non-opiates only,M,18-29,10042,8378,364,358,523,90
+2015/16,England,non-opiates only,M,30-49,8091,6507,213,411,530,98
+2015/16,England,non-opiates only,M,50+,1051,800,23,21,157,10
+2015/16,England,non-opiates only,F,Total,6630,5721,261,119,247,64
+2015/16,England,non-opiates only,F,18-29,3045,2621,148,54,104,22
+2015/16,England,non-opiates only,F,30-49,2902,2486,100,62,121,34
+2015/16,England,non-opiates only,F,50+,683,614,13,3,22,8
+2015/16,England,alcohol only,Total,Total,85035,76115,1004,2147,1596,480
+2015/16,England,alcohol only,Total,18-29,8137,7065,187,204,224,57
+2015/16,England,alcohol only,Total,30-49,46019,40955,580,1318,902,320
+2015/16,England,alcohol only,Total,50+,30879,28095,237,625,470,103
+2015/16,England,alcohol only,M,Total,51798,45849,525,1806,977,349
+2015/16,England,alcohol only,M,18-29,4915,4248,91,161,127,40
+2015/16,England,alcohol only,M,30-49,27955,24591,291,1097,547,238
+2015/16,England,alcohol only,M,50+,18928,17010,143,548,303,71
+2015/16,England,alcohol only,F,Total,33237,30266,479,341,619,131
+2015/16,England,alcohol only,F,18-29,3222,2817,96,43,97,17
+2015/16,England,alcohol only,F,30-49,18064,16364,289,221,355,82
+2015/16,England,alcohol only,F,50+,11951,11085,94,77,167,32
+2015/16,England,alcohol & non-opiates,Total,Total,28187,24284,831,616,1178,182
+2015/16,England,alcohol & non-opiates,Total,18-29,9865,8558,367,238,358,49
+2015/16,England,alcohol & non-opiates,Total,30-49,15494,13289,411,350,663,115
+2015/16,England,alcohol & non-opiates,Total,50+,2828,2437,53,28,157,18
+2015/16,England,alcohol & non-opiates,M,Total,20867,17946,554,549,886,160
+2015/16,England,alcohol & non-opiates,M,18-29,7103,6155,246,206,250,44
+2015/16,England,alcohol & non-opiates,M,30-49,11618,9957,265,316,507,102
+2015/16,England,alcohol & non-opiates,M,50+,2146,1834,43,27,129,14
+2015/16,England,alcohol & non-opiates,F,Total,7320,6338,277,67,292,22
+2015/16,England,alcohol & non-opiates,F,18-29,2762,2403,121,32,108,5
+2015/16,England,alcohol & non-opiates,F,30-49,3876,3332,146,34,156,13
+2015/16,England,alcohol & non-opiates,F,50+,682,603,10,1,28,4
+2016/17,England,Total,Total,Total,279793,245684,5334,9583,6546,2097
+2016/17,England,Total,Total,18-29,44448,38454,1357,1466,1346,376
+2016/17,England,Total,Total,30-49,179397,157437,3286,6944,3636,1379
+2016/17,England,Total,Total,50+,55948,49793,691,1173,1564,342
+2016/17,England,Total,M,Total,194304,167684,3603,8704,5022,1752
+2016/17,England,Total,M,18-29,29690,25270,857,1290,981,294
+2016/17,England,Total,M,30-49,126761,109379,2259,6344,2771,1168
+2016/17,England,Total,M,50+,37853,33035,487,1070,1270,290
+2016/17,England,Total,F,Total,85489,78000,1731,879,1524,345
+2016/17,England,Total,F,18-29,14758,13184,500,176,365,82
+2016/17,England,Total,F,30-49,52636,48058,1027,600,865,211
+2016/17,England,Total,F,50+,18095,16758,204,103,294,52
+2016/17,England,opiates,Total,Total,146536,128582,2668,5732,2442,1243
+2016/17,England,opiates,Total,18-29,15560,13761,318,624,155,180
+2016/17,England,opiates,Total,30-49,109909,96739,1998,4622,1522,846
+2016/17,England,opiates,Total,50+,21067,18082,352,486,765,217
+2016/17,England,opiates,M,Total,106766,91828,1944,5408,2041,1098
+2016/17,England,opiates,M,18-29,9566,8215,196,562,111,141
+2016/17,England,opiates,M,30-49,81012,69995,1466,4377,1239,762
+2016/17,England,opiates,M,50+,16188,13618,282,469,691,195
+2016/17,England,opiates,F,Total,39770,36754,724,324,401,145
+2016/17,England,opiates,F,18-29,5994,5546,122,62,44,39
+2016/17,England,opiates,F,30-49,28897,26744,532,245,283,84
+2016/17,England,opiates,F,50+,4879,4464,70,17,74,22
+2016/17,England,non-opiates only,Total,Total,24561,20401,860,942,1354,223
+2016/17,England,non-opiates only,Total,18-29,11943,9975,499,436,583,96
+2016/17,England,non-opiates only,Total,30-49,10906,9010,324,470,612,116
+2016/17,England,non-opiates only,Total,50+,1712,1416,37,36,159,11
+2016/17,England,non-opiates only,M,Total,17983,14685,603,818,1117,182
+2016/17,England,non-opiates only,M,18-29,8959,7410,339,384,478,80
+2016/17,England,non-opiates only,M,30-49,7974,6454,238,408,503,94
+2016/17,England,non-opiates only,M,50+,1050,821,26,26,136,8
+2016/17,England,non-opiates only,F,Total,6578,5716,257,124,237,41
+2016/17,England,non-opiates only,F,18-29,2984,2565,160,52,105,16
+2016/17,England,non-opiates only,F,30-49,2932,2556,86,62,109,22
+2016/17,England,non-opiates only,F,50+,662,595,11,10,23,3
+2016/17,England,alcohol only,Total,Total,80454,72394,971,2245,1541,457
+2016/17,England,alcohol only,Total,18-29,7470,6564,175,185,221,48
+2016/17,England,alcohol only,Total,30-49,42842,38115,568,1447,864,307
+2016/17,England,alcohol only,Total,50+,30142,27715,228,613,456,102
+2016/17,England,alcohol only,M,Total,48754,43364,491,1901,945,328
+2016/17,England,alcohol only,M,18-29,4411,3860,82,157,114,34
+2016/17,England,alcohol only,M,30-49,26041,22865,287,1204,533,217
+2016/17,England,alcohol only,M,50+,18302,16639,122,540,298,77
+2016/17,England,alcohol only,F,Total,31700,29030,480,344,596,129
+2016/17,England,alcohol only,F,18-29,3059,2704,93,28,107,14
+2016/17,England,alcohol only,F,30-49,16801,15250,281,243,331,90
+2016/17,England,alcohol only,F,50+,11840,11076,106,73,158,25
+2016/17,England,alcohol & non-opiates,Total,Total,28242,24307,835,664,1209,174
+2016/17,England,alcohol & non-opiates,Total,18-29,9475,8154,365,221,387,52
+2016/17,England,alcohol & non-opiates,Total,30-49,15740,13573,396,405,638,110
+2016/17,England,alcohol & non-opiates,Total,50+,3027,2580,74,38,184,12
+2016/17,England,alcohol & non-opiates,M,Total,20801,17807,565,577,919,144
+2016/17,England,alcohol & non-opiates,M,18-29,6754,5785,240,187,278,39
+2016/17,England,alcohol & non-opiates,M,30-49,11734,10065,268,355,496,95
+2016/17,England,alcohol & non-opiates,M,50+,2313,1957,57,35,145,10
+2016/17,England,alcohol & non-opiates,F,Total,7441,6500,270,87,290,30
+2016/17,England,alcohol & non-opiates,F,18-29,2721,2369,125,34,109,13
+2016/17,England,alcohol & non-opiates,F,30-49,4006,3508,128,50,142,15
+2016/17,England,alcohol & non-opiates,F,50+,714,623,17,3,39,2
+2017/18,England,Total,Total,Total,268390,236250,5360,9239,6210,2028
+2017/18,England,Total,Total,18-29,40069,34794,1271,1291,1115,334
+2017/18,England,Total,Total,30-49,171815,151220,3347,6704,3462,1326
+2017/18,England,Total,Total,50+,56506,50236,742,1244,1633,368
+2017/18,England,Total,M,Total,185870,161025,3562,8353,4680,1675
+2017/18,England,Total,M,18-29,26436,22654,762,1130,788,255
+2017/18,England,Total,M,30-49,120725,104573,2278,6090,2577,1119
+2017/18,England,Total,M,50+,38709,33798,522,1133,1315,301
+2017/18,England,Total,F,Total,82520,75225,1798,886,1530,353
+2017/18,England,Total,F,18-29,13633,12140,509,161,327,79
+2017/18,England,Total,F,30-49,51090,46647,1069,614,885,207
+2017/18,England,Total,F,50+,17797,16438,220,111,318,67
+2017/18,England,opiates,Total,Total,141189,124279,2666,5422,2365,1208
+2017/18,England,opiates,Total,18-29,13186,11735,283,500,123,139
+2017/18,England,opiates,Total,30-49,105174,92881,2016,4375,1424,851
+2017/18,England,opiates,Total,50+,22829,19663,367,547,818,218
+2017/18,England,opiates,M,Total,102803,88813,1919,5124,1956,1070
+2017/18,England,opiates,M,18-29,8099,7034,169,453,87,105
+2017/18,England,opiates,M,30-49,77052,66858,1452,4142,1132,771
+2017/18,England,opiates,M,50+,17652,14921,298,529,737,194
+2017/18,England,opiates,F,Total,38386,35466,747,298,409,138
+2017/18,England,opiates,F,18-29,5087,4701,114,47,36,34
+2017/18,England,opiates,F,30-49,28122,26023,564,233,292,80
+2017/18,England,opiates,F,50+,5177,4742,69,18,81,24
+2017/18,England,non-opiates only,Total,Total,23730,19792,846,908,1198,215
+2017/18,England,non-opiates only,Total,18-29,11139,9352,453,385,471,100
+2017/18,England,non-opiates only,Total,30-49,10946,9089,347,485,572,102
+2017/18,England,non-opiates only,Total,50+,1645,1351,46,38,155,13
+2017/18,England,non-opiates only,M,Total,17120,14079,557,793,946,176
+2017/18,England,non-opiates only,M,18-29,8142,6761,288,345,375,87
+2017/18,England,non-opiates only,M,30-49,7940,6495,238,420,444,81
+2017/18,England,non-opiates only,M,50+,1038,823,31,28,127,8
+2017/18,England,non-opiates only,F,Total,6610,5713,289,115,252,39
+2017/18,England,non-opiates only,F,18-29,2997,2591,165,40,96,13
+2017/18,England,non-opiates only,F,30-49,3006,2594,109,65,128,21
+2017/18,England,non-opiates only,F,50+,607,528,15,10,28,5
+2017/18,England,alcohol only,Total,Total,75787,68182,1015,2217,1521,442
+2017/18,England,alcohol only,Total,18-29,6720,5923,172,191,186,40
+2017/18,England,alcohol only,Total,30-49,40057,35595,580,1423,870,279
+2017/18,England,alcohol only,Total,50+,29010,26664,263,603,465,123
+2017/18,England,alcohol only,M,Total,45668,40633,537,1835,917,303
+2017/18,England,alcohol only,M,18-29,3814,3353,79,151,93,26
+2017/18,England,alcohol only,M,30-49,24129,21156,314,1158,528,190
+2017/18,England,alcohol only,M,50+,17725,16124,144,526,296,87
+2017/18,England,alcohol only,F,Total,30119,27549,478,382,604,139
+2017/18,England,alcohol only,F,18-29,2906,2570,93,40,93,14
+2017/18,England,alcohol only,F,30-49,15928,14439,266,265,342,89
+2017/18,England,alcohol only,F,50+,11285,10540,119,77,169,36
+2017/18,England,alcohol & non-opiates,Total,Total,27684,23997,833,692,1126,163
+2017/18,England,alcohol & non-opiates,Total,18-29,9024,7784,363,215,335,55
+2017/18,England,alcohol & non-opiates,Total,30-49,15638,13655,404,421,596,94
+2017/18,England,alcohol & non-opiates,Total,50+,3022,2558,66,56,195,14
+2017/18,England,alcohol & non-opiates,M,Total,20279,17500,549,601,861,126
+2017/18,England,alcohol & non-opiates,M,18-29,6381,5506,226,181,233,37
+2017/18,England,alcohol & non-opiates,M,30-49,11604,10064,274,370,473,77
+2017/18,England,alcohol & non-opiates,M,50+,2294,1930,49,50,155,12
+2017/18,England,alcohol & non-opiates,F,Total,7405,6497,284,91,265,37
+2017/18,England,alcohol & non-opiates,F,18-29,2643,2278,137,34,102,18
+2017/18,England,alcohol & non-opiates,F,30-49,4034,3591,130,51,123,17
+2017/18,England,alcohol & non-opiates,F,50+,728,628,17,6,40,2
+2018/19,England,Total,Total,Total,268251,237817,5589,9423,6249,1955
+2018/19,England,Total,Total,18-29,38643,33656,1233,1170,1085,340
+2018/19,England,Total,Total,30-49,170100,150795,3521,6845,3350,1233
+2018/19,England,Total,Total,50+,59508,53366,835,1408,1814,382
+2018/19,England,Total,M,Total,185236,161806,3672,8479,4598,1603
+2018/19,England,Total,M,18-29,25387,21918,734,982,724,249
+2018/19,England,Total,M,30-49,118900,103790,2357,6208,2409,1036
+2018/19,England,Total,M,50+,40949,36098,581,1289,1465,318
+2018/19,England,Total,F,Total,83015,76011,1917,944,1651,352
+2018/19,England,Total,F,18-29,13256,11738,499,188,361,91
+2018/19,England,Total,F,30-49,51200,47005,1164,637,941,197
+2018/19,England,Total,F,50+,18559,17268,254,119,349,64
+2018/19,England,opiates,Total,Total,139845,124168,2834,5649,2509,1191
+2018/19,England,opiates,Total,18-29,11736,10475,283,417,117,139
+2018/19,England,opiates,Total,30-49,102790,91479,2090,4552,1430,805
+2018/19,England,opiates,Total,50+,25319,22214,461,680,962,247
+2018/19,England,opiates,M,Total,101810,88741,2001,5317,2062,1058
+2018/19,England,opiates,M,18-29,7360,6422,164,375,82,115
+2018/19,England,opiates,M,30-49,74876,65442,1467,4295,1117,719
+2018/19,England,opiates,M,50+,19574,16877,370,647,863,224
+2018/19,England,opiates,F,Total,38035,35427,833,332,447,133
+2018/19,England,opiates,F,18-29,4376,4053,119,42,35,24
+2018/19,England,opiates,F,30-49,27914,26037,623,257,313,86
+2018/19,England,opiates,F,50+,5745,5337,91,33,99,23
+2018/19,England,non-opiates only,Total,Total,24253,20454,878,819,1118,201
+2018/19,England,non-opiates only,Total,18-29,11154,9433,453,350,455,83
+2018/19,England,non-opiates only,Total,30-49,11529,9734,385,441,506,106
+2018/19,England,non-opiates only,Total,50+,1570,1287,40,28,157,12
+2018/19,England,non-opiates only,M,Total,17388,14495,587,709,864,151
+2018/19,England,non-opiates only,M,18-29,7992,6712,288,302,342,62
+2018/19,England,non-opiates only,M,30-49,8330,6939,271,385,390,82
+2018/19,England,non-opiates only,M,50+,1066,844,28,22,132,7
+2018/19,England,non-opiates only,F,Total,6865,5959,291,110,254,50
+2018/19,England,non-opiates only,F,18-29,3162,2721,165,48,113,21
+2018/19,England,non-opiates only,F,30-49,3199,2795,114,56,116,24
+2018/19,England,non-opiates only,F,50+,504,443,12,6,25,5
+2018/19,England,alcohol only,Total,Total,75555,68204,1051,2250,1517,398
+2018/19,England,alcohol only,Total,18-29,6538,5735,159,186,192,51
+2018/19,England,alcohol only,Total,30-49,39595,35355,624,1421,834,240
+2018/19,England,alcohol only,Total,50+,29422,27114,268,643,491,107
+2018/19,England,alcohol only,M,Total,45210,40375,556,1847,872,280
+2018/19,England,alcohol only,M,18-29,3654,3238,69,129,84,31
+2018/19,England,alcohol only,M,30-49,23680,20850,343,1150,477,177
+2018/19,England,alcohol only,M,50+,17876,16287,144,568,311,72
+2018/19,England,alcohol only,F,Total,30345,27829,495,403,645,118
+2018/19,England,alcohol only,F,18-29,2884,2497,90,57,108,20
+2018/19,England,alcohol only,F,30-49,15915,14505,281,271,357,63
+2018/19,England,alcohol only,F,50+,11546,10827,124,75,180,35
+2018/19,England,alcohol & non-opiates,Total,Total,28598,24991,826,705,1105,165
+2018/19,England,alcohol & non-opiates,Total,18-29,9215,8013,338,217,321,67
+2018/19,England,alcohol & non-opiates,Total,30-49,16186,14227,422,431,580,82
+2018/19,England,alcohol & non-opiates,Total,50+,3197,2751,66,57,204,16
+2018/19,England,alcohol & non-opiates,M,Total,20828,18195,528,606,800,114
+2018/19,England,alcohol & non-opiates,M,18-29,6381,5546,213,176,216,41
+2018/19,England,alcohol & non-opiates,M,30-49,12014,10559,276,378,425,58
+2018/19,England,alcohol & non-opiates,M,50+,2433,2090,39,52,159,15
+2018/19,England,alcohol & non-opiates,F,Total,7770,6796,298,99,305,51
+2018/19,England,alcohol & non-opiates,F,18-29,2834,2467,125,41,105,26
+2018/19,England,alcohol & non-opiates,F,30-49,4172,3668,146,53,155,24
+2018/19,England,alcohol & non-opiates,F,50+,764,661,27,5,45,1
+2019/20,England,Total,Total,Total,270705,239393,5796,9865,6565,2063
+2019/20,England,Total,Total,18-29,38009,32892,1285,1191,1145,304
+2019/20,England,Total,Total,30-49,169966,150315,3632,7101,3453,1342
+2019/20,England,Total,Total,50+,62730,56186,879,1573,1967,417
+2019/20,England,Total,M,Total,186811,162770,3775,8824,4801,1712
+2019/20,England,Total,M,18-29,24876,21375,771,969,752,231
+2019/20,England,Total,M,30-49,118392,103055,2375,6432,2475,1126
+2019/20,England,Total,M,50+,43543,38340,629,1423,1574,355
+2019/20,England,Total,F,Total,83894,76623,2021,1041,1764,351
+2019/20,England,Total,F,18-29,13133,11517,514,222,393,73
+2019/20,England,Total,F,30-49,51574,47260,1257,669,978,216
+2019/20,England,Total,F,50+,19187,17846,250,150,393,62
+2019/20,England,opiates,Total,Total,140599,124822,2925,5654,2595,1219
+2019/20,England,opiates,Total,18-29,10571,9408,280,349,128,108
+2019/20,England,opiates,Total,30-49,101717,90522,2110,4515,1424,836
+2019/20,England,opiates,Total,50+,28311,24892,535,790,1043,275
+2019/20,England,opiates,M,Total,102183,89077,2056,5297,2130,1087
+2019/20,England,opiates,M,18-29,6555,5719,161,306,96,84
+2019/20,England,opiates,M,30-49,73664,64377,1463,4236,1104,751
+2019/20,England,opiates,M,50+,21964,18981,432,755,930,252
+2019/20,England,opiates,F,Total,38416,35745,869,357,465,132
+2019/20,England,opiates,F,18-29,4016,3689,119,43,32,24
+2019/20,England,opiates,F,30-49,28053,26145,647,279,320,85
+2019/20,England,opiates,F,50+,6347,5911,103,35,113,23
+2019/20,England,non-opiates only,Total,Total,25226,21115,903,937,1207,239
+2019/20,England,non-opiates only,Total,18-29,11296,9479,450,392,475,91
+2019/20,England,non-opiates only,Total,30-49,12224,10250,419,501,563,129
+2019/20,England,non-opiates only,Total,50+,1706,1386,34,44,169,19
+2019/20,England,non-opiates only,M,Total,17967,14841,620,797,921,187
+2019/20,England,non-opiates only,M,18-29,8017,6666,306,324,343,74
+2019/20,England,non-opiates only,M,30-49,8773,7248,294,441,432,99
+2019/20,England,non-opiates only,M,50+,1177,927,20,32,146,14
+2019/20,England,non-opiates only,F,Total,7259,6274,283,140,286,52
+2019/20,England,non-opiates only,F,18-29,3279,2813,144,68,132,17
+2019/20,England,non-opiates only,F,30-49,3451,3002,125,60,131,30
+2019/20,England,non-opiates only,F,50+,529,459,14,12,23,5
+2019/20,England,alcohol only,Total,Total,74618,67115,1050,2424,1603,434
+2019/20,England,alcohol only,Total,18-29,6555,5679,187,207,227,50
+2019/20,England,alcohol only,Total,30-49,38717,34416,626,1534,855,281
+2019/20,England,alcohol only,Total,50+,29346,27020,237,683,521,103
+2019/20,England,alcohol only,M,Total,44664,39733,525,1995,912,305
+2019/20,England,alcohol only,M,18-29,3715,3253,78,141,105,34
+2019/20,England,alcohol only,M,30-49,23103,20225,320,1269,493,200
+2019/20,England,alcohol only,M,50+,17846,16255,127,585,314,71
+2019/20,England,alcohol only,F,Total,29954,27382,525,429,691,129
+2019/20,England,alcohol only,F,18-29,2840,2426,109,66,122,16
+2019/20,England,alcohol only,F,30-49,15614,14191,306,265,362,81
+2019/20,England,alcohol only,F,50+,11500,10765,110,98,207,32
+2019/20,England,alcohol & non-opiates,Total,Total,30262,26341,918,850,1160,171
+2019/20,England,alcohol & non-opiates,Total,18-29,9587,8326,368,243,315,55
+2019/20,England,alcohol & non-opiates,Total,30-49,17308,15127,477,551,611,96
+2019/20,England,alcohol & non-opiates,Total,50+,3367,2888,73,56,234,20
+2019/20,England,alcohol & non-opiates,M,Total,21997,19119,574,735,838,133
+2019/20,England,alcohol & non-opiates,M,18-29,6589,5737,226,198,208,39
+2019/20,England,alcohol & non-opiates,M,30-49,12852,11205,298,486,446,76
+2019/20,England,alcohol & non-opiates,M,50+,2556,2177,50,51,184,18
+2019/20,England,alcohol & non-opiates,F,Total,8265,7222,344,115,322,38
+2019/20,England,alcohol & non-opiates,F,18-29,2998,2589,142,45,107,16
+2019/20,England,alcohol & non-opiates,F,30-49,4456,3922,179,65,165,20
+2019/20,England,alcohol & non-opiates,F,50+,811,711,23,5,50,2
+2020/21,England,Total,Total,Total,275896,243220,6460,10190,6905,2103
+2020/21,England,Total,Total,18-29,38848,33179,1451,1261,1301,323
+2020/21,England,Total,Total,30-49,171144,151095,3932,7184,3522,1346
+2020/21,England,Total,Total,50+,65904,58946,1077,1745,2082,434
+2020/21,England,Total,M,Total,186371,161907,4086,9022,4876,1696
+2020/21,England,Total,M,18-29,24450,20807,818,991,793,233
+2020/21,England,Total,M,30-49,116617,101306,2515,6449,2413,1096
+2020/21,England,Total,M,50+,45304,39794,753,1582,1670,367
+2020/21,England,Total,F,Total,89525,81313,2374,1168,2029,407
+2020/21,England,Total,F,18-29,14398,12372,633,270,508,90
+2020/21,England,Total,F,30-49,54527,49789,1417,735,1109,250
+2020/21,England,Total,F,50+,20600,19152,324,163,412,67
+2020/21,England,opiates,Total,Total,140863,124795,3113,5660,2763,1221
+2020/21,England,opiates,Total,18-29,9655,8536,268,326,130,112
+2020/21,England,opiates,Total,30-49,100076,88958,2193,4426,1464,823
+2020/21,England,opiates,Total,50+,31132,27301,652,908,1169,286
+2020/21,England,opiates,M,Total,101959,88707,2193,5293,2242,1062
+2020/21,England,opiates,M,18-29,5994,5207,163,280,93,85
+2020/21,England,opiates,M,30-49,71757,62610,1514,4143,1114,715
+2020/21,England,opiates,M,50+,24208,20890,516,870,1035,262
+2020/21,England,opiates,F,Total,38904,36088,920,367,521,159
+2020/21,England,opiates,F,18-29,3661,3329,105,46,37,27
+2020/21,England,opiates,F,30-49,28319,26348,679,283,350,108
+2020/21,England,opiates,F,50+,6924,6411,136,38,134,24
+2020/21,England,non-opiates only,Total,Total,27605,22945,1127,1039,1295,244
+2020/21,England,non-opiates only,Total,18-29,12685,10470,578,442,569,103
+2020/21,England,non-opiates only,Total,30-49,13179,11071,493,542,559,120
+2020/21,England,non-opiates only,Total,50+,1741,1404,56,55,167,21
+2020/21,England,non-opiates only,M,Total,18690,15393,700,855,928,179
+2020/21,England,non-opiates only,M,18-29,8435,6935,349,350,385,75
+2020/21,England,non-opiates only,M,30-49,9060,7533,314,461,397,88
+2020/21,England,non-opiates only,M,50+,1195,925,37,44,146,16
+2020/21,England,non-opiates only,F,Total,8915,7552,427,184,367,65
+2020/21,England,non-opiates only,F,18-29,4250,3535,229,92,184,28
+2020/21,England,non-opiates only,F,30-49,4119,3538,179,81,162,32
+2020/21,England,non-opiates only,F,50+,546,479,19,11,21,5
+2020/21,England,alcohol only,Total,Total,76740,68826,1227,2620,1701,451
+2020/21,England,alcohol only,Total,18-29,6928,5953,209,228,261,48
+2020/21,England,alcohol only,Total,30-49,40145,35551,729,1665,909,290
+2020/21,England,alcohol only,Total,50+,29667,27322,289,727,531,113
+2020/21,England,alcohol only,M,Total,44254,39156,601,2137,932,319
+2020/21,England,alcohol only,M,18-29,3791,3288,80,155,109,35
+2020/21,England,alcohol only,M,30-49,23042,20027,372,1364,497,207
+2020/21,England,alcohol only,M,50+,17421,15841,149,618,326,77
+2020/21,England,alcohol only,F,Total,32486,29670,626,483,769,132
+2020/21,England,alcohol only,F,18-29,3137,2665,129,73,152,13
+2020/21,England,alcohol only,F,30-49,17103,15524,357,301,412,83
+2020/21,England,alcohol only,F,50+,12246,11481,140,109,205,36
+2020/21,England,alcohol & non-opiates,Total,Total,30688,26654,993,871,1146,187
+2020/21,England,alcohol & non-opiates,Total,18-29,9580,8220,396,265,341,60
+2020/21,England,alcohol & non-opiates,Total,30-49,17744,15515,517,551,590,113
+2020/21,England,alcohol & non-opiates,Total,50+,3364,2919,80,55,215,14
+2020/21,England,alcohol & non-opiates,M,Total,21468,18651,592,737,774,136
+2020/21,England,alcohol & non-opiates,M,18-29,6230,5377,226,206,206,38
+2020/21,England,alcohol & non-opiates,M,30-49,12758,11136,315,481,405,86
+2020/21,England,alcohol & non-opiates,M,50+,2480,2138,51,50,163,12
+2020/21,England,alcohol & non-opiates,F,Total,9220,8003,401,134,372,51
+2020/21,England,alcohol & non-opiates,F,18-29,3350,2843,170,59,135,22
+2020/21,England,alcohol & non-opiates,F,30-49,4986,4379,202,70,185,27
+2020/21,England,alcohol & non-opiates,F,50+,884,781,29,5,52,2
+2021/22,England,TOTAL,TOTAL,TOTAL,289215,254119,7238,10770,7667,2310
+2021/22,England,TOTAL,TOTAL,18-29,38954,33003,1625,1263,1362,371
+2021/22,England,TOTAL,TOTAL,30-49,175817,154639,4316,7494,3897,1424
+2021/22,England,TOTAL,TOTAL,50+,74444,66477,1297,2013,2408,515
+2021/22,England,TOTAL,M,TOTAL,195080,168911,4610,9527,5405,1834
+2021/22,England,TOTAL,M,18-29,24362,20646,900,968,814,254
+2021/22,England,TOTAL,M,30-49,119747,103547,2802,6738,2681,1153
+2021/22,England,TOTAL,M,50+,50971,44718,908,1821,1910,427
+2021/22,England,TOTAL,F,TOTAL,94135,85208,2628,1243,2262,476
+2021/22,England,TOTAL,F,18-29,14592,12357,725,295,548,117
+2021/22,England,TOTAL,F,30-49,56070,51092,1514,756,1216,271
+2021/22,England,TOTAL,F,50+,23473,21759,389,192,498,88
+2021/22,England,OPIATES,TOTAL,TOTAL,140558,124156,3251,5755,2862,1257
+2021/22,England,OPIATES,TOTAL,18-29,8313,7263,276,304,120,102
+2021/22,England,OPIATES,TOTAL,30-49,97694,86632,2247,4396,1444,832
+2021/22,England,OPIATES,TOTAL,50+,34551,30261,728,1055,1298,323
+2021/22,England,OPIATES,M,TOTAL,101822,88239,2323,5390,2331,1093
+2021/22,England,OPIATES,M,18-29,5246,4502,169,262,87,81
+2021/22,England,OPIATES,M,30-49,69721,60594,1583,4123,1096,719
+2021/22,England,OPIATES,M,50+,26855,23143,571,1005,1148,293
+2021/22,England,OPIATES,F,TOTAL,38736,35917,928,365,531,164
+2021/22,England,OPIATES,F,18-29,3067,2761,107,42,33,21
+2021/22,England,OPIATES,F,30-49,27973,26038,664,273,348,113
+2021/22,England,OPIATES,F,50+,7696,7118,157,50,150,30
+2021/22,England,NON-OPIATES ONLY,TOTAL,TOTAL,29582,24453,1305,1146,1441,288
+2021/22,England,NON-OPIATES ONLY,TOTAL,18-29,12867,10550,653,449,586,128
+2021/22,England,NON-OPIATES ONLY,TOTAL,30-49,14618,12227,575,631,653,133
+2021/22,England,NON-OPIATES ONLY,TOTAL,50+,2097,1676,77,66,202,27
+2021/22,England,NON-OPIATES ONLY,M,TOTAL,19821,16190,819,929,1032,220
+2021/22,England,NON-OPIATES ONLY,M,18-29,8295,6781,386,340,383,93
+2021/22,England,NON-OPIATES ONLY,M,30-49,10092,8291,377,544,488,104
+2021/22,England,NON-OPIATES ONLY,M,50+,1434,1118,56,45,161,23
+2021/22,England,NON-OPIATES ONLY,F,TOTAL,9761,8263,486,217,409,68
+2021/22,England,NON-OPIATES ONLY,F,18-29,4572,3769,267,109,203,35
+2021/22,England,NON-OPIATES ONLY,F,30-49,4526,3936,198,87,165,29
+2021/22,England,NON-OPIATES ONLY,F,50+,663,558,21,21,41,4
+2021/22,England,ALCOHOL ONLY,TOTAL,TOTAL,84697,75797,1475,2882,2013,543
+2021/22,England,ALCOHOL ONLY,TOTAL,18-29,7539,6450,254,240,283,58
+2021/22,England,ALCOHOL ONLY,TOTAL,30-49,43411,38323,832,1815,1078,335
+2021/22,England,ALCOHOL ONLY,TOTAL,50+,33747,31024,389,827,652,150
+2021/22,England,ALCOHOL ONLY,M,TOTAL,49358,43642,745,2382,1120,358
+2021/22,England,ALCOHOL ONLY,M,18-29,4206,3630,117,167,132,25
+2021/22,England,ALCOHOL ONLY,M,30-49,25439,22127,415,1500,583,235
+2021/22,England,ALCOHOL ONLY,M,50+,19713,17885,213,715,405,98
+2021/22,England,ALCOHOL ONLY,F,TOTAL,35339,32155,730,500,893,185
+2021/22,England,ALCOHOL ONLY,F,18-29,3333,2820,137,73,151,33
+2021/22,England,ALCOHOL ONLY,F,30-49,17972,16196,417,315,495,100
+2021/22,England,ALCOHOL ONLY,F,50+,14034,13139,176,112,247,52
+2021/22,England,ALCOHOL & NON-OPIATES,TOTAL,TOTAL,34378,29713,1207,987,1351,222
+2021/22,England,ALCOHOL & NON-OPIATES,TOTAL,18-29,10235,8740,442,270,373,83
+2021/22,England,ALCOHOL & NON-OPIATES,TOTAL,30-49,20094,17457,662,652,722,124
+2021/22,England,ALCOHOL & NON-OPIATES,TOTAL,50+,4049,3516,103,65,256,15
+2021/22,England,ALCOHOL & NON-OPIATES,M,TOTAL,24079,20840,723,826,922,163
+2021/22,England,ALCOHOL & NON-OPIATES,M,18-29,6615,5733,228,199,212,55
+2021/22,England,ALCOHOL & NON-OPIATES,M,30-49,14495,12535,427,571,514,95
+2021/22,England,ALCOHOL & NON-OPIATES,M,50+,2969,2572,68,56,196,13
+2021/22,England,ALCOHOL & NON-OPIATES,F,TOTAL,10299,8873,484,161,429,59
+2021/22,England,ALCOHOL & NON-OPIATES,F,18-29,3620,3007,214,71,161,28
+2021/22,England,ALCOHOL & NON-OPIATES,F,30-49,5599,4922,235,81,208,29
+2021/22,England,ALCOHOL & NON-OPIATES,F,50+,1080,944,35,9,60,2

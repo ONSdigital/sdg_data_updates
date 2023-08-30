@@ -39,8 +39,18 @@ The input filepaths used for this output are:
 - ODA archived data: **`r paste0(getwd(), "/", input_folder, "/", filename_2017)`**  
 - Exchange rates: **`r paste0(getwd(), "/", input_folder, "/", exchange_filename)`**  
 - Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**  
-- OECD GNI url (for 1-a-1): **`r gni_api`**  
-- OECD Biodiversity url (for 15-a-1b and 15-b-1b): **`r biodiversity_api`**  
+
+```{r}
+if ("1-a-1" %in% indicators) {
+  print(paste0("OECD GNI url (for 1-a-1): ", gni_api))
+}
+
+if("15-a-1_15-b-1" %in% indicators) {
+  print(paste0("OECD Biodiversity url (for 15-a-1b and 15-b-1b): ", biodiversity_api))
+}
+
+```
+
   
 The following indicators were included in the run:  
 **`r indicators`**. See the next section to see if they all ran successfully.  
@@ -718,7 +728,7 @@ if ("csv_17191" %in% objects()) {
     filter(grepl("USD", units)) %>% 
     basic_plot(.) +
     facet_wrap(vars(country_income_classification), nrow = 3) +
-    ggtitle("17-19-1 by country income classification (Constant USD)") 
+    ggtitle("17-19-1 by country income classification (USD)") 
 } else {
   print("17-19-1 data not produced")
 }  
@@ -742,7 +752,7 @@ if ("csv_17191" %in% objects()) {
       mutate(units = 
                ifelse(
                  grepl("USD", units) == TRUE, 
-                 "Constant USD, thousands", units)) 
+                 "USD, thousands", units)) 
   )
   
   try(

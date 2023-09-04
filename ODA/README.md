@@ -8,7 +8,8 @@ The full list of indicators, and whether they are based on net ODA or amounts ex
 -  2-a-2  
 -  3-b-2  
 -  7-a-1  
--  9-a-1  
+-  9-a-1
+-  17-7-1  
 -  17-9-1  
 -  17-19-1  
 #### Gross ODA (Amounts extended)
@@ -37,8 +38,8 @@ If not, save `example_config.R` as `config.R` in ODA.
 4. Check the configurations are correct (see bullets below) for the files you have saved, and if not correct them and save the `config.R`: 
      1. `filename_newdat` is the name of file (including the .csv extension) containing ODA data that you have saved in the Input file.  
      2. `filename_2017` is the name of file (including the .csv extension) containing older data. This file should already be in the Input folder so there is no need to download it again or edit it in the config file. See [Data sources](#data-sources) for details if the file is not already present. 
-     3. `deflators_filename` is the name of the **most recent** deflators data, including the .xlsx extension. You must save is as xlsx if downloaded as xls. The deflators are not needed for 17.19.1, but they can still be part of the configuration.
-     4. `exchange_filename` is the name of the **most recent** exchange rates data, including the .xlsx extension. You must save is as xlsx if downloaded as xls.
+     3. `deflators_filename` is the name of the **most recent** deflators data, including the .xlsx extension. You must save is as xlsx if downloaded as xls. The deflators are not needed for all indicators (e.g. 17.19.1 or 17.7.1), but they can still be part of the configuration.
+     4. `exchange_filename` is the name of the **most recent** exchange rates data, including the .xlsx extension. You must save is as xlsx if downloaded as xls. This file is also not needed for all ODA indicators, but it part of the configurations.
 5. Open `update_indicator_main.R` (from `sdg_data_updates.Rproj`). Change the test_run to FALSE and indicator to “ODA”.
 6. In `update_indicator_main.R` click 'Source' button to run the script (top right corner of the script panel).
 7. Outputs will be saved in the Outputs folder in ODA (which the script will create if it doesn't already exist).  

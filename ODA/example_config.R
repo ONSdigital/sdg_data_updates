@@ -28,10 +28,18 @@ input_folder <- "Example_Input"
 output_folder <- "Example_Output"
 
 # filenames of the ODA data (data underlying SID). 
-# Ensure when saving as csv from the original ods files you extend to at least 4 decimal places
+# For ODA, ensure when saving as csv from the original .ods files you extend to at least 4 decimal places
 # and format the value columns as number
 filename_newdat <- "dataunderSID-Final2020_example.csv"
 filename_2017 <- "data-underlying-sid-2017_example.csv"
+
+# additional file needed only for indicator 17-7-1 (ONS source)
+if ("17-7-1" %in% indicators) {
+  filename_lowcarbon <- "lcreedataset2021.xlsx"
+  tabname_lowcarbon <- "LCREE by country"
+  header_row <- 4
+}
+
 
 deflators_filename <- "Deflators-base-YYYY_example.xlsx" # Change to latest downloaded file
 exchange_filename <- "Exchange-rates_example.xlsx"       # Change to latest downloaded file     

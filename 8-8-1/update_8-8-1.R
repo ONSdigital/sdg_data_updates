@@ -166,7 +166,6 @@ fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
 
 fatal_inj_age_sex_main <- fatal_inj_age_sex_main[fatal_inj_age_sex_main$`Industry sector` == "All industry", ]
 
-
 fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
   mutate(Age = case_when(
     Age == "All" ~ "",
@@ -204,13 +203,16 @@ fatal_inj_age_sex_main$`Year`[fatal_inj_age_sex_main$`Year` == "2021/22p [Note 9
 
 # Then join fatal data
 
-fatal_joined_data <- full_join(fatal_inj_headline_main, fatal_inj_region_main, by = c("Year", 
-                                                                                      "Value")) 
-                                                           
+fatal_joined_data <- full_join(fatal_inj_headline_main, 
+                               fatal_inj_region_main, 
+                               by = c("Year", 
+                                      "Value")) 
 
-fatal_joined_data <- full_join(fatal_joined_data, fatal_inj_age_sex_main, by = c("Year", 
-                                                                                 "Industry sector",
-                                                                                  "Value")) 
+fatal_joined_data <- full_join(fatal_joined_data, 
+                               fatal_inj_age_sex_main, 
+                               by = c("Year", 
+                                      "Industry sector",
+                                       "Value")) 
 
 fatal_joined_data <- fatal_joined_data %>% 
   replace(is.na(.), "")
@@ -223,8 +225,18 @@ fatal_joined_data <- fatal_joined_data %>%
          "Occupation" = "")
 
 fatal_joined_data <- fatal_joined_data %>% 
-  select("Year", "Series", "Age", "Sex", "Country", "Region", "Industry sector", "Occupation", "Units", "Unit multiplier", "Observation status", "Value")
-
+  select("Year", 
+         "Series", 
+         "Age", 
+         "Sex", 
+         "Country", 
+         "Region", 
+         "Industry sector",
+         "Occupation", 
+         "Units", 
+         "Unit multiplier", 
+         "Observation status", 
+         "Value")
 
 # Non-fatal data
 
@@ -245,10 +257,16 @@ nonfatal_inj_summary_main$`Year`[nonfatal_inj_summary_main$`Year` == "2020/21 (N
 
 nonfatal_inj_summary_main$`Year`[nonfatal_inj_summary_main$`Year` == "2021/22 (Note A, Note B)"] <- "2021/22"
 
+nonfatal_inj_summary_main <- nonfatal_inj_summary_main %>% 
+  mutate("Units" = "Rate per 100,000 workers",
+         "Observation status" = "Normal Value")
+
 # non-fatal region
 
 nonfatal_inj_region_main <- nonfatal_inj_region_main %>% 
-  select("Year", "Usual country and region of residence", "Averaged rate per 100,000 workers")
+  select("Year", 
+         "Usual country and region of residence", 
+         "Averaged rate per 100,000 workers")
 
 nonfatal_inj_region_main <- nonfatal_inj_region_main[-c(1, 2, 3, 4), ]
 
@@ -306,6 +324,10 @@ nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
 
 nonfatal_inj_region_main$`Year`[nonfatal_inj_region_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
 
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>% 
+  mutate("Units" = "Rate per 100,000 (3 year average)",
+         "Observation status" = "Estimated Value")
+
 # non-fatal age
 
 nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
@@ -353,6 +375,10 @@ nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
 
 nonfatal_inj_age_main$`Year`[nonfatal_inj_age_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
 
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
+  mutate("Units" = "Rate per 100,000 (3 year average)",
+         "Observation status" = "Estimated Value")
+
 # non-fatal industry
 
 nonfatal_inj_ind_main <- nonfatal_inj_ind_main[c(6, 8, 12)]
@@ -386,6 +412,10 @@ nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>%
 
 nonfatal_inj_ind_main$`Year`[nonfatal_inj_ind_main$`Year` == "2019/20-2021/22 (Note A, Note B)"] <- "2019/20-2021/22"
 
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>% 
+  mutate("Units" = "Rate per 100,000 (3 year average)",
+         "Observation status" = "Estimated Value")
+
 # non-fatal occ
 
 nonfatal_inj_occ_main <- nonfatal_inj_occ_main[c(6, 8, 12)]
@@ -410,48 +440,64 @@ nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>%
 nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>% 
   select("Year", "Occupation", "Value")
 
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>% 
+  mutate("Units" = "Rate per 100,000 (3 year average)",
+         "Observation status" = "Estimated Value")
+
 # Then join non-fatal data
 
-nonfatal_joined_data <- full_join(nonfatal_inj_summary_main, nonfatal_inj_region_main, by = c("Year", 
-                                                                                      "Value")) 
+nonfatal_joined_data <- full_join(nonfatal_inj_summary_main, 
+                                  nonfatal_inj_region_main, 
+                                  by = c("Year", 
+                                          "Value",
+                                          "Units",
+                                          "Observation status")) 
 
 
-nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_age_main, by = c("Year",
-                                                                                 "Value")) 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, 
+                                  nonfatal_inj_age_main, 
+                                  by = c("Year",
+                                         "Value",
+                                         "Units",
+                                         "Observation status"))  
 
-nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_ind_main, by = c("Year",
-                                                                                      "Value")) 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, 
+                                  nonfatal_inj_ind_main, 
+                                  by = c("Year",
+                                         "Value",
+                                         "Units",
+                                         "Observation status")) 
 
-nonfatal_joined_data <- full_join(nonfatal_joined_data, nonfatal_inj_occ_main, by = c("Year",
-                                                                                      "Value")) 
+nonfatal_joined_data <- full_join(nonfatal_joined_data, 
+                                  nonfatal_inj_occ_main, 
+                                  by = c("Year",
+                                         "Value",
+                                         "Units",
+                                         "Observation status")) 
 
 nonfatal_joined_data <- nonfatal_joined_data %>% 
   replace(is.na(.), "")
-
-# nonfatal_joined_data <- nonfatal_joined_data %>% 
-#   mutate(Units = case_when(
-#     Year %in% c("2000/01", "2001/02", "2002/03", "2003/04", "2004/05", "2005/06", 
-#                 "2006/07", "2007/08", "2008/09", "2009/10", "2010/11", "2011/12", 
-#                 "2012/13", "2013/14", "2014/15", "2015/16", "2016/17", "2017/18",
-#                 "2018/19", "2019/20", "2020/21", "2021/22") ~ "Rate per 100,000 workers"
-#     TRUE ~ "Rate per 100,000 (3 year average)"))
-# 
-# nonfatal_joined_data <- nonfatal_joined_data %>% 
-#   mutate("Observation status" = case_when(
-#     Year %in% c("2000/01", "2001/02", "2002/03", "2003/04", "2004/05", "2005/06", 
-#                 "2006/07", "2007/08", "2008/09", "2009/10", "2010/11", "2011/12", 
-#                 "2012/13", "2013/14", "2014/15", "2015/16", "2016/17", "2017/18",
-#                 "2018/19", "2019/20", "2020/21", "2021/22") ~ "Normal value"
-#     TRUE ~ "Estimated value"))
-
 
 nonfatal_joined_data <- nonfatal_joined_data %>% 
   mutate("Series" = "Non-fatal injury",
          "Unit multiplier" =  "Units")
 
-fatal_joined_data <- fatal_joined_data %>% 
-  select("Year", "Series", "Age", "Sex", "Country", "Region", "Industry sector", "Occupation", "Units", "Unit multiplier", "Observation status", "Value")
+nonfatal_joined_data <- nonfatal_joined_data %>% 
+  select("Year", 
+         "Series", 
+         "Age", 
+         "Sex", 
+         "Country", 
+         "Region", 
+         "Industry sector", 
+         "Occupation", 
+         "Units", 
+         "Unit multiplier", 
+         "Observation status", 
+         "Value")
 
+csv_output <- full_join(fatal_joined_data, 
+                        nonfatal_joined_data)
 
 
 

@@ -23,6 +23,23 @@
            `Observation status`, Units, `Unit multiplier`, Value) %>% 
     arrange(Year)
     #replace(is.na(.), "")
+  #non-ODA part
+  national_EST <- get_type1_data(header_row, filename_lowcarbon, tabname_lowcarbon)
   
+  #DRAFT FROM HERE, check how to consolidate with csv without running twice
+  national_EST <- extract_data(national_EST, header_row)
+  # select wanted columns and rows
+  
+  national_EST <- national_EST %>% national_EST["Turnover (£ thousand)",]
+    select(c("CDID","N3Y6"))
+  
+  gdp_main_data <- gdp_main_data[gdp_main_data$CDID >= 2000 & gdp_main_data$CDID <= latest_year, ]
+  
+  gdp_main_data <- gdp_main_data[!grepl("Q", gdp_main_data$CDID),]
+  
+  # format
+  
+  gdp_main_data <- gdp_main_data %>% 
+    rename("Year" = CDID, "Value" = N3Y6)
   
   scripts_run <- c(scripts_run, "17-7-1")

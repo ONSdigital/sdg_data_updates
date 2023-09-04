@@ -21,8 +21,8 @@
   
   
   #creating some empty lists that will be populated in the loop below
-  SID_filtered <- vector(mode = "list", length = length(oda_renamed))
-  EST_funding <- vector(mode = "list", length = length(oda_renamed))
+  #SID_filtered <- vector(mode = "list", length = length(oda_renamed))
+  #EST_funding <- vector(mode = "list", length = length(oda_renamed))
   
 #  for(i in 1:length(oda_renamed)){
  #   colnames(oda_renamed[[i]])[ncol(oda_renamed[[i]])] <- "ODA"
@@ -41,12 +41,26 @@
   
     colnames(EST_funding)[2] <- "Value"
   #}
-  EST_funding <- do.call("rbind", EST_funding)
-  EST_funding <- EST_funding[order(EST_funding$Year),]
-  return(EST_funding)
+  #EST_funding <- do.call("rbind", EST_funding)
+  #EST_funding <- EST_funding[order(EST_funding$Year),]
+  #return(EST_funding)
 #}
 
+  csv <- EST_funding %>% 
+    #bind_rows(constant_usd_data) %>% 
+    mutate(Series = "Official Development Assistance (ODA) for environmentally sound technologies",
+           `Country turnover` = "",
+           `Observation status` = "Definition differs",
+           Units = "GBP (thousands)",
+           `Unit multiplier` = "Thousands") %>% 
+    select(Year, Series, `Country turnover`,
+           `Observation status`, Units, `Unit multiplier`, Value) %>% 
+    arrange(Year)
+    #replace(is.na(.), "")
+  
+  
+  scripts_run <- c(scripts_run, "17-7-1")
 #example call
-EST_funding <- ODA_17.7.1(data_underlying_SID_1, data_underlying_SID_2)
+#EST_funding <- ODA_17.7.1(data_underlying_SID_1, data_underlying_SID_2)
 
-write.csv(EST_funding,"D:\\SDG general\\SDG_updates\\17.7.1.csv")
+#write.csv(EST_funding,"D:\\SDG general\\SDG_updates\\17.7.1.csv")

@@ -29,11 +29,14 @@ date <- Sys.Date()
 
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-8-1", ".csv"))
 
+latest_year <- max(new_data$Year)
+
 new_data <- new_data %>% 
   rename("Industry sector" = "Industry.sector", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier") 
 
 new_data <- new_data %>% 
-  mutate(dataset = "new")
+  mutate(dataset = "new") %>% 
+  mutate(Value = as.numeric(Value))
 
 # join to the new data
 joined_data <- old_data %>% 

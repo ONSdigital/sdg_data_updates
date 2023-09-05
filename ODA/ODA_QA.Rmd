@@ -38,7 +38,8 @@ The input filepaths used for this output are:
 - ODA new data: **`r paste0(getwd(), "/", input_folder, "/", filename_newdat)`**  
 - ODA archived data: **`r paste0(getwd(), "/", input_folder, "/", filename_2017)`**  
 - Exchange rates: **`r paste0(getwd(), "/", input_folder, "/", exchange_filename)`**  
-- Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**  
+- Deflators: **`r paste0(getwd(), "/", input_folder, "/", deflators_filename)`**
+
 
 ```{r}
 if ("1-a-1" %in% indicators) {
@@ -47,6 +48,10 @@ if ("1-a-1" %in% indicators) {
 
 if("15-a-1_15-b-1" %in% indicators) {
   print(paste0("OECD Biodiversity url (for 15-a-1b and 15-b-1b): ", biodiversity_api))
+}
+
+if ("17-7-1" %in% indicators) {
+  print(paste0("Low carbon survey data (for 17-7-1 only): ", getwd(), "/", input_folder, "/", filename_lowcarbon))
 }
 
 ```
@@ -65,7 +70,8 @@ Indicator specific settings are:
 - 7-a-1 CRS codes: **`r as.character(crs_codes_7a1)`**  
 - 8-a-1 broad sector code: **`r as.character(broad_sector_code_8a1)`**  
 - 9-a-1 SID sector: **`r as.character(sid_sector_9a1)`**   
-- 15-a-1/15-b-1 CRS code: **`r as.character(crs_code_15a1_15b1)`**  
+- 15-a-1/15-b-1 CRS code: **`r as.character(crs_code_15a1_15b1)`**
+- 17-7-1 key words for data extraction from source: low carbon, low-carbon, clean technology, environmental technology, green technology, cleantech, renewable energy, wastewater management, wastewater treatment, energy storage, energy distribution, water remediation, bioenergy, solar, climate friendly, geothermal, climate smart, sustainable energy, air pollution, carbon footprint, global emissions, clean energy, offshore wind, wind energy, wave energy, hydropower, sustainable sanitation, nuclear power, biofuel, atmospheric pollution, biogas, bio-energy, photovoltaic, carbon reduction, energy efficient, biomass energy, nanogrid, nano-grid.
   
 The outputs are saved in: **`r  paste0(getwd(), "/",output_folder)`**  
   
@@ -709,6 +715,24 @@ if ("csv_1791" %in% objects()) {
   create_datatable(comparison_1791)
 }
 ```
+
+### 17-7-1
+```{r}
+#TO BE COMPLETED
+if ("csv_1771" %in% objects()) {
+
+joined_data_1771 <- join_plot_data("17-7-1") %>% 
+  mutate(units = ifelse(is.na(units), unit_measure, units))
+
+#----
+
+
+} else {
+  print("17-7-1 data not produced")
+}
+```
+
+
 ### 17-19-1
 ```{r}
 if ("csv_17191" %in% objects()) {

@@ -1,7 +1,7 @@
 ---
 title: "8-8-1 checks"
 author: "Katie Uzzell"
-date: "10/08/2023"
+date: "05/09/2023"
 output: html_document
 ---
 
@@ -23,15 +23,14 @@ library(DT)
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-8-1.csv")
 
 old_data <- old_data %>% 
-  rename("Local Authority" = "Local.Authority", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier") %>% 
-  select("Year", "Series", "Country", "Region", "Local Authority", "Units", "Unit multiplier", "Observation status", "Value")
+  rename("Industry sector" = "Industry.sector", "Units" = "Unit.measure", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier") 
 
 date <- Sys.Date()
 
 new_data <- read.csv(paste0(output_folder, "/", date, "_update_8-8-1", ".csv"))
 
 new_data <- new_data %>% 
-  rename("Local Authority" = "Local.Authority", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier")
+  rename("Industry sector" = "Industry.sector", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier") 
 
 new_data <- new_data %>% 
   mutate(dataset = "new")
@@ -46,12 +45,10 @@ joined_data <- old_data %>%
 
 ## 8-8-1 update summary
 
-Data for `r min(new_data$Year)` to `r latest_year` have been created and 
-saved as `r paste0(date, "_8-8-1", ".csv")` in the 8-8-1 Output folder.  
+Data for `r min(new_data$Year)` to `r latest_year` have been created and saved as `r paste0(date, "_8-8-1", ".csv")` in the 8-8-1 Output folder.  
     
 ### Check configurations
-Please check that the information below is as you expect. In particular, pay attention to the time since data were saved, to check that previously 
-downloaded data have not accidentally been used.
+Please check that the information below is as you expect. In particular, pay attention to the time since data were saved, to check that previously downloaded data have not accidentally been used.
     
 These settings can all be adjusted in `config.R`
     
@@ -60,79 +57,71 @@ Files used to create the new data were downloaded and saved in
 
 ```{r include= FALSE}
 
-banks_country_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", banks_country), 
+fatal_inj_headline_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", fatal_inj_headline), 
                                 full.names = TRUE)$ctime[1]
-banks_country_time_since_data_saved <- round(difftime(Sys.time(), banks_country_save_time, units = "days"), 2)
+fatal_inj_headline_time_since_data_saved <- round(difftime(Sys.time(), fatal_inj_headline_save_time, units = "days"), 2)
 
-bs_country_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", bs_country), 
+fatal_inj_region_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", fatal_inj_region), 
                                 full.names = TRUE)$ctime[1]
-bs_country_time_since_data_saved <- round(difftime(Sys.time(), bs_country_save_time, units = "days"), 2)
+fatal_inj_region_time_since_data_saved <- round(difftime(Sys.time(), fatal_inj_region_save_time, units = "days"), 2)
 
-banks_region_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", banks_region), 
+fatal_inj_age_sex_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", fatal_inj_age_sex), 
                                 full.names = TRUE)$ctime[1]
-banks_region_time_since_data_saved <- round(difftime(Sys.time(), banks_region_save_time, units = "days"), 2)
+fatal_inj_age_sex_time_since_data_saved <- round(difftime(Sys.time(), fatal_inj_age_sex_save_time, units = "days"), 2)
 
-bs_region_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", bs_region), 
+nonfatal_inj_summary_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", nonfatal_inj_summary), 
                                 full.names = TRUE)$ctime[1]
-bs_region_time_since_data_saved <- round(difftime(Sys.time(), bs_region_save_time, units = "days"), 2)
+nonfatal_inj_summary_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_inj_summary_save_time, units = "days"), 2)
 
-banks_la_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", banks_la), 
+nonfatal_inj_region_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", nonfatal_inj_region), 
                                 full.names = TRUE)$ctime[1]
-banks_la_time_since_data_saved <- round(difftime(Sys.time(), banks_la_save_time, units = "days"), 2)
+nonfatal_inj_region_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_inj_region_save_time, units = "days"), 2)
 
-bs_la_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", bs_la), 
+nonfatal_inj_age_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", nonfatal_inj_age), 
                                 full.names = TRUE)$ctime[1]
-bs_la_time_since_data_saved <- round(difftime(Sys.time(), bs_la_save_time, units = "days"), 2)
+nonfatal_inj_age_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_inj_age_save_time, units = "days"), 2)
 
-pop_ests_country_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", pop_ests_country), 
+nonfatal_inj_ind_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", nonfatal_inj_ind), 
                                 full.names = TRUE)$ctime[1]
-pop_ests_country_time_since_data_saved <- round(difftime(Sys.time(), pop_ests_country_save_time, units = "days"), 2)
+nonfatal_inj_ind_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_inj_ind_save_time, units = "days"), 2)
 
-pop_ests_region_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", pop_ests_region), 
+nonfatal_inj_occ_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", nonfatal_inj_occ), 
                                 full.names = TRUE)$ctime[1]
-pop_ests_region_time_since_data_saved <- round(difftime(Sys.time(), pop_ests_region_save_time, units = "days"), 2)
-
-pop_ests_la_save_time <- file.info(paste0(getwd(),"/",input_folder,"/", pop_ests_la), 
-                                full.names = TRUE)$ctime[1]
-pop_ests_la_time_since_data_saved <- round(difftime(Sys.time(), pop_ests_la_save_time, units = "days"), 2)
+nonfatal_inj_occ_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_inj_occ_save_time, units = "days"), 2)
 
 ```
 
 
-#### **Business counts data from IDBR (ONS) - Nomis**
+#### **Fatal and non-fatal workplace injuries data from Health and Safety Executive (HSE)**
 
-Number of banks by country data are saved in the `r banks_country`. This file was saved at `r banks_country_save_time`: It has been 
-`r banks_country_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Fatal workplace injury headline data are saved in the `r fatal_inj_headline`. This file was saved at `r fatal_inj_headline_save_time`: It has been 
+`r fatal_inj_headline_time_since_data_saved` days since the file was saved in `r input_folder`. 
  
-Number of banks by region data are saved in the `r banks_region`.This file was saved at `r banks_region_save_time`: It has been 
-`r banks_region_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Fatal workplace injury by region data are saved in the `r fatal_inj_region`.This file was saved at `r fatal_inj_region_save_time`: It has been 
+`r fatal_inj_region_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
-Number of banks by local authority data are saved in the `r banks_la`. This file was saved at `r banks_la_save_time`: It has been 
-`r banks_la_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Fatal workplace injury by age and sex data are saved in the `r fatal_inj_age_sex`. This file was saved at `r fatal_inj_age_sex_save_time`: It has been 
+`r fatal_inj_age_sex_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
-Number of building societies by country data are saved in the `r bs_country`. This file was saved at `r bs_country_save_time`: It has been 
-`r bs_country_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Non-fatal workplace injury headline data data are saved in the `r nonfatal_inj_summary`. This file was saved at `r nonfatal_inj_summary_save_time`: It has been 
+`r nonfatal_inj_summary_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
-Number of building societies by region data are saved in the `r bs_region`. This file was saved at `r bs_region_save_time`: It has been 
-`r bs_region_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Non-fatal workplace injury by region data are saved in the `r nonfatal_inj_region`. This file was saved at `r nonfatal_inj_region_save_time`: It has been 
+`r nonfatal_inj_region_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
-Number of building societies by local authority data are saved in the `r bs_la`. This file was saved at `r bs_la_save_time`: It has been 
-`r bs_la_time_since_data_saved` days since the file was saved in `r input_folder`. 
+Non-fatal workplace injury by age and sex data are saved in the `r nonfatal_inj_age`. This file was saved at `r nonfatal_inj_age_save_time`: It has been 
+`r nonfatal_inj_age_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
+Non-fatal workplace injury by industry data are saved in the `r nonfatal_inj_ind`. This file was saved at `r nonfatal_inj_ind_save_time`: It has been 
+`r nonfatal_inj_ind_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
-#### **Population estimates (ONS) - NOMIS**
-
-Population estimates by country data are saved in the `r pop_ests_country`. This file was saved at `r pop_ests_country_save_time`: It has been 
-`r pop_ests_country_time_since_data_saved` days since the file was saved in `r input_folder`. 
- 
-Population estimates by region data are saved in the `r pop_ests_region`.This file was saved at `r pop_ests_region_save_time`: It has been 
-`r pop_ests_region_time_since_data_saved` days since the file was saved in `r input_folder`. 
-
-Population estimates by local authority data are saved in the `r pop_ests_la`. This file was saved at `r pop_ests_la_save_time`: It has been 
-`r pop_ests_la_time_since_data_saved` days since the file was saved in `r input_folder`.
+Non-fatal workplace injury by occupation data are saved in the `r nonfatal_inj_occ`. This file was saved at `r nonfatal_inj_occ_save_time`: It has been 
+`r nonfatal_inj_occ_time_since_data_saved` days since the file was saved in `r input_folder`. 
 
 
-**The tab used for all inputs is called `r tabname`.**
+**The tab used for all fatal injury inputs is called `r fatal_tabname`.**
+
+**The tab used for all non-fatal injury inputs is called `r nonfatal_tabname`.**
 
 ## **Check data**
 
@@ -141,7 +130,7 @@ Please check the table below for any differences between the live and new data. 
 ```{r include=FALSE}
 
 comparison <- joined_data %>% 
-  select(Year, Series, Country, Region, `Local Authority`, Value, dataset) %>%
+  select(Year, Series, Age, Sex, Country, Region, `Industry sector`, Occupation, Value, dataset) %>%
   pivot_wider(names_from = dataset,
               values_from = Value)
 
@@ -166,9 +155,7 @@ datatable(comparison,
 
 ### Calculations
 
-Rate was calculated using the following formula:
-
-((Number of banks + Number of building societies) / Population)) * 100000
+No calculations were performed on this data during the automated update. 
 
 ## Session Info
 ```{r}

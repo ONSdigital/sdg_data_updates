@@ -23,7 +23,11 @@ library(DT)
 old_data <- read.csv("https://sdgdata.gov.uk/sdg-data/en/data/8-8-1.csv")
 
 old_data <- old_data %>% 
-  rename("Industry sector" = "Industry.sector", "Units" = "Unit.measure", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier") 
+  rename("Industry sector" = "Industry.sector", "Units" = "Unit.measure", "Observation status" = "Observation.status", "Unit multiplier" = "Unit.multiplier")
+
+old_data$`Year`[old_data$`Year` == "2019/20 [Note 5]"] <- "2019/20"
+old_data$`Year`[old_data$`Year` == "2020/21 [Note 5]"] <- "2020/21"
+old_data$`Year`[old_data$`Year` == "2021/22 [Note 5]"] <- "2021/22"
 
 date <- Sys.Date()
 
@@ -44,6 +48,8 @@ joined_data <- old_data %>%
   bind_rows(new_data) %>% 
   mutate(across(everything(), ~ replace(., is.na(.), ""))) %>% 
   mutate(Value = as.numeric(Value))
+
+joined_data[joined_data == ' '] <- ''
 ```
 
 ## 8-8-1 update summary
@@ -128,32 +134,362 @@ Non-fatal workplace injury by occupation data are saved in the `r nonfatal_inj_o
 
 ## **Check data**
 
-Please check the table below for any differences between the live and new data. If there are differences visible in the table below, please investigate these.
+Please check the graphs below for any differences between the live and new data. If there are differences visible in the graphs below, please investigate these.
+
+### FATAL DATA
 
 ```{r include=FALSE}
 
-comparison <- joined_data %>% 
-  select(Year, Series, Age, Sex, Country, Region, `Industry sector`, Occupation, Value, dataset) %>%
-  pivot_wider(names_from = dataset,
-              values_from = Value)
+# headline
 
-comparison <- comparison %>% 
-  mutate(difference = new - old) %>% 
-  filter(difference != 0) %>% 
-  # put the largest differences at the top
-  arrange(desc(abs(difference)))
+fatal_headline_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_headline_plot_data <- fatal_headline_plot_data %>% 
+  filter(Age == "" & Sex == "" & Country == "" & Region == "" & `Industry sector` == "" & Occupation == "")
+
+fatal_headline_plot <- fatal_headline_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal headline data")
+
+# sex
+
+fatal_sex_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_sex_plot_data <- fatal_sex_plot_data %>% 
+  filter(Sex != "")
+
+fatal_sex_plot_data <- fatal_sex_plot_data %>% 
+  filter(Age == "")
+
+fatal_sex_plot <- fatal_sex_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Sex, ncol=2) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal sex data")
+
+
+# age
+
+fatal_age_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_age_plot_data <- fatal_age_plot_data %>% 
+  filter(Age != "")
+
+fatal_age_plot_data <- fatal_age_plot_data %>% 
+  filter(Sex == "")
+
+fatal_age_plot <- fatal_age_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Age, ncol=3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal age data")
+
+#age/sex
+
+fatal_age_sex_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_age_sex_plot_data <- fatal_age_sex_plot_data %>% 
+  filter(Age != "" & Sex != "")
+
+
+fatal_age_sex_plot <- fatal_age_sex_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Sex~Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal age/sex data")
+
+
+# country
+
+fatal_country_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_country_plot_data <- fatal_country_plot_data %>% 
+  filter(Country != "" & Region == "")
+
+fatal_country_plot <- fatal_country_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Country, ncol=5) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal country data")
+
+# region
+
+fatal_region_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_region_plot_data <- fatal_region_plot_data %>% 
+  filter(Country == "England" & Region != "")
+
+fatal_region_plot <- fatal_region_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Region, ncol=5) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal region data")
+
+# industry (NEED TO SORT!)
+
+fatal_industry_plot_data <- joined_data[joined_data$Series == "Fatal injury",] 
+
+fatal_industry_plot_data <- fatal_industry_plot_data %>% 
+  filter(`Industry sector` != "")
+
+fatal_industry_plot <- fatal_industry_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~`Industry sector`, ncol=3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Fatal industry data")
+
+
 
 ```
 
 
-```{r, echo = FALSE}
-datatable(comparison, 
-          rownames = FALSE, 
-          filter = "top",
-          options = list(dom = 'tp', 
-                         pageLength = 10,
-                         columnDefs = list(list(
-                           className = 'dt-center', targets = 0:3))))
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+
+suppressMessages(print(fatal_headline_plot))
+suppressMessages(print(fatal_sex_plot))
+suppressMessages(print(fatal_age_plot))
+suppressMessages(print(fatal_age_sex_plot))
+suppressMessages(print(fatal_country_plot))
+suppressMessages(print(fatal_region_plot))
+suppressMessages(print(fatal_industry_plot))
+```
+
+### NON-FATAL DATA
+
+```{r include=FALSE}
+
+# headline (NEEDS)
+
+nonfatal_headline_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_headline_plot_data <- nonfatal_headline_plot_data %>% 
+  filter(Age == "" & Sex == "" & Country == "" & Region == "" & `Industry sector` == "" & Occupation == "")
+
+nonfatal_headline_plot <- nonfatal_headline_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal headline data")
+
+# sex
+
+nonfatal_sex_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_sex_plot_data <- nonfatal_sex_plot_data %>% 
+  filter(Sex != "")
+
+nonfatal_sex_plot_data <- nonfatal_sex_plot_data %>% 
+  filter(Age == "")
+
+nonfatal_sex_plot <- nonfatal_sex_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Sex, ncol=2) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal sex data")
+
+
+# age
+
+nonfatal_age_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_age_plot_data <- nonfatal_age_plot_data %>% 
+  filter(Age != "")
+
+nonfatal_age_plot_data <- nonfatal_age_plot_data %>% 
+  filter(Sex == "")
+
+nonfatal_age_plot <- nonfatal_age_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Age, ncol=3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal age data")
+
+#age/sex
+
+nonfatal_age_sex_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_age_sex_plot_data <- nonfatal_age_sex_plot_data %>% 
+  filter(Age != "" & Sex != "")
+
+
+nonfatal_age_sex_plot <- nonfatal_age_sex_plot_data %>% 
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_grid(Sex~Age) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal age/sex data")
+
+
+# country
+
+nonfatal_country_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_country_plot_data <- nonfatal_country_plot_data %>% 
+  filter(Country != "" & Region == "")
+
+nonfatal_country_plot <- nonfatal_country_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Country, ncol=5) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal country data")
+
+# region
+
+nonfatal_region_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_region_plot_data <- nonfatal_region_plot_data %>% 
+  filter(Country == "England" & Region != "")
+
+nonfatal_region_plot <- nonfatal_region_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Region, ncol=5) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal region data")
+
+# industry (NEED TO SORT!)
+
+nonfatal_industry_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_industry_plot_data <- nonfatal_industry_plot_data %>% 
+  filter(`Industry sector` != "")
+
+nonfatal_industry_plot <- nonfatal_industry_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~`Industry sector`, ncol=3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal industry data")
+
+# occupation
+
+nonfatal_occupation_plot_data <- joined_data[joined_data$Series == "Non-fatal injury",] 
+
+nonfatal_occupation_plot_data <- nonfatal_occupation_plot_data %>% 
+  filter(Occupation != "")
+
+nonfatal_occupation_plot <- nonfatal_occupation_plot_data %>%
+  ggplot(.,
+         aes(x = Year,
+             y = Value,
+             colour = dataset)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~Occupation, ncol=3) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, size = 7)) +
+  theme(axis.text.y = element_text(size = 7)) +
+  ggtitle("Non-fatal occupation data")
+
+
+```
+
+
+```{r, echo = FALSE, fig.height = 8, fig.width = 10}
+
+suppressMessages(print(nonfatal_headline_plot))
+suppressMessages(print(nonfatal_sex_plot))
+suppressMessages(print(nonfatal_age_plot))
+suppressMessages(print(nonfatal_age_sex_plot))
+suppressMessages(print(nonfatal_country_plot))
+suppressMessages(print(nonfatal_region_plot))
+suppressMessages(print(nonfatal_industry_plot))
+suppressMessages(print(nonfatal_occupation_plot))
 ```
 
 ### Calculations

@@ -101,7 +101,7 @@ fatal_inj_region_main <- fatal_inj_region_main %>%
                       "NORTH WEST",
                       "YORKSHIRE AND THE HUMBER",
                       "EAST MIDLANDS",
-                      "WEST MIDLANDS",
+                      "WEST MIDLANDS ",
                       "EAST",
                       "LONDON",
                       "SOUTH EAST",
@@ -134,7 +134,7 @@ fatal_inj_region_main <- fatal_inj_region_main %>%
     Region == "NORTH WEST" ~ "North West",
     Region == "YORKSHIRE AND THE HUMBER" ~ "Yorkshire and The Humber",
     Region == "EAST MIDLANDS" ~ "East Midlands",
-    Region == "WEST MIDLANDS" ~ "West Midlands",
+    Region == "WEST MIDLANDS " ~ "West Midlands",
     Region == "EAST" ~ "East",
     Region == "LONDON" ~ "London",
     Region == "SOUTH EAST" ~ "South East",
@@ -328,6 +328,29 @@ nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
   mutate("Units" = "Rate per 100,000 (3 year average)",
          "Observation status" = "Estimated Value")
 
+nonfatal_inj_region_main <- nonfatal_inj_region_main %>%
+  mutate(Year = case_when(
+    Year == "2001/02-2003/04" ~ "2002/03",
+    Year == "2002/03-2004/05" ~ "2003/04",
+    Year == "2003/04-2005/06" ~ "2004/05",
+    Year == "2004/05-2006/07" ~ "2005/06",
+    Year == "2005/06-2007/08" ~ "2006/07",
+    Year == "2006/07-2008/09" ~ "2007/08",
+    Year == "2007/08-2009/10" ~ "2008/09",
+    Year == "2008/09-2010/11" ~ "2009/10",
+    Year == "2009/10-2011/12" ~ "2010/11",
+    Year == "2010/11-2012/13" ~ "2011/12",
+    Year == "2011/12-2013/14" ~ "2012/13",
+    Year == "2012/13-2014/15" ~ "2013/14",
+    Year == "2013/14-2015/16" ~ "2014/15",
+    Year == "2014/15-2016/17" ~ "2015/16",
+    Year == "2015/16-2017/18" ~ "2016/17",
+    Year == "2016/17-2018/19" ~ "2017/18",
+    Year == "2017/18-2019/20" ~ "2018/19",
+    Year == "2018/19-2020/21" ~ "2019/20",
+    Year == "2019/20-2021/22" ~ "2020/21",
+    Year == "2019/20-2021/22" ~ "2020/21"))
+
 # non-fatal age
 
 nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
@@ -379,6 +402,29 @@ nonfatal_inj_age_main <- nonfatal_inj_age_main %>%
   mutate("Units" = "Rate per 100,000 (3 year average)",
          "Observation status" = "Estimated Value")
 
+nonfatal_inj_age_main <- nonfatal_inj_age_main %>% 
+  mutate(Year = case_when(
+    Year == "2001/02-2003/04" ~ "2002/03",
+    Year == "2002/03-2004/05" ~ "2003/04",
+    Year == "2003/04-2005/06" ~ "2004/05",
+    Year == "2004/05-2006/07" ~ "2005/06",
+    Year == "2005/06-2007/08" ~ "2006/07",
+    Year == "2006/07-2008/09" ~ "2007/08",
+    Year == "2007/08-2009/10" ~ "2008/09",
+    Year == "2008/09-2010/11" ~ "2009/10",
+    Year == "2009/10-2011/12" ~ "2010/11",
+    Year == "2010/11-2012/13" ~ "2011/12",
+    Year == "2011/12-2013/14" ~ "2012/13",
+    Year == "2012/13-2014/15" ~ "2013/14",
+    Year == "2013/14-2015/16" ~ "2014/15",
+    Year == "2014/15-2016/17" ~ "2015/16",
+    Year == "2015/16-2017/18" ~ "2016/17",
+    Year == "2016/17-2018/19" ~ "2017/18",
+    Year == "2017/18-2019/20" ~ "2018/19",
+    Year == "2018/19-2020/21" ~ "2019/20",
+    Year == "2019/20-2021/22" ~ "2020/21",
+    Year == "2019/20-2021/22" ~ "2020/21"))
+
 # non-fatal industry
 
 nonfatal_inj_ind_main <- nonfatal_inj_ind_main[c(6, 8, 12)]
@@ -416,6 +462,29 @@ nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>%
   mutate("Units" = "Rate per 100,000 (3 year average)",
          "Observation status" = "Estimated Value")
 
+nonfatal_inj_ind_main <- nonfatal_inj_ind_main %>% 
+  mutate(Year = case_when(
+    Year == "2001/02-2003/04" ~ "2002/03",
+    Year == "2002/03-2004/05" ~ "2003/04",
+    Year == "2003/04-2005/06" ~ "2004/05",
+    Year == "2004/05-2006/07" ~ "2005/06",
+    Year == "2005/06-2007/08" ~ "2006/07",
+    Year == "2006/07-2008/09" ~ "2007/08",
+    Year == "2007/08-2009/10" ~ "2008/09",
+    Year == "2008/09-2010/11" ~ "2009/10",
+    Year == "2009/10-2011/12" ~ "2010/11",
+    Year == "2010/11-2012/13" ~ "2011/12",
+    Year == "2011/12-2013/14" ~ "2012/13",
+    Year == "2012/13-2014/15" ~ "2013/14",
+    Year == "2013/14-2015/16" ~ "2014/15",
+    Year == "2014/15-2016/17" ~ "2015/16",
+    Year == "2015/16-2017/18" ~ "2016/17",
+    Year == "2016/17-2018/19" ~ "2017/18",
+    Year == "2017/18-2019/20" ~ "2018/19",
+    Year == "2018/19-2020/21" ~ "2019/20",
+    Year == "2019/20-2021/22" ~ "2020/21",
+    Year == "2019/20-2021/22" ~ "2020/21"))
+
 # non-fatal occ
 
 nonfatal_inj_occ_main <- nonfatal_inj_occ_main[c(6, 8, 12)]
@@ -443,6 +512,29 @@ nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>%
 nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>% 
   mutate("Units" = "Rate per 100,000 (3 year average)",
          "Observation status" = "Estimated Value")
+
+nonfatal_inj_occ_main <- nonfatal_inj_occ_main %>%
+  mutate(Year = case_when(
+    Year == "2001/02-2003/04" ~ "2002/03",
+    Year == "2002/03-2004/05" ~ "2003/04",
+    Year == "2003/04-2005/06" ~ "2004/05",
+    Year == "2004/05-2006/07" ~ "2005/06",
+    Year == "2005/06-2007/08" ~ "2006/07",
+    Year == "2006/07-2008/09" ~ "2007/08",
+    Year == "2007/08-2009/10" ~ "2008/09",
+    Year == "2008/09-2010/11" ~ "2009/10",
+    Year == "2009/10-2011/12" ~ "2010/11",
+    Year == "2010/11-2012/13" ~ "2011/12",
+    Year == "2011/12-2013/14" ~ "2012/13",
+    Year == "2012/13-2014/15" ~ "2013/14",
+    Year == "2013/14-2015/16" ~ "2014/15",
+    Year == "2014/15-2016/17" ~ "2015/16",
+    Year == "2015/16-2017/18" ~ "2016/17",
+    Year == "2016/17-2018/19" ~ "2017/18",
+    Year == "2017/18-2019/20" ~ "2018/19",
+    Year == "2018/19-2020/21" ~ "2019/20",
+    Year == "2019/20-2021/22" ~ "2020/21",
+    Year == "2019/20-2021/22" ~ "2020/21"))
 
 # Then join non-fatal data
 
@@ -481,7 +573,8 @@ nonfatal_joined_data <- nonfatal_joined_data %>%
 nonfatal_joined_data <- nonfatal_joined_data %>% 
   mutate("Series" = "Non-fatal injury",
          "Unit multiplier" =  "Units")
-
+  
+  
 nonfatal_joined_data <- nonfatal_joined_data %>% 
   select("Year", 
          "Series", 

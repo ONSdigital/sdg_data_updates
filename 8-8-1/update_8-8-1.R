@@ -81,6 +81,8 @@ fatal_inj_headline_main$`Year`[fatal_inj_headline_main$`Year` == "2020/21r [Note
 
 fatal_inj_headline_main$`Year`[fatal_inj_headline_main$`Year` == "2021/22p [Note 16] [Note 17]"] <- "2021/22"
 
+fatal_inj_headline_main$`Industry sector` <- trimws(fatal_inj_headline_main$`Industry sector`, whitespace = "[ \t\r\n]")
+
 # fatal injuries region
 
 fatal_inj_region_main <- fatal_inj_region_main[ , grepl('Year|Area|Rate of fatal injury per 100,000 workers', names(fatal_inj_region_main))]
@@ -92,6 +94,8 @@ colnames(fatal_inj_region_main) [1] <- "Year"
 colnames(fatal_inj_region_main) [2] <- "Region"
 colnames(fatal_inj_region_main) [3] <- "Value"
 
+fatal_inj_region_main$Region <- trimws(fatal_inj_region_main$Region, whitespace = "[ \t\r\n]")
+
 fatal_inj_region_main <- fatal_inj_region_main %>% 
   filter(Region %in% c("ENGLAND AND WALES",
                       "ENGLAND",
@@ -101,7 +105,7 @@ fatal_inj_region_main <- fatal_inj_region_main %>%
                       "NORTH WEST",
                       "YORKSHIRE AND THE HUMBER",
                       "EAST MIDLANDS",
-                      "WEST MIDLANDS ",
+                      "WEST MIDLANDS",
                       "EAST",
                       "LONDON",
                       "SOUTH EAST",
@@ -134,7 +138,7 @@ fatal_inj_region_main <- fatal_inj_region_main %>%
     Region == "NORTH WEST" ~ "North West",
     Region == "YORKSHIRE AND THE HUMBER" ~ "Yorkshire and The Humber",
     Region == "EAST MIDLANDS" ~ "East Midlands",
-    Region == "WEST MIDLANDS " ~ "West Midlands",
+    Region == "WEST MIDLANDS" ~ "West Midlands",
     Region == "EAST" ~ "East",
     Region == "LONDON" ~ "London",
     Region == "SOUTH EAST" ~ "South East",
@@ -170,7 +174,7 @@ fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>%
   mutate(Age = case_when(
     Age == "All" ~ "",
     Age == "Under 16" ~ "Under 16",
-    Age == "16-19" ~ "16 to 24",
+    Age == "16-19" ~ "16 to 19",
     Age == "20-24" ~ "20 to 24",
     Age == "25-34" ~ "25 to 34",
     Age == "35-44" ~ "35 to 44",
@@ -203,16 +207,27 @@ fatal_inj_age_sex_main$`Year`[fatal_inj_age_sex_main$`Year` == "2021/22p [Note 9
 
 # Then join fatal data
 
-fatal_joined_data <- full_join(fatal_inj_headline_main, 
-                               fatal_inj_region_main, 
-                               by = c("Year", 
-                                      "Value")) 
+fatal_inj_headline_main <- fatal_inj_headline_main %>% 
+  mutate(Country = "",
+         Region = "")
 
-fatal_joined_data <- full_join(fatal_joined_data, 
-                               fatal_inj_age_sex_main, 
-                               by = c("Year", 
-                                      "Industry sector",
-                                       "Value")) 
+fatal_inj_region_main <- fatal_inj_region_main %>% 
+  mutate(`Industry sector` = "")
+
+
+fatal_joined_data <- rbind(fatal_inj_headline_main, 
+                               fatal_inj_region_main)
+
+fatal_inj_age_sex_main <- fatal_inj_age_sex_main %>% 
+  mutate(Country = "",
+         Region = "")      
+
+fatal_joined_data <- fatal_joined_data %>% 
+  mutate(Age = "",
+         Sex = "")
+
+fatal_joined_data <- rbind(fatal_joined_data, 
+                               fatal_inj_age_sex_main)
 
 fatal_joined_data <- fatal_joined_data %>% 
   replace(is.na(.), "")
@@ -237,6 +252,12 @@ fatal_joined_data <- fatal_joined_data %>%
          "Unit multiplier", 
          "Observation status", 
          "Value")
+
+fatal_joined_data$`Value`[fatal_joined_data$`Value` == "-"] <- ""
+
+fatal_joined_data <- fatal_joined_data %>% 
+  mutate("Observation status" = case_when(fatal_joined_data$Value == "" ~ "Missing value",
+                                          fatal_joined_data$Value != "" ~ "Normal value"))
 
 # Non-fatal data
 

@@ -52,11 +52,11 @@ joined_data <- old_data %>%
 joined_data[joined_data == ' '] <- ''
 ```
 
-## 8-8-1 update summary
+## **8-8-1 update summary**
 
 Data for `r min(new_data$Year)` to `r latest_year` have been created and saved as `r paste0(date, "_8-8-1", ".csv")` in the 8-8-1 Output folder.  
     
-### Check configurations
+### **Check configurations**
 Please check that the information below is as you expect. In particular, pay attention to the time since data were saved, to check that previously downloaded data have not accidentally been used.
     
 These settings can all be adjusted in `config.R`
@@ -101,7 +101,7 @@ nonfatal_inj_occ_time_since_data_saved <- round(difftime(Sys.time(), nonfatal_in
 ```
 
 
-#### **Fatal and non-fatal workplace injuries data from Health and Safety Executive (HSE)**
+**Fatal and non-fatal workplace injuries data from Health and Safety Executive (HSE)**
 
 Fatal workplace injury headline data are saved in the `r fatal_inj_headline`. This file was saved at `r fatal_inj_headline_save_time`: It has been 
 `r fatal_inj_headline_time_since_data_saved` days since the file was saved in `r input_folder`. 
@@ -136,7 +136,7 @@ Non-fatal workplace injury by occupation data are saved in the `r nonfatal_inj_o
 
 Please check the graphs below for any differences between the live and new data. If there are differences visible in the graphs below, please investigate these.
 
-### FATAL DATA
+### **Fatal injuries data**
 
 ```{r include=FALSE}
 
@@ -304,7 +304,7 @@ suppressMessages(print(fatal_region_plot))
 suppressMessages(print(fatal_industry_plot))
 ```
 
-### NON-FATAL DATA
+### **Non-fatal injuries data**
 
 ```{r include=FALSE}
 
@@ -492,11 +492,11 @@ suppressMessages(print(nonfatal_industry_plot))
 suppressMessages(print(nonfatal_occupation_plot))
 ```
 
-### Calculations
+## **Calculations**
 
 No calculations were performed on this data during the automated update. 
 
-## Session Info
+## **Session Info**
 ```{r}
 pander(sessionInfo())
 ```
